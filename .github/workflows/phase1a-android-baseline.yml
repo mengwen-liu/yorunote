@@ -308,7 +308,9 @@ jobs:
       - name: Thumbnail regression tests (cover cache, queue, limiter)
         run: |
           . "$PHASE/lib.sh"
-          run_logged flutter_test_thumbnail "$LOGS/05a_test_thumbnail.log" flutter test --no-pub \
+          # Explicit reporter: on GitHub Actions flutter test defaults to the "github"
+          # reporter, whose summary line the checks below do not parse.
+          run_logged flutter_test_thumbnail "$LOGS/05a_test_thumbnail.log" flutter test --no-pub --reporter expanded \
             test/network/thumbnail_cover_cache_test.dart test/network/thumbnail_cover_queue_test.dart test/network/request_limiter_test.dart
           last="$(grep -E '^[0-9:]+ \+[0-9]+' "$LOGS/05a_test_thumbnail.log" | tail -1)"
           echo "$last" | tee "$EVID/test_thumbnail_summary.txt"
@@ -318,7 +320,7 @@ jobs:
       - name: Full flutter test (includes brand, reader cache and native-HTTP tests)
         run: |
           . "$PHASE/lib.sh"
-          run_logged flutter_test_full "$LOGS/05b_test_full.log" flutter test --no-pub
+          run_logged flutter_test_full "$LOGS/05b_test_full.log" flutter test --no-pub --reporter expanded
           last="$(grep -E '^[0-9:]+ \+[0-9]+' "$LOGS/05b_test_full.log" | tail -1)"
           echo "$last" | tee "$EVID/test_full_summary.txt"
           case "$last" in *"~"*) echo "::error::some tests were skipped"; exit 1 ;; esac

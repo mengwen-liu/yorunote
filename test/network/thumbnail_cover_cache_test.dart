@@ -14,7 +14,6 @@ import 'package:venera/foundation/cache_manager.dart';
 import 'package:venera/foundation/comic_type.dart';
 import 'package:venera/foundation/image_provider/cached_image.dart';
 import 'package:venera/foundation/image_provider/history_image_provider.dart';
-import 'package:venera/network/images.dart';
 
 import 'thumbnail_test_support.dart';
 
@@ -180,35 +179,6 @@ void main() {
         server.images[path] = png(42);
         expect(await resolveOnce(cover(url)), isNull);
         expect(server.count(path), 2);
-      });
-    }, skip: !hasNativeHttp);
-
-    testWidgets('invalidation keeps an entry repaired in the meantime', (
-      tester,
-    ) async {
-      await tester.runAsync(() async {
-        const path = '/c/repaired.png';
-        final url = server.url(path);
-        final key = thumbDiskKey(url, srcA.key, 'c1');
-        await CacheManager().writeCache(key, corruptPng);
-        // The bytes a failing load read from the broken entry ...
-        Uint8List? stale;
-        await for (final p in ImageDownloader.loadThumbnail(
-          url,
-          srcA.key,
-          'c1',
-        )) {
-          if (p.imageBytes != null) {
-            stale = p.imageBytes;
-            break;
-          }
-        }
-        // ... arrive after another request has stored a good image.
-        await CacheManager().writeCache(key, png(50));
-        // ignore: invalid_use_of_protected_member
-        await cover(url).onInvalidImageData(stale!);
-        final file = await CacheManager().findCache(key);
-        expect(await file!.readAsBytes(), png(50));
       });
     }, skip: !hasNativeHttp);
 

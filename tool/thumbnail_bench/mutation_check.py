@@ -5,7 +5,7 @@ Applies one mutation at a time to a scratch copy of the candidate, runs the
 related tests and records whether they fail (the mutation is "killed").
 The copy is restored after every mutation; nothing is kept.
 
-Usage: python3 -I mutation_check.py <scratch_repo> <out.json>
+Usage: python3 -I mutation_check.py <scratch_repo> <out.json> [ID,ID,...]
 Requires flutter on PATH and FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR.
 """
 import json
@@ -16,6 +16,7 @@ import time
 
 REPO = pathlib.Path(sys.argv[1]).resolve()
 OUT = pathlib.Path(sys.argv[2]).resolve()
+ONLY = set(sys.argv[3].split(",")) if len(sys.argv) > 3 else None
 
 IMAGES = "lib/network/images.dart"
 LIMITER = "lib/network/request_limiter.dart"
@@ -24,6 +25,7 @@ HISTORY = "lib/foundation/image_provider/history_image_provider.dart"
 T_CACHE = "test/network/thumbnail_cover_cache_test.dart"
 T_QUEUE = "test/network/thumbnail_cover_queue_test.dart"
 T_LIMIT = "test/network/request_limiter_test.dart"
+T_INVAL = "test/network/thumbnail_cover_invalidation_test.dart"
 
 MUTANTS = [
     {
@@ -32,7 +34,7 @@ MUTANTS = [
         "file": IMAGES,
         "old": "      if (!listEquals(await file.readAsBytes(), data)) {\n        return;\n      }\n",
         "new": "",
-        "tests": [T_CACHE],
+        "tests": [T_CACHE, T_INVAL],
     },
     {
         "id": "M2_cached_provider_default_invalidation",
@@ -40,7 +42,7 @@ MUTANTS = [
         "file": CACHED,
         "old": "  @override\n  Future<void> onInvalidImageData(Uint8List data) =>\n      ImageDownloader.invalidateCoverCache(data);\n",
         "new": "",
-        "tests": [T_CACHE],
+        "tests": [T_CACHE, T_INVAL],
     },
     {
         "id": "M3_history_provider_default_invalidation",
@@ -48,7 +50,7 @@ MUTANTS = [
         "file": HISTORY,
         "old": "  @override\n  Future<void> onInvalidImageData(Uint8List data) =>\n      ImageDownloader.invalidateCoverCache(data);\n",
         "new": "",
-        "tests": [T_CACHE],
+        "tests": [T_CACHE, T_INVAL],
     },
     {
         "id": "M4_limit_9",
@@ -125,6 +127,8 @@ def run_tests(tests):
 def main():
     results = []
     for m in MUTANTS:
+        if ONLY and m["id"] not in ONLY:
+            continue
         path = REPO / m["file"]
         original = path.read_text()
         if original.count(m["old"]) != 1:
@@ -150,7 +154,7 @@ def main():
         })
         print(m["id"], results[-1]["status"], code, secs, flush=True)
     # Sanity: the unmutated copy passes the same tests.
-    code, secs, tail = run_tests([T_CACHE, T_QUEUE, T_LIMIT])
+    code, secs, tail = run_tests([T_CACHE, T_QUEUE, T_LIMIT, T_INVAL])
     OUT.write_text(json.dumps(
         {"unmutated_exit_code": code, "unmutated_last_line": tail,
          "mutants": results},

@@ -1,0 +1,859 @@
+   Woah! You appear to be trying to run flutter as root.
+   We strongly recommend running the flutter tool without superuser privileges.
+  /
+📎
+00:00 +0: loading /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart
+00:00 +0: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: (setUpAll)
+00:00 +0: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:00 +1: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:00 +2: /root/work/r2/start_clean/test/ui/home_page_test.dart: nonempty history keeps recent comic and history actions
+00:01 +3: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 393.0dp
+00:01 +4: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 393.0dp
+00:01 +5: /root/work/r2/start_clean/test/ui/home_page_test.dart: nonempty local still displays supplied recent comics
+00:01 +6: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 360.0dp
+00:01 +7: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 360.0dp
+00:01 +8: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 360.0dp
+00:01 +9: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 1.5x
+00:01 +10: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 393.0dp
+00:01 +11: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 393.0dp
+00:01 +12: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 393.0dp 1.0x
+00:01 +13: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +14: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +15: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +16: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +17: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +18: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 2.0x
+00:01 +19: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:01 +20: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:01 +21: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:01 +22: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:01 +23: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.0x
+00:01 +24: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.5
+00:01 +25: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.5x
+00:01 +26: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 2.0
+00:01 +27: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 2.0
+00:01 +28: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.0x
+00:02 +29: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 1.0
+00:02 +30: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.5x
+00:02 +31: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 1.5
+00:02 +32: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 1.5
+00:02 +33: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 1.0x
+00:02 +34: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 2.0
+00:02 +35: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 1.5x
+00:02 +36: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 1.0
+00:02 +37: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 2.0x
+00:02 +38: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 1.5
+00:02 +39: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 1.5
+00:02 +40: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 1.5x
+00:02 +41: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 2.0
+00:02 +42: /root/work/r2/start_clean/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 2.0x
+00:02 +43: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 393.0 1.0
+00:02 +44: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 393.0 1.5
+00:02 +45: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 393.0 2.0
+00:02 +46: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 1.0
+00:02 +47: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 1.5
+00:02 +48: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 2.0
+00:02 +49: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 393.0 1.0
+00:02 +50: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 393.0 1.5
+00:02 +51: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 393.0 2.0
+00:02 +52: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 1.0
+00:02 +53: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 1.5
+00:02 +54: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 2.0
+00:03 +55: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 1.0
+00:03 +56: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 1.5
+00:03 +57: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: ReadingProgress.tryCreate rejects missing or invalid totals
+00:03 +58: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:03 +59: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:03 +60: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:03 +61: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:03 +62: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:03 +63: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:03 +64: /root/work/r2/start_clean/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:03 +65: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +66: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +67: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard optional lines and progress are hidden when absent
+00:03 +68: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard shows progress only when valid
+00:03 +69: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard shows progress only when valid
+00:03 +70: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard shows progress only when valid
+00:03 +71: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard shows progress only when valid
+00:03 +72: /root/work/r2/start_clean/test/ui/ui_tokens_test.dart: color roles follow ColorScheme (Brightness.dark, MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB)))
+00:03 +73: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard missing cover shows the placeholder
+00:04 +74: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard missing cover shows the placeholder
+00:04 +75: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard missing cover shows the placeholder
+00:04 +76: /root/work/r2/start_clean/test/ui/ui_tokens_test.dart: text roles follow TextTheme
+00:04 +77: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard broken cover falls back to the placeholder
+00:04 +78: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard loading cover shows the placeholder
+00:04 +79: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard onTap and onAction are independent
+00:04 +80: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard long action label: no overflow at 2x text
+00:04 +81: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard action needs both label and callback
+00:04 +82: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard card without onTap does not crash on tap
+00:04 +83: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard uses ColorScheme roles (Brightness.dark)
+00:04 +84: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard uses ColorScheme roles (Brightness.light)
+00:04 +85: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 320.0dp wide
+00:04 +86: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 360.0dp wide
+00:04 +87: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 600.0dp wide
+00:04 +88: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 320.0dp wide
+00:04 +89: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 360.0dp wide
+00:04 +90: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 600.0dp wide
+00:04 +91: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 320.0dp wide
+00:04 +92: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 360.0dp wide
+00:04 +93: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 600.0dp wide
+00:04 +94: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard exposes one labeled button with a tap action
+00:04 +95: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard is not exposed as tappable without onTap
+00:04 +96: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard meets tap target and label guidelines (Brightness.dark)
+00:04 +97: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard meets text contrast guideline (Brightness.dark)
+00:04 +98: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard meets tap target and label guidelines (Brightness.light)
+00:04 +99: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: RecentComicCard meets text contrast guideline (Brightness.light)
+00:04 +100: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: CoverImage uses the supplied size
+00:04 +101: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading renders title, count and action
+00:04 +102: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading title is a semantics header
+00:05 +103: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading hides optional parts
+00:05 +104: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading action meets the tap target guideline
+00:05 +105: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading no overflow at 2x text on a narrow width
+00:05 +106: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 240.0dp
+00:05 +107: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 320.0dp
+00:05 +108: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 2.0x, 240.0dp
+00:05 +109: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 2.0x, 320.0dp
+00:05 +110: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeEmptyState renders message and action
+00:05 +111: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeEmptyState message only has no button
+00:05 +112: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeEmptyState no overflow at 2x text
+00:05 +113: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeEmptyState long CTA label: no overflow at 2x text
+00:05 +114: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeEmptyState action meets the tap target guideline
+00:05 +115: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeCardPlaceholder has the default footprint
+00:05 +116: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeCardPlaceholder exposes a loading label when supplied
+00:05 +117: /root/work/r2/start_clean/test/ui/home_widgets_test.dart: HomeCardPlaceholder is silent without a label
+00:05 +118: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: (setUpAll)
+00:05 +118: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:06 +119: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:07 +120: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:07 +121: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=false
+00:07 +122: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=true
+00:07 +123: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=true
+00:07 +124: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.5x populated=false
+00:07 +125: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=false
+00:07 +126: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.5x populated=true
+00:07 +127: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:08 +128: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:08 +129: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:08 +130: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.0x populated=false
+00:08 +131: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=false
+00:08 +132: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.0x populated=true
+00:08 +133: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:08 +134: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:08 +135: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.5x populated=true
+00:08 +136: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=false
+00:08 +137: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=false
+00:08 +138: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 2.0x populated=true
+00:08 +139: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:08 +140: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:08 +141: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:08 +142: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.5x populated=false
+00:08 +143: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=false
+00:09 +144: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.5x populated=true
+00:09 +145: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:09 +146: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:09 +147: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:09 +148: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.0x populated=false
+00:09 +149: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=false
+00:09 +150: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=false
+00:09 +151: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.5x populated=false
+00:09 +152: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:09 +153: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:09 +154: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 2.0x populated=false
+00:09 +155: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=false
+00:09 +156: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=false
+00:09 +157: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.0x populated=false
+00:09 +158: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:09 +159: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:09 +160: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:09 +161: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.5x populated=true
+00:09 +162: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=false
+00:10 +163: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 2.0x populated=false
+00:10 +164: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:10 +165: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:10 +166: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:10 +167: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.0x populated=true
+00:10 +168: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=false
+00:10 +169: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=false
+00:10 +170: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.5x populated=true
+00:10 +171: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:10 +172: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:10 +173: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:10 +174: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.0x populated=false
+00:10 +175: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:10 +176: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.0x populated=true
+00:10 +177: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:10 +178: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:10 +179: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:10 +180: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 2.0x populated=false
+00:10 +181: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:11 +182: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:11 +183: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.0x populated=false
+00:11 +184: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:11 +185: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:11 +186: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.5x populated=false
+00:11 +187: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=false
+00:11 +188: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.5x populated=true
+00:11 +189: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:11 +190: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:11 +191: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:11 +192: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: every R2 entry dispatches its supplied callback
+00:11 +193: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=false
+00:11 +194: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: source labels have no button or tap semantics; management does
+00:11 +195: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=true
+00:11 +196: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=true
+00:11 +197: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=true
+00:11 +198: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: presentation follows alternate Material seed colors
+00:11 +199: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=false
+00:12 +200: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=false
+00:12 +201: /root/work/r2/start_clean/test/ui/home_visual_r2_test.dart: synthetic visual evidence light
+00:12 +202: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=true
+00:12 +203: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.0 populated=false
+00:12 +204: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.0 populated=true
+00:12 +205: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.5 populated=false
+00:12 +206: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.5 populated=true
+00:12 +207: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.5 populated=true
+00:12 +208: /root/work/r2/start_clean/test/brand/yorunote_brand_test.dart: 自適應圖示各密度尺寸正確，背景為 #17283B 純色
+00:12 +209: /root/work/r2/start_clean/test/brand/yorunote_brand_test.dart: 自適應圖示各密度尺寸正確，背景為 #17283B 純色
+00:13 +210: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 2.0 populated=true
+00:13 +211: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 2.0 populated=true
+00:13 +212: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 2.0 populated=true
+00:13 +213: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=false
+00:13 +214: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=true
+00:13 +215: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=false
+00:13 +216: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=true
+00:13 +217: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=false
+00:13 +218: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=true
+00:13 +219: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:14 +220: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:14 +221: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:14 +222: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:14 +223: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:14 +224: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:14 +225: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:14 +226: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +227: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +228: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +229: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=true
+00:15 +230: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +231: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +232: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +233: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +234: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +235: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +236: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +237: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=false
+00:16 +237: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: an undecodable cache entry is invalidated, other entries kept
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:16 +238: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=false
+00:16 +239: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:16 +240: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:16 +241: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:16 +242: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:16 +243: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:16 +244: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +245: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +246: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +247: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:17 +247: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: an empty cache entry is invalidated, other entries kept
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:17 +248: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:17 +249: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:17 +250: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:17 +251: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:17 +252: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:17 +253: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:18 +254: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:18 +255: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 actual statistics selectors and exact keyword callbacks
+00:18 +255: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_reader_cacheVOTVPB/cache/cache/14/686379ad1b3dad34c82527fc185907f5-1793822002639697-13' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:113:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:18 +256: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:18 +257: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:18 +258: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:18 +259: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:19 +260: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:19 +261: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:19 +262: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 two-column tools fall back and long titles remain semantic
+00:19 +262: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: other providers keep the default invalid-data handling
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:19 +263: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 two-column tools fall back and long titles remain semantic
+00:19 +264: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 two-column tools fall back and long titles remain semantic
+00:19 +265: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 two-column tools fall back and long titles remain semantic
+00:19 +266: /root/work/r2/start_clean/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps local comic files and their keys
+00:19 +267: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 capture dark 360
+00:19 +268: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 capture dark 393
+00:19 +269: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 capture light 360
+00:19 +270: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 capture light 393
+00:19 +271: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 capture full content dark
+00:19 +272: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: R4 capture full content light
+00:19 +273: /root/work/r2/start_clean/test/ui/home_visual_r4_test.dart: (tearDownAll)
+00:20 +273: /root/work/r2/start_clean/test/network/request_limiter_test.dart: cover requests are limited to 8
+00:20 +274: /root/work/r2/start_clean/test/network/request_limiter_test.dart: grants up to the limit, then hands slots over in FIFO order
+00:20 +275: /root/work/r2/start_clean/test/network/request_limiter_test.dart: a cancelled waiter is skipped and takes no slot
+00:20 +276: /root/work/r2/start_clean/test/network/request_limiter_test.dart: releasing twice frees only one slot
+00:20 +277: /root/work/r2/start_clean/test/network/request_limiter_test.dart: a failing isCancelled callback does not lose the slot
+00:20 +278: /root/work/r2/start_clean/test/network/request_limiter_test.dart: slots come back after work fails
+00:20 +279: /root/work/r2/start_clean/test/network/reader_image_cache_path_reuse_test.dart: (setUpAll)
+00:20 +279: /root/work/r2/start_clean/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+PATH_REUSE before the broken file is removed / a direct cache write: same_directory=true same_path=false
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_path_reuseNREYEK/cache/cache/1/86efd6aa3609a92d4940b1c7aa705443-1793822005149895-0' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:113:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:21 +280: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:21 +280: /root/work/r2/start_clean/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a new request in the same directory is kept
+PATH_REUSE before the broken file is removed / a new request: same_directory=true same_path=false
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_path_reuseNREYEK/cache/cache/2/4d47d7b9b1406aa74a58cc636aecec85-1793822005620534-101' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:113:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:21 +281: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:21 +282: /root/work/r2/start_clean/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a direct cache write in the same directory is kept
+PATH_REUSE after the broken file is removed / a direct cache write: same_directory=true same_path=false
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:22 +283: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: cache hits and local files do not wait for a full queue
+00:22 +284: /root/work/r2/start_clean/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a new request in the same directory is kept
+PATH_REUSE after the broken file is removed / a new request: same_directory=true same_path=false
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:22 +285: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: cancelled loads give their slots back
+00:22 +286: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: a shared request survives when one of its loads is cancelled
+00:23 +287: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: (setUpAll)
+00:23 +287: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:24 +288: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:24 +289: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:24 +290: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:24 +290: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:25 +291: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:25 +291: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +292: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:26 +292: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken download is not kept in the cache
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +293: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:26 +293: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken local file is reported and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +294: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:27 +294: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider the local cover fallback is used and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:27 +295: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:27 +296: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:27 +297: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:27 +298: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:27 +298: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:28 +299: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:28 +299: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:28 +300: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:28 +300: /root/work/r2/start_clean/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider a local history cover is shown and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:28 +301: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:30 +302: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:30 +303: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:30 +304: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:31 +304: /root/work/r2/start_clean/test/network/reader_image_cache_race_test.dart: before delete: a direct cache write keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:31 +305: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:31 +305: /root/work/r2/start_clean/test/network/reader_image_cache_race_test.dart: delete started: a direct cache write keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:31 +306: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:31 +306: /root/work/r2/start_clean/test/network/reader_image_cache_race_test.dart: before delete: a new request keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:31 +307: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:31 +307: /root/work/r2/start_clean/test/network/reader_image_cache_race_test.dart: delete started: a new request keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:31 +308: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:32 +309: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:32 +310: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:32 +311: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:32 +311: /root/work/r2/start_clean/test/channel_test.dart: 1-1-3
+push 1
+push 2
+pop 1
+push 3
+pop 2
+push done
+pop 3
+00:32 +312: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:32 +313: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+00:37 +314: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: history and cover tiles of one comic share one request
+00:38 +315: /root/work/r2/start_clean/test/network/thumbnail_cover_queue_test.dart: (tearDownAll)
+00:38 +315: All tests passed!
+exit=0

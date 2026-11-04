@@ -1,0 +1,117 @@
+{
+  "unmutated_exit_code": 0,
+  "unmutated_last_line": "00:15 +25: All tests passed!",
+  "mutants": [
+    {
+      "id": "R1_cancel_rhttp_before_headers",
+      "why": "rhttp must not be cancelled while the headers may be arriving (panic=abort race)",
+      "file": "lib/network/app_dio.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cancel_test.dart",
+        "test/network/rhttp_adapter_cancel_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 33.7,
+      "last_line": "00:16 +12 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "R2_no_rhttp_cancel_token",
+      "why": "Dio's cancel signal must reach rhttp",
+      "file": "lib/network/app_dio.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cancel_test.dart",
+        "test/network/rhttp_adapter_cancel_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 59.9,
+      "last_line": "00:55 +7 -6: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "R3_no_drain_after_cancel",
+      "why": "rhttp's cancel error needs a listener after Dio stops listening",
+      "file": "lib/network/app_dio.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cancel_test.dart",
+        "test/network/rhttp_adapter_cancel_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 20.3,
+      "last_line": "00:16 +8 -5: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "R4_base_ignores_stop_signal",
+      "why": "BaseImageProvider must hand the stop signal to providers",
+      "file": "lib/foundation/image_provider/base_image_provider.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cancel_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 3.6,
+      "last_line": "00:00 +0 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "R5_abandoned_load_stays_joinable",
+      "why": "a consumer arriving after all others cancelled must start a new load",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cancel_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 50.5,
+      "last_line": "00:46 +5 -2: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "R6_dio_cancel_before_headers",
+      "why": "a slot must stay taken while rhttp still waits for headers",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cancel_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 20.0,
+      "last_line": "00:15 +6 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "R7_limiter_ignores_cancel_signal",
+      "why": "a cancelled waiter must leave the queue at once",
+      "file": "lib/network/request_limiter.dart",
+      "tests": [
+        "test/network/request_limiter_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 34.3,
+      "last_line": "00:30 +7 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "R8_no_recheck_after_wait",
+      "why": "a valid image stored while queued must be used without a request",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_cache_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 4.8,
+      "last_line": "00:01 +3 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "R9_recheck_accepts_broken_bytes",
+      "why": "empty or undecodable bytes stored while queued are no hit",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_cache_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 5.1,
+      "last_line": "00:01 +2 -2: Some tests failed.",
+      "status": "KILLED"
+    }
+  ]
+}

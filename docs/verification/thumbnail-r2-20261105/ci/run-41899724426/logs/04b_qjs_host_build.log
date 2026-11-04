@@ -1,0 +1,4 @@
+/mnt/venera-ci/pub-cache/git/flutter_qjs-8feae95df7fb00455df129ad7a0dfec1d0e8d8e4/cxx/quickjs-ng/quickjs.c:95: warning: "DUMP_LEAKS" redefined
+   95 | #define DUMP_LEAKS          0x4000  /* dump leaked objects and strings in JS_FreeRuntime */
+      | 
+<command-line>: note: this is the location of the previous definition

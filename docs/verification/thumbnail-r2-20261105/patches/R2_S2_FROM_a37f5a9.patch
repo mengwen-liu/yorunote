@@ -1,0 +1,3650 @@
+diff --git a/lib/foundation/image_provider/base_image_provider.dart b/lib/foundation/image_provider/base_image_provider.dart
+index 3861574b4fac95f167404ba31af6a25814e62ad2..050c0bc37ca0abae7543cd5817b7d770b10fdf9b 100644
+--- a/lib/foundation/image_provider/base_image_provider.dart
++++ b/lib/foundation/image_provider/base_image_provider.dart
+@@ -1,4 +1,4 @@
+-import 'dart:async' show Future, StreamController, scheduleMicrotask;
++import 'dart:async' show Completer, Future, StreamController, scheduleMicrotask;
+ import 'dart:convert';
+ import 'dart:math';
+ import 'dart:ui' as ui show Codec;
+@@ -59,19 +59,25 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
+ 
+       bool stop = false;
+ 
++      // Completes when the image is no longer needed (see [loadCancellable]).
++      final stopped = Completer<void>();
++
+       chunkEvents.onCancel = () {
+         stop = true;
++        if (!stopped.isCompleted) {
++          stopped.complete();
++        }
+       };
+ 
+       Uint8List? data;
+ 
+       while (data == null && !stop) {
+         try {
+-          data = await load(chunkEvents, () {
++          data = await loadCancellable(chunkEvents, () {
+             if (stop) {
+               throw const _ImageLoadingStopException();
+             }
+-          });
++          }, stopped.future);
+         } on _ImageLoadingStopException {
+           rethrow;
+         } catch (e) {
+@@ -141,6 +147,19 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
+     void Function() checkStop,
+   );
+ 
++  /// Same as [load], with [stopped] completing as soon as the image is no
++  /// longer needed, so that a provider can abort work that does not produce
++  /// events (e.g. a request waiting for headers) instead of waiting for the
++  /// next [checkStop] call.
++  ///
++  /// The default implementation ignores [stopped] and calls [load].
++  @protected
++  Future<Uint8List> loadCancellable(
++    StreamController<ImageChunkEvent> chunkEvents,
++    void Function() checkStop,
++    Future<void> stopped,
++  ) => load(chunkEvents, checkStop);
++
+   String get key;
+ 
+   /// Called before the error is reported when the loaded [data] is empty or
+diff --git a/lib/foundation/image_provider/cached_image.dart b/lib/foundation/image_provider/cached_image.dart
+index c54757a18ad956a2d715587b71b93fc3d20bc9a8..88d07181aed4481b34c21cd001c918104979d963 100644
+--- a/lib/foundation/image_provider/cached_image.dart
++++ b/lib/foundation/image_provider/cached_image.dart
+@@ -1,4 +1,4 @@
+-import 'dart:async' show Future;
++import 'dart:async' show Future, StreamController;
+ import 'package:flutter/foundation.dart';
+ import 'package:flutter/material.dart';
+ import 'package:venera/foundation/comic_type.dart';
+@@ -32,7 +32,18 @@ class CachedImageProvider
+   final bool fallbackToLocalCover;
+ 
+   @override
+-  Future<Uint8List> load(chunkEvents, checkStop) async {
++  Future<Uint8List> load(chunkEvents, checkStop) =>
++      _load(chunkEvents, checkStop, null);
++
++  @override
++  Future<Uint8List> loadCancellable(chunkEvents, checkStop, stopped) =>
++      _load(chunkEvents, checkStop, stopped);
++
++  Future<Uint8List> _load(
++    StreamController<ImageChunkEvent> chunkEvents,
++    void Function() checkStop,
++    Future<void>? stopped,
++  ) async {
+     try {
+       if(url.startsWith("file://")) {
+         var file = File(url.substring(7));
+@@ -45,6 +56,7 @@ class CachedImageProvider
+         sourceKey,
+         cid,
+         checkStop: checkStop,
++        stopped: stopped,
+         onProgress: (currentBytes, totalBytes) {
+           chunkEvents.add(
+             ImageChunkEvent(
+diff --git a/lib/foundation/image_provider/history_image_provider.dart b/lib/foundation/image_provider/history_image_provider.dart
+index 8df681ceaab256e5e0796eab636603b8883c4dfa..d752e5adc756654450fe6ee25a66b01488c1b568 100644
+--- a/lib/foundation/image_provider/history_image_provider.dart
++++ b/lib/foundation/image_provider/history_image_provider.dart
+@@ -1,4 +1,4 @@
+-import 'dart:async' show Future;
++import 'dart:async' show Future, StreamController;
+ import 'package:flutter/foundation.dart';
+ import 'package:flutter/material.dart';
+ import 'package:venera/foundation/local.dart';
+@@ -17,7 +17,18 @@ class HistoryImageProvider
+   final History history;
+ 
+   @override
+-  Future<Uint8List> load(chunkEvents, checkStop) async {
++  Future<Uint8List> load(chunkEvents, checkStop) =>
++      _load(chunkEvents, checkStop, null);
++
++  @override
++  Future<Uint8List> loadCancellable(chunkEvents, checkStop, stopped) =>
++      _load(chunkEvents, checkStop, stopped);
++
++  Future<Uint8List> _load(
++    StreamController<ImageChunkEvent> chunkEvents,
++    void Function() checkStop,
++    Future<void>? stopped,
++  ) async {
+     var url = history.cover;
+     if (!url.contains('/')) {
+       var localComic = LocalManager().find(history.id, history.type);
+@@ -37,6 +48,7 @@ class HistoryImageProvider
+       history.type.sourceKey,
+       history.id,
+       checkStop: checkStop,
++      stopped: stopped,
+       onProgress: (currentBytes, totalBytes) {
+         chunkEvents.add(
+           ImageChunkEvent(
+diff --git a/lib/network/app_dio.dart b/lib/network/app_dio.dart
+index 4d5549df7f4d99abbe0e80ef67d0f5aa944f1059..f732ead4d232092f3d2999dffcb65c20a191c427 100644
+--- a/lib/network/app_dio.dart
++++ b/lib/network/app_dio.dart
+@@ -227,12 +227,49 @@ class RHttpAdapter implements HttpClientAdapter {
+       options.headers['User-Agent'] = "venera/v${App.version}";
+     }
+ 
++    // Without a cancel signal the request is made exactly as before.
++    //
++    // With one, the rhttp request is cancelled only after its headers have
++    // arrived. rhttp 0.15.1 (built with panic = "abort") cancels by dropping
++    // the Rust future; if that future is waiting for the reply of a Dart
++    // callback (onResponse / onError, i.e. around the arrival of the
++    // headers), flutter_rust_bridge 2.11.1 panics when the reply comes and
++    // the whole process aborts. Once the headers are in and one event-loop
++    // turn has passed, the Rust side only streams the body, so dropping it
++    // is safe. A request still waiting for its headers is therefore not torn
++    // down until they arrive.
++    rhttp.CancelToken? cancelToken;
++    var cancelled = false;
++    var headersReceived = false;
++    var rhttpCancelScheduled = false;
++    void scheduleRhttpCancel() {
++      final token = cancelToken;
++      if (token == null || rhttpCancelScheduled) return;
++      rhttpCancelScheduled = true;
++      Timer.run(() {
++        token.cancel().catchError((Object e, StackTrace s) {
++          Log.error("Network", "Failed to cancel request: $e", s);
++        });
++      });
++    }
++
++    if (cancelFuture != null) {
++      cancelToken = rhttp.CancelToken();
++      unawaited(
++        cancelFuture.then((_) {
++          cancelled = true;
++          if (headersReceived) scheduleRhttpCancel();
++        }),
++      );
++    }
++
+     var res = await rhttp.Rhttp.request(
+       method: rhttp.HttpMethod(options.method),
+       url: options.uri.toString(),
+       settings: await settings,
+       expectBody: rhttp.HttpExpectBody.stream,
+       body: requestStream == null ? null : rhttp.HttpBody.stream(requestStream),
++      cancelToken: cancelToken,
+       headers: rhttp.HttpHeaders.rawMap(
+         Map.fromEntries(
+           options.headers.entries.map(
+@@ -241,6 +278,8 @@ class RHttpAdapter implements HttpClientAdapter {
+         ),
+       ),
+     );
++    headersReceived = true;
++    if (cancelled) scheduleRhttpCancel();
+     if (res is! rhttp.HttpStreamResponse) {
+       throw Exception("Invalid response type: ${res.runtimeType}");
+     }
+@@ -251,7 +290,9 @@ class RHttpAdapter implements HttpClientAdapter {
+       headers[key]!.add(entry.$2);
+     }
+     return ResponseBody(
+-      res.body,
++      cancelToken == null
++          ? res.body
++          : _drainAfterCancel(res.body, () => cancelled),
+       res.statusCode,
+       statusMessage: _getStatusMessage(res.statusCode),
+       isRedirect: false,
+@@ -259,6 +300,40 @@ class RHttpAdapter implements HttpClientAdapter {
+     );
+   }
+ 
++  /// Forwards [body]. Once the request was cancelled, the rhttp stream is
++  /// kept and drained until it ends (rhttp ends it with a cancel error right
++  /// after the cancellation) so that this error has a listener; data is no
++  /// longer forwarded then. Before the cancellation every event, errors
++  /// included, is forwarded unchanged.
++  static Stream<Uint8List> _drainAfterCancel(
++    Stream<Uint8List> body,
++    bool Function() cancelled,
++  ) {
++    late StreamSubscription<Uint8List> sub;
++    final out = StreamController<Uint8List>(
++      onCancel: () {
++        if (cancelled()) {
++          return null;
++        }
++        return sub.cancel();
++      },
++    );
++    sub = body.listen(
++      (data) {
++        if (!cancelled()) {
++          out.add(data);
++        }
++      },
++      onError: (Object e, StackTrace s) {
++        if (!cancelled()) {
++          out.addError(e, s);
++        }
++      },
++      onDone: out.close,
++    );
++    return out.stream;
++  }
++
+   static String _getStatusMessage(int statusCode) {
+     return switch (statusCode) {
+       200 => "OK",
+diff --git a/lib/network/images.dart b/lib/network/images.dart
+index f29e803f4de5398c0f99857286166eb2f095f534..745196915ed1357148256a179e8174b427e9f71d 100644
+--- a/lib/network/images.dart
++++ b/lib/network/images.dart
+@@ -1,7 +1,8 @@
+ import 'dart:async';
+ import 'dart:typed_data';
++import 'dart:ui' as ui;
+ 
+-import 'package:flutter/foundation.dart' show listEquals;
++import 'package:flutter/foundation.dart' show listEquals, visibleForTesting;
+ import 'package:flutter_qjs/flutter_qjs.dart';
+ import 'package:venera/foundation/cache_manager.dart';
+ import 'package:venera/foundation/comic_source/comic_source.dart';
+@@ -106,6 +107,13 @@ abstract class ImageDownloader {
+   /// Disk cache hits and local files never wait for it.
+   static final coverRequestLimiter = RequestLimiter(maxCoverRequests);
+ 
++  /// Test-only timing probe for cover network loads: called with
++  /// `enqueue` (before waiting for a slot of [coverRequestLimiter]),
++  /// `granted` (slot obtained) and `request` (request handed to Dio), and the
++  /// disk cache key. Null in the app.
++  @visibleForTesting
++  static void Function(String event, String cacheKey)? debugCoverLoadEvent;
++
+   /// Cover network loads in progress, by disk cache key.
+   static final _coverLoads = <String, _CoverLoad>{};
+ 
+@@ -121,22 +129,31 @@ abstract class ImageDownloader {
+   /// - concurrent loads of the same disk cache key share one request, which is
+   ///   abandoned only when every load sharing it has been stopped.
+   ///
+-  /// [checkStop] throws once the caller's load has been stopped.
++  /// [checkStop] throws once the caller's load has been stopped. [stopped],
++  /// if given, completes at that moment; the caller then returns right away,
++  /// and when it was the last load using the request, the request is
++  /// cancelled down to rhttp (also while waiting for headers or body bytes)
++  /// or, if still queued, removed from [coverRequestLimiter].
+   static Future<Uint8List> loadCoverThumbnail(
+     String url,
+     String? sourceKey,
+     String? cid, {
+     required void Function() checkStop,
+     void Function(int currentBytes, int? totalBytes)? onProgress,
++    Future<void>? stopped,
+   }) async {
+-    final consumer = _CoverConsumer(() {
+-      try {
+-        checkStop();
+-        return false;
+-      } catch (_) {
+-        return true;
+-      }
+-    }, onProgress);
++    final consumer = _CoverConsumer(
++      () {
++        try {
++          checkStop();
++          return false;
++        } catch (_) {
++          return true;
++        }
++      },
++      onProgress,
++      stopped,
++    );
+     while (true) {
+       try {
+         return await _loadCover(url, sourceKey, cid, consumer);
+@@ -183,19 +200,29 @@ abstract class ImageDownloader {
+       return cache;
+     }
+     var load = _coverLoads[cacheKey];
+-    if (load != null) {
+-      load.consumers.add(consumer);
+-      return load.future;
+-    }
+-    final newLoad = _CoverLoad()..consumers.add(consumer);
+-    _coverLoads[cacheKey] = newLoad;
+-    newLoad.future = _fetchCover(url, sourceKey, cid, cacheKey, newLoad)
+-        .whenComplete(() {
+-          if (_coverLoads[cacheKey] == newLoad) {
+-            _coverLoads.remove(cacheKey);
+-          }
+-        });
+-    return newLoad.future;
++    if (load == null) {
++      final newLoad = _CoverLoad(cacheKey);
++      load = newLoad;
++      _coverLoads[cacheKey] = newLoad;
++      newLoad.attach(consumer);
++      newLoad.future = _fetchCover(
++        url,
++        sourceKey,
++        cid,
++        cacheKey,
++        newLoad,
++      ).whenComplete(() => _forgetCoverLoad(newLoad));
++    } else {
++      load.attach(consumer);
++    }
++    return consumer.wait(load.future);
++  }
++
++  /// Removes [load] from the loads that new consumers can join.
++  static void _forgetCoverLoad(_CoverLoad load) {
++    if (_coverLoads[load.cacheKey] == load) {
++      _coverLoads.remove(load.cacheKey);
++    }
+   }
+ 
+   static Future<Uint8List?> _readCoverCache(String cacheKey) async {
+@@ -208,6 +235,33 @@ abstract class ImageDownloader {
+     return data;
+   }
+ 
++  /// [_readCoverCache] for the check made after waiting for a slot: empty or
++  /// undecodable bytes are treated as a miss, so the request goes out and its
++  /// result replaces them. The decode happens only when an entry appeared
++  /// while waiting, never for an ordinary cache hit.
++  static Future<Uint8List?> _readValidCoverCache(String cacheKey) async {
++    final data = await _readCoverCache(cacheKey);
++    if (data == null || data.isEmpty || !await _canDecode(data)) {
++      return null;
++    }
++    return data;
++  }
++
++  static Future<bool> _canDecode(Uint8List data) async {
++    try {
++      final codec = await ui.instantiateImageCodec(data);
++      try {
++        final frame = await codec.getNextFrame();
++        frame.image.dispose();
++      } finally {
++        codec.dispose();
++      }
++      return true;
++    } catch (_) {
++      return false;
++    }
++  }
++
+   static Future<Uint8List> _fetchCover(
+     String url,
+     String? sourceKey,
+@@ -235,23 +289,25 @@ abstract class ImageDownloader {
+           comicInfo.data.cover,
+           sourceKey,
+           null,
+-          _CoverConsumer(load.isCancelled, load.progress),
++          _CoverConsumer(load.isCancelled, load.progress, load.abandoned),
+         );
+       }
+     }
+ 
++    debugCoverLoadEvent?.call('enqueue', cacheKey);
+     final release = await coverRequestLimiter.acquire(
+       isCancelled: load.isCancelled,
++      cancelSignal: load.abandoned,
+     );
++    debugCoverLoadEvent?.call('granted', cacheKey);
+     try {
+-      // Another load may have stored the cover while this one was waiting.
+-      final cache = await _readCoverCache(cacheKey);
++      // Another path may have stored the cover while this load was waiting
++      // for its slot; empty or broken bytes stored meanwhile are no hit.
++      final cache = await _readValidCoverCache(cacheKey);
+       if (cache != null) {
+         return cache;
+       }
+-      if (load.isCancelled()) {
+-        throw const RequestCancelledException();
+-      }
++      load.throwIfCancelled();
+ 
+       var dio = AppDio(
+         BaseOptions(
+@@ -265,24 +321,39 @@ abstract class ImageDownloader {
+       if (requestUrl.startsWith('//')) {
+         requestUrl = 'https:$requestUrl';
+       }
+-      var req = await dio.request<ResponseBody>(
+-        requestUrl,
+-        data: configs['data'],
+-      );
+-      var stream = req.data?.stream ?? (throw "Error: Empty response body.");
+-      int? expectedBytes = req.data!.contentLength;
+-      if (expectedBytes == -1) {
+-        expectedBytes = null;
+-      }
++      debugCoverLoadEvent?.call('request', cacheKey);
++      Response<ResponseBody> req;
+       var buffer = <int>[];
+-      await for (var data in stream) {
+-        if (load.isCancelled()) {
++      int? expectedBytes;
++      try {
++        req = await dio.request<ResponseBody>(
++          requestUrl,
++          data: configs['data'],
++          cancelToken: load.cancelToken,
++        );
++        load.headersReceived = true;
++        if (load.isAbandoned) {
++          // Abandoned while waiting for the headers: tear it down now.
++          load.cancelToken.cancel();
+           throw const RequestCancelledException();
+         }
+-        buffer.addAll(data);
+-        if (expectedBytes != null) {
+-          load.progress(buffer.length, expectedBytes);
++        var stream = req.data?.stream ?? (throw "Error: Empty response body.");
++        expectedBytes = req.data!.contentLength;
++        if (expectedBytes == -1) {
++          expectedBytes = null;
+         }
++        await for (var data in stream) {
++          load.throwIfCancelled();
++          buffer.addAll(data);
++          if (expectedBytes != null) {
++            load.progress(buffer.length, expectedBytes);
++          }
++        }
++      } on DioException catch (e) {
++        if (CancelToken.isCancel(e) || load.isAbandoned) {
++          throw const RequestCancelledException();
++        }
++        rethrow;
+       }
+ 
+       if (configs['onResponse'] is JSInvokable) {
+@@ -486,12 +557,58 @@ abstract class ImageDownloader {
+ 
+ /// One cover network load and the provider loads sharing it.
+ class _CoverLoad {
++  _CoverLoad(this.cacheKey);
++
++  final String cacheKey;
++
+   final consumers = <_CoverConsumer>[];
+ 
+   late final Future<Uint8List> future;
+ 
++  /// Cancels the request in Dio and, through RHttpAdapter, in rhttp.
++  /// Only used once the headers are in (see RHttpAdapter.fetch): before
++  /// that, Dio would give up on the request while rhttp keeps it open, so
++  /// the slot would be returned for a request that is still running.
++  final cancelToken = CancelToken();
++
++  /// True once the response headers have arrived.
++  bool headersReceived = false;
++
++  final _abandoned = Completer<void>();
++
++  /// Completes once every load sharing this one has been stopped.
++  Future<void> get abandoned => _abandoned.future;
++
++  bool get isAbandoned => _abandoned.isCompleted;
++
++  void attach(_CoverConsumer consumer) {
++    consumers.add(consumer);
++    consumer.onStop(_abandonIfUnused);
++  }
++
+   /// True once every load sharing this one has been stopped.
+-  bool isCancelled() => consumers.every((c) => c.isCancelled());
++  bool isCancelled() => isAbandoned || consumers.every((c) => c.isCancelled());
++
++  void throwIfCancelled() {
++    if (isCancelled()) {
++      _abandonIfUnused();
++      throw const RequestCancelledException();
++    }
++  }
++
++  /// Abandons the load when no consumer needs it any more: new consumers
++  /// start a new load, a queued request leaves the queue and a running
++  /// request is cancelled.
++  void _abandonIfUnused() {
++    if (isAbandoned || !consumers.every((c) => c.isCancelled())) {
++      return;
++    }
++    _abandoned.complete();
++    ImageDownloader._forgetCoverLoad(this);
++    if (headersReceived) {
++      cancelToken.cancel();
++    }
++  }
+ 
+   void progress(int currentBytes, int? totalBytes) {
+     for (final c in consumers) {
+@@ -503,11 +620,49 @@ class _CoverLoad {
+ }
+ 
+ class _CoverConsumer {
+-  const _CoverConsumer(this.isCancelled, this.onProgress);
++  _CoverConsumer(this._isStopped, this.onProgress, this._stopped) {
++    _stopped?.then((_) {
++      _stopSignalled = true;
++      for (final listener in _stopListeners) {
++        listener();
++      }
++      _stopListeners.clear();
++    });
++  }
+ 
+-  final bool Function() isCancelled;
++  final bool Function() _isStopped;
+ 
+   final void Function(int currentBytes, int? totalBytes)? onProgress;
++
++  final Future<void>? _stopped;
++
++  bool _stopSignalled = false;
++
++  final _stopListeners = <void Function()>[];
++
++  bool isCancelled() => _stopSignalled || _isStopped();
++
++  /// Calls [listener] when this consumer's stop signal fires.
++  void onStop(void Function() listener) {
++    if (_stopSignalled) {
++      listener();
++    } else {
++      _stopListeners.add(listener);
++    }
++  }
++
++  /// Waits for [load], or fails with [RequestCancelledException] as soon as
++  /// this consumer is stopped (other consumers keep the load alive).
++  Future<Uint8List> wait(Future<Uint8List> load) {
++    final stopped = _stopped;
++    if (stopped == null) {
++      return load;
++    }
++    return Future.any([
++      load,
++      stopped.then<Uint8List>((_) => throw const RequestCancelledException()),
++    ]);
++  }
+ }
+ 
+ /// A wrapper class for a stream that
+diff --git a/lib/network/request_limiter.dart b/lib/network/request_limiter.dart
+index 14c2f33c1882fd58aad2166f6cf243cd1f7ad2f5..e36bd0072a658362c05d516e6dde08153719db76 100644
+--- a/lib/network/request_limiter.dart
++++ b/lib/network/request_limiter.dart
+@@ -13,7 +13,8 @@ class RequestCancelledException implements Exception {
+ /// Lets at most [maxConcurrent] requests run at the same time.
+ ///
+ /// Waiters are served in FIFO order. A released slot is handed to the next
+-/// waiter right away (no polling). Waiters whose [acquire] `isCancelled`
++/// waiter right away (no polling). A waiter leaves the queue as soon as its
++/// [acquire] `cancelSignal` completes, and waiters whose `isCancelled`
+ /// callback returns true when their turn comes are skipped, so cancelled loads
+ /// never hold or lose a slot.
+ class RequestLimiter {
+@@ -35,13 +36,25 @@ class RequestLimiter {
+   ///
+   /// The returned function must be called once the request has finished,
+   /// failed or been abandoned; calling it again has no effect.
+-  Future<void Function()> acquire({bool Function()? isCancelled}) {
++  ///
++  /// When [cancelSignal] completes before a slot is granted, the waiter is
++  /// removed from the queue and the future fails with
++  /// [RequestCancelledException].
++  Future<void Function()> acquire({
++    bool Function()? isCancelled,
++    Future<void>? cancelSignal,
++  }) {
+     if (_active < maxConcurrent && _waiters.isEmpty) {
+       _active++;
+       return Future.value(_releaser());
+     }
+     final waiter = _Waiter(isCancelled);
+     _waiters.add(waiter);
++    cancelSignal?.then((_) {
++      if (!waiter.completer.isCompleted && _waiters.remove(waiter)) {
++        waiter.completer.completeError(const RequestCancelledException());
++      }
++    });
+     return waiter.completer.future;
+   }
+ 
+diff --git a/test/network/raw_image_server.dart b/test/network/raw_image_server.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..5c1167ebe50b397cc4c6f57c13434c8610121946
+--- /dev/null
++++ b/test/network/raw_image_server.dart
+@@ -0,0 +1,210 @@
++// A local HTTP/1.1 image server that hands each request over to the test as
++// a raw socket, so the test decides exactly when headers and body bytes are
++// sent and can observe when the client closes the connection (which is the
++// evidence that the underlying request was really torn down).
++
++import 'dart:async';
++import 'dart:io';
++
++import 'package:flutter/foundation.dart';
++
++/// How the server answers a request for a path.
++enum RawMode {
++  /// Full response right away.
++  immediate,
++
++  /// Nothing (not even headers) until [HeldRequest.release].
++  holdHeaders,
++
++  /// Headers and the first half of the body, then nothing until release.
++  stallBody,
++
++  /// An HTTP status error right away.
++  status,
++
++  /// Headers announcing the full length, half the body, then the server
++  /// closes the connection (a broken response).
++  truncate,
++}
++
++class HeldRequest {
++  HeldRequest(this.path, this._socket, this._body, this.mode) {
++    _socket.listen(
++      (_) {},
++      onDone: _markClosed,
++      onError: (_) => _markClosed(),
++      cancelOnError: true,
++    );
++  }
++
++  final String path;
++  final Socket _socket;
++  final Uint8List _body;
++  final RawMode mode;
++
++  final _closed = Completer<void>();
++  bool _finished = false;
++
++  /// True once the server finished the response itself.
++  bool get finished => _finished;
++
++  /// Completes when the connection is closed by the client (or broken)
++  /// before the server finished the response.
++  Future<void> get closedByClient => _closed.future;
++
++  bool get isClosedByClient => _closed.isCompleted && !_finished;
++
++  void _markClosed() {
++    if (!_closed.isCompleted) _closed.complete();
++  }
++
++  String _headers(int length) =>
++      'HTTP/1.1 200 OK\r\n'
++      'Content-Type: image/png\r\n'
++      'Content-Length: $length\r\n'
++      'Connection: close\r\n\r\n';
++
++  void _sendHeadersAndHalf() {
++    _socket.write(_headers(_body.length));
++    _socket.add(_body.sublist(0, _body.length ~/ 2));
++  }
++
++  bool _headersSent = false;
++
++  /// For a request held before its headers: sends the headers and half of
++  /// the body, then waits again (like [RawMode.stallBody]).
++  Future<void> sendHeadersAndStall() async {
++    if (_headersSent || _finished || _closed.isCompleted) return;
++    _headersSent = true;
++    try {
++      _sendHeadersAndHalf();
++      await _socket.flush();
++    } catch (_) {
++      // The client went away in the meantime.
++    }
++  }
++
++  /// Sends the rest of the response and closes the connection.
++  Future<void> release() async {
++    if (_finished || _closed.isCompleted) return;
++    _finished = true;
++    try {
++      if (mode == RawMode.stallBody || _headersSent) {
++        _socket.add(_body.sublist(_body.length ~/ 2));
++      } else {
++        _socket.write(_headers(_body.length));
++        _socket.add(_body);
++      }
++      await _socket.flush();
++      await _socket.close();
++    } catch (_) {
++      // The client went away in the meantime.
++    }
++    _markClosed();
++  }
++}
++
++class RawImageServer {
++  HttpServer? _server;
++
++  final images = <String, Uint8List>{};
++  final modes = <String, RawMode>{};
++  final statusCodes = <String, int>{};
++  final requests = <String, int>{};
++  final held = <HeldRequest>[];
++
++  int total = 0;
++  int active = 0;
++  int peakActive = 0;
++
++  final _waiters = <(bool Function(), Completer<void>)>[];
++
++  Future<void> start() async {
++    _server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
++    _server!.listen(_handle);
++  }
++
++  String url(String path) => 'http://127.0.0.1:${_server!.port}$path';
++
++  int count(String path) => requests[path] ?? 0;
++
++  Future<void> _handle(HttpRequest request) async {
++    final path = request.uri.path;
++    requests[path] = (requests[path] ?? 0) + 1;
++    total++;
++    final mode = modes[path] ?? RawMode.immediate;
++    final body = images[path] ?? Uint8List(0);
++    if (mode == RawMode.status || images[path] == null) {
++      request.response.statusCode = statusCodes[path] ?? HttpStatus.notFound;
++      request.response.headers.set('connection', 'close');
++      await request.response.close();
++      _notify();
++      return;
++    }
++    final socket = await request.response.detachSocket(writeHeaders: false);
++    final h = HeldRequest(path, socket, body, mode);
++    held.add(h);
++    active++;
++    if (active > peakActive) peakActive = active;
++    unawaited(
++      h.closedByClient.then((_) {
++        active--;
++        _notify();
++      }),
++    );
++    switch (mode) {
++      case RawMode.immediate:
++        unawaited(h.release());
++      case RawMode.stallBody:
++        h._sendHeadersAndHalf();
++        await socket.flush();
++      case RawMode.truncate:
++        h._finished = true;
++        h._sendHeadersAndHalf();
++        await socket.flush();
++        socket.destroy();
++        h._markClosed();
++      case RawMode.holdHeaders:
++      case RawMode.status:
++        break;
++    }
++    _notify();
++  }
++
++  void _notify() {
++    _waiters.removeWhere((w) {
++      if (w.$1()) {
++        w.$2.complete();
++        return true;
++      }
++      return false;
++    });
++  }
++
++  /// Completes once [condition] holds; re-checked on every server event.
++  Future<void> until(bool Function() condition, {Duration? timeout}) {
++    final f = condition()
++        ? Future<void>.value()
++        : (() {
++            final c = Completer<void>();
++            _waiters.add((condition, c));
++            return c.future;
++          })();
++    return f.timeout(timeout ?? const Duration(seconds: 20));
++  }
++
++  /// Held requests for [path] in arrival order.
++  List<HeldRequest> heldFor(String path) =>
++      held.where((h) => h.path == path).toList();
++
++  Future<void> releaseAll() async {
++    for (final h in [...held]) {
++      await h.release();
++    }
++  }
++
++  Future<void> stop() async {
++    await releaseAll();
++    await _server?.close(force: true);
++  }
++}
+diff --git a/test/network/request_limiter_test.dart b/test/network/request_limiter_test.dart
+index 23b8d7950108f6e4eb4af742833c54d82b68d7fd..b0f9963f0baab542b1a11b8462ba7d20559a61df 100644
+--- a/test/network/request_limiter_test.dart
++++ b/test/network/request_limiter_test.dart
+@@ -1,6 +1,8 @@
+ // Unit tests of RequestLimiter, the event-driven limit of cover requests.
+ // No timers are used: a waiter must get a freed slot within microtasks.
+ 
++import 'dart:async';
++
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:venera/network/images.dart';
+ import 'package:venera/network/request_limiter.dart';
+@@ -113,4 +115,37 @@ void main() {
+     expect(limiter.active, 0);
+     expect(limiter.waiting, 0);
+   });
++
++  test('a cancel signal removes a waiter from the queue at once', () async {
++    final limiter = RequestLimiter(1);
++    final first = await limiter.acquire();
++    final signal = Completer<void>();
++    final cancelled = limiter.acquire(cancelSignal: signal.future);
++    final next = limiter.acquire();
++    expect(limiter.waiting, 2);
++    signal.complete();
++    await expectLater(cancelled, throwsA(isA<RequestCancelledException>()));
++    expect(limiter.waiting, 1, reason: 'left the queue before any release');
++    first();
++    final release = await next;
++    expect(limiter.active, 1);
++    release();
++    expect(limiter.active, 0);
++    expect(limiter.waiting, 0);
++  });
++
++  test('a cancel signal after the grant does not take the slot away', () async {
++    final limiter = RequestLimiter(1);
++    final first = await limiter.acquire();
++    final signal = Completer<void>();
++    final waiter = limiter.acquire(cancelSignal: signal.future);
++    first();
++    final release = await waiter;
++    signal.complete();
++    await _microtasks();
++    expect(limiter.active, 1);
++    release();
++    release();
++    expect(limiter.active, 0);
++  });
+ }
+diff --git a/test/network/rhttp_adapter_cancel_test.dart b/test/network/rhttp_adapter_cancel_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..b8048be8a8b5658a3a6cd0bc74c9ebda4bf41c0d
+--- /dev/null
++++ b/test/network/rhttp_adapter_cancel_test.dart
+@@ -0,0 +1,175 @@
++// RHttpAdapter with and without a Dio cancel signal, against a raw local
++// server: requests without a CancelToken behave as before, and a cancelled
++// request is torn down in rhttp (the server sees the connection closed)
++// without leaving an unhandled rhttp stream error behind.
++
++import 'dart:async';
++import 'dart:typed_data';
++
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/network/app_dio.dart';
++
++import 'raw_image_server.dart';
++import 'thumbnail_test_support.dart';
++
++void main() {
++  final unused = CoverServer();
++  final server = RawImageServer();
++
++  setUpAll(() async {
++    await initCoverTestEnvironment(unused);
++    if (hasNativeHttp) await server.start();
++  });
++
++  tearDownAll(() async {
++    await unused.stop();
++    if (hasNativeHttp) await server.stop();
++  });
++
++  AppDio streamDio() => AppDio(BaseOptions(responseType: ResponseType.stream));
++
++  Future<Uint8List> readAll(Stream<Uint8List> s) async {
++    final b = BytesBuilder();
++    await for (final c in s) {
++      b.add(c);
++    }
++    return b.takeBytes();
++  }
++
++  String path(String name, RawMode mode) {
++    final p = '/adapter/$name.png';
++    server.images[p] = png(3, width: 64, height: 64);
++    server.modes[p] = mode;
++    return p;
++  }
++
++  test(
++    'without a CancelToken a full response is read as before',
++    () async {
++      final p = path('plain', RawMode.immediate);
++      final res = await streamDio().request<ResponseBody>(server.url(p));
++      expect(await readAll(res.data!.stream), server.images[p]);
++    },
++    skip: !hasNativeHttp,
++  );
++
++  test(
++    'with an unused CancelToken a full response is read as before',
++    () async {
++      final p = path('token-unused', RawMode.immediate);
++      final res = await streamDio().request<ResponseBody>(
++        server.url(p),
++        cancelToken: CancelToken(),
++      );
++      expect(await readAll(res.data!.stream), server.images[p]);
++    },
++    skip: !hasNativeHttp,
++  );
++
++  for (final withToken in [false, true]) {
++    test('a broken body still fails (CancelToken: $withToken)', () async {
++      final p = path('truncate-$withToken', RawMode.truncate);
++      final res = await streamDio().request<ResponseBody>(
++        server.url(p),
++        cancelToken: withToken ? CancelToken() : null,
++      );
++      await expectLater(readAll(res.data!.stream), throwsA(anything));
++    }, skip: !hasNativeHttp);
++  }
++
++  test('cancel while waiting for headers: Dio gives up at once, rhttp '
++      'closes the connection when the headers arrive', () async {
++    final p = path('cancel-headers', RawMode.holdHeaders);
++    final token = CancelToken();
++    final req = streamDio().request<ResponseBody>(
++      server.url(p),
++      cancelToken: token,
++    );
++    await server.until(() => server.count(p) == 1);
++    token.cancel();
++    await expectLater(
++      req,
++      throwsA(
++        isA<DioException>().having(
++          (e) => e.type,
++          'type',
++          DioExceptionType.cancel,
++        ),
++      ),
++    );
++    final h = server.heldFor(p).single;
++    await Future<void>.delayed(const Duration(milliseconds: 300));
++    expect(h.isClosedByClient, isFalse, reason: 'not torn down before headers');
++    await h.sendHeadersAndStall();
++    await h.closedByClient.timeout(const Duration(seconds: 10));
++    expect(h.isClosedByClient, isTrue);
++    await Future<void>.delayed(const Duration(milliseconds: 300));
++  }, skip: !hasNativeHttp);
++
++  test(
++    'cancel inside the body closes the connection, no stray error',
++    () async {
++      final p = path('cancel-body', RawMode.stallBody);
++      final token = CancelToken();
++      final res = await streamDio().request<ResponseBody>(
++        server.url(p),
++        cancelToken: token,
++      );
++      final first = Completer<void>();
++      final done = Completer<Object?>();
++      res.data!.stream.listen(
++        (_) {
++          if (!first.isCompleted) first.complete();
++        },
++        onError: (Object e) {
++          if (!done.isCompleted) done.complete(e);
++        },
++        onDone: () {
++          if (!done.isCompleted) done.complete(null);
++        },
++      );
++      await first.future.timeout(const Duration(seconds: 10));
++      token.cancel();
++      final error = await done.future.timeout(const Duration(seconds: 10));
++      expect(error, isA<DioException>());
++      final h = server.heldFor(p).single;
++      await h.closedByClient.timeout(const Duration(seconds: 10));
++      expect(h.isClosedByClient, isTrue);
++      // Gives rhttp time to deliver its own cancel error; an unhandled error
++      // would fail this test.
++      await Future<void>.delayed(const Duration(milliseconds: 300));
++    },
++    skip: !hasNativeHttp,
++  );
++
++  test(
++    'cancelling right as the headers arrive never aborts the process',
++    () async {
++      // rhttp 0.15.1 aborts the whole process if a request is dropped while its
++      // onResponse callback is in flight. The cancel is fired the moment the
++      // server has flushed the headers, many times over.
++      for (var i = 0; i < 200; i++) {
++        final p = path('race-$i', RawMode.holdHeaders);
++        final token = CancelToken();
++        final req = streamDio()
++            .request<ResponseBody>(server.url(p), cancelToken: token)
++            .then<Object?>((r) => r, onError: (Object e) => e);
++        await server.until(() => server.count(p) == 1);
++        final h = server.heldFor(p).single;
++        await h.sendHeadersAndStall();
++        token.cancel();
++        final r = await req;
++        if (r is Response<ResponseBody>) {
++          await r.data!.stream.drain<void>().catchError((_) {});
++        }
++        await h.closedByClient.timeout(const Duration(seconds: 10));
++      }
++      // Still alive and able to make requests.
++      final ok = path('race-after', RawMode.immediate);
++      final res = await streamDio().request<ResponseBody>(server.url(ok));
++      expect(await readAll(res.data!.stream), server.images[ok]);
++    },
++    skip: !hasNativeHttp,
++    timeout: const Timeout(Duration(minutes: 3)),
++  );
++}
+diff --git a/test/network/synthetic_source_test.dart b/test/network/synthetic_source_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..8975e8672be5c5ee98c55b9fe1eb83f6cebadaea
+--- /dev/null
++++ b/test/network/synthetic_source_test.dart
+@@ -0,0 +1,308 @@
++// The synthetic comic source and server (tool/synthetic_source) driven
++// through the app's own code: the script is downloaded with AppDio and
++// imported with ComicSourceParser.createAndParse, exactly as the comic source
++// page does; it runs in QuickJS (flutter_qjs); covers and pages are loaded by
++// the real image providers over rhttp.
++//
++// Needs a host librhttp.so (FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR)
++// and a host build of flutter_qjs (libflutter_qjs_plugin.so on
++// LD_LIBRARY_PATH); otherwise the tests are skipped and say so.
++
++import 'dart:ffi';
++import 'dart:io';
++
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/app.dart';
++import 'package:venera/foundation/cache_manager.dart';
++import 'package:venera/foundation/comic_source/comic_source.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/foundation/image_provider/history_image_provider.dart';
++import 'package:venera/foundation/image_provider/reader_image.dart';
++import 'package:venera/foundation/js_engine.dart';
++import 'package:venera/network/app_dio.dart';
++
++import '../../tool/synthetic_source/synthetic_server.dart';
++import 'thumbnail_test_support.dart';
++
++final bool _hasQjs = () {
++  try {
++    DynamicLibrary.open('libflutter_qjs_plugin.so');
++    return true;
++  } catch (_) {
++    return false;
++  }
++}();
++
++final String? _skipReason = !hasNativeHttp
++    ? 'needs a host librhttp.so'
++    : !_hasQjs
++    ? 'needs a host libflutter_qjs_plugin.so on LD_LIBRARY_PATH'
++    : null;
++
++final bool _skip = _skipReason != null;
++
++void main() {
++  TestWidgetsFlutterBinding.ensureInitialized();
++  if (_skip) {
++    // ignore: avoid_print
++    print('synthetic_source_test skipped: $_skipReason');
++  }
++  final unused = CoverServer();
++  late SyntheticServer server;
++  late ComicSource source;
++
++  setUpAll(() async {
++    if (_skip) return;
++    await initCoverTestEnvironment(unused);
++    final template = await File(
++      'tool/synthetic_source/yorunote_synthetic_source.js',
++    ).readAsString();
++    server = SyntheticServer(sourceTemplate: template);
++    await server.start();
++    // App start-up (lib/init.dart): JS engine with assets/init.js in
++    // QuickJS, then the comic source manager (creates the source folder).
++    await JsEngine().init();
++    await ComicSourceManager().init();
++    await Directory('${App.dataPath}/comic_source').create(recursive: true);
++    // Same steps as ComicSourcePage.handleAddSource / addSource.
++    final res = await AppDio().get<String>(
++      '${server.baseUrl}/source.js',
++      options: Options(responseType: ResponseType.plain),
++    );
++    source = await ComicSourceParser().createAndParse(res.data!, 'source.js');
++    ComicSourceManager().add(source);
++  });
++
++  tearDownAll(() async {
++    if (_skip) return;
++    await unused.stop();
++    await server.stop();
++  });
++
++  setUp(() {
++    PaintingBinding.instance.imageCache.clear();
++    if (!_skip) {
++      server.delay = Duration.zero;
++      server.resetCounters();
++    }
++  });
++
++  Future<List<Comic>> explore(int page) async {
++    final load = source.explorePages.single.loadPage!;
++    final res = await load(page);
++    expect(res.error, isFalse, reason: res.errorMessage);
++    return res.data;
++  }
++
++  testWidgets('the source is imported and runs in QuickJS', (tester) async {
++    await tester.runAsync(() async {
++      expect(source.key, 'yorunote_synthetic');
++      final page1 = await explore(1);
++      final page2 = await explore(2);
++      expect(page1.length, 20);
++      expect(page2.length, 20);
++      expect(page1.first.cover, '${server.baseUrl}/img/cover/c01.png');
++      final info = await source.loadComicInfo!('c05');
++      expect(info.error, isFalse);
++      expect(info.data.cover, '${server.baseUrl}/img/cover/c05.png');
++      expect(info.data.chapters!.length, 2);
++      final pages = await source.loadComicPages!('c05', '1');
++      expect(pages.data.length, 5);
++    });
++  }, skip: _skip);
++
++  testWidgets('a page of covers loads with at most 8 image requests at once', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      server.delay = const Duration(milliseconds: 60);
++      final comics = await explore(1);
++      final rs = [
++        for (final c in comics)
++          Resolution(
++            CachedImageProvider(c.cover, sourceKey: source.key, cid: c.id),
++          ),
++      ];
++      expect(await Future.wait(rs.map((r) => r.result)), everyElement(isNull));
++      expect(server.imageRequests, 20);
++      expect(server.peakImages, lessThanOrEqualTo(8));
++      // Second time: all from the cache.
++      PaintingBinding.instance.imageCache.clear();
++      final again = [
++        for (final c in comics)
++          Resolution(
++            CachedImageProvider(c.cover, sourceKey: source.key, cid: c.id),
++          ),
++      ];
++      expect(
++        await Future.wait(again.map((r) => r.result)),
++        everyElement(isNull),
++      );
++      expect(server.imageRequests, 20, reason: 'cache hits, no requests');
++      for (final r in [...rs, ...again]) {
++        r.dispose();
++      }
++    });
++  }, skip: _skip);
++
++  testWidgets('onThumbnailLoad onResponse decodes an encoded cover', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      final url = server.coverUrl(xorComicId);
++      final r = Resolution(
++        CachedImageProvider(url, sourceKey: source.key, cid: xorComicId),
++      );
++      expect(await r.result, isNull);
++      r.dispose();
++      final file = await CacheManager().findCache(
++        thumbDiskKey(url, source.key, xorComicId),
++      );
++      expect(await file!.readAsBytes(), coverPng(37), reason: 'decoded copy');
++    });
++  }, skip: _skip);
++
++  testWidgets('a cover. placeholder is resolved through loadInfo', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      final comic = (await explore(
++        2,
++      )).firstWhere((c) => c.id == placeholderComicId);
++      expect(comic.cover, 'cover.$placeholderComicId');
++      final r = Resolution(
++        CachedImageProvider(
++          comic.cover,
++          sourceKey: source.key,
++          cid: placeholderComicId,
++        ),
++      );
++      expect(await r.result, isNull);
++      r.dispose();
++      expect(server.count('/api/comic/$placeholderComicId'), 1);
++      expect(server.count('/img/cover/$placeholderComicId.png'), 1);
++      expect(
++        await CacheManager().findCache(
++          thumbDiskKey(server.coverUrl(placeholderComicId), source.key),
++        ),
++        isNotNull,
++      );
++    });
++  }, skip: _skip);
++
++  testWidgets('history and cover tiles of one comic share one request', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      server.delay = const Duration(milliseconds: 200);
++      final url = server.coverUrl('c25');
++      final a = Resolution(
++        CachedImageProvider(url, sourceKey: source.key, cid: 'c25'),
++      );
++      final b = Resolution(
++        HistoryImageProvider(testHistory('c25', source, url)),
++      );
++      expect(await a.result, isNull);
++      expect(await b.result, isNull);
++      expect(server.count('/img/cover/c25.png'), 1);
++      a.dispose();
++      b.dispose();
++    });
++  }, skip: _skip);
++
++  testWidgets('a broken cover is shown as an error and recovers on retry', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      final url = server.coverUrl('c26');
++      await _get('${server.baseUrl}/__control/broken?match=/img/cover/c26');
++      expect(
++        await resolveOnce(
++          CachedImageProvider(url, sourceKey: source.key, cid: 'c26'),
++        ),
++        isNotNull,
++      );
++      await _get('${server.baseUrl}/__control/recover');
++      expect(
++        await resolveOnce(
++          CachedImageProvider(url, sourceKey: source.key, cid: 'c26'),
++        ),
++        isNull,
++      );
++      expect(server.count('/img/cover/c26.png'), 2);
++    });
++  }, skip: _skip);
++
++  testWidgets('paused covers do not block cached covers', (tester) async {
++    await tester.runAsync(() async {
++      final comics = await explore(1);
++      // c01 is cached from an earlier test in this file only if run in order;
++      // make sure it is.
++      final hit = comics.first;
++      await resolveOnce(
++        CachedImageProvider(hit.cover, sourceKey: source.key, cid: hit.id),
++      );
++      PaintingBinding.instance.imageCache.clear();
++      await _get('${server.baseUrl}/__control/pause');
++      final paused = [
++        for (final id in [
++          'c41',
++          'c42',
++          'c43',
++          'c44',
++          'c45',
++          'c46',
++          'c47',
++          'c48',
++          'c49',
++        ])
++          Resolution(
++            CachedImageProvider(
++              server.coverUrl(id),
++              sourceKey: source.key,
++              cid: id,
++            ),
++          ),
++      ];
++      await server.untilActive(8).catchError((Object e) {
++        fail('not 8 active: ${server.stats()}');
++      });
++      final cached = Resolution(
++        CachedImageProvider(hit.cover, sourceKey: source.key, cid: hit.id),
++      );
++      expect(await cached.result, isNull, reason: 'shown while paused');
++      expect(server.activeImages, 8);
++      await _get('${server.baseUrl}/__control/release');
++      expect(
++        await Future.wait(paused.map((r) => r.result)),
++        everyElement(isNull),
++      );
++      for (final r in [...paused, cached]) {
++        r.dispose();
++      }
++    });
++  }, skip: _skip);
++
++  testWidgets('chapter pages load through ReaderImageProvider', (tester) async {
++    await tester.runAsync(() async {
++      final pages = (await source.loadComicPages!('c03', '1')).data;
++      final r = Resolution(
++        ReaderImageProvider(pages.first, source.key, 'c03', '1', 1),
++      );
++      expect(await r.result, isNull);
++      r.dispose();
++      expect(server.count('/img/page/c03/1/1.png'), 1);
++    });
++  }, skip: _skip);
++}
++
++/// Calls a control endpoint over real HTTP (rhttp). dart:io's HttpClient is
++/// replaced by a fake in flutter tests, so it is not used here.
++Future<void> _get(String url) async {
++  final res = await AppDio().get<String>(
++    url,
++    options: Options(responseType: ResponseType.plain),
++  );
++  expect(res.statusCode, 200);
++}
+diff --git a/test/network/thumbnail_cover_cancel_test.dart b/test/network/thumbnail_cover_cancel_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..663bba9fac58ee34a4888459dee57722df6e4d52
+--- /dev/null
++++ b/test/network/thumbnail_cover_cancel_test.dart
+@@ -0,0 +1,415 @@
++// Cancellation of cover loads through the real provider path:
++// ImageProvider.resolve -> CachedImageProvider / HistoryImageProvider ->
++// shared cover load -> RequestLimiter -> AppDio -> RHttpAdapter -> rhttp.
++//
++// The server hands every request to the test as a raw socket, so the test
++// decides when headers and body bytes are sent, and sees whether the client
++// closed the connection. A load is cancelled the way the app cancels it: the
++// image is evicted from ImageCache and the next frame releases it.
++// Timeouts only turn a hang into a failure; they never decide the order.
++
++import 'dart:async';
++
++import 'package:flutter/foundation.dart' show FlutterError;
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/foundation/image_provider/history_image_provider.dart';
++import 'package:venera/network/images.dart';
++
++import 'raw_image_server.dart';
++import 'thumbnail_test_support.dart';
++
++const _limit = 8;
++const _closeTimeout = Duration(seconds: 10);
++
++void main() {
++  final unused = CoverServer();
++  final server = RawImageServer();
++  final src = testSource('thumb_cancel_src');
++
++  setUpAll(() async {
++    await initCoverTestEnvironment(unused, sources: [src]);
++    if (hasNativeHttp) await server.start();
++  });
++
++  tearDownAll(() async {
++    await unused.stop();
++    if (hasNativeHttp) await server.stop();
++  });
++
++  setUp(() => PaintingBinding.instance.imageCache.clear());
++
++  String path(String name, {RawMode mode = RawMode.immediate, int shade = 0}) {
++    final p = '/c/$name.png';
++    server.images[p] = png(shade, width: 64, height: 64);
++    server.modes[p] = mode;
++    return p;
++  }
++
++  CachedImageProvider cover(String p, {String cid = 'k', bool fb = false}) =>
++      CachedImageProvider(
++        server.url(p),
++        sourceKey: src.key,
++        cid: cid,
++        fallbackToLocalCover: fb,
++      );
++
++  /// Polls a plain counter until it holds (no server event to wait on).
++  Future<void> eventually(bool Function() condition, String what) async {
++    final sw = Stopwatch()..start();
++    while (!condition()) {
++      if (sw.elapsed > const Duration(seconds: 10)) {
++        fail('timed out waiting for: $what');
++      }
++      await Future<void>.delayed(const Duration(milliseconds: 5));
++    }
++  }
++
++  int activeSlots() => ImageDownloader.coverRequestLimiter.active;
++
++  /// Leaves no held request or busy slot behind from an earlier test.
++  Future<void> reset() async {
++    await server.releaseAll();
++    await eventually(() => activeSlots() == 0, 'idle limiter');
++    PaintingBinding.instance.imageCache.clear();
++  }
++
++  /// ImageCache gives up evicted images after the next frame, as in the app.
++  Future<void> frame(WidgetTester tester) async {
++    tester.binding.scheduleFrame();
++    await tester.pump();
++  }
++
++  /// BaseImageProvider reports (silently in the app) a stop error for a
++  /// cancelled load; only that error is ignored here.
++  Future<void> ignoringStopErrors(Future<void> Function() body) async {
++    final previous = FlutterError.onError;
++    FlutterError.onError = (details) {
++      if (details.exception.toString().contains('ImageLoadingStopException')) {
++        return;
++      }
++      previous?.call(details);
++    };
++    try {
++      await body();
++    } finally {
++      FlutterError.onError = previous;
++    }
++  }
++
++  testWidgets('A: a request cancelled before its headers is torn down when '
++      'they arrive, and only then frees its slot', (tester) async {
++    // Tearing a request down while it waits for its headers is not safe
++    // with rhttp 0.15.1 (see RHttpAdapter.fetch), so it stays open and keeps
++    // its slot until the headers arrive; then it is closed at once.
++    await ignoringStopErrors(() async {
++      late List<Resolution> stuck;
++      late List<String> stuckPaths;
++      await tester.runAsync(() async {
++        await reset();
++        stuckPaths = [
++          for (var i = 0; i < _limit; i++)
++            path('a-stuck-$i', mode: RawMode.holdHeaders),
++        ];
++        stuck = [for (final p in stuckPaths) Resolution(cover(p))];
++        await server.until(() => stuckPaths.every((p) => server.count(p) == 1));
++        expect(activeSlots(), _limit);
++        for (final r in stuck) {
++          r.cancel();
++        }
++      });
++      await frame(tester);
++      await tester.runAsync(() async {
++        // Still waiting for headers: open, and the slots stay accounted for.
++        await Future<void>.delayed(const Duration(milliseconds: 300));
++        for (final p in stuckPaths) {
++          expect(server.heldFor(p).single.isClosedByClient, isFalse);
++        }
++        expect(activeSlots(), _limit);
++        final healthyPath = path('a-healthy', shade: 9);
++        final healthy = Resolution(cover(healthyPath));
++        // Headers arrive (the body is held back): each request must be
++        // closed by the client without reading the rest.
++        for (final p in stuckPaths) {
++          final h = server.heldFor(p).single;
++          await h.sendHeadersAndStall();
++          await h.closedByClient.timeout(
++            _closeTimeout,
++            onTimeout: () => fail('request $p still open after its headers'),
++          );
++          expect(h.isClosedByClient, isTrue);
++        }
++        expect(await healthy.result, isNull);
++        healthy.dispose();
++        expect(server.count(healthyPath), 1);
++        await eventually(() => activeSlots() == 0, 'slots returned');
++        expect(stuck.every((r) => !r.isDone), isTrue);
++      });
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets(
++    'B: a response stalled inside the body is torn down on cancel',
++    (tester) async {
++      await ignoringStopErrors(() async {
++        late Resolution r;
++        late String p;
++        await tester.runAsync(() async {
++          await reset();
++          p = path('b-stall', mode: RawMode.stallBody, shade: 20);
++          final firstChunk = Completer<void>();
++          r = Resolution(cover(p));
++          final chunks = ImageStreamListener(
++            (_, _) {},
++            onChunk: (_) {
++              if (!firstChunk.isCompleted) firstChunk.complete();
++            },
++          );
++          r.stream.addListener(chunks);
++          // Headers and the first half of the body have reached the provider.
++          await firstChunk.future.timeout(const Duration(seconds: 20));
++          expect(activeSlots(), 1);
++          r.stream.removeListener(chunks);
++          r.cancel();
++        });
++        await frame(tester);
++        await tester.runAsync(() async {
++          final h = server.heldFor(p).single;
++          await h.closedByClient.timeout(
++            _closeTimeout,
++            onTimeout: () => fail('stalled body still open after cancel'),
++          );
++          expect(h.isClosedByClient, isTrue);
++          await eventually(() => activeSlots() == 0, 'slot returned');
++          expect(r.isDone, isFalse);
++        });
++      });
++    },
++    skip: !hasNativeHttp,
++  );
++
++  testWidgets(
++    'C: queued cancel, error and success return each slot once',
++    (tester) async {
++      await ignoringStopErrors(() async {
++        late List<String> heldPaths;
++        late List<Resolution> held;
++        late Resolution q0, q1, qErr, qOk;
++        late String p0, p1, pErr, pOk;
++        await tester.runAsync(() async {
++          await reset();
++          heldPaths = [
++            for (var i = 0; i < _limit; i++)
++              path('c-held-$i', mode: RawMode.holdHeaders, shade: 30 + i),
++          ];
++          held = [for (final p in heldPaths) Resolution(cover(p))];
++          await server.until(
++            () => heldPaths.every((p) => server.count(p) == 1),
++          );
++          p0 = path('c-q0');
++          p1 = path('c-q1');
++          pErr = path('c-qerr', mode: RawMode.status);
++          server.statusCodes[pErr] = 500;
++          pOk = path('c-qok', shade: 40);
++          q0 = Resolution(cover(p0));
++          q1 = Resolution(cover(p1));
++          qErr = Resolution(cover(pErr));
++          qOk = Resolution(cover(pOk));
++          await eventually(
++            () => ImageDownloader.coverRequestLimiter.waiting >= 4,
++            'four queued loads',
++          );
++          q0.cancel();
++          q1.cancel();
++        });
++        await frame(tester);
++        await tester.runAsync(() async {
++          for (final p in heldPaths) {
++            await server.heldFor(p).single.release();
++          }
++          expect(
++            await Future.wait(held.map((r) => r.result)),
++            everyElement(isNull),
++          );
++          expect(await qOk.result, isNull);
++          expect(await qErr.result, isNotNull);
++          expect(server.count(p0), 0, reason: 'cancelled while queued');
++          expect(server.count(p1), 0, reason: 'cancelled while queued');
++          await eventually(() => activeSlots() == 0, 'all slots back');
++          expect(ImageDownloader.coverRequestLimiter.waiting, 0);
++          for (final r in [...held, qOk, qErr]) {
++            r.dispose();
++          }
++        });
++      });
++    },
++    skip: !hasNativeHttp,
++    timeout: const Timeout(Duration(minutes: 2)),
++  );
++
++  testWidgets(
++    'D1: one cancelled consumer does not stop a shared request',
++    (tester) async {
++      await ignoringStopErrors(() async {
++        late Resolution tile;
++        late Resolution history;
++        late String p;
++        await tester.runAsync(() async {
++          await reset();
++          p = path('d1-shared', mode: RawMode.holdHeaders, shade: 50);
++          final url = server.url(p);
++          tile = Resolution(
++            CachedImageProvider(url, sourceKey: src.key, cid: 'd1'),
++          );
++          history = Resolution(
++            HistoryImageProvider(testHistory('d1', src, url)),
++          );
++          await server.until(() => server.count(p) == 1);
++          tile.cancel();
++        });
++        await frame(tester);
++        await tester.runAsync(() async {
++          final h = server.heldFor(p).single;
++          expect(h.isClosedByClient, isFalse);
++          await h.release();
++          expect(await history.result, isNull);
++          expect(tile.isDone, isFalse);
++          expect(server.count(p), 1);
++          history.dispose();
++        });
++      });
++    },
++    skip: !hasNativeHttp,
++  );
++
++  testWidgets(
++    'D2: a shared request ends when all its consumers cancel',
++    (tester) async {
++      await ignoringStopErrors(() async {
++        late String p;
++        await tester.runAsync(() async {
++          await reset();
++          p = path('d2-shared', mode: RawMode.holdHeaders, shade: 60);
++          final url = server.url(p);
++          final a = Resolution(
++            CachedImageProvider(url, sourceKey: src.key, cid: 'd2'),
++          );
++          final b = Resolution(
++            HistoryImageProvider(testHistory('d2', src, url)),
++          );
++          await server.until(() => server.count(p) == 1);
++          a.cancel();
++          b.cancel();
++        });
++        await frame(tester);
++        await tester.runAsync(() async {
++          final h = server.heldFor(p).single;
++          await h.sendHeadersAndStall();
++          await h.closedByClient.timeout(
++            _closeTimeout,
++            onTimeout: () => fail('shared request still open'),
++          );
++          expect(h.isClosedByClient, isTrue);
++          await eventually(() => activeSlots() == 0, 'slot returned');
++        });
++      });
++    },
++    skip: !hasNativeHttp,
++  );
++
++  testWidgets(
++    'D3: a consumer arriving after all others cancelled starts anew',
++    (tester) async {
++      await ignoringStopErrors(() async {
++        late String p;
++        late Resolution late_;
++        await tester.runAsync(() async {
++          await reset();
++          p = path('d3-shared', mode: RawMode.holdHeaders, shade: 70);
++          final url = server.url(p);
++          final a = Resolution(
++            CachedImageProvider(url, sourceKey: src.key, cid: 'd3'),
++          );
++          final b = Resolution(
++            HistoryImageProvider(testHistory('d3', src, url)),
++          );
++          await server.until(() => server.count(p) == 1);
++          a.cancel();
++          b.cancel();
++        });
++        await frame(tester);
++        await tester.runAsync(() async {
++          // Joins right after the cancellation, before anything is released.
++          late_ = Resolution(
++            CachedImageProvider(
++              server.url(p),
++              sourceKey: src.key,
++              cid: 'd3',
++              fallbackToLocalCover: true,
++            ),
++          );
++          // It must not join the abandoned request: a new one goes out.
++          await server.until(() => server.count(p) == 2);
++          final old = server.heldFor(p).first;
++          final fresh = server.heldFor(p).last;
++          await old.sendHeadersAndStall();
++          await old.closedByClient.timeout(
++            _closeTimeout,
++            onTimeout: () => fail('abandoned request still open'),
++          );
++          expect(old.isClosedByClient, isTrue);
++          expect(fresh.isClosedByClient, isFalse, reason: 'not cancelled');
++          await fresh.release();
++          expect(await late_.result, isNull);
++          late_.dispose();
++          await eventually(() => activeSlots() == 0, 'slots returned');
++        });
++      });
++    },
++    skip: !hasNativeHttp,
++  );
++
++  testWidgets(
++    'E: cancelling while headers arrive never aborts the process',
++    (tester) async {
++      // rhttp 0.15.1 aborts the process when a request is dropped while its
++      // header callback is in flight; loads cancelled just as their headers
++      // arrive must be handled without such a drop.
++      await ignoringStopErrors(() async {
++        for (var round = 0; round < 20; round++) {
++          late List<String> ps;
++          late List<Resolution> rs;
++          await tester.runAsync(() async {
++            await reset();
++            ps = [
++              for (var i = 0; i < 4; i++)
++                path('e-race-$round-$i', mode: RawMode.holdHeaders),
++            ];
++            rs = [for (final p in ps) Resolution(cover(p))];
++            await server.until(() => ps.every((p) => server.count(p) == 1));
++            for (final r in rs) {
++              r.cancel();
++            }
++          });
++          await frame(tester);
++          await tester.runAsync(() async {
++            // Headers and the cancellation meet: release everything at once.
++            await Future.wait([
++              for (final p in ps) server.heldFor(p).single.release(),
++            ]);
++            await eventually(() => activeSlots() == 0, 'slots returned');
++          });
++        }
++        await tester.runAsync(() async {
++          final p = path('e-after', shade: 80);
++          final r = Resolution(cover(p));
++          expect(await r.result, isNull, reason: 'process still healthy');
++          r.dispose();
++        });
++      });
++    },
++    skip: !hasNativeHttp,
++    timeout: const Timeout(Duration(minutes: 3)),
++  );
++}
+diff --git a/test/network/thumbnail_cover_queue_cache_test.dart b/test/network/thumbnail_cover_queue_cache_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..4efc919aa4ed76626eee9839520afd481678e8b9
+--- /dev/null
++++ b/test/network/thumbnail_cover_queue_cache_test.dart
+@@ -0,0 +1,172 @@
++// Cache consistency while a cover request waits for a network slot.
++//
++// All 8 slots are held by requests that wait for their headers, so the cover
++// under test is queued. While it waits, the disk cache entry of its key is
++// written by another real path; when it finally gets a slot it must:
++// - use a valid image written in the meantime without any extra request;
++// - not take empty or undecodable bytes for a valid hit;
++// - not use an entry written for another source or cid.
++
++import 'package:flutter/foundation.dart' show Uint8List;
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/cache_manager.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/network/images.dart';
++
++import 'raw_image_server.dart';
++import 'thumbnail_test_support.dart';
++
++const _limit = 8;
++
++void main() {
++  final unused = CoverServer();
++  final server = RawImageServer();
++  final srcA = testSource('thumb_qc_a');
++  final srcB = testSource('thumb_qc_b');
++
++  setUpAll(() async {
++    await initCoverTestEnvironment(unused, sources: [srcA, srcB]);
++    if (hasNativeHttp) await server.start();
++  });
++
++  tearDownAll(() async {
++    await unused.stop();
++    if (hasNativeHttp) await server.stop();
++  });
++
++  setUp(() => PaintingBinding.instance.imageCache.clear());
++
++  String path(String name, {RawMode mode = RawMode.immediate, int shade = 0}) {
++    final p = '/qc/$name.png';
++    server.images[p] = png(shade, width: 32, height: 32);
++    server.modes[p] = mode;
++    return p;
++  }
++
++  Future<void> eventually(bool Function() condition, String what) async {
++    final sw = Stopwatch()..start();
++    while (!condition()) {
++      if (sw.elapsed > const Duration(seconds: 10)) {
++        fail('timed out waiting for: $what');
++      }
++      await Future<void>.delayed(const Duration(milliseconds: 5));
++    }
++  }
++
++  final limiter = ImageDownloader.coverRequestLimiter;
++
++  /// Holds all slots; returns the held paths.
++  Future<List<String>> fillSlots(String prefix) async {
++    await server.releaseAll();
++    await eventually(() => limiter.active == 0, 'idle limiter');
++    final ps = [
++      for (var i = 0; i < _limit; i++)
++        path('$prefix-held-$i', mode: RawMode.holdHeaders, shade: i),
++    ];
++    for (final p in ps) {
++      Resolution(CachedImageProvider(server.url(p), sourceKey: srcA.key));
++    }
++    await server.until(() => ps.every((p) => server.count(p) == 1));
++    expect(limiter.active, _limit);
++    return ps;
++  }
++
++  Future<void> releaseSlots(List<String> ps) async {
++    for (final p in ps) {
++      await server.heldFor(p).single.release();
++    }
++  }
++
++  testWidgets(
++    'a valid image written while queued is used, no extra request',
++    (tester) async {
++      await tester.runAsync(() async {
++        final held = await fillSlots('e1');
++        final p = path('e1-target', shade: 100);
++        final url = server.url(p);
++        final queued = Resolution(
++          CachedImageProvider(url, sourceKey: srcA.key, cid: 'e1'),
++        );
++        await eventually(() => limiter.waiting >= 1, 'target queued');
++        // Another real write path (the download task's cover loader) stores
++        // the same key while the cover waits.
++        await for (final _ in ImageDownloader.loadThumbnail(
++          url,
++          srcA.key,
++          'e1',
++        )) {}
++        expect(server.count(p), 1);
++        expect(
++          await CacheManager().findCache(thumbDiskKey(url, srcA.key, 'e1')),
++          isNotNull,
++        );
++        await releaseSlots(held);
++        expect(await queued.result, isNull);
++        expect(server.count(p), 1, reason: 'the cached image was used');
++        queued.dispose();
++      });
++    },
++    skip: !hasNativeHttp,
++  );
++
++  for (final (name, bytes) in [
++    ('empty', Uint8List(0)),
++    ('undecodable', corruptPng),
++  ]) {
++    testWidgets(
++      'an $name entry written while queued is not a valid hit',
++      (tester) async {
++        await tester.runAsync(() async {
++          final held = await fillSlots('e2-$name');
++          final p = path('e2-$name-target', shade: 110);
++          final url = server.url(p);
++          final key = thumbDiskKey(url, srcA.key, 'e2');
++          final queued = Resolution(
++            CachedImageProvider(url, sourceKey: srcA.key, cid: 'e2'),
++          );
++          await eventually(() => limiter.waiting >= 1, 'target queued');
++          await CacheManager().writeCache(key, bytes);
++          await releaseSlots(held);
++          expect(
++            await queued.result,
++            isNull,
++            reason: 'loaded from the network',
++          );
++          expect(server.count(p), 1);
++          final file = await CacheManager().findCache(key);
++          expect(await file!.readAsBytes(), server.images[p]);
++          queued.dispose();
++        });
++      },
++      skip: !hasNativeHttp,
++    );
++  }
++
++  testWidgets('an entry for another source or cid is not used', (tester) async {
++    await tester.runAsync(() async {
++      final held = await fillSlots('e3');
++      final p = path('e3-target', shade: 120);
++      final url = server.url(p);
++      final queued = Resolution(
++        CachedImageProvider(url, sourceKey: srcA.key, cid: 'e3'),
++      );
++      await eventually(() => limiter.waiting >= 1, 'target queued');
++      final other = png(121, width: 32, height: 32);
++      await CacheManager().writeCache(thumbDiskKey(url, srcB.key, 'e3'), other);
++      await CacheManager().writeCache(thumbDiskKey(url, srcA.key, 'x'), other);
++      await releaseSlots(held);
++      expect(await queued.result, isNull);
++      expect(server.count(p), 1, reason: 'other keys are not a hit');
++      final own = await CacheManager().findCache(
++        thumbDiskKey(url, srcA.key, 'e3'),
++      );
++      expect(await own!.readAsBytes(), server.images[p]);
++      final b = await CacheManager().findCache(
++        thumbDiskKey(url, srcB.key, 'e3'),
++      );
++      expect(await b!.readAsBytes(), other, reason: 'other entries kept');
++      queued.dispose();
++    });
++  }, skip: !hasNativeHttp);
++}
+diff --git a/tool/synthetic_source/README.md b/tool/synthetic_source/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6021f7f003a0af9d52f3d108f82c0bfd5ab591ce
+--- /dev/null
++++ b/tool/synthetic_source/README.md
+@@ -0,0 +1,14 @@
++# Yorunote 合成漫畫來源
++
++受控網路驗收用的測試來源與伺服器。所有內容（清單、詳情、章節、封面、閱讀頁）都由程式產生，不含真實漫畫、帳號、Cookie 或閱讀紀錄。
++
++| 檔案 | 用途 |
++|---|---|
++| `serve.dart` | 在電腦啟動伺服器：`dart run tool/synthetic_source/serve.dart [--host H] [--port N] [--public-url URL] [--list-interfaces]` |
++| `synthetic_server.dart` | 伺服器本體（純 `dart:io`），測試也直接匯入 |
++| `yorunote_synthetic_source.js` | 漫畫來源腳本；伺服器在 `/source.js` 提供已填入位址的版本 |
++
++- 綁定非迴路位址時必須給 `--public-url`；工具不猜測區域網路位址。
++- 控制端點與計數：`/__control/*`、`/__stats`、狀態頁 `/`（說明見 `synthetic_server.dart` 開頭）。
++- 雲端驗證：`test/network/synthetic_source_test.dart`（需主機版 `librhttp.so` 與 `libflutter_qjs_plugin.so`）。
++- 實機操作流程：`docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md`。
+diff --git a/tool/synthetic_source/serve.dart b/tool/synthetic_source/serve.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..5507d5fc6c1f19e1c1ec7b1eee00c163cb422ee3
+--- /dev/null
++++ b/tool/synthetic_source/serve.dart
+@@ -0,0 +1,83 @@
++// Starts the Yorunote synthetic comic server on a computer.
++//
++//   dart run tool/synthetic_source/serve.dart [options]
++//
++// Options:
++//   --host <addr>        address to bind (default 127.0.0.1)
++//   --port <n>           port (default 8765)
++//   --public-url <url>   address the device uses to reach this server; it is
++//                        written into /source.js. Required when --host is not
++//                        a loopback address (the server never guesses a LAN
++//                        address). With `adb reverse tcp:<port> tcp:<port>`
++//                        use the default http://127.0.0.1:<port>.
++//   --list-interfaces    print this computer's interface addresses and exit
++//
++// Stop with Ctrl+C.
++
++import 'dart:async';
++import 'dart:convert';
++import 'dart:io';
++
++import 'synthetic_server.dart';
++
++Future<void> main(List<String> args) async {
++  String? arg(String name) {
++    final i = args.indexOf(name);
++    return i >= 0 && i + 1 < args.length ? args[i + 1] : null;
++  }
++
++  if (args.contains('--list-interfaces')) {
++    for (final ni in await NetworkInterface.list()) {
++      for (final a in ni.addresses) {
++        stdout.writeln('${ni.name}\t${a.address}');
++      }
++    }
++    return;
++  }
++
++  final host = arg('--host') ?? '127.0.0.1';
++  final port = int.parse(arg('--port') ?? '8765');
++  var publicUrl = arg('--public-url');
++  final loopback = host == '127.0.0.1' || host == 'localhost' || host == '::1';
++  if (publicUrl == null && !loopback) {
++    stderr.writeln(
++      'error: --public-url is required with --host $host '
++      '(e.g. --public-url http://<this computer\'s LAN address>:$port)',
++    );
++    exitCode = 64;
++    return;
++  }
++  publicUrl ??= 'http://127.0.0.1:$port';
++
++  final scriptDir = File.fromUri(Platform.script).parent.path;
++  final template = await File(
++    '$scriptDir/yorunote_synthetic_source.js',
++  ).readAsString();
++  final server = SyntheticServer(sourceTemplate: template);
++  await server.start(host: host, port: port, publicUrl: publicUrl);
++
++  stdout.writeln('Yorunote synthetic server listening on $host:${server.port}');
++  stdout.writeln('Source script for the app: ${server.baseUrl}/source.js');
++  stdout.writeln('Status page:              ${server.baseUrl}/');
++  stdout.writeln('Counters (JSON):          ${server.baseUrl}/__stats');
++  stdout.writeln('Synthetic data only. Ctrl+C to stop.');
++
++  var last = '';
++  final timer = Timer.periodic(const Duration(seconds: 2), (_) {
++    final s = server.stats();
++    final line =
++        'requests=${s['total_requests']} images=${s['image_requests']} '
++        'active=${s['active_image_requests']} '
++        'peak=${s['peak_active_image_requests']} paused=${s['paused']} '
++        'delay=${s['delay_ms']}ms rules=${jsonEncode(s['rules'])}';
++    if (line != last) {
++      stdout.writeln('[${DateTime.now().toIso8601String()}] $line');
++      last = line;
++    }
++  });
++
++  await ProcessSignal.sigint.watch().first;
++  timer.cancel();
++  await server.stop();
++  stdout.writeln('stopped');
++}
+diff --git a/tool/synthetic_source/synthetic_server.dart b/tool/synthetic_source/synthetic_server.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..d7579aa1987c89b84a5d9c0499ac53b356afc9c6
+--- /dev/null
++++ b/tool/synthetic_source/synthetic_server.dart
+@@ -0,0 +1,445 @@
++// Synthetic comic server for Yorunote network acceptance tests.
++//
++// Everything it serves is generated here: comic list, details, chapter page
++// lists, cover and page PNGs, and the comic source script itself
++// (yorunote_synthetic_source.js, with the public base URL filled in). No real
++// comics, accounts, cookies or reading history are involved.
++//
++// Pure dart:io, so it runs on a computer with `dart run` (see serve.dart) and
++// can also be started in-process by tests.
++//
++// Control endpoints (GET, so a browser or curl can drive them):
++//   /__control/delay?ms=N          delay every image response by N ms
++//   /__control/pause               hold image responses ...
++//   /__control/release             ... until released
++//   /__control/fail?match=S&status=500   image paths containing S answer an
++//                                  HTTP error
++//   /__control/broken?match=S      ... answer undecodable PNG bytes
++//   /__control/empty?match=S       ... answer an empty body
++//   /__control/recover?match=S     remove fail/broken/empty rules for S
++//                                  (no match: remove all rules)
++//   /__control/reset               rules, pause, delay and counters
++//   /__stats                       JSON counters
++//   /                              status page
++
++import 'dart:async';
++import 'dart:convert';
++import 'dart:io';
++import 'dart:typed_data';
++
++/// Number of comics in the synthetic list.
++const syntheticComicCount = 40;
++
++/// Comic whose cover is served XOR-encoded (needs the source's onResponse).
++const xorComicId = 'c37';
++
++/// Comic listed with a `cover.` placeholder that is resolved via loadInfo.
++const placeholderComicId = 'c38';
++
++const _pagesPerChapter = 5;
++const _chapters = 2;
++
++class _Rule {
++  _Rule(this.kind, this.match, [this.status = 500]);
++  final String kind; // fail | broken | empty
++  final String match;
++  final int status;
++}
++
++class SyntheticServer {
++  SyntheticServer({required this.sourceTemplate});
++
++  /// Content of yorunote_synthetic_source.js with `__BASE_URL__`.
++  final String sourceTemplate;
++
++  HttpServer? _server;
++  late String baseUrl;
++
++  final requests = <String, int>{};
++  int total = 0;
++  int activeImages = 0;
++  int peakImages = 0;
++  int imageRequests = 0;
++
++  Duration delay = Duration.zero;
++  Completer<void>? _pause;
++  final _rules = <_Rule>[];
++  final _cache = <String, Uint8List>{};
++
++  int get port => _server!.port;
++
++  final _activeWaiters = <(int, Completer<void>)>[];
++
++  /// Completes once at least [n] image requests are being served at once.
++  Future<void> untilActive(
++    int n, {
++    Duration timeout = const Duration(seconds: 20),
++  }) {
++    if (activeImages >= n) return Future.value();
++    final c = Completer<void>();
++    _activeWaiters.add((n, c));
++    return c.future.timeout(timeout);
++  }
++
++  /// Starts listening. [publicUrl] is the address devices use to reach this
++  /// server (it is written into the source script); by default it is
++  /// `http://host:port` as bound.
++  Future<void> start({
++    String host = '127.0.0.1',
++    int port = 0,
++    String? publicUrl,
++  }) async {
++    _server = await HttpServer.bind(host, port);
++    baseUrl = (publicUrl ?? 'http://$host:${_server!.port}').replaceAll(
++      RegExp(r'/+$'),
++      '',
++    );
++    _server!.listen(_handle);
++  }
++
++  Future<void> stop() async {
++    _pause?.complete();
++    await _server?.close(force: true);
++  }
++
++  String get sourceScript => sourceTemplate.replaceAll('__BASE_URL__', baseUrl);
++
++  Map<String, dynamic> stats() => {
++    'total_requests': total,
++    'image_requests': imageRequests,
++    'active_image_requests': activeImages,
++    'peak_active_image_requests': peakImages,
++    'paused': _pause != null,
++    'delay_ms': delay.inMilliseconds,
++    'rules': [
++      for (final r in _rules)
++        {
++          'kind': r.kind,
++          'match': r.match,
++          if (r.kind == 'fail') 'status': r.status,
++        },
++    ],
++    'per_path': requests,
++  };
++
++  void resetCounters() {
++    requests.clear();
++    total = 0;
++    imageRequests = 0;
++    peakImages = activeImages;
++  }
++
++  int count(String path) => requests[path] ?? 0;
++
++  Future<void> _handle(HttpRequest req) async {
++    final path = req.uri.path;
++    final res = req.response;
++    res.headers.set('cache-control', 'no-store');
++    try {
++      if (path.startsWith('/__')) {
++        _control(req);
++        return;
++      }
++      requests[path] = (requests[path] ?? 0) + 1;
++      total++;
++      if (path == '/source.js') {
++        res.headers.contentType = ContentType(
++          'application',
++          'javascript',
++          charset: 'utf-8',
++        );
++        res.write(sourceScript);
++      } else if (path.startsWith('/api/')) {
++        _api(req);
++      } else if (path.startsWith('/img/')) {
++        await _image(req);
++        return;
++      } else {
++        res.statusCode = HttpStatus.notFound;
++      }
++    } catch (e) {
++      res.statusCode = HttpStatus.internalServerError;
++      res.write('$e');
++    }
++    await res.close();
++  }
++
++  void _json(HttpResponse res, Object value) {
++    res.headers.contentType = ContentType.json;
++    res.write(jsonEncode(value));
++  }
++
++  static String comicId(int i) => 'c${i.toString().padLeft(2, '0')}';
++
++  String coverUrl(String id) => '$baseUrl/img/cover/$id.png';
++
++  Map<String, dynamic> _comic(int i) {
++    final id = comicId(i);
++    return {
++      'id': id,
++      'title': '合成漫畫 $id',
++      'subtitle': i == 37
++          ? 'onResponse 封面'
++          : i == 38
++          ? 'cover. 佔位封面'
++          : '合成資料',
++      'cover': id == placeholderComicId ? 'cover.$id' : coverUrl(id),
++    };
++  }
++
++  void _api(HttpRequest req) {
++    final seg = req.uri.pathSegments; // api, ...
++    final res = req.response;
++    if (seg.length == 2 && seg[1] == 'explore') {
++      final page = int.tryParse(req.uri.queryParameters['page'] ?? '1') ?? 1;
++      const perPage = 20;
++      final start = (page - 1) * perPage + 1;
++      final comics = [
++        for (
++          var i = start;
++          i < start + perPage && i <= syntheticComicCount;
++          i++
++        )
++          _comic(i),
++      ];
++      _json(res, {
++        'comics': comics,
++        'maxPage': (syntheticComicCount / perPage).ceil(),
++      });
++    } else if (seg.length == 3 && seg[1] == 'comic') {
++      final id = seg[2];
++      _json(res, {
++        'title': '合成漫畫 $id',
++        'subtitle': '合成資料',
++        'cover': coverUrl(id),
++        'description': '由 Yorunote 合成測試伺服器產生的內容。',
++        'tags': {
++          '類型': ['合成'],
++        },
++        'chapters': {for (var c = 1; c <= _chapters; c++) '$c': '第 $c 話'},
++      });
++    } else if (seg.length == 5 && seg[1] == 'comic' && seg[3] == 'ep') {
++      final id = seg[2];
++      final ep = seg[4];
++      _json(res, {
++        'images': [
++          for (var p = 1; p <= _pagesPerChapter; p++)
++            '$baseUrl/img/page/$id/$ep/$p.png',
++        ],
++      });
++    } else {
++      res.statusCode = HttpStatus.notFound;
++    }
++  }
++
++  Future<void> _image(HttpRequest req) async {
++    final path = req.uri.path;
++    final res = req.response;
++    imageRequests++;
++    activeImages++;
++    if (activeImages > peakImages) peakImages = activeImages;
++    _activeWaiters.removeWhere((w) {
++      if (activeImages >= w.$1) {
++        w.$2.complete();
++        return true;
++      }
++      return false;
++    });
++    try {
++      final pause = _pause;
++      if (pause != null) await pause.future;
++      if (delay > Duration.zero) await Future<void>.delayed(delay);
++      final rule = _rules.lastWhereOrNullMatch(path);
++      if (rule?.kind == 'fail') {
++        res.statusCode = rule!.status;
++        res.write('synthetic error ${rule.status}');
++      } else if (rule?.kind == 'empty') {
++        res.headers.contentType = ContentType('image', 'png');
++        res.contentLength = 0;
++      } else {
++        final bytes = rule?.kind == 'broken'
++            ? _brokenPng
++            : _imageBytes(req.uri.pathSegments);
++        if (bytes == null) {
++          res.statusCode = HttpStatus.notFound;
++        } else {
++          res.headers.contentType = ContentType('image', 'png');
++          res.contentLength = bytes.length;
++          res.add(bytes);
++        }
++      }
++      await res.close();
++    } catch (_) {
++      // Client went away.
++    } finally {
++      activeImages--;
++    }
++  }
++
++  Uint8List? _imageBytes(List<String> seg) {
++    final key = seg.join('/');
++    final cached = _cache[key];
++    if (cached != null) return cached;
++    Uint8List? bytes;
++    if (seg.length == 3 && seg[1] == 'cover' && seg[2].endsWith('.png')) {
++      final id = seg[2].substring(0, seg[2].length - 4);
++      final n = int.tryParse(id.substring(1)) ?? 0;
++      bytes = coverPng(n);
++      if (id == xorComicId) {
++        bytes = Uint8List.fromList([for (final b in bytes) b ^ 0x5a]);
++      }
++    } else if (seg.length == 5 && seg[1] == 'page') {
++      final n = int.tryParse(seg[4].replaceAll('.png', '')) ?? 1;
++      bytes = pagePng(n);
++    }
++    if (bytes != null) _cache[key] = bytes;
++    return bytes;
++  }
++
++  void _control(HttpRequest req) {
++    final res = req.response;
++    final q = req.uri.queryParameters;
++    final match = q['match'] ?? '';
++    switch (req.uri.path) {
++      case '/__stats':
++        _json(res, stats());
++      case '/__control/delay':
++        delay = Duration(milliseconds: int.tryParse(q['ms'] ?? '0') ?? 0);
++        _json(res, stats());
++      case '/__control/pause':
++        _pause ??= Completer<void>();
++        _json(res, stats());
++      case '/__control/release':
++        _pause?.complete();
++        _pause = null;
++        _json(res, stats());
++      case '/__control/fail':
++        _rules.add(
++          _Rule('fail', match, int.tryParse(q['status'] ?? '') ?? 500),
++        );
++        _json(res, stats());
++      case '/__control/broken':
++        _rules.add(_Rule('broken', match));
++        _json(res, stats());
++      case '/__control/empty':
++        _rules.add(_Rule('empty', match));
++        _json(res, stats());
++      case '/__control/recover':
++        _rules.removeWhere((r) => match.isEmpty || r.match == match);
++        _json(res, stats());
++      case '/__control/reset':
++        _rules.clear();
++        delay = Duration.zero;
++        _pause?.complete();
++        _pause = null;
++        resetCounters();
++        _json(res, stats());
++      case '/':
++      case '/__':
++        res.headers.contentType = ContentType.html;
++        res.write(_statusPage());
++      default:
++        res.statusCode = HttpStatus.notFound;
++    }
++    res.close();
++  }
++
++  String _statusPage() {
++    final s = const HtmlEscape().convert(
++      const JsonEncoder.withIndent('  ').convert(stats()),
++    );
++    return '<!doctype html><meta charset="utf-8">'
++        '<meta name="viewport" content="width=device-width">'
++        '<meta http-equiv="refresh" content="2">'
++        '<title>Yorunote synthetic server</title>'
++        '<h3>Yorunote 合成伺服器</h3><p>來源：$baseUrl/source.js</p>'
++        '<pre>$s</pre>';
++  }
++
++  static final Uint8List _brokenPng = Uint8List.fromList([
++    0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, //
++    ...List<int>.filled(64, 0x5a),
++  ]);
++}
++
++extension on List<_Rule> {
++  _Rule? lastWhereOrNullMatch(String path) {
++    for (var i = length - 1; i >= 0; i--) {
++      if (this[i].match.isNotEmpty && path.contains(this[i].match)) {
++        return this[i];
++      }
++    }
++    return null;
++  }
++}
++
++/// A 240x320 RGB cover: a colour per comic and [n] mod 8 + 1 white bars.
++Uint8List coverPng(int n) {
++  const w = 240, h = 320;
++  final r = (n * 67) % 200 + 40,
++      g = (n * 131) % 200 + 40,
++      b = (n * 29) % 200 + 40;
++  final bars = n % 8 + 1;
++  final raw = BytesBuilder();
++  for (var y = 0; y < h; y++) {
++    raw.addByte(0);
++    final bar = (y ~/ 20) < bars * 2 && (y ~/ 20).isOdd;
++    for (var x = 0; x < w; x++) {
++      if (bar && x > 30 && x < w - 30) {
++        raw.add([250, 250, 250]);
++      } else {
++        raw.add([r, g, b]);
++      }
++    }
++  }
++  return _png(w, h, 2, raw.takeBytes());
++}
++
++/// A 600x900 grayscale page with [n] dark bars.
++Uint8List pagePng(int n) {
++  const w = 600, h = 900;
++  final raw = BytesBuilder();
++  for (var y = 0; y < h; y++) {
++    raw.addByte(0);
++    final dark = (y ~/ 60).isOdd && (y ~/ 120) < n;
++    raw.add(List<int>.filled(w, dark ? 40 : 230));
++  }
++  return _png(w, h, 0, raw.takeBytes());
++}
++
++Uint8List _png(int w, int h, int colorType, List<int> raw) {
++  List<int> chunk(String type, List<int> data) {
++    final body = [...ascii.encode(type), ...data];
++    return [..._u32(data.length), ...body, ..._u32(_crc32(body))];
++  }
++
++  return Uint8List.fromList([
++    0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, //
++    ...chunk('IHDR', [..._u32(w), ..._u32(h), 8, colorType, 0, 0, 0]),
++    ...chunk('IDAT', zlib.encode(raw)),
++    ...chunk('IEND', const []),
++  ]);
++}
++
++List<int> _u32(int v) => [
++  v >> 24 & 0xff,
++  v >> 16 & 0xff,
++  v >> 8 & 0xff,
++  v & 0xff,
++];
++
++final List<int> _crcTable = List<int>.generate(256, (n) {
++  var c = n;
++  for (var k = 0; k < 8; k++) {
++    c = c & 1 != 0 ? 0xedb88320 ^ (c >> 1) : c >> 1;
++  }
++  return c;
++});
++
++int _crc32(List<int> bytes) {
++  var crc = 0xffffffff;
++  for (final b in bytes) {
++    crc = _crcTable[(crc ^ b) & 0xff] ^ (crc >> 8);
++  }
++  return crc ^ 0xffffffff;
++}
+diff --git a/tool/synthetic_source/yorunote_synthetic_source.js b/tool/synthetic_source/yorunote_synthetic_source.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..2fa07e1f527af0301b96c838b7ca1abef18e0a7e
+--- /dev/null
++++ b/tool/synthetic_source/yorunote_synthetic_source.js
+@@ -0,0 +1,100 @@
++/**
++ * Yorunote synthetic test source.
++ *
++ * Talks only to the Yorunote synthetic server (tool/synthetic_source); every
++ * comic, cover and page is generated by that server. `__BASE_URL__` is
++ * replaced by the server with the address given to it (--public-url), so a
++ * copy downloaded from http://<server>/source.js is ready to import.
++ *
++ * Remove the source after testing (Settings > Comic source).
++ */
++class YorunoteSyntheticSource extends ComicSource {
++    name = "Yorunote 合成測試來源"
++
++    key = "yorunote_synthetic"
++
++    version = "1.0.0"
++
++    minAppVersion = "1.0.0"
++
++    url = "__BASE_URL__/source.js"
++
++    static base = "__BASE_URL__"
++
++    static async getJson(path) {
++        let res = await Network.get(YorunoteSyntheticSource.base + path, {})
++        if (res.status !== 200) {
++            throw `Invalid status code: ${res.status}`
++        }
++        return JSON.parse(res.body)
++    }
++
++    explore = [
++        {
++            title: "合成封面測試",
++            type: "multiPageComicList",
++            load: async (page) => {
++                let data = await YorunoteSyntheticSource.getJson(`/api/explore?page=${page}`)
++                return {
++                    comics: data.comics.map((c) => new Comic({
++                        id: c.id,
++                        title: c.title,
++                        subtitle: c.subtitle,
++                        cover: c.cover,
++                        tags: [],
++                        description: c.subtitle,
++                    })),
++                    maxPage: data.maxPage,
++                }
++            },
++        }
++    ]
++
++    // The app's source parser expects a `search` object.
++    search = {
++        load: async (keyword, options, page) => {
++            let data = await YorunoteSyntheticSource.getJson(`/api/explore?page=${page}`)
++            let comics = data.comics
++                .filter((c) => !keyword || c.title.indexOf(keyword) >= 0 || c.id === keyword)
++                .map((c) => new Comic({id: c.id, title: c.title, subtitle: c.subtitle, cover: c.cover}))
++            return { comics: comics, maxPage: data.maxPage }
++        },
++        optionList: [],
++    }
++
++    comic = {
++        loadInfo: async (id) => {
++            let d = await YorunoteSyntheticSource.getJson(`/api/comic/${id}`)
++            return new ComicDetails({
++                title: d.title,
++                subtitle: d.subtitle,
++                cover: d.cover,
++                description: d.description,
++                tags: d.tags,
++                chapters: d.chapters,
++            })
++        },
++        loadEp: async (comicId, epId) => {
++            let d = await YorunoteSyntheticSource.getJson(`/api/comic/${comicId}/ep/${epId}`)
++            return { images: d.images }
++        },
++        onThumbnailLoad: (url) => {
++            // The cover of comic c37 is served XOR-encoded; only onResponse
++            // turns it back into a PNG.
++            if (url.indexOf("/img/cover/c37.png") >= 0) {
++                return {
++                    headers: { "x-yorunote-synthetic": "1" },
++                    onResponse: (buffer) => {
++                        let input = new Uint8Array(buffer)
++                        let out = new Uint8Array(input.length)
++                        for (let i = 0; i < input.length; i++) {
++                            out[i] = input[i] ^ 0x5a
++                        }
++                        return out.buffer
++                    },
++                }
++            }
++            return {}
++        },
++    }
++}
+diff --git a/tool/thumbnail_bench/bench_stats.dart b/tool/thumbnail_bench/bench_stats.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..65a91cb586bf246324b624cc640af0eb7af7cf2d
+--- /dev/null
++++ b/tool/thumbnail_bench/bench_stats.dart
+@@ -0,0 +1,34 @@
++// Summary statistics for the r2 thumbnail benchmark.
++//
++// Definitions (identical to tool/thumbnail_bench/bench_stats.py):
++// - median: middle value for an odd count, mean of the two middle values for
++//   an even count;
++// - percentile p (0..1): linear interpolation between closest ranks on the
++//   sorted values, h = (n - 1) * p (Hyndman & Fan type 7, the default of
++//   NumPy `percentile` and R `quantile`).
++// The r1 benchmark used sorted[round((n - 1) * p)] instead, which for an even
++// count returns the upper of the two middle values as "median".
++
++double median(List<num> xs) => percentile(xs, 0.5);
++
++double percentile(List<num> xs, double p) {
++  if (xs.isEmpty) throw ArgumentError('no values');
++  if (p < 0 || p > 1) throw ArgumentError('p must be within 0..1');
++  final s = [for (final x in xs) x.toDouble()]..sort();
++  final h = (s.length - 1) * p;
++  final lo = h.floor();
++  final hi = h.ceil();
++  return s[lo] + (s[hi] - s[lo]) * (h - lo);
++}
++
++Map<String, dynamic> summary(List<num> xs) {
++  if (xs.isEmpty) return {'n': 0};
++  final s = [for (final x in xs) x.toDouble()]..sort();
++  return {
++    'n': s.length,
++    'median': median(s),
++    'p95': percentile(s, 0.95),
++    'min': s.first,
++    'max': s.last,
++  };
++}
+diff --git a/tool/thumbnail_bench/bench_stats.py b/tool/thumbnail_bench/bench_stats.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..6dbaffbe706a00992705485ed1f0d551398fabb2
+--- /dev/null
++++ b/tool/thumbnail_bench/bench_stats.py
+@@ -0,0 +1,58 @@
++#!/usr/bin/env python3
++"""Summary statistics for the thumbnail benchmark (same as bench_stats.dart).
++
++median: middle value (odd n) or mean of the two middle values (even n).
++percentile p in [0, 1]: linear interpolation, h = (n - 1) * p
++(Hyndman & Fan type 7; NumPy `percentile` default, R `quantile` default).
++r1_rank(p): the r1 rule sorted[round((n - 1) * p)], kept only to explain
++old numbers. Note Dart rounds .5 away from zero, Python rounds half to even;
++r1_rank therefore uses floor(x + 0.5) to match Dart.
++
++Run `python3 -I bench_stats.py --self-test` to check the known values.
++"""
++import math
++import sys
++
++
++def percentile(xs, p):
++    if not xs:
++        raise ValueError("no values")
++    s = sorted(float(x) for x in xs)
++    h = (len(s) - 1) * p
++    lo, hi = math.floor(h), math.ceil(h)
++    return s[lo] + (s[hi] - s[lo]) * (h - lo)
++
++
++def median(xs):
++    return percentile(xs, 0.5)
++
++
++def r1_rank(xs, p):
++    s = sorted(float(x) for x in xs)
++    return s[math.floor((len(s) - 1) * p + 0.5)]
++
++
++def summary(xs):
++    s = sorted(float(x) for x in xs)
++    return {"n": len(s), "median": median(s), "p95": percentile(s, 0.95),
++            "min": s[0], "max": s[-1]}
++
++
++def self_test():
++    assert median([5, 1, 3]) == 3
++    assert median([4, 1, 3, 2]) == 2.5
++    assert median([10, 20]) == 15
++    xs = list(range(1, 11))
++    assert percentile(xs, 0) == 1 and percentile(xs, 1) == 10
++    assert abs(percentile(xs, 0.95) - 9.55) < 1e-9
++    assert abs(percentile(xs, 0.25) - 3.25) < 1e-9
++    assert abs(percentile([15, 20, 35, 40, 50], 0.4) - 29) < 1e-9
++    assert r1_rank([1, 2, 3, 4], 0.5) == 3
++    # Dart's round(1.5) == 2, round(2.5) == 3 (away from zero).
++    assert r1_rank([1, 2, 3, 4, 5, 6], 0.5) == 4
++    print("bench_stats self-test: OK")
++
++
++if __name__ == "__main__":
++    if sys.argv[1:] == ["--self-test"]:
++        self_test()
+diff --git a/tool/thumbnail_bench/bench_stats_test.dart b/tool/thumbnail_bench/bench_stats_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..1839b5080b66056b797a6ee2fc4dde84c3590589
+--- /dev/null
++++ b/tool/thumbnail_bench/bench_stats_test.dart
+@@ -0,0 +1,33 @@
++// Known-value checks of bench_stats.dart (run explicitly with flutter test).
++import 'package:flutter_test/flutter_test.dart';
++
++import 'bench_stats.dart';
++
++void main() {
++  test('median of an odd count is the middle value', () {
++    expect(median([5, 1, 3]), 3);
++    expect(median([7]), 7);
++  });
++
++  test('median of an even count is the mean of the two middle values', () {
++    expect(median([4, 1, 3, 2]), 2.5);
++    expect(median([10, 20]), 15);
++  });
++
++  test('percentiles interpolate linearly between ranks (type 7)', () {
++    final xs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
++    expect(percentile(xs, 0), 1);
++    expect(percentile(xs, 1), 10);
++    expect(percentile(xs, 0.95), closeTo(9.55, 1e-9));
++    expect(percentile(xs, 0.25), closeTo(3.25, 1e-9));
++    expect(percentile([15, 20, 35, 40, 50], 0.4), closeTo(29, 1e-9));
++  });
++
++  test('r1 rounding rule differs for an even count', () {
++    final xs = [1, 2, 3, 4];
++    double r1(List<num> v, double p) =>
++        ([...v]..sort())[((v.length - 1) * p).round()].toDouble();
++    expect(r1(xs, 0.5), 3, reason: 'upper middle value');
++    expect(median(xs), 2.5);
++  });
++}
+diff --git a/tool/thumbnail_bench/mutation_check_r2.py b/tool/thumbnail_bench/mutation_check_r2.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..b1b04aba9127451c05a050ab819c621dc6c71cc7
+--- /dev/null
++++ b/tool/thumbnail_bench/mutation_check_r2.py
+@@ -0,0 +1,177 @@
++#!/usr/bin/env python3
++"""r2 mutation check: cancellation, adapter and queued-cache protections.
++
++Applies one mutation at a time to a scratch copy of the candidate, runs the
++related tests and records whether they fail (the mutation is "killed").
++The copy is restored after every mutation; nothing is kept.
++
++Usage: python3 -I mutation_check_r2.py <scratch_repo> <out.json> [ID,ID,...]
++Requires flutter on PATH and FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR.
++"""
++import json
++import pathlib
++import subprocess
++import sys
++import time
++
++REPO = pathlib.Path(sys.argv[1]).resolve()
++OUT = pathlib.Path(sys.argv[2]).resolve()
++ONLY = set(sys.argv[3].split(",")) if len(sys.argv) > 3 else None
++
++IMAGES = "lib/network/images.dart"
++LIMITER = "lib/network/request_limiter.dart"
++CACHED = "lib/foundation/image_provider/cached_image.dart"
++HISTORY = "lib/foundation/image_provider/history_image_provider.dart"
++T_CACHE = "test/network/thumbnail_cover_cache_test.dart"
++T_QUEUE = "test/network/thumbnail_cover_queue_test.dart"
++T_LIMIT = "test/network/request_limiter_test.dart"
++T_INVAL = "test/network/thumbnail_cover_invalidation_test.dart"
++T_CANCEL = "test/network/thumbnail_cover_cancel_test.dart"
++T_ADAPTER = "test/network/rhttp_adapter_cancel_test.dart"
++T_QCACHE = "test/network/thumbnail_cover_queue_cache_test.dart"
++ADIO = "lib/network/app_dio.dart"
++BASE = "lib/foundation/image_provider/base_image_provider.dart"
++
++MUTANTS = [
++    {
++        "id": "R1_cancel_rhttp_before_headers",
++        "why": "rhttp must not be cancelled while the headers may be arriving (panic=abort race)",
++        "file": ADIO,
++        "old": "          cancelled = true;\n          if (headersReceived) scheduleRhttpCancel();",
++        "new": "          cancelled = true;\n          scheduleRhttpCancel();",
++        "tests": [T_CANCEL, T_ADAPTER],
++    },
++    {
++        "id": "R2_no_rhttp_cancel_token",
++        "why": "Dio's cancel signal must reach rhttp",
++        "file": ADIO,
++        "old": "      cancelToken: cancelToken,\n      headers: rhttp.HttpHeaders.rawMap(",
++        "new": "      headers: rhttp.HttpHeaders.rawMap(",
++        "tests": [T_CANCEL, T_ADAPTER],
++    },
++    {
++        "id": "R3_no_drain_after_cancel",
++        "why": "rhttp's cancel error needs a listener after Dio stops listening",
++        "file": ADIO,
++        "old": "      cancelToken == null\n          ? res.body\n          : _drainAfterCancel(res.body, () => cancelled),",
++        "new": "      res.body,",
++        "tests": [T_CANCEL, T_ADAPTER],
++    },
++    {
++        "id": "R4_base_ignores_stop_signal",
++        "why": "BaseImageProvider must hand the stop signal to providers",
++        "file": BASE,
++        "old": "          }, stopped.future);",
++        "new": "          }, Completer<void>().future);",
++        "tests": [T_CANCEL],
++    },
++    {
++        "id": "R5_abandoned_load_stays_joinable",
++        "why": "a consumer arriving after all others cancelled must start a new load",
++        "file": IMAGES,
++        "old": "    _abandoned.complete();\n    ImageDownloader._forgetCoverLoad(this);",
++        "new": "    _abandoned.complete();",
++        "tests": [T_CANCEL],
++    },
++    {
++        "id": "R6_dio_cancel_before_headers",
++        "why": "a slot must stay taken while rhttp still waits for headers",
++        "file": IMAGES,
++        "old": "    if (headersReceived) {\n      cancelToken.cancel();\n    }",
++        "new": "    cancelToken.cancel();",
++        "tests": [T_CANCEL],
++    },
++    {
++        "id": "R7_limiter_ignores_cancel_signal",
++        "why": "a cancelled waiter must leave the queue at once",
++        "file": LIMITER,
++        "old": "      if (!waiter.completer.isCompleted && _waiters.remove(waiter)) {",
++        "new": "      if (false) {",
++        "tests": [T_LIMIT],
++    },
++    {
++        "id": "R8_no_recheck_after_wait",
++        "why": "a valid image stored while queued must be used without a request",
++        "file": IMAGES,
++        "old": "      final cache = await _readValidCoverCache(cacheKey);\n      if (cache != null) {\n        return cache;\n      }",
++        "new": "",
++        "tests": [T_QCACHE],
++    },
++    {
++        "id": "R9_recheck_accepts_broken_bytes",
++        "why": "empty or undecodable bytes stored while queued are no hit",
++        "file": IMAGES,
++        "old": "      final cache = await _readValidCoverCache(cacheKey);",
++        "new": "      final cache = await _readCoverCache(cacheKey);",
++        "tests": [T_QCACHE],
++    },
++]
++
++
++LAST_OUTPUT = {"text": ""}
++
++
++def run_tests(tests):
++    t0 = time.time()
++    p = subprocess.run(
++        ["flutter", "test", "--no-pub", "--reporter", "expanded", *tests],
++        cwd=REPO,
++        capture_output=True,
++        text=True,
++        timeout=900,
++    )
++    LAST_OUTPUT["text"] = p.stdout + p.stderr
++    lines = [l for l in p.stdout.splitlines() if l.strip()]
++    tail = [l for l in lines if l[:1].isdigit()][-1:] or lines[-1:] or [""]
++    return p.returncode, round(time.time() - t0, 1), tail[0][-200:]
++
++
++def main():
++    results = []
++    for m in MUTANTS:
++        if ONLY and m["id"] not in ONLY:
++            continue
++        path = REPO / m["file"]
++        original = path.read_text()
++        if original.count(m["old"]) != 1:
++            results.append({**m, "status": "NOT_APPLIED (pattern not unique)"})
++            continue
++        path.write_text(original.replace(m["old"], m["new"]))
++        try:
++            code, secs, tail = run_tests(m["tests"])
++        except subprocess.TimeoutExpired:
++            code, secs, tail = "timeout", 900, "timeout"
++        finally:
++            path.write_text(original)
++        killed = code != 0
++        log_dir = OUT.parent / (OUT.stem + "_logs")
++        log_dir.mkdir(exist_ok=True)
++        (log_dir / (m["id"] + ".log")).write_text(LAST_OUTPUT["text"])
++        failed = sorted({l.split(": ", 1)[-1] for l in LAST_OUTPUT["text"].splitlines()
++                         if l.endswith("[E]")})
++        compile_error = "Compilation failed" in LAST_OUTPUT["text"]
++        results.append({
++            "id": m["id"],
++            "why": m["why"],
++            "file": m["file"],
++            "tests": m["tests"],
++            "exit_code": code,
++            "seconds": secs,
++            "last_line": tail,
++            "status": ("INVALID (compile error)" if compile_error
++                       else "KILLED" if killed else "SURVIVED"),
++            "failed_tests": failed,
++            "aborted": "SIGABRT" in LAST_OUTPUT["text"],
++        })
++        print(m["id"], results[-1]["status"], code, secs, flush=True)
++    # Sanity: the unmutated copy passes the same tests.
++    code, secs, tail = run_tests([T_CANCEL, T_ADAPTER, T_QCACHE, T_LIMIT])
++    OUT.write_text(json.dumps(
++        {"unmutated_exit_code": code, "unmutated_last_line": tail,
++         "mutants": results},
++        indent=2, ensure_ascii=False))
++    print("unmutated", code, tail)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tool/thumbnail_bench/recompute_r1.py b/tool/thumbnail_bench/recompute_r1.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..053544e0735b164f6f40b54cd7d709df07d393a6
+--- /dev/null
++++ b/tool/thumbnail_bench/recompute_r1.py
+@@ -0,0 +1,98 @@
++#!/usr/bin/env python3
++"""Recompute r1 thumbnail benchmark summaries with the r2 definitions.
++
++Reads r1 raw JSON files read-only and writes a new JSON report. For every
++per-image metric it gives:
++- pooled: all images of all runs together, with the r1 rule
++  (sorted[round((n - 1) * p)]) and the r2 rule (bench_stats.py), side by side;
++- per_run: the r2 median of each run (one value per run), and the median,
++  min and max of those run medians. Runs, not images, are the independent
++  repetitions; the images of one run share the same process and timing.
++
++The r1 metric `queue_wait_ms` was measured from the call to
++ImageProvider.resolve to the arrival of the request at the test server, so it
++includes the cache lookup, the time in the limiter and the connection; it is
++reported here as `resolve_to_server_arrival_ms`. Time spent inside the limiter
++alone was not recorded in r1 and is not derived here.
++
++Usage: python3 -I recompute_r1.py <out.json> <label=r1.json> [...]
++"""
++import hashlib
++import json
++import os
++import sys
++
++sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
++import bench_stats as st  # noqa: E402
++
++RENAME = {"queue_wait_ms": "resolve_to_server_arrival_ms"}
++PER_IMAGE = [
++    ("cold_grid_32", "queue_wait_ms"),
++    ("cold_grid_32", "completion_ms"),
++    ("cache_hits_with_full_queue", "hit_completion_ms"),
++    ("slot_handoff", "handoff_ms"),
++]
++PER_RUN_SCALAR = [
++    ("cold_grid_32", "first_display_ms"),
++    ("cold_grid_32", "all_done_ms"),
++]
++
++
++def sha256(path):
++    with open(path, "rb") as f:
++        return hashlib.sha256(f.read()).hexdigest()
++
++
++def main():
++    out = sys.argv[1]
++    report = {"definitions": {
++        "median_r2": "middle value (odd n), mean of the two middle values (even n)",
++        "percentile_r2": "linear interpolation, h=(n-1)*p (Hyndman-Fan type 7)",
++        "rule_r1": "sorted[round((n-1)*p)], Dart round half away from zero",
++        "independent_unit": "one benchmark run (sample); images inside a run are not independent",
++        "renamed": RENAME,
++    }, "sources": {}, "results": {}}
++    for arg in sys.argv[2:]:
++        label, path = arg.split("=", 1)
++        data = json.load(open(path))
++        report["sources"][label] = {"path": path, "sha256": sha256(path),
++                                    "label_in_file": data.get("label")}
++        res = {}
++        sc = data["scenarios"]
++        for scenario, metric in PER_IMAGE:
++            raw = sc[scenario]["raw"]
++            runs = [r[metric] for r in raw]
++            pooled = [x for r in runs for x in r]
++            run_medians = [st.median(r) for r in runs]
++            name = RENAME.get(metric, metric)
++            res[f"{scenario}.{name}"] = {
++                "runs": len(runs),
++                "images_per_run": sorted({len(r) for r in runs}),
++                "pooled_n": len(pooled),
++                "pooled_r1": {"median": st.r1_rank(pooled, 0.5),
++                              "p95": st.r1_rank(pooled, 0.95)},
++                "pooled_r2": {"median": st.median(pooled),
++                              "p95": st.percentile(pooled, 0.95)},
++                "per_run_median": run_medians,
++                "across_runs": {"median": st.median(run_medians),
++                                "min": min(run_medians),
++                                "max": max(run_medians)},
++            }
++        for scenario, metric in PER_RUN_SCALAR:
++            vals = [r[metric] for r in sc[scenario]["raw"]]
++            res[f"{scenario}.{metric}"] = {
++                "runs": len(vals),
++                "r1": {"median": st.r1_rank(vals, 0.5),
++                       "p95": st.r1_rank(vals, 0.95)},
++                "r2": {"median": st.median(vals),
++                       "p95": st.percentile(vals, 0.95),
++                       "min": min(vals), "max": max(vals)},
++            }
++        report["results"][label] = res
++    with open(out, "w") as f:
++        json.dump(report, f, indent=2)
++
++
++if __name__ == "__main__":
++    st.self_test()
++    main()
+diff --git a/tool/thumbnail_bench/summarize_r2.py b/tool/thumbnail_bench/summarize_r2.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..47118b456ff5833d0879178684907a6f25eca29e
+--- /dev/null
++++ b/tool/thumbnail_bench/summarize_r2.py
+@@ -0,0 +1,84 @@
++#!/usr/bin/env python3
++"""Summarise alternating r2 benchmark invocations.
++
++Each JSON file is one invocation (one process) of
++thumbnail_bench_r2_test.dart: 1 warm-up + N samples. Hierarchy:
++  image   -> values inside one sample (not independent)
++  sample  -> one repetition inside an invocation (same process)
++  invocation (run) -> the independent unit compared between arms.
++For each per-image metric, a sample is reduced to its median; an invocation to
++the median of its samples; an arm is reported as the median and the min..max
++of its invocation values. Scalar per-sample metrics are reduced the same way
++from the sample level.
++
++Usage: python3 -I summarize_r2.py <out.json> <arm>=<file.json> [...]
++(files listed in the order they were run).
++"""
++import hashlib
++import json
++import os
++import sys
++
++sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
++import bench_stats as st  # noqa: E402
++
++PER_IMAGE = [
++    ("cold_grid_32", "resolve_to_server_arrival_ms"),
++    ("cold_grid_32", "completion_ms"),
++    ("cache_hits_with_full_queue", "hit_completion_ms"),
++    ("slot_handoff", "handoff_ms"),
++]
++SCALAR = [
++    ("cold_grid_32", "first_display_ms"),
++    ("cold_grid_32", "all_done_ms"),
++    ("cold_grid_32", "http_requests"),
++    ("cold_grid_32", "peak_inflight"),
++    ("cache_hits_with_full_queue", "hits_done_while_network_held"),
++    ("history_and_cover_same_comic", "http_requests"),
++]
++
++
++def sha256(path):
++    with open(path, "rb") as f:
++        return hashlib.sha256(f.read()).hexdigest()
++
++
++def main():
++    out = sys.argv[1]
++    runs = []
++    for order, arg in enumerate(sys.argv[2:]):
++        arm, path = arg.split("=", 1)
++        data = json.load(open(path))
++        sc = data["scenarios"]
++        vals = {}
++        for scenario, metric in PER_IMAGE:
++            samples = [st.median(r[metric]) for r in sc[scenario]["raw"]]
++            vals[f"{scenario}.{metric}"] = st.median(samples)
++        for scenario, metric in SCALAR:
++            samples = [r[metric] for r in sc[scenario]["raw"]]
++            vals[f"{scenario}.{metric}"] = st.median(samples)
++        vals["broken_cache_retry.retry_errors"] = st.median(
++            [r["retry_errors"] for r in sc["broken_cache_retry"]["raw"]])
++        runs.append({"order": order, "arm": arm, "file": os.path.basename(path),
++                     "sha256": sha256(path), "label": data.get("label"),
++                     "samples": data.get("samples"), "values": vals})
++    arms = sorted({r["arm"] for r in runs})
++    keys = list(runs[0]["values"].keys())
++    summary = {}
++    for k in keys:
++        summary[k] = {}
++        for arm in arms:
++            xs = [r["values"][k] for r in runs if r["arm"] == arm]
++            summary[k][arm] = {"invocations": len(xs), "median": st.median(xs),
++                               "min": min(xs), "max": max(xs), "values": xs}
++    json.dump({
++        "method": __doc__,
++        "statistics": "bench_stats.py (median; type-7 percentiles)",
++        "runs": runs,
++        "summary": summary,
++    }, open(out, "w"), indent=2, ensure_ascii=False)
++
++
++if __name__ == "__main__":
++    st.self_test()
++    main()
+diff --git a/tool/thumbnail_bench/thumbnail_bench_r2_test.dart b/tool/thumbnail_bench/thumbnail_bench_r2_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..7dcf92e9fe7c640eac4bcb0fec6c1dbbcaf53f60
+--- /dev/null
++++ b/tool/thumbnail_bench/thumbnail_bench_r2_test.dart
+@@ -0,0 +1,334 @@
++// r2 host benchmark of cover (thumbnail) loading through ImageProvider.resolve.
++//
++// Same scenarios, fixture and server settings as thumbnail_queue_bench_test.dart
++// (r1), with two corrections: summaries use bench_stats.dart (true median,
++// type-7 percentiles), and the r1 `queue_wait_ms` is named after what it
++// measures, `resolve_to_server_arrival_ms` (from ImageProvider.resolve to the
++// arrival of the request at the server: cache lookup + limiter + connection).
++// Raw per-run values are kept; summarize_r2.py combines several invocations.
++//
++// Run explicitly (it is not part of `flutter test` under test/):
++//   FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR=<dir of librhttp.so> \
++//   THUMB_BENCH_OUT=<file.json> THUMB_BENCH_LABEL=<label> \
++//   flutter test --no-pub tool/thumbnail_bench/thumbnail_bench_r2_test.dart
++//
++// Only public provider APIs and ImageDownloader.loadThumbnail are used, so the
++// same file runs unchanged against the baseline and the candidate. Results are
++// host (x86_64 Linux, loopback HTTP) timings; they say nothing about frame
++// rate or power use on a phone or tablet.
++
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/cache_manager.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/foundation/image_provider/history_image_provider.dart';
++import 'package:venera/network/images.dart';
++
++import '../../test/network/thumbnail_test_support.dart';
++import 'bench_stats.dart';
++
++const _warmup = 1;
++const _samples = 7;
++const _latency = Duration(milliseconds: 40);
++
++double _ms(int us) => us / 1000.0;
++
++void main() {
++  final server = CoverServer();
++  final src = testSource('thumb_bench_src');
++  final out = Platform.environment['THUMB_BENCH_OUT'];
++  final label = Platform.environment['THUMB_BENCH_LABEL'] ?? 'unlabelled';
++  final cover = png(1, width: 160, height: 240);
++  final results = <String, dynamic>{
++    'label': label,
++    'samples': _samples,
++    'warmup': _warmup,
++    'server_latency_ms': _latency.inMilliseconds,
++    'fixture': 'synthetic grayscale PNG 160x240, ${cover.length} bytes',
++    'platform': '${Platform.operatingSystem} ${Platform.version}',
++    'scenarios': <String, dynamic>{},
++  };
++  var run = 0;
++
++  setUpAll(() async {
++    await initCoverTestEnvironment(server, sources: [src]);
++  });
++
++  tearDownAll(() async {
++    await server.stop();
++    if (out != null) {
++      await File(
++        out,
++      ).writeAsString(const JsonEncoder.withIndent('  ').convert(results));
++    }
++  });
++
++  String path(String scenario, int i) => '/b/${run++}/$scenario/$i.png';
++
++  CachedImageProvider cp(String p) =>
++      CachedImageProvider(server.url(p), sourceKey: src.key, cid: 'b');
++
++  /// Runs [body] _warmup + _samples times; returns the measured samples.
++  Future<List<Map<String, dynamic>>> repeat(
++    Future<Map<String, dynamic>> Function() body,
++  ) async {
++    final samples = <Map<String, dynamic>>[];
++    for (var i = 0; i < _warmup + _samples; i++) {
++      PaintingBinding.instance.imageCache.clear();
++      await server.drain();
++      final r = await body();
++      if (i >= _warmup) samples.add(r);
++    }
++    return samples;
++  }
++
++  testWidgets('cold grid: 32 misses at once', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.delay = _latency;
++        server.resetCounters();
++        final ps = [for (var i = 0; i < 32; i++) path('cold', i)];
++        for (final p in ps) {
++          server.images[p] = cover;
++        }
++        final t0 = server.clock.elapsedMicroseconds;
++        final rs = [for (final p in ps) Resolution(cp(p), clock: server.clock)];
++        final errors = await Future.wait(rs.map((r) => r.result));
++        final waits = <double>[];
++        final done = <double>[];
++        for (var i = 0; i < rs.length; i++) {
++          final arrival = server.arrivals[Uri.parse(server.url(ps[i])).path]!;
++          waits.add(_ms(arrival.first - rs[i].startUs!));
++          done.add(_ms(rs[i].doneUs! - rs[i].startUs!));
++        }
++        for (final r in rs) {
++          r.dispose();
++        }
++        return {
++          'errors': errors.where((e) => e != null).length,
++          'http_requests': server.total,
++          'peak_inflight': server.peakInflight,
++          'first_display_ms': done.reduce((a, b) => a < b ? a : b),
++          'all_done_ms': _ms(server.clock.elapsedMicroseconds - t0),
++          'resolve_to_server_arrival_ms': waits,
++          'completion_ms': done,
++        };
++      });
++      results['scenarios']['cold_grid_32'] = {
++        'raw': raw,
++        'http_requests': raw.map((r) => r['http_requests']).toList(),
++        'peak_inflight': raw.map((r) => r['peak_inflight']).toList(),
++        'errors': raw.map((r) => r['errors']).toList(),
++        'first_display_ms': summary([
++          for (final r in raw) r['first_display_ms'] as double,
++        ]),
++        'all_done_ms': summary([
++          for (final r in raw) r['all_done_ms'] as double,
++        ]),
++        'resolve_to_server_arrival_ms': summary([
++          for (final r in raw)
++            ...(r['resolve_to_server_arrival_ms'] as List<double>),
++        ]),
++        'completion_ms': summary([
++          for (final r in raw) ...(r['completion_ms'] as List<double>),
++        ]),
++      };
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('cache hits while the network queue is full', (tester) async {
++    await tester.runAsync(() async {
++      const holdFor = Duration(milliseconds: 1500);
++      final raw = await repeat(() async {
++        server.resetCounters();
++        server.holdResponses = true;
++        final busy = [for (var i = 0; i < 12; i++) path('busy', i)];
++        for (final p in busy) {
++          server.images[p] = cover;
++        }
++        final hits = [for (var i = 0; i < 16; i++) path('hit', i)];
++        for (final p in hits) {
++          await CacheManager().writeCache(
++            thumbDiskKey(server.url(p), src.key, 'b'),
++            cover,
++          );
++        }
++        final held = [for (final p in busy) Resolution(cp(p))];
++        await server.inflightAtLeast(8).timeout(const Duration(seconds: 20));
++        final rs = [
++          for (final p in hits) Resolution(cp(p), clock: server.clock),
++        ];
++        final t0 = server.clock.elapsedMicroseconds;
++        await Future<void>.delayed(holdFor);
++        final doneWhileHeld = rs.where((r) => r.isDone).length;
++        server.holdResponses = false;
++        server.releaseAll();
++        final errors = await Future.wait(rs.map((r) => r.result));
++        await Future.wait(held.map((r) => r.result));
++        final lat = [for (final r in rs) _ms(r.doneUs! - r.startUs!)];
++        for (final r in [...held, ...rs]) {
++          r.dispose();
++        }
++        return {
++          'errors': errors.where((e) => e != null).length,
++          'hits_done_while_network_held': doneWhileHeld,
++          'hit_requests': [
++            for (final p in hits) server.count(p),
++          ].fold<int>(0, (a, b) => a + b),
++          'network_held_ms': _ms(server.clock.elapsedMicroseconds - t0),
++          'hit_completion_ms': lat,
++        };
++      });
++      results['scenarios']['cache_hits_with_full_queue'] = {
++        'raw': raw,
++        'hits_total_per_sample': 16,
++        'hits_done_while_network_held': [
++          for (final r in raw) r['hits_done_while_network_held'],
++        ],
++        'hit_http_requests': [for (final r in raw) r['hit_requests']],
++        'hit_completion_ms': summary([
++          for (final r in raw) ...(r['hit_completion_ms'] as List<double>),
++        ]),
++      };
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('slot hand-off after one response', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.resetCounters();
++        server.holdResponses = true;
++        final ps = [for (var i = 0; i < 16; i++) path('handoff', i)];
++        for (final p in ps) {
++          server.images[p] = cover;
++        }
++        final rs = [for (final p in ps) Resolution(cp(p))];
++        await server.inflightAtLeast(8).timeout(const Duration(seconds: 20));
++        await Future<void>.delayed(const Duration(milliseconds: 300));
++        final handoff = <double>[];
++        for (var k = 0; k < 6; k++) {
++          final next = server.nextArrival();
++          final t = server.clock.elapsedMicroseconds;
++          server.release();
++          // Event driven: completes when the next queued request arrives.
++          final arrival = await next.timeout(const Duration(seconds: 10));
++          handoff.add(_ms(arrival - t));
++        }
++        server.holdResponses = false;
++        server.releaseAll();
++        final errors = await Future.wait(rs.map((r) => r.result));
++        for (final r in rs) {
++          r.dispose();
++        }
++        return {
++          'errors': errors.where((e) => e != null).length,
++          'handoff_ms': handoff,
++        };
++      });
++      results['scenarios']['slot_handoff'] = {
++        'raw': raw,
++        'handoff_ms': summary([
++          for (final r in raw) ...(r['handoff_ms'] as List<double>),
++        ]),
++      };
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('history and cover tiles of the same comics', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.delay = _latency;
++        server.resetCounters();
++        final ps = [for (var i = 0; i < 10; i++) path('dup', i)];
++        final rs = <Resolution>[];
++        for (var i = 0; i < ps.length; i++) {
++          server.images[ps[i]] = cover;
++          final url = server.url(ps[i]);
++          rs.add(
++            Resolution(
++              CachedImageProvider(url, sourceKey: src.key, cid: 'd$i'),
++            ),
++          );
++          rs.add(
++            Resolution(HistoryImageProvider(testHistory('d$i', src, url))),
++          );
++        }
++        final errors = await Future.wait(rs.map((r) => r.result));
++        for (final r in rs) {
++          r.dispose();
++        }
++        return {
++          'errors': errors.where((e) => e != null).length,
++          'http_requests': server.total,
++          'distinct_covers': ps.length,
++        };
++      });
++      results['scenarios']['history_and_cover_same_comic'] = {
++        'raw': raw,
++        'http_requests': [for (final r in raw) r['http_requests']],
++      };
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('valid cache hit: provider path vs full stream', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.resetCounters();
++        final p1 = path('hit-provider', 0);
++        final p2 = path('hit-stream', 0);
++        for (final p in [p1, p2]) {
++          server.images[p] = cover;
++          await CacheManager().writeCache(
++            thumbDiskKey(server.url(p), src.key, 'b'),
++            cover,
++          );
++        }
++        final err = await resolveOnce(cp(p1));
++        var yields = 0;
++        await for (final e in ImageDownloader.loadThumbnail(
++          server.url(p2),
++          src.key,
++          'b',
++        )) {
++          if (e.imageBytes != null) yields++;
++        }
++        await Future<void>.delayed(const Duration(milliseconds: 300));
++        return {
++          'provider_error': err?.toString(),
++          'provider_http_requests': server.count(p1),
++          'full_stream_http_requests': server.count(p2),
++          'full_stream_image_events': yields,
++        };
++      });
++      results['scenarios']['cache_hit_paths'] = {'raw': raw};
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('broken cache entries: first load and one retry', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.resetCounters();
++        final ps = [for (var i = 0; i < 6; i++) path('broken', i)];
++        for (var i = 0; i < ps.length; i++) {
++          server.images[ps[i]] = cover;
++          await CacheManager().writeCache(
++            thumbDiskKey(server.url(ps[i]), src.key, 'b'),
++            i.isEven ? corruptPng : <int>[],
++          );
++        }
++        final first = await Future.wait(ps.map((p) => resolveOnce(cp(p))));
++        final retry = await Future.wait(ps.map((p) => resolveOnce(cp(p))));
++        return {
++          'first_load_errors': first.where((e) => e != null).length,
++          'retry_errors': retry.where((e) => e != null).length,
++          'http_requests': server.total,
++          'entries': ps.length,
++        };
++      });
++      results['scenarios']['broken_cache_retry'] = {'raw': raw};
++    });
++  }, skip: !hasNativeHttp);
++}
+diff --git a/tool/thumbnail_bench/thumbnail_limiter_timing_bench_test.dart b/tool/thumbnail_bench/thumbnail_limiter_timing_bench_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..d0ae30fa0055b2015a29597dce0b329ffb8d44f1
+--- /dev/null
++++ b/tool/thumbnail_bench/thumbnail_limiter_timing_bench_test.dart
+@@ -0,0 +1,123 @@
++// Candidate-only timing breakdown of the cold-grid scenario of the r2
++// benchmark, using ImageDownloader.debugCoverLoadEvent (not in the start
++// version, so there is no baseline counterpart for these segments).
++//
++// Per image (all 32 are cache misses):
++//   resolve_to_enqueue_ms     ImageProvider.resolve -> waiting for a slot
++//   limiter_wait_ms           waiting for a slot -> slot granted
++//   granted_to_request_ms     slot granted -> request handed to Dio
++//                             (includes the re-check of the disk cache)
++//   request_to_arrival_ms     request handed to Dio -> arrival at the server
++//
++// Run explicitly:
++//   FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR=<dir of librhttp.so> \
++//   THUMB_BENCH_OUT=<file.json> THUMB_BENCH_LABEL=<label> \
++//   flutter test --no-pub tool/thumbnail_bench/thumbnail_limiter_timing_bench_test.dart
++
++// This benchmark is a test run from tool/; the timing probe is test-only.
++// ignore_for_file: invalid_use_of_visible_for_testing_member
++
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/network/images.dart';
++
++import '../../test/network/thumbnail_test_support.dart';
++import 'bench_stats.dart';
++
++const _warmup = 1;
++const _samples = 7;
++const _latency = Duration(milliseconds: 40);
++
++double _ms(int us) => us / 1000.0;
++
++void main() {
++  final server = CoverServer();
++  final src = testSource('thumb_timing_src');
++  final out = Platform.environment['THUMB_BENCH_OUT'];
++  final label = Platform.environment['THUMB_BENCH_LABEL'] ?? 'unlabelled';
++  final cover = png(1, width: 160, height: 240);
++  final runs = <Map<String, dynamic>>[];
++  var run = 0;
++
++  setUpAll(() async {
++    await initCoverTestEnvironment(server, sources: [src]);
++  });
++
++  tearDownAll(() async {
++    ImageDownloader.debugCoverLoadEvent = null;
++    await server.stop();
++    if (out != null) {
++      final metrics = [
++        'resolve_to_enqueue_ms',
++        'limiter_wait_ms',
++        'granted_to_request_ms',
++        'request_to_arrival_ms',
++      ];
++      await File(out).writeAsString(
++        const JsonEncoder.withIndent('  ').convert({
++          'label': label,
++          'samples': _samples,
++          'warmup': _warmup,
++          'server_latency_ms': _latency.inMilliseconds,
++          'runs': runs,
++          'per_run_median': {
++            for (final m in metrics)
++              m: [for (final r in runs) median(r[m] as List<double>)],
++          },
++        }),
++      );
++    }
++  });
++
++  testWidgets('cold grid timing breakdown', (tester) async {
++    await tester.runAsync(() async {
++      for (var i = 0; i < _warmup + _samples; i++) {
++        PaintingBinding.instance.imageCache.clear();
++        await server.drain();
++        server.delay = _latency;
++        final events = <String, Map<String, int>>{};
++        ImageDownloader.debugCoverLoadEvent = (event, key) {
++          (events[key] ??= {})[event] = server.clock.elapsedMicroseconds;
++        };
++        final ps = [for (var k = 0; k < 32; k++) '/t/${run++}/$k.png'];
++        for (final p in ps) {
++          server.images[p] = cover;
++        }
++        final rs = [
++          for (final p in ps)
++            Resolution(
++              CachedImageProvider(server.url(p), sourceKey: src.key, cid: 't'),
++              clock: server.clock,
++            ),
++        ];
++        final errors = await Future.wait(rs.map((r) => r.result));
++        ImageDownloader.debugCoverLoadEvent = null;
++        final m = <String, List<double>>{
++          'resolve_to_enqueue_ms': [],
++          'limiter_wait_ms': [],
++          'granted_to_request_ms': [],
++          'request_to_arrival_ms': [],
++        };
++        for (var k = 0; k < ps.length; k++) {
++          final key = thumbDiskKey(server.url(ps[k]), src.key, 't');
++          final e = events[key]!;
++          final arrival = server.arrivals[ps[k]]!.first;
++          m['resolve_to_enqueue_ms']!.add(_ms(e['enqueue']! - rs[k].startUs!));
++          m['limiter_wait_ms']!.add(_ms(e['granted']! - e['enqueue']!));
++          m['granted_to_request_ms']!.add(_ms(e['request']! - e['granted']!));
++          m['request_to_arrival_ms']!.add(_ms(arrival - e['request']!));
++        }
++        for (final r in rs) {
++          r.dispose();
++        }
++        expect(errors, everyElement(isNull));
++        if (i >= _warmup) runs.add({...m, 'http_requests': server.total});
++        server.resetCounters();
++      }
++    });
++  }, skip: !hasNativeHttp);
++}

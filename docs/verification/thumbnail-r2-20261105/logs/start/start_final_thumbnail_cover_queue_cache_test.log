@@ -1,0 +1,87 @@
+   Woah! You appear to be trying to run flutter as root.
+   We strongly recommend running the flutter tool without superuser privileges.
+  /
+📎
+00:00 +0: loading /root/work/r2/start/test/network/thumbnail_cover_queue_cache_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: a valid image written while queued is used, no extra request
+00:00 +1: an empty entry written while queued is not a valid hit
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+Expected: null
+  Actual: _Exception:<Exception: Empty image data>
+loaded from the network
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      _expect (package:matcher/src/expect/expect.dart:182:3)
+#2      expect (package:matcher/src/expect/expect.dart:65:3)
+#3      expect (package:flutter_test/src/widget_tester.dart:473:18)
+#4      main.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_queue_cache_test.dart:131:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_queue_cache_test.dart:120:9)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 2 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +1 -1: an empty entry written while queued is not a valid hit [E]
+  Test failed. See exception logs above.
+  The test description was: an empty entry written while queued is not a valid hit
+  
+00:00 +1 -1: an undecodable entry written while queued is not a valid hit
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+Expected: null
+  Actual: _Exception:<Exception: Invalid image data>
+loaded from the network
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      _expect (package:matcher/src/expect/expect.dart:182:3)
+#2      expect (package:matcher/src/expect/expect.dart:65:3)
+#3      expect (package:flutter_test/src/widget_tester.dart:473:18)
+#4      main.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_queue_cache_test.dart:131:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_queue_cache_test.dart:120:9)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 2 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +1 -2: an undecodable entry written while queued is not a valid hit [E]
+  Test failed. See exception logs above.
+  The test description was: an undecodable entry written while queued is not a valid hit
+  
+00:00 +1 -2: an entry for another source or cid is not used
+00:00 +2 -2: (tearDownAll)
+00:00 +2 -2: Some tests failed.
+thumbnail_cover_queue_cache_test exit=1

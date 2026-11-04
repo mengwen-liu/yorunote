@@ -1,0 +1,5 @@
+workflow_source_commit=767022107a80a2f64c2ff1104cbd018b4657bb16
+workflow_ref=refs/heads/claude/yorunote-thumbnail-r2-20261105
+run_id=41899724426 attempt=1
+runner_os=Linux arch=X64 image=ubuntu24 20261101.360.1
+documented_standard_runner_storage=14GB (informational only; gates use runtime-measured bytes)

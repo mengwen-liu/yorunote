@@ -1,0 +1,45 @@
+== disk snapshot: start (2026-11-04T19:43:48Z)
+Filesystem     Type    1B-blocks        Used       Avail Mounted on
+/dev/root      ext4 154894188544 62783733760 92093677568 /
+/dev/root      ext4 154894188544 62783733760 92093677568 /
+st_dev(/)=2049 st_dev(/mnt)=2049
+== disk snapshot: before-cleanup (2026-11-04T19:43:49Z)
+Filesystem     Type    1B-blocks        Used       Avail Mounted on
+/dev/root      ext4 154894188544 62805434368 92071976960 /
+/dev/root      ext4 154894188544 62805434368 92071976960 /
+st_dev(/)=2049 st_dev(/mnt)=2049
+layout=same base=/mnt/venera-ci required_mib(root)=14336 required_mib(base)=14336 free_bytes(root)=92071968768
+== disk snapshot: after-cleanup (2026-11-04T19:43:49Z)
+Filesystem     Type    1B-blocks        Used       Avail Mounted on
+/dev/root      ext4 154894188544 62805458944 92071952384 /
+/dev/root      ext4 154894188544 62805458944 92071952384 /
+st_dev(/)=2049 st_dev(/mnt/venera-ci)=2049
+disk-gate[after-cleanup-root] path=/ free_bytes=92071952384 required_bytes=15032385536 free_mib=87806 required_mib=14336
+disk-gate[after-cleanup-base] path=/mnt/venera-ci free_bytes=92071944192 required_bytes=15032385536 free_mib=87806 required_mib=14336
+== disk snapshot: after-sdk-install (2026-11-04T19:45:30Z)
+Filesystem     Type    1B-blocks        Used       Avail Mounted on
+/dev/root      ext4 154894188544 69650948096 85226463232 /
+/dev/root      ext4 154894188544 69650948096 85226463232 /
+st_dev(/)=2049 st_dev(/mnt/venera-ci)=2049
+disk-gate[prebuild-root] path=/ free_bytes=85111730176 required_bytes=8589934592 free_mib=81168 required_mib=8192
+disk-gate[prebuild-base] path=/mnt/venera-ci free_bytes=85111730176 required_bytes=8589934592 free_mib=81168 required_mib=8192
+== disk snapshot: after-pub-get (2026-11-04T19:45:48Z)
+Filesystem     Type    1B-blocks        Used       Avail Mounted on
+/dev/root      ext4 154894188544 70042095616 84835315712 /
+/dev/root      ext4 154894188544 70042095616 84835315712 /
+st_dev(/)=2049 st_dev(/mnt/venera-ci)=2049
+== disk snapshot: after-rhttp-host-build (2026-11-04T19:47:18Z)
+Filesystem     Type    1B-blocks        Used       Avail Mounted on
+/dev/root      ext4 154894188544 70593945600 84283465728 /
+/dev/root      ext4 154894188544 70593945600 84283465728 /
+st_dev(/)=2049 st_dev(/mnt/venera-ci)=2049
+== disk snapshot: before-build (2026-11-04T19:49:44Z)
+Filesystem     Type    1B-blocks        Used       Avail Mounted on
+/dev/root      ext4 154894188544 70826844160 84050567168 /
+/dev/root      ext4 154894188544 70826844160 84050567168 /
+st_dev(/)=2049 st_dev(/mnt/venera-ci)=2049
+== disk snapshot: after-build (2026-11-04T19:58:19Z)
+Filesystem     Type    1B-blocks        Used       Avail Mounted on
+/dev/root      ext4 154894188544 80803282944 74074128384 /
+/dev/root      ext4 154894188544 80803282944 74074128384 /
+st_dev(/)=2049 st_dev(/mnt/venera-ci)=2049

@@ -1,0 +1,77 @@
+{
+  "run_id": 41899724426,
+  "run_url": "https://github.com/mengwen-liu/yorunote/actions/runs/41899724426",
+  "dispatches_this_round": 1,
+  "workflow_commit": "767022107a80a2f64c2ff1104cbd018b4657bb16",
+  "app_source_commit": "cee5b03043152cf96a1f444e1d88be46a44b8c08",
+  "app_source_tree": "be394dabeef2fdac47b64ad82e66b6cc7f59ff3d",
+  "conclusion": "success",
+  "exit_codes": {
+    "pub_get": 0,
+    "rhttp_host_build": 0,
+    "qjs_host_build": 0,
+    "key_tests": 0,
+    "full_tests": 0,
+    "analyze": 1,
+    "apk_build": 0
+  },
+  "key_tests": "00:30 +61: All tests passed!",
+  "full_tests": "00:48 +343: All tests passed!",
+  "analyzer": "identical to the known set (8 info)",
+  "host_libs_on_runner": {
+    "librhttp.so": "f3fb14cad35dc7b574099fc2ee4d4bb8839bacb7aa6b2ac1c72d9ebad365a295",
+    "libflutter_qjs_plugin.so": "741707767ddafef16014fdade489758b4ce207918e7a2b88e5bcdfa84942a3fd (runner compiler; differs from the local build 5c2ac257..., same sources/flags)"
+  },
+  "apk_artifact": {
+    "id": 13357779497,
+    "name": "yorunote-thumbnail-r2-arm64-profile-apk",
+    "zip_digest_reported_by_github": "sha256:34c63b481f8d754df6f7062e6c45d40cf7337be44abceede17e132b15010976b",
+    "zip_sha256_downloaded": "34c63b481f8d754df6f7062e6c45d40cf7337be44abceede17e132b15010976b",
+    "expires_at_utc": "2026-11-11T19:58:24Z",
+    "expires_at_asia_taipei": "2026-11-12 03:58:24 +08:00"
+  },
+  "apk": {
+    "file": "Yorunote_cee5b03_thumbnail_r2_arm64_profile.apk",
+    "size_bytes": 27881187,
+    "sha256_ci": "ad0d73c3b1ca5dd062086c32db8208ec11814ebe791bf890a38453a9252b475b",
+    "sha256_downloaded": "ad0d73c3b1ca5dd062086c32db8208ec11814ebe791bf890a38453a9252b475b",
+    "package": "com.github.wgh136.venera",
+    "versionName": "1.6.3",
+    "versionCode": 2163,
+    "label": "Yorunote",
+    "abis": [
+      "arm64-v8a"
+    ],
+    "native_libs": [
+      "libapp.so",
+      "libflutter-saf.so",
+      "libflutter.so",
+      "libflutter_7zip.so",
+      "liblodepng_flutter.so",
+      "libqjs.so",
+      "librhttp.so",
+      "libsqlite3.so",
+      "libvmservice_snapshot.so",
+      "libzip_flutter.so"
+    ],
+    "zip_integrity": "ok (CI and local unzip -t)",
+    "zipalign_4": "ok",
+    "zipalign_16k": "yes (informational)",
+    "icons": "20 pixel-identical, adaptive xml with background/foreground/monochrome",
+    "about_asset_app_icon_sha256": "4f40bc600941faf39a27974c39da8fad276dd7fd655f51a831cfcafe4f03341d (matches repo)",
+    "apksigner": "Verifies, v2, 1 signer, CN=Yorunote CI Disposable",
+    "cert_sha256": "96ee97a721f3f935984c68d12533e0d189e74c9eff113768bc8b82f6782004f7",
+    "libapp_strings": {
+      "loadCancellable": 1,
+      "RequestCancelledException": 1,
+      "coverRequestLimiter": 2,
+      "debugCoverLoadEvent": 0
+    }
+  },
+  "diagnostic_logs_artifact": {
+    "id": 13358087148,
+    "zip_sha256": "1400d72e32293ac4ec36c05ab41609570128fde3d711efa7322200b4f38e2813",
+    "expires_at_utc": "2026-11-11T19:58:23Z"
+  },
+  "signing_compatibility": "one-time key generated in this job; certificate differs from every earlier APK (incl. f300eecd... of run 41883419245, cert a8144ca3...); cannot overwrite-install over them"
+}

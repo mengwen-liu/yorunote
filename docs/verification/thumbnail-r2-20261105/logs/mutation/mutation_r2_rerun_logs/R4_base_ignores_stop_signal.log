@@ -1,0 +1,96 @@
+00:00 +0: loading /root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:00 +1: B: a response stalled inside the body is torn down on cancel
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+stalled body still open after cancel
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.<anonymous closure>.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:181:30)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:179:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:177:9)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:95:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:155:7)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:10 +1 -1: B: a response stalled inside the body is torn down on cancel [E]
+  Test failed. See exception logs above.
+  The test description was: B: a response stalled inside the body is torn down on cancel
+  
+00:10 +1 -1: C: queued cancel, error and success return each slot once
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:320:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+00:25 +2 -1: D1: one cancelled consumer does not stop a shared request
+00:25 +3 -1: D2: a shared request ends when all its consumers cancel
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:25 +4 -1: D3: a consumer arriving after all others cancelled starts anew
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TimeoutException was thrown while running async test code:
+TimeoutException after 0:00:20.000000: Future not completed
+
+When the exception was thrown, this was the stack:
+<asynchronous suspension>
+#1      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:353:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:342:9)
+<asynchronous suspension>
+#4      main.ignoringStopErrors (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:95:7)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///root/work/r2/mutant/test/network/thumbnail_cover_cancel_test.dart:324:7)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:45 +4 -2: D3: a consumer arriving after all others cancelled starts anew [E]
+  Test failed. See exception logs above.
+  The test description was: D3: a consumer arriving after all others cancelled starts anew
+  
+00:45 +4 -2: E: cancelling while headers arrive never aborts the process
+00:45 +5 -2: (tearDownAll)
+00:45 +5 -2: Some tests failed.
+   Woah! You appear to be trying to run flutter as root.
+   We strongly recommend running the flutter tool without superuser privileges.
+  /
+📎

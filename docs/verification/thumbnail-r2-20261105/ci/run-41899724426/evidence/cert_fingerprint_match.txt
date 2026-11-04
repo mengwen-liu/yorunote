@@ -1,0 +1,1 @@
+signing certificate SHA-256 matches keystore: 96ee97a721f3f935984c68d12533e0d189e74c9eff113768bc8b82f6782004f7

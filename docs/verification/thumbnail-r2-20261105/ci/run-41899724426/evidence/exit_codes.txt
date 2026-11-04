@@ -1,0 +1,8 @@
+flutter_doctor_exit=0
+flutter_pub_get_exit=0
+rhttp_host_build_exit=0
+qjs_host_build_exit=0
+flutter_test_key_exit=0
+flutter_test_full_exit=0
+flutter_analyze_exit=1
+flutter_build_apk_arm64_profile_exit=0

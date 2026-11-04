@@ -1,0 +1,1 @@
+python3 -I tool/thumbnail_bench/summarize_r2.py <out> start=r2_1_start.json candidate=r2_1_candidate.json ... (5 pairs, run order 1..5, start before candidate in each pair)

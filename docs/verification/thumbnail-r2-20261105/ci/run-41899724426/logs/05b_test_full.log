@@ -1,0 +1,1062 @@
+00:00 +0: loading /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart
+00:00 +0: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: (setUpAll)
+00:00 +0: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +1: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +2: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +3: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +4: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +5: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +6: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +7: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +8: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:00 +9: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:00 +10: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty local keeps browse, import and download actions
+00:01 +11: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard optional lines and progress are hidden when absent
+00:01 +12: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: nonempty local still displays supplied recent comics
+00:01 +13: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard shows progress only when valid
+00:01 +14: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard shows progress only when valid
+00:01 +15: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 1.0x
+00:01 +16: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard missing cover shows the placeholder
+00:01 +17: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 1.5x
+00:01 +18: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard broken cover falls back to the placeholder
+00:01 +19: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 2.0x
+00:01 +20: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard loading cover shows the placeholder
+00:01 +21: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 393.0dp 1.0x
+00:01 +22: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard onTap and onAction are independent
+00:01 +23: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard onTap and onAction are independent
+00:01 +24: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 393.0dp 2.0x
+00:01 +25: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard long action label: no overflow at 2x text
+00:01 +26: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 1.0x
+00:01 +27: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard action needs both label and callback
+00:01 +28: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 1.5x
+00:01 +29: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard card without onTap does not crash on tap
+00:01 +30: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 2.0x
+00:01 +31: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 2.0x
+00:01 +32: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard uses ColorScheme roles (Brightness.light)
+00:01 +33: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 1.0x
+00:01 +34: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 320.0dp wide
+00:01 +35: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 1.5x
+00:01 +36: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 1.5x
+00:01 +37: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 600.0dp wide
+00:01 +38: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 2.0x
+00:01 +39: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 320.0dp wide
+00:01 +40: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.0x
+00:01 +41: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.0x
+00:01 +42: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 600.0dp wide
+00:01 +43: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.5x
+00:01 +44: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.5x
+00:01 +45: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 360.0dp wide
+00:01 +46: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 2.0x
+00:01 +47: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 600.0dp wide
+00:01 +48: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.0x
+00:01 +49: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard exposes one labeled button with a tap action
+00:01 +50: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.5x
+00:01 +51: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.5x
+00:02 +52: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard meets tap target and label guidelines (Brightness.dark)
+00:02 +53: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 2.0x
+00:02 +54: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard meets text contrast guideline (Brightness.dark)
+00:02 +55: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 1.0x
+00:02 +56: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard meets tap target and label guidelines (Brightness.light)
+00:02 +57: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 1.5x
+00:02 +58: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: RecentComicCard meets text contrast guideline (Brightness.light)
+00:02 +59: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 2.0x
+00:02 +60: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 2.0x
+00:02 +61: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeSectionHeading renders title, count and action
+00:02 +62: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeSectionHeading renders title, count and action
+00:02 +63: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 1.5x
+00:02 +64: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 1.5x
+00:02 +65: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeSectionHeading hides optional parts
+00:02 +66: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 2.0x
+00:02 +67: /home/runner/work/yorunote/yorunote/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 2.0x
+00:02 +68: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeSectionHeading no overflow at 2x text on a narrow width
+00:02 +69: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 240.0dp
+00:02 +70: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 320.0dp
+00:02 +71: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 2.0x, 240.0dp
+00:02 +72: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 2.0x, 320.0dp
+00:02 +73: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeEmptyState renders message and action
+00:02 +74: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeEmptyState message only has no button
+00:02 +75: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeEmptyState no overflow at 2x text
+00:02 +76: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeEmptyState long CTA label: no overflow at 2x text
+00:02 +77: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeEmptyState action meets the tap target guideline
+00:02 +78: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeCardPlaceholder has the default footprint
+00:02 +79: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeCardPlaceholder exposes a loading label when supplied
+00:02 +80: /home/runner/work/yorunote/yorunote/test/ui/home_widgets_test.dart: HomeCardPlaceholder is silent without a label
+00:03 +81: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: (setUpAll)
+00:03 +81: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:04 +82: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=true
+00:04 +83: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:04 +84: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:04 +85: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:04 +86: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:04 +87: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:04 +88: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +89: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +90: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +91: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +92: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +93: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +94: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +95: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +96: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.5x populated=false
+00:05 +97: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:05 +98: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:05 +99: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:05 +100: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:06 +101: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:06 +102: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:06 +103: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:06 +104: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.5x populated=true
+00:06 +105: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=false
+00:06 +106: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=false
+00:06 +107: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 2.0x populated=true
+00:06 +108: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=true
+00:06 +109: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=true
+00:06 +110: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=true
+00:06 +111: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=true
+00:06 +112: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.5x populated=true
+00:06 +113: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=false
+00:06 +114: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=false
+00:06 +115: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 2.0x populated=true
+00:06 +116: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:06 +117: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:06 +118: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.0x populated=true
+00:07 +119: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=false
+00:07 +120: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=false
+00:07 +121: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.5x populated=true
+00:07 +122: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:07 +123: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:07 +124: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:07 +125: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.0x populated=false
+00:07 +126: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=false
+00:07 +127: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=false
+00:07 +128: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.5x populated=false
+00:07 +129: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:07 +130: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:07 +131: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:07 +132: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 2.0x populated=true
+00:07 +133: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=false
+00:07 +134: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=false
+00:07 +135: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.0x populated=true
+00:07 +136: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:07 +137: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:07 +138: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:07 +139: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 2.0x populated=false
+00:07 +140: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=false
+00:08 +141: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=false
+00:08 +142: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: every R2 entry dispatches its supplied callback
+00:08 +143: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:08 +144: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:08 +145: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: original follow-up State still receives its global refresh
+00:08 +146: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=false
+00:08 +147: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=false
+00:08 +148: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: presentation follows alternate Material seed colors
+00:08 +149: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:08 +150: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:08 +151: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r2_test.dart: synthetic visual evidence light
+00:08 +152: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=false
+00:08 +153: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:08 +154: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=false
+00:08 +155: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:09 +156: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:09 +157: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:09 +158: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +159: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +160: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +161: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +162: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +163: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +164: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +165: /home/runner/work/yorunote/yorunote/test/ui/ui_tokens_test.dart: text roles follow TextTheme
+00:09 +166: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:09 +167: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=false
+00:09 +168: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:10 +169: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=false
+00:10 +170: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=true
+00:10 +171: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=false
+00:10 +172: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=true
+00:10 +173: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.0 populated=false
+00:10 +174: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.0 populated=true
+00:10 +175: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:10 +176: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:10 +177: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:11 +178: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:11 +179: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:11 +180: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:11 +181: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:11 +182: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:11 +183: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:11 +184: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=false
+00:11 +185: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 393.0dp
+00:11 +186: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=true
+00:11 +187: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 360.0dp
+00:11 +188: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=false
+00:12 +189: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 393.0dp
+00:12 +190: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=true
+00:12 +191: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:12 +192: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:12 +193: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=true
+00:12 +194: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:12 +195: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:12 +196: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 2.0 populated=true
+00:12 +197: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 2.0 populated=true
+00:12 +198: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 2.0
+00:12 +199: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=false
+00:12 +200: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 1.0
+00:12 +201: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=true
+00:12 +202: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=true
+00:12 +203: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=true
+00:12 +204: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 1.0
+00:12 +205: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=false
+00:12 +206: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 1.5
+00:12 +207: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=true
+00:13 +208: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=true
+00:13 +209: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=true
+00:13 +210: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 393.0 1.5
+00:13 +211: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=false
+00:13 +212: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=false
+00:13 +213: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 1.0
+00:13 +214: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=true
+00:13 +215: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=true
+00:13 +216: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 2.0
+00:13 +217: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=false
+00:13 +218: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=false
+00:13 +219: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 393.0 1.5
+00:13 +220: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=true
+00:13 +221: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=true
+00:13 +222: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 1.0
+00:13 +223: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=false
+00:13 +224: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=false
+00:13 +225: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 2.0
+00:13 +226: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=true
+00:13 +227: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=true
+00:13 +228: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=true
+00:13 +229: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:13 +230: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=false
+00:13 +231: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=false
+00:13 +232: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=true
+00:14 +233: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=false
+00:14 +234: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=true
+00:14 +235: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=false
+00:14 +236: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=true
+00:14 +237: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=false
+00:14 +238: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=true
+00:14 +239: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=true
+00:14 +240: /home/runner/work/yorunote/yorunote/test/channel_test.dart: 1-3-1
+00:14 +241: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:14 +242: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:14 +242: /home/runner/work/yorunote/yorunote/test/channel_test.dart: 1-1-3
+push 1
+push 2
+pop 1
+push 3
+pop 2
+push done
+pop 3
+00:14 +243: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:14 +244: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:14 +245: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=true
+00:14 +246: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.5 populated=false
+00:14 +247: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.5 populated=true
+00:15 +248: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 2.0 populated=false
+00:15 +249: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 2.0 populated=true
+00:15 +250: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 actual statistics selectors and exact keyword callbacks
+00:15 +251: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+00:15 +252: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+00:15 +253: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+00:16 +254: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+00:16 +255: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+00:16 +256: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+00:16 +257: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+00:16 +258: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:16 +259: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+00:16 +260: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 capture light 360
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:16 +261: /home/runner/work/yorunote/yorunote/test/ui/home_visual_r4_test.dart: R4 capture light 360
+00:16 +262: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:16 +263: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:16 +264: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:16 +265: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:18 +266: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:18 +267: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:19 +268: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:19 +268: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:20 +269: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:20 +269: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:21 +270: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:21 +270: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken download is not kept in the cache
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:21 +271: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:21 +271: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken local file is reported and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:21 +272: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:21 +272: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider the local cover fallback is used and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:21 +273: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:21 +274: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:21 +275: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:22 +276: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:22 +276: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:22 +277: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:22 +277: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:23 +278: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:23 +278: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider a local history cover is shown and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:23 +279: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:24 +280: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:24 +281: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:24 +282: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:25 +282: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+PATH_REUSE before the broken file is removed / a direct cache write: same_directory=true same_path=false
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_path_reuseUVIMPI/cache/cache/1/fd930703929ce697cd54efc9d0c88a1b-1793821731962333-0' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:119:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:25 +283: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:26 +283: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a new request in the same directory is kept
+PATH_REUSE before the broken file is removed / a new request: same_directory=true same_path=false
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_path_reuseUVIMPI/cache/cache/2/df5948eafcaa7ca0db0fd447465f6076-1793821732391970-101' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:119:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +284: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:26 +284: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a direct cache write in the same directory is kept
+PATH_REUSE after the broken file is removed / a direct cache write: same_directory=true same_path=false
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +285: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:26 +285: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a new request in the same directory is kept
+PATH_REUSE after the broken file is removed / a new request: same_directory=true same_path=false
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +286: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:28 +287: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:29 +288: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:29 +288: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: an undecodable cache entry is invalidated, other entries kept
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:29 +289: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:29 +289: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:30 +290: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:30 +290: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: an empty cache entry is invalidated, other entries kept
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:30 +291: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:30 +291: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:30 +291: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+00:30 +292: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:30 +293: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:30 +294: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:30 +295: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:31 +296: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:31 +297: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_reader_cacheFQHQVQ/cache/cache/14/50328ae8e2d37e7ce2841d5875e0b026-1793821738340720-13' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:119:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:32 +298: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:32 +298: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_test.dart: other providers keep the default invalid-data handling
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:32 +299: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:32 +300: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:32 +301: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:32 +302: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:33 +303: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: cache hits and local files do not wait for a full queue
+00:33 +304: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: cancelled loads give their slots back
+00:33 +305: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: cancelled loads give their slots back
+00:33 +306: /home/runner/work/yorunote/yorunote/test/network/synthetic_source_test.dart: a page of covers loads with at most 8 image requests at once
+00:34 +307: /home/runner/work/yorunote/yorunote/test/network/synthetic_source_test.dart: a page of covers loads with at most 8 image requests at once
+00:34 +308: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:34 +309: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:34 +310: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:34 +311: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:34 +311: /home/runner/work/yorunote/yorunote/test/network/synthetic_source_test.dart: a broken cover is shown as an error and recovers on retry
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:34 +312: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:34 +313: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:34 +314: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:36 +315: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:36 +316: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:36 +317: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:36 +318: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:37 +318: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_race_test.dart: before delete: a direct cache write keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:37 +319: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:37 +319: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_race_test.dart: delete started: a direct cache write keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:37 +320: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:37 +320: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_race_test.dart: before delete: a new request keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:37 +321: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:37 +321: /home/runner/work/yorunote/yorunote/test/network/reader_image_cache_race_test.dart: delete started: a new request keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:37 +322: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:38 +323: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:38 +324: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:38 +325: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:38 +326: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:38 +327: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:38 +328: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:38 +329: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:38 +330: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:39 +331: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:39 +332: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:39 +333: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:39 +334: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:40 +335: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:40 +336: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:41 +337: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:42 +338: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:42 +339: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:42 +340: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:42 +341: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:329:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: <unknown>
+   9: <unknown>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: <unknown>
+   9: <unknown>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: <unknown>
+   9: <unknown>
+[0m
+00:48 +342: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: history and cover tiles of one comic share one request
+00:48 +343: /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: (tearDownAll)
+00:48 +343: All tests passed!

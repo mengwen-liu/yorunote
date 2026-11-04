@@ -1,0 +1,154 @@
+   Woah! You appear to be trying to run flutter as root.
+   We strongly recommend running the flutter tool without superuser privileges.
+  /
+📎
+00:00 +0: loading /root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+request /c/a-stuck-0.png still open after its headers
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.<anonymous closure>.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:139:30)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:137:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:123:7)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:95:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:106:5)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:10 +0 -1: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot [E]
+  Test failed. See exception logs above.
+  The test description was: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+  
+00:10 +0 -1: B: a response stalled inside the body is torn down on cancel
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+stalled body still open after cancel
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.<anonymous closure>.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:181:30)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:179:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:177:9)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:95:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:155:7)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:20 +0 -2: B: a response stalled inside the body is torn down on cancel [E]
+  Test failed. See exception logs above.
+  The test description was: B: a response stalled inside the body is torn down on cancel
+  
+00:20 +0 -2: C: queued cancel, error and success return each slot once
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:35 +1 -2: D1: one cancelled consumer does not stop a shared request
+00:35 +2 -2: D2: a shared request ends when all its consumers cancel
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+shared request still open
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.<anonymous closure>.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:311:30)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:309:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:306:9)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:95:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:289:7)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:45 +2 -3: D2: a shared request ends when all its consumers cancel [E]
+  Test failed. See exception logs above.
+  The test description was: D2: a shared request ends when all its consumers cancel
+  
+00:45 +2 -3: D3: a consumer arriving after all others cancelled starts anew
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TimeoutException was thrown while running async test code:
+TimeoutException after 0:00:20.000000: Future not completed
+
+When the exception was thrown, this was the stack:
+<asynchronous suspension>
+#1      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:353:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      main.<anonymous closure>.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:342:9)
+<asynchronous suspension>
+#4      main.ignoringStopErrors (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:95:7)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///root/work/r2/start/test/network/thumbnail_cover_cancel_test.dart:324:7)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:05 +2 -4: D3: a consumer arriving after all others cancelled starts anew [E]
+  Test failed. See exception logs above.
+  The test description was: D3: a consumer arriving after all others cancelled starts anew
+  
+01:05 +2 -4: E: cancelling while headers arrive never aborts the process
+01:05 +3 -4: (tearDownAll)
+01:05 +3 -4: Some tests failed.
+thumbnail_cover_cancel_test exit=1

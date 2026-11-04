@@ -1,0 +1,28 @@
+   Woah! You appear to be trying to run flutter as root.
+   We strongly recommend running the flutter tool without superuser privileges.
+  /
+📎
+00:00 +0: loading /root/work/r2/start/test/network/rhttp_adapter_cancel_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: without a CancelToken a full response is read as before
+00:00 +1: with an unused CancelToken a full response is read as before
+00:00 +2: a broken body still fails (CancelToken: false)
+00:00 +3: a broken body still fails (CancelToken: true)
+00:00 +4: cancel while waiting for headers: Dio gives up at once, rhttp closes the connection when the headers arrive
+00:10 +4 -1: cancel while waiting for headers: Dio gives up at once, rhttp closes the connection when the headers arrive [E]
+  TimeoutException after 0:00:10.000000: Future not completed
+  dart:async  _startMicrotaskLoop
+  
+00:10 +4 -1: cancel inside the body closes the connection, no stray error
+00:20 +4 -2: cancel inside the body closes the connection, no stray error [E]
+  TimeoutException after 0:00:10.000000: Future not completed
+  dart:async  _startMicrotaskLoop
+  
+00:20 +4 -2: cancelling right as the headers arrive never aborts the process
+00:30 +4 -3: cancelling right as the headers arrive never aborts the process [E]
+  TimeoutException after 0:00:10.000000: Future not completed
+  dart:async  _startMicrotaskLoop
+  
+00:30 +4 -3: (tearDownAll)
+00:30 +4 -3: Some tests failed.
+start adapter exit=1

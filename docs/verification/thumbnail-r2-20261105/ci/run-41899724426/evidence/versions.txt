@@ -1,0 +1,21 @@
+rustc 1.85.1 (4eb161250 2025-03-15)
+== flutter
+Flutter 3.41.4 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ff37bef603 (8 months ago) • 2026-03-03 16:03:22 -0800
+Engine • hash 99578ad0355da00edb26301c874a3c250a5716f5 (revision e4b8dca3f1) (7 months ago) • 2026-03-03 18:24:54.000Z
+Tools • Dart 3.11.1 • DevTools 2.54.1
+== java
+openjdk version "17.0.21" 2026-10-20
+OpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)
+OpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)
+== sdk
+/mnt/venera-ci/android-sdk/build-tools:
+36.0.0
+
+/mnt/venera-ci/android-sdk/ndk:
+28.0.13004108
+
+/mnt/venera-ci/android-sdk/platforms:
+android-36
+== gradle wrapper
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-all.zip

@@ -1,0 +1,186 @@
+diff --git a/.github/workflows/phase1a-android-baseline.yml b/.github/workflows/phase1a-android-baseline.yml
+index 345fd50..ca716c7 100644
+--- a/.github/workflows/phase1a-android-baseline.yml
++++ b/.github/workflows/phase1a-android-baseline.yml
+@@ -1,11 +1,12 @@
+ name: Phase1A Android Baseline
+-run-name: Yorunote thumbnail-perf ARM64 Profile APK (fixed commit 418efac)
++run-name: Yorunote thumbnail-r2 ARM64 Profile APK (fixed commit cee5b03)
+ 
+ # Manual-only (workflow_dispatch). No inputs: the application source commit is
+ # fixed below and cannot be changed at dispatch time. This copy of the file is
+-# valid ONLY on branch claude/yorunote-thumbnail-perf-20261105 (the job is
++# valid ONLY on branch claude/yorunote-thumbnail-r2-20261105 (the job is
+ # skipped on any other ref). Host tests (with a host librhttp built from the
+-# locked rhttp sources) + analyzer diagnostics check + build + static APK
++# locked rhttp sources and a host flutter_qjs built from the locked
++# flutter_qjs sources) + analyzer diagnostics check + build + static APK
+ # checks only; it does NOT provide Android runtime acceptance. Disposable test
+ # signing key; no repository secrets.
+ on:
+@@ -15,7 +16,7 @@ permissions:
+   contents: read
+ 
+ concurrency:
+-  group: yorunote-thumbnail-perf-ci
++  group: yorunote-thumbnail-r2-ci
+   cancel-in-progress: false
+ 
+ defaults:
+@@ -23,17 +24,21 @@ defaults:
+     shell: bash   # GitHub expands this to: bash --noprofile --norc -eo pipefail {0}
+ 
+ env:
+-  # App/test source commit S of the thumbnail-perf round (not this workflow commit).
+-  BASELINE_SHA: 418efacd0bb03e1da180ff105c4566821a4e69fd
+-  BASELINE_TREE: bd2f77027cdd152682dadae4a1abec0335d77908
++  # App/test source commit S2 of the thumbnail-r2 round (not this workflow commit).
++  BASELINE_SHA: cee5b03043152cf96a1f444e1d88be46a44b8c08
++  BASELINE_TREE: be394dabeef2fdac47b64ad82e66b6cc7f59ff3d
+   BASELINE_LOCK_BLOB: c061e4fc0057646a0a5561dbc607114c00e44bfb
+   BASELINE_PUBSPEC_BLOB: 489d6acd5fcd2fc5979205db9b877c9e1bf1761b
+-  IMAGES_DART_BLOB: f29e803f4de5398c0f99857286166eb2f095f534
+-  LIMITER_DART_BLOB: 14c2f33c1882fd58aad2166f6cf243cd1f7ad2f5
+-  APK_BASENAME: Yorunote_418efac_thumbnail_perf_arm64_profile
++  IMAGES_DART_BLOB: 745196915ed1357148256a179e8174b427e9f71d
++  LIMITER_DART_BLOB: e36bd0072a658362c05d516e6dde08153719db76
++  APP_DIO_BLOB: f732ead4d232092f3d2999dffcb65c20a191c427
++  BASE_PROVIDER_BLOB: 050c0bc37ca0abae7543cd5817b7d770b10fdf9b
++  APK_BASENAME: Yorunote_cee5b03_thumbnail_r2_arm64_profile
+   RHTTP_VERSION: '0.15.1'
+   RHTTP_CARGO_LOCK_SHA256: 232c3f91d09446ff821cb15f2d86b15934da29e6395e856eb3afd8571eff5eb4
+-  EXPECTED_TEST_COUNT: '313'
++  FLUTTER_QJS_REF: 8feae95df7fb00455df129ad7a0dfec1d0e8d8e4
++  EXPECTED_KEY_TEST_COUNT: '61'
++  EXPECTED_TEST_COUNT: '343'
+   FLUTTER_VERSION: '3.41.4'
+   FLUTTER_REVISION_PREFIX: ff37bef603
+   DART_VERSION: '3.11.1'
+@@ -62,7 +67,7 @@ env:
+ jobs:
+   android-arm64-baseline:
+     name: Yorunote Android ARM64 Profile build
+-    if: github.repository == 'mengwen-liu/yorunote' && github.ref == 'refs/heads/claude/yorunote-thumbnail-perf-20261105'
++    if: github.repository == 'mengwen-liu/yorunote' && github.ref == 'refs/heads/claude/yorunote-thumbnail-r2-20261105'
+     runs-on: ubuntu-24.04   # ubuntu-22.04 images are in deprecation (see audit report)
+     timeout-minutes: 75
+     steps:
+@@ -121,10 +126,10 @@ jobs:
+           } > "$EVID/context.txt"
+           . "$P/lib.sh"; disk_snapshot "start"
+ 
+-      - name: Checkout fixed application source (commit S)
++      - name: Checkout fixed application source (commit S2)
+         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+         with:
+-          ref: 418efacd0bb03e1da180ff105c4566821a4e69fd
++          ref: cee5b03043152cf96a1f444e1d88be46a44b8c08
+           fetch-depth: 1
+           fetch-tags: false
+           persist-credentials: false
+@@ -138,6 +143,8 @@ jobs:
+           [ "$(git rev-parse HEAD:pubspec.yaml)" = "$BASELINE_PUBSPEC_BLOB" ] || { echo "::error::pubspec.yaml blob mismatch"; exit 1; }
+           [ "$(git rev-parse HEAD:lib/network/images.dart)" = "$IMAGES_DART_BLOB" ] || { echo "::error::images.dart blob mismatch"; exit 1; }
+           [ "$(git rev-parse HEAD:lib/network/request_limiter.dart)" = "$LIMITER_DART_BLOB" ] || { echo "::error::request_limiter.dart blob mismatch"; exit 1; }
++          [ "$(git rev-parse HEAD:lib/network/app_dio.dart)" = "$APP_DIO_BLOB" ] || { echo "::error::app_dio.dart blob mismatch"; exit 1; }
++          [ "$(git rev-parse HEAD:lib/foundation/image_provider/base_image_provider.dart)" = "$BASE_PROVIDER_BLOB" ] || { echo "::error::base_image_provider.dart blob mismatch"; exit 1; }
+           grep -Eq "^[[:space:]]+flutter:[[:space:]]*${FLUTTER_VERSION}[[:space:]]*$" pubspec.yaml || { echo "::error::pubspec flutter pin is not ${FLUTTER_VERSION}"; exit 1; }
+           [ -z "$(git status --porcelain)" ] || { echo "::error::working tree not clean after checkout"; exit 1; }
+           {
+@@ -305,21 +312,56 @@ jobs:
+           echo "FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR=$LIBDIR" >> "$GITHUB_ENV"
+           disk_snapshot "after-rhttp-host-build"
+ 
+-      - name: Thumbnail regression tests (cover cache, queue, limiter)
++      - name: Build host flutter_qjs (QuickJS) from the locked flutter_qjs sources
+         run: |
+           . "$PHASE/lib.sh"
++          Q="$PUB_CACHE/git/flutter_qjs-${FLUTTER_QJS_REF}"
++          [ -d "$Q/cxx" ] || { echo "::error::flutter_qjs ${FLUTTER_QJS_REF} not found in pub cache"; exit 1; }
++          rev="$(git -C "$Q" rev-parse HEAD)"
++          [ "$rev" = "$FLUTTER_QJS_REF" ] || { echo "::error::flutter_qjs checkout is $rev"; exit 1; }
++          O="$BASE/qjs-host"; mkdir -p "$O/obj"
++          V="$(cat "$Q/cxx/quickjs-ng/VERSION")"
++          # Same flags as flutter_qjs cxx/quickjs.cmake + linux/CMakeLists.txt;
++          # the Linux plugin registration file (GTK) is not needed for FFI.
++          build_qjs() {
++            set -e
++            for f in cutils libregexp libunicode quickjs libbf; do
++              gcc -std=c11 -O2 -fPIC -D_GNU_SOURCE "-DCONFIG_VERSION=\"$V\"" -DDUMP_LEAKS -c "$Q/cxx/quickjs-ng/$f.c" -o "$O/obj/$f.o"
++            done
++            g++ -std=c++17 -O2 -fPIC -fvisibility=hidden -I"$Q/cxx" -I"$Q/cxx/quickjs-ng" -c "$Q/cxx/ffi.cpp" -o "$O/obj/ffi.o"
++            g++ -shared -o "$O/libflutter_qjs_plugin.so" "$O"/obj/*.o -lm -lpthread
++          }
++          run_logged qjs_host_build "$LOGS/04b_qjs_host_build.log" build_qjs
++          { echo "flutter_qjs_ref=$rev"; sha256sum "$O/libflutter_qjs_plugin.so"; } | tee -a "$EVID/qjs_host.txt"
++          echo "QJS_HOST_DIR=$O" >> "$GITHUB_ENV"
++
++      - name: Key regression tests (cancellation, adapter, queued cache, synthetic source, cover cache/queue, limiter)
++        run: |
++          . "$PHASE/lib.sh"
++          export LD_LIBRARY_PATH="$QJS_HOST_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+           # Explicit reporter: on GitHub Actions flutter test defaults to the "github"
+           # reporter, whose summary line the checks below do not parse.
+-          run_logged flutter_test_thumbnail "$LOGS/05a_test_thumbnail.log" flutter test --no-pub --reporter expanded \
+-            test/network/thumbnail_cover_cache_test.dart test/network/thumbnail_cover_queue_test.dart test/network/request_limiter_test.dart
+-          last="$(grep -E '^[0-9:]+ \+[0-9]+' "$LOGS/05a_test_thumbnail.log" | tail -1)"
+-          echo "$last" | tee "$EVID/test_thumbnail_summary.txt"
+-          case "$last" in *"~"*) echo "::error::thumbnail tests were skipped (native HTTP missing?)"; exit 1 ;; esac
+-          grep -q 'All tests passed!' <<< "$last" || { echo "::error::thumbnail tests did not pass"; exit 1; }
++          # run_logged returns flutter's real exit code; a non-zero code fails this step.
++          run_logged flutter_test_key "$LOGS/05a_test_key.log" flutter test --no-pub --reporter expanded \
++            test/network/thumbnail_cover_cancel_test.dart \
++            test/network/rhttp_adapter_cancel_test.dart \
++            test/network/thumbnail_cover_queue_cache_test.dart \
++            test/network/synthetic_source_test.dart \
++            test/network/thumbnail_cover_cache_test.dart \
++            test/network/thumbnail_cover_queue_test.dart \
++            test/network/thumbnail_cover_invalidation_test.dart \
++            test/network/request_limiter_test.dart \
++            tool/thumbnail_bench/bench_stats_test.dart
++          last="$(grep -E '^[0-9:]+ \+[0-9]+' "$LOGS/05a_test_key.log" | tail -1)"
++          echo "$last" | tee "$EVID/test_key_summary.txt"
++          case "$last" in *"~"*) echo "::error::key tests were skipped (native library missing?)"; exit 1 ;; esac
++          grep -Eq "\+${EXPECTED_KEY_TEST_COUNT}: All tests passed!" <<< "$last" || { echo "::error::expected +${EXPECTED_KEY_TEST_COUNT} passing key tests"; exit 1; }
++          if grep -q 'synthetic_source_test skipped' "$LOGS/05a_test_key.log"; then echo "::error::synthetic source tests skipped"; exit 1; fi
+ 
+       - name: Full flutter test (includes brand, reader cache and native-HTTP tests)
+         run: |
+           . "$PHASE/lib.sh"
++          export LD_LIBRARY_PATH="$QJS_HOST_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+           run_logged flutter_test_full "$LOGS/05b_test_full.log" flutter test --no-pub --reporter expanded
+           last="$(grep -E '^[0-9:]+ \+[0-9]+' "$LOGS/05b_test_full.log" | tail -1)"
+           echo "$last" | tee "$EVID/test_full_summary.txt"
+@@ -633,12 +675,12 @@ jobs:
+         run: |
+           S="$PHASE/sanitized/evidence"
+           {
+-            echo "## Yorunote thumbnail-perf ARM64 Profile APK (source commit ${BASELINE_SHA:0:7})"
++            echo "## Yorunote thumbnail-r2 ARM64 Profile APK (source commit ${BASELINE_SHA:0:7})"
+             echo "**STATIC CHECKS ONLY. Android runtime acceptance was NOT performed. Disposable test signing key.**"
+             echo
+             echo '```'
+             if [ -d "$S" ]; then
+-              for f in exit_codes.txt test_thumbnail_summary.txt test_full_summary.txt analyze_diff.txt rhttp_host.txt verification.txt icon_check.txt git_integrity.txt disk.txt; do
++              for f in exit_codes.txt test_key_summary.txt test_full_summary.txt analyze_diff.txt rhttp_host.txt qjs_host.txt verification.txt icon_check.txt git_integrity.txt disk.txt; do
+                 if [ -f "$S/$f" ]; then cat "$S/$f"; fi
+               done
+             else
+@@ -651,7 +693,7 @@ jobs:
+         if: always() && steps.sanitize.outcome == 'success'
+         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+         with:
+-          name: yorunote-thumbnail-perf-diagnostic-logs
++          name: yorunote-thumbnail-r2-diagnostic-logs
+           path: ${{ runner.temp }}/phase1a/sanitized
+           retention-days: 7
+           if-no-files-found: warn
+@@ -661,7 +703,7 @@ jobs:
+         if: ${{ !cancelled() && steps.verify.outcome == 'success' && steps.gitcheck.outcome == 'success' }}
+         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+         with:
+-          name: yorunote-thumbnail-perf-arm64-profile-apk
++          name: yorunote-thumbnail-r2-arm64-profile-apk
+           path: ${{ runner.temp }}/phase1a/apk_out
+           retention-days: 7
+           if-no-files-found: error

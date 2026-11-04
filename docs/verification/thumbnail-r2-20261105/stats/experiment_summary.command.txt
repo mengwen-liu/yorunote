@@ -1,0 +1,1 @@
+python3 -I tool/thumbnail_bench/summarize_r2.py <out> no_cancel_token=exp_1_no_cancel_token.json candidate=exp_1_candidate.json ... (3 pairs; no_cancel_token = S2 with 'cancelToken: load.cancelToken' removed in a scratch copy, attribution only)

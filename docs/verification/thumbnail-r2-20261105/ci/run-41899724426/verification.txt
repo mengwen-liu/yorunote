@@ -1,0 +1,7 @@
+file=Yorunote_cee5b03_thumbnail_r2_arm64_profile.apk size_bytes=27881187 source_commit=cee5b03043152cf96a1f444e1d88be46a44b8c08
+package=com.github.wgh136.venera versionName=1.6.3 versionCode=2163 label=Yorunote icon=res/mipmap-anydpi-v26/ic_launcher.xml
+native-code=arm64-v8a lib_abis=arm64-v8a 
+zip_integrity=ok zipalign(4)=ok icon_check=ok
+signature=verified (apksigner) cert=CN=Yorunote CI Disposable sha256=96ee97a721f3f935984c68d12533e0d189e74c9eff113768bc8b82f6782004f7 (matches job keystore)
+WARNING: signed with a ONE-TIME disposable test key generated in this job; it cannot overwrite-install over an app signed with a different certificate.
+NOTE: static checks only; Android runtime acceptance NOT performed

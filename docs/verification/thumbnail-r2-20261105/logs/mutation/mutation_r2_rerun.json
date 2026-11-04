@@ -1,0 +1,40 @@
+{
+  "unmutated_exit_code": 0,
+  "unmutated_last_line": "00:15 +25: All tests passed!",
+  "mutants": [
+    {
+      "id": "R1_cancel_rhttp_before_headers",
+      "why": "rhttp must not be cancelled while the headers may be arriving (panic=abort race)",
+      "file": "lib/network/app_dio.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cancel_test.dart",
+        "test/network/rhttp_adapter_cancel_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 19.9,
+      "last_line": "00:15 +12 -1: Some tests failed.",
+      "status": "KILLED",
+      "failed_tests": [
+        "/root/work/r2/mutant/test/network/rhttp_adapter_cancel_test.dart: cancel while waiting for headers: Dio gives up at once, rhttp closes the connection when the headers arrive [E]"
+      ],
+      "aborted": false
+    },
+    {
+      "id": "R4_base_ignores_stop_signal",
+      "why": "BaseImageProvider must hand the stop signal to providers",
+      "file": "lib/foundation/image_provider/base_image_provider.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cancel_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 50.4,
+      "last_line": "00:45 +5 -2: Some tests failed.",
+      "status": "KILLED",
+      "failed_tests": [
+        "B: a response stalled inside the body is torn down on cancel [E]",
+        "D3: a consumer arriving after all others cancelled starts anew [E]"
+      ],
+      "aborted": false
+    }
+  ]
+}

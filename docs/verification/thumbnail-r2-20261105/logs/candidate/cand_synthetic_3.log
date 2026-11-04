@@ -1,0 +1,26 @@
+   Woah! You appear to be trying to run flutter as root.
+   We strongly recommend running the flutter tool without superuser privileges.
+  /
+📎
+00:00 +0: loading /home/user/yorunote/test/network/synthetic_source_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: the source is imported and runs in QuickJS
+00:00 +1: a page of covers loads with at most 8 image requests at once
+00:01 +2: onThumbnailLoad onResponse decodes an encoded cover
+00:01 +3: a cover. placeholder is resolved through loadInfo
+00:01 +4: history and cover tiles of one comic share one request
+00:01 +5: a broken cover is shown as an error and recovers on retry
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:01 +6: paused covers do not block cached covers
+00:01 +7: chapter pages load through ReaderImageProvider
+00:02 +8: (tearDownAll)
+00:02 +8: All tests passed!

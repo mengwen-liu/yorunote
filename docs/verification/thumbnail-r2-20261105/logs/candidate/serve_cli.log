@@ -1,0 +1,10 @@
+   Woah! You appear to be trying to run flutter as root.
+   We strongly recommend running the flutter tool without superuser privileges.
+  /
+📎
+Yorunote synthetic server listening on 127.0.0.1:8799
+Source script for the app: http://127.0.0.1:8799/source.js
+Status page:              http://127.0.0.1:8799/
+Counters (JSON):          http://127.0.0.1:8799/__stats
+Synthetic data only. Ctrl+C to stop.
+stopped

@@ -1,0 +1,2 @@
+flutter_qjs_ref=8feae95df7fb00455df129ad7a0dfec1d0e8d8e4
+741707767ddafef16014fdade489758b4ce207918e7a2b88e5bcdfa84942a3fd  /mnt/venera-ci/qjs-host/libflutter_qjs_plugin.so

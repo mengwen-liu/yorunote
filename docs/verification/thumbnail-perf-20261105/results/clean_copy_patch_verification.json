@@ -1,0 +1,11 @@
+{
+  "clean_copy": "fresh clone of https://github.com/mengwen-liu/yorunote (git clone --no-local), detached at 7b6348a98cb85dd71c826134811fa02fcd302da8",
+  "patch": "patches/THUMBNAIL_PERF_S_FROM_7b6348a.patch",
+  "patch_sha256": "93c70d6c5e1f8d318af20c4360edda5d422694b7c2edf15179557b7c7a3bd289",
+  "apply": "git apply --index --whitespace=nowarn",
+  "tree_after_apply": "bd2f77027cdd152682dadae4a1abec0335d77908",
+  "expected_tree_of_S": "bd2f77027cdd152682dadae4a1abec0335d77908",
+  "diff_against_remote_S_418efac": "none (git diff --cached --quiet 418efac: exit 0)",
+  "result": "PASS",
+  "note": "Patch T (TESTS_T_FROM_S_418efac.patch) changes only test/ and tool/ files; lib/, android/, assets/, pubspec.yaml and pubspec.lock are identical between S and T (git diff --quiet: exit 0)."
+}

@@ -1,0 +1,30 @@
+ic_launcher mdpi 48x48: packaged pixel-identical as res/mipmap-mdpi-v4/ic_launcher.png
+ic_launcher hdpi 72x72: packaged pixel-identical as res/mipmap-hdpi-v4/ic_launcher.png
+ic_launcher xhdpi 96x96: packaged pixel-identical as res/mipmap-xhdpi-v4/ic_launcher.png
+ic_launcher xxhdpi 144x144: packaged pixel-identical as res/mipmap-xxhdpi-v4/ic_launcher.png
+ic_launcher xxxhdpi 192x192: packaged pixel-identical as res/mipmap-xxxhdpi-v4/ic_launcher.png
+ic_launcher_background mdpi 108x108: packaged pixel-identical as res/mipmap-mdpi-v4/ic_launcher_background.png
+ic_launcher_background hdpi 162x162: packaged pixel-identical as res/mipmap-hdpi-v4/ic_launcher_background.png
+ic_launcher_background xhdpi 216x216: packaged pixel-identical as res/mipmap-xhdpi-v4/ic_launcher_background.png
+ic_launcher_background xxhdpi 324x324: packaged pixel-identical as res/mipmap-xxhdpi-v4/ic_launcher_background.png
+ic_launcher_background xxxhdpi 432x432: packaged pixel-identical as res/mipmap-xxxhdpi-v4/ic_launcher_background.png
+ic_launcher_foreground mdpi 108x108: packaged pixel-identical as res/mipmap-mdpi-v4/ic_launcher_foreground.png
+ic_launcher_foreground hdpi 162x162: packaged pixel-identical as res/mipmap-hdpi-v4/ic_launcher_foreground.png
+ic_launcher_foreground xhdpi 216x216: packaged pixel-identical as res/mipmap-xhdpi-v4/ic_launcher_foreground.png
+ic_launcher_foreground xxhdpi 324x324: packaged pixel-identical as res/mipmap-xxhdpi-v4/ic_launcher_foreground.png
+ic_launcher_foreground xxxhdpi 432x432: packaged pixel-identical as res/mipmap-xxxhdpi-v4/ic_launcher_foreground.png
+ic_launcher_monochrome mdpi 108x108: packaged pixel-identical as res/mipmap-mdpi-v4/ic_launcher_monochrome.png
+ic_launcher_monochrome hdpi 162x162: packaged pixel-identical as res/mipmap-hdpi-v4/ic_launcher_monochrome.png
+ic_launcher_monochrome xhdpi 216x216: packaged pixel-identical as res/mipmap-xhdpi-v4/ic_launcher_monochrome.png
+ic_launcher_monochrome xxhdpi 324x324: packaged pixel-identical as res/mipmap-xxhdpi-v4/ic_launcher_monochrome.png
+ic_launcher_monochrome xxxhdpi 432x432: packaged pixel-identical as res/mipmap-xxxhdpi-v4/ic_launcher_monochrome.png
+adaptive icon xmltree (res/mipmap-anydpi-v26/ic_launcher.xml):
+N: android=http://schemas.android.com/apk/res/android (line=2)
+  E: adaptive-icon (line=2)
+      E: background (line=3)
+        A: http://schemas.android.com/apk/res/android:drawable(0x01010199)=@0x7f0f0001
+      E: foreground (line=4)
+        A: http://schemas.android.com/apk/res/android:drawable(0x01010199)=@0x7f0f0002
+      E: monochrome (line=5)
+        A: http://schemas.android.com/apk/res/android:drawable(0x01010199)=@0x7f0f0003
+assets/flutter_assets/assets/app_icon.png sha256=4f40bc600941faf39a27974c39da8fad276dd7fd655f51a831cfcafe4f03341d repo=4f40bc600941faf39a27974c39da8fad276dd7fd655f51a831cfcafe4f03341d

@@ -1,0 +1,4 @@
+flutter_doctor_exit=0
+flutter_pub_get_exit=0
+rhttp_host_build_exit=0
+flutter_test_thumbnail_exit=0

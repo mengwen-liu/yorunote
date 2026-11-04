@@ -1,0 +1,1 @@
+No errors detected in compressed data of build/app/outputs/apk/profile/app-arm64-v8a-profile.apk.

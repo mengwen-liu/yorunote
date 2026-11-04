@@ -1,0 +1,4355 @@
+diff --git a/docs/verification/thumbnail-perf-20261105/baseline/README.md b/docs/verification/thumbnail-perf-20261105/baseline/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6157e41d1f4679b2490fcebcbb1ceb80e414c714
+--- /dev/null
++++ b/docs/verification/thumbnail-perf-20261105/baseline/README.md
+@@ -0,0 +1,16 @@
++# 基準（修正前）紀錄
++
++- 來源：`7b6348a98cb85dd71c826134811fa02fcd302da8`（起始分支 `claude/yorunote-arm64-ci-20261104`），
++  於隔離的 git worktree 執行；只複製本輪新增的測試／量測檔，未改動 App 程式碼。
++- 工具鏈：Flutter 3.41.4（ff37bef603）／Dart 3.11.1，主機版 `librhttp.so` 依 rhttp 0.15.1
++  鎖定的 `Cargo.lock`（SHA-256 `232c3f91…5eb4`）以 Rust 1.85.1 建置。
++- 環境：x86_64 Linux 雲端容器、本機 loopback HTTP 伺服器、合成 PNG、暫存資料目錄。
++  數值為主機量測，不代表手機／平板的 FPS 或耗電。
++
++| 檔案 | 內容 |
++|---|---|
++| `bench_baseline_7b6348a.json` | 量測原始資料（暖機 1 次＋取樣 7 次） |
++| `bench_baseline_7b6348a.log` | 量測執行輸出 |
++| `cover_cache_test_on_7b6348a.log` | 封面快取測試在基準上的結果（預期失敗 5 項） |
++
++最終的基準／候選對照（以最終版測試重跑）見上層 `README.md`。
+diff --git a/docs/verification/thumbnail-perf-20261105/baseline/bench_baseline_7b6348a.json b/docs/verification/thumbnail-perf-20261105/baseline/bench_baseline_7b6348a.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..efe5dc64911505f7bfd8673d79df25c682b92881
+--- /dev/null
++++ b/docs/verification/thumbnail-perf-20261105/baseline/bench_baseline_7b6348a.json
+@@ -0,0 +1,1020 @@
++{
++  "label": "baseline-7b6348a",
++  "samples": 7,
++  "warmup": 1,
++  "server_latency_ms": 40,
++  "fixture": "synthetic grayscale PNG 160x240, 1020 bytes",
++  "platform": "linux 3.11.1 (stable) (Tue Feb 24 00:03:07 2026 -0800) on \"linux_x64\"",
++  "scenarios": {
++    "cold_grid_32": {
++      "raw": [
++        {
++          "errors": 0,
++          "http_requests": 32,
++          "peak_inflight": 9,
++          "first_display_ms": 123.643,
++          "all_done_ms": 503.964,
++          "queue_wait_ms": [
++            26.988,
++            27.414,
++            27.359,
++            27.779,
++            27.844,
++            28.111,
++            28.033,
++            28.117,
++            28.068,
++            220.713,
++            221.418,
++            221.588,
++            222.248,
++            222.31,
++            222.747,
++            222.835,
++            222.962,
++            223.043,
++            325.758,
++            325.852,
++            325.818,
++            326.189,
++            326.157,
++            326.356,
++            326.397,
++            326.624,
++            326.784,
++            424.518,
++            425.063,
++            425.229,
++            425.459,
++            425.448
++          ],
++          "completion_ms": [
++            123.643,
++            130.865,
++            130.8,
++            130.709,
++            130.669,
++            130.888,
++            130.791,
++            130.768,
++            130.787,
++            307.268,
++            316.96,
++            316.964,
++            316.881,
++            316.971,
++            318.637,
++            317.762,
++            317.733,
++            317.996,
++            405.907,
++            416.114,
++            416.1,
++            418.315,
++            418.327,
++            418.25,
++            418.785,
++            418.836,
++            418.915,
++            494.879,
++            495.058,
++            495.193,
++            495.354,
++            495.298
++          ]
++        },
++        {
++          "errors": 0,
++          "http_requests": 32,
++          "peak_inflight": 9,
++          "first_display_ms": 91.148,
++          "all_done_ms": 388.145,
++          "queue_wait_ms": [
++            16.787,
++            17.275,
++            17.37,
++            17.915,
++            17.995,
++            18.312,
++            18.436,
++            18.644,
++            22.137,
++            114.427,
++            114.946,
++            115.124,
++            115.858,
++            115.974,
++            116.292,
++            116.45,
++            116.538,
++            116.645,
++            211.197,
++            211.663,
++            211.83,
++            211.933,
++            212.481,
++            215.8,
++            216.016,
++            216.123,
++            216.15,
++            316.3,
++            316.944,
++            317.272,
++            317.735,
++            318.032
++          ],
++          "completion_ms": [
++            91.148,
++            99.497,
++            99.573,
++            102.424,
++            101.898,
++            101.985,
++            102.223,
++            102.359,
++            106.708,
++            186.056,
++            195.448,
++            195.143,
++            195.719,
++            195.763,
++            195.788,
++            195.861,
++            195.879,
++            195.944,
++            286.278,
++            296.189,
++            296.413,
++            296.541,
++            297.0,
++            297.114,
++            297.291,
++            297.524,
++            297.592,
++            379.602,
++            380.126,
++            381.766,
++            383.637,
++            383.967
++          ]
++        },
++        {
++          "errors": 0,
++          "http_requests": 32,
++          "peak_inflight": 9,
++          "first_display_ms": 112.198,
++          "all_done_ms": 542.506,
++          "queue_wait_ms": [
++            20.33,
++            20.966,
++            20.929,
++            21.691,
++            21.882,
++            22.466,
++            23.327,
++            22.476,
++            22.45,
++            126.092,
++            126.993,
++            127.174,
++            128.12,
++            128.314,
++            128.571,
++            128.64,
++            128.68,
++            245.969,
++            247.901,
++            248.451,
++            250.271,
++            250.755,
++            252.125,
++            252.607,
++            253.508,
++            254.137,
++            450.102,
++            451.548,
++            451.909,
++            452.341,
++            452.805,
++            453.219
++          ],
++          "completion_ms": [
++            112.804,
++            116.743,
++            116.904,
++            118.461,
++            112.198,
++            114.123,
++            115.938,
++            113.912,
++            115.015,
++            220.054,
++            224.385,
++            224.603,
++            231.377,
++            231.584,
++            231.632,
++            231.668,
++            231.781,
++            345.944,
++            360.757,
++            360.975,
++            361.705,
++            361.995,
++            362.541,
++            361.899,
++            362.552,
++            362.804,
++            531.985,
++            536.452,
++            536.563,
++            536.558,
++            536.834,
++            536.943
++          ]
++        },
++        {
++          "errors": 0,
++          "http_requests": 32,
++          "peak_inflight": 9,
++          "first_display_ms": 91.191,
++          "all_done_ms": 381.112,
++          "queue_wait_ms": [
++            19.403,
++            19.871,
++            19.913,
++            20.431,
++            20.533,
++            20.964,
++            21.02,
++            21.214,
++            21.285,
++            105.99,
++            112.133,
++            112.676,
++            112.716,
++            113.356,
++            113.478,
++            113.941,
++            114.072,
++            114.215,
++            214.743,
++            214.827,
++            215.886,
++            216.072,
++            216.711,
++            216.792,
++            217.059,
++            217.191,
++            217.545,
++            310.215,
++            310.606,
++            310.711,
++            310.895,
++            310.968
++          ],
++          "completion_ms": [
++            91.191,
++            98.403,
++            98.405,
++            98.64,
++            98.659,
++            98.66,
++            98.606,
++            98.615,
++            98.62,
++            152.627,
++            185.294,
++            185.382,
++            189.529,
++            192.69,
++            192.976,
++            193.091,
++            193.089,
++            193.181,
++            289.201,
++            291.574,
++            293.379,
++            293.408,
++            293.482,
++            293.52,
++            295.359,
++            295.524,
++            295.568,
++            375.584,
++            375.786,
++            375.833,
++            375.938,
++            375.96
++          ]
++        },
++        {
++          "errors": 0,
++          "http_requests": 32,
++          "peak_inflight": 9,
++          "first_display_ms": 90.676,
++          "all_done_ms": 382.327,
++          "queue_wait_ms": [
++            14.242,
++            14.865,
++            14.952,
++            15.63,
++            15.762,
++            16.142,
++            16.161,
++            16.238,
++            16.27,
++            116.734,
++            117.349,
++            117.552,
++            118.256,
++            118.411,
++            118.85,
++            119.032,
++            119.299,
++            119.511,
++            223.59,
++            224.467,
++            224.665,
++            225.2,
++            225.442,
++            225.825,
++            225.917,
++            226.146,
++            226.328,
++            316.262,
++            316.768,
++            316.882,
++            317.046,
++            317.107
++          ],
++          "completion_ms": [
++            90.676,
++            101.061,
++            100.713,
++            101.786,
++            101.959,
++            106.034,
++            106.372,
++            106.0,
++            107.292,
++            196.717,
++            209.554,
++            209.725,
++            212.944,
++            213.005,
++            213.034,
++            214.054,
++            214.124,
++            214.192,
++            295.309,
++            306.823,
++            306.963,
++            307.395,
++            307.889,
++            307.422,
++            307.927,
++            307.366,
++            307.381,
++            378.282,
++            378.4,
++            378.503,
++            378.595,
++            378.713
++          ]
++        },
++        {
++          "errors": 0,
++          "http_requests": 32,
++          "peak_inflight": 9,
++          "first_display_ms": 88.338,
++          "all_done_ms": 381.207,
++          "queue_wait_ms": [
++            13.362,
++            13.714,
++            13.819,
++            14.212,
++            14.294,
++            14.637,
++            14.734,
++            14.837,
++            14.901,
++            106.942,
++            114.141,
++            114.838,
++            114.914,
++            115.334,
++            115.397,
++            115.539,
++            115.705,
++            115.71,
++            206.247,
++            213.893,
++            214.012,
++            214.554,
++            214.641,
++            214.958,
++            215.091,
++            215.339,
++            217.101,
++            311.109,
++            311.395,
++            311.552,
++            311.63,
++            313.266
++          ],
++          "completion_ms": [
++            88.338,
++            91.447,
++            91.776,
++            91.794,
++            91.918,
++            91.965,
++            92.038,
++            92.052,
++            92.172,
++            152.778,
++            184.363,
++            189.287,
++            189.412,
++            189.45,
++            189.466,
++            189.558,
++            189.586,
++            189.589,
++            253.315,
++            280.314,
++            291.461,
++            293.208,
++            293.271,
++            293.348,
++            293.446,
++            293.593,
++            293.758,
++            374.679,
++            375.256,
++            375.415,
++            377.74,
++            377.775
++          ]
++        },
++        {
++          "errors": 0,
++          "http_requests": 32,
++          "peak_inflight": 9,
++          "first_display_ms": 114.117,
++          "all_done_ms": 384.703,
++          "queue_wait_ms": [
++            21.551,
++            21.58,
++            22.127,
++            22.222,
++            22.797,
++            22.957,
++            23.275,
++            23.442,
++            23.439,
++            124.57,
++            125.024,
++            125.066,
++            125.522,
++            125.678,
++            125.939,
++            125.936,
++            126.243,
++            126.323,
++            220.972,
++            221.299,
++            221.332,
++            221.746,
++            221.737,
++            222.068,
++            222.095,
++            222.136,
++            222.084,
++            317.131,
++            317.709,
++            317.998,
++            318.221,
++            320.809
++          ],
++          "completion_ms": [
++            114.202,
++            114.117,
++            114.143,
++            116.107,
++            116.677,
++            116.228,
++            116.786,
++            117.01,
++            117.166,
++            204.519,
++            204.849,
++            204.384,
++            204.995,
++            205.097,
++            205.0,
++            204.953,
++            205.013,
++            205.03,
++            294.044,
++            301.391,
++            301.436,
++            301.47,
++            301.668,
++            301.679,
++            301.708,
++            301.813,
++            301.482,
++            378.613,
++            378.666,
++            380.09,
++            380.16,
++            380.321
++          ]
++        }
++      ],
++      "http_requests": [
++        32,
++        32,
++        32,
++        32,
++        32,
++        32,
++        32
++      ],
++      "peak_inflight": [
++        9,
++        9,
++        9,
++        9,
++        9,
++        9,
++        9
++      ],
++      "errors": [
++        0,
++        0,
++        0,
++        0,
++        0,
++        0,
++        0
++      ],
++      "first_display_ms": {
++        "n": 7,
++        "median": 91.191,
++        "p95": 123.643,
++        "min": 88.338,
++        "max": 123.643
++      },
++      "all_done_ms": {
++        "n": 7,
++        "median": 384.703,
++        "p95": 542.506,
++        "min": 381.112,
++        "max": 542.506
++      },
++      "queue_wait_ms": {
++        "n": 224,
++        "median": 128.314,
++        "p95": 326.784,
++        "min": 13.362,
++        "max": 453.219
++      },
++      "completion_ms": {
++        "n": 224,
++        "median": 231.584,
++        "p95": 418.915,
++        "min": 88.338,
++        "max": 536.943
++      }
++    },
++    "cache_hits_with_full_queue": {
++      "raw": [
++        {
++          "errors": 0,
++          "hits_done_while_network_held": 0,
++          "hit_requests": 0,
++          "network_held_ms": 1736.245,
++          "hit_completion_ms": [
++            1641.773,
++            1641.856,
++            1641.821,
++            1641.808,
++            1641.808,
++            1641.824,
++            1641.766,
++            1641.739,
++            1641.711,
++            1727.097,
++            1744.828,
++            1744.813,
++            1744.789,
++            1735.81,
++            1735.78,
++            1735.863
++          ]
++        },
++        {
++          "errors": 0,
++          "hits_done_while_network_held": 0,
++          "hit_requests": 0,
++          "network_held_ms": 1827.872,
++          "hit_completion_ms": [
++            1651.239,
++            1651.223,
++            1651.32,
++            1651.407,
++            1651.818,
++            1651.993,
++            1746.122,
++            1746.136,
++            1746.185,
++            1746.234,
++            1746.293,
++            1746.387,
++            1746.471,
++            1746.596,
++            1746.706,
++            1827.457
++          ]
++        },
++        {
++          "errors": 0,
++          "hits_done_while_network_held": 0,
++          "hit_requests": 0,
++          "network_held_ms": 1746.795,
++          "hit_completion_ms": [
++            1651.838,
++            1652.707,
++            1651.8,
++            1652.269,
++            1651.85,
++            1651.951,
++            1652.591,
++            1652.72,
++            1652.853,
++            1745.766,
++            1745.908,
++            1745.948,
++            1745.976,
++            1746.029,
++            1746.139,
++            1746.237
++          ]
++        },
++        {
++          "errors": 0,
++          "hits_done_while_network_held": 0,
++          "hit_requests": 0,
++          "network_held_ms": 1827.762,
++          "hit_completion_ms": [
++            1641.936,
++            1641.858,
++            1641.874,
++            1641.83,
++            1641.904,
++            1642.025,
++            1742.104,
++            1742.243,
++            1742.306,
++            1742.357,
++            1742.437,
++            1742.543,
++            1742.604,
++            1742.658,
++            1742.683,
++            1827.397
++          ]
++        },
++        {
++          "errors": 0,
++          "hits_done_while_network_held": 0,
++          "hit_requests": 0,
++          "network_held_ms": 1741.068,
++          "hit_completion_ms": [
++            1640.268,
++            1640.209,
++            1640.246,
++            1640.323,
++            1640.413,
++            1640.468,
++            1640.534,
++            1640.618,
++            1740.033,
++            1740.24,
++            1740.296,
++            1740.373,
++            1740.413,
++            1740.476,
++            1740.499,
++            1740.607
++          ]
++        },
++        {
++          "errors": 0,
++          "hits_done_while_network_held": 0,
++          "hit_requests": 0,
++          "network_held_ms": 1828.663,
++          "hit_completion_ms": [
++            1639.962,
++            1639.765,
++            1639.773,
++            1639.755,
++            1639.782,
++            1639.816,
++            1741.263,
++            1741.354,
++            1741.404,
++            1741.48,
++            1741.57,
++            1741.663,
++            1741.728,
++            1741.802,
++            1741.881,
++            1827.675
++          ]
++        },
++        {
++          "errors": 0,
++          "hits_done_while_network_held": 0,
++          "hit_requests": 0,
++          "network_held_ms": 1828.863,
++          "hit_completion_ms": [
++            1649.279,
++            1649.364,
++            1649.465,
++            1649.585,
++            1649.675,
++            1649.763,
++            1741.905,
++            1741.995,
++            1742.04,
++            1742.094,
++            1742.178,
++            1742.205,
++            1742.188,
++            1742.303,
++            1742.457,
++            1828.5
++          ]
++        }
++      ],
++      "hits_total_per_sample": 16,
++      "hits_done_while_network_held": [
++        0,
++        0,
++        0,
++        0,
++        0,
++        0,
++        0
++      ],
++      "hit_http_requests": [
++        0,
++        0,
++        0,
++        0,
++        0,
++        0,
++        0
++      ],
++      "hit_completion_ms": {
++        "n": 112,
++        "median": 1740.296,
++        "p95": 1746.471,
++        "min": 1639.755,
++        "max": 1828.5
++      }
++    },
++    "slot_handoff": {
++      "raw": [
++        {
++          "errors": 0,
++          "handoff_ms": [
++            86.793,
++            100.754,
++            99.365,
++            101.672,
++            101.801,
++            104.349
++          ]
++        },
++        {
++          "errors": 0,
++          "handoff_ms": [
++            93.176,
++            102.752,
++            101.422,
++            100.412,
++            101.205,
++            101.105
++          ]
++        },
++        {
++          "errors": 0,
++          "handoff_ms": [
++            96.344,
++            100.716,
++            101.118,
++            100.824,
++            101.815,
++            101.458
++          ]
++        },
++        {
++          "errors": 0,
++          "handoff_ms": [
++            96.02,
++            101.112,
++            101.012,
++            101.784,
++            100.019,
++            100.716
++          ]
++        },
++        {
++          "errors": 0,
++          "handoff_ms": [
++            90.718,
++            100.808,
++            101.274,
++            100.541,
++            101.605,
++            99.862
++          ]
++        },
++        {
++          "errors": 0,
++          "handoff_ms": [
++            89.366,
++            102.439,
++            99.811,
++            102.775,
++            99.987,
++            100.294
++          ]
++        },
++        {
++          "errors": 0,
++          "handoff_ms": [
++            96.785,
++            100.63,
++            101.058,
++            102.503,
++            100.169,
++            101.419
++          ]
++        }
++      ],
++      "handoff_ms": {
++        "n": 42,
++        "median": 100.824,
++        "p95": 102.752,
++        "min": 86.793,
++        "max": 104.349
++      }
++    },
++    "history_and_cover_same_comic": {
++      "raw": [
++        {
++          "errors": 0,
++          "http_requests": 19,
++          "distinct_covers": 10
++        },
++        {
++          "errors": 0,
++          "http_requests": 19,
++          "distinct_covers": 10
++        },
++        {
++          "errors": 0,
++          "http_requests": 19,
++          "distinct_covers": 10
++        },
++        {
++          "errors": 0,
++          "http_requests": 20,
++          "distinct_covers": 10
++        },
++        {
++          "errors": 0,
++          "http_requests": 20,
++          "distinct_covers": 10
++        },
++        {
++          "errors": 0,
++          "http_requests": 20,
++          "distinct_covers": 10
++        },
++        {
++          "errors": 0,
++          "http_requests": 20,
++          "distinct_covers": 10
++        }
++      ],
++      "http_requests": [
++        19,
++        19,
++        19,
++        20,
++        20,
++        20,
++        20
++      ]
++    },
++    "cache_hit_paths": {
++      "raw": [
++        {
++          "provider_error": null,
++          "provider_http_requests": 0,
++          "full_stream_http_requests": 1,
++          "full_stream_image_events": 2
++        },
++        {
++          "provider_error": null,
++          "provider_http_requests": 0,
++          "full_stream_http_requests": 1,
++          "full_stream_image_events": 2
++        },
++        {
++          "provider_error": null,
++          "provider_http_requests": 0,
++          "full_stream_http_requests": 1,
++          "full_stream_image_events": 2
++        },
++        {
++          "provider_error": null,
++          "provider_http_requests": 0,
++          "full_stream_http_requests": 1,
++          "full_stream_image_events": 2
++        },
++        {
++          "provider_error": null,
++          "provider_http_requests": 0,
++          "full_stream_http_requests": 1,
++          "full_stream_image_events": 2
++        },
++        {
++          "provider_error": null,
++          "provider_http_requests": 0,
++          "full_stream_http_requests": 1,
++          "full_stream_image_events": 2
++        },
++        {
++          "provider_error": null,
++          "provider_http_requests": 0,
++          "full_stream_http_requests": 1,
++          "full_stream_image_events": 2
++        }
++      ]
++    },
++    "broken_cache_retry": {
++      "raw": [
++        {
++          "first_load_errors": 6,
++          "retry_errors": 6,
++          "http_requests": 0,
++          "entries": 6
++        },
++        {
++          "first_load_errors": 6,
++          "retry_errors": 6,
++          "http_requests": 0,
++          "entries": 6
++        },
++        {
++          "first_load_errors": 6,
++          "retry_errors": 6,
++          "http_requests": 0,
++          "entries": 6
++        },
++        {
++          "first_load_errors": 6,
++          "retry_errors": 6,
++          "http_requests": 0,
++          "entries": 6
++        },
++        {
++          "first_load_errors": 6,
++          "retry_errors": 6,
++          "http_requests": 0,
++          "entries": 6
++        },
++        {
++          "first_load_errors": 6,
++          "retry_errors": 6,
++          "http_requests": 0,
++          "entries": 6
++        },
++        {
++          "first_load_errors": 6,
++          "retry_errors": 6,
++          "http_requests": 0,
++          "entries": 6
++        }
++      ]
++    }
++  }
++}
+\ No newline at end of file
+diff --git a/docs/verification/thumbnail-perf-20261105/baseline/bench_baseline_7b6348a.log b/docs/verification/thumbnail-perf-20261105/baseline/bench_baseline_7b6348a.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..7e0534d476801c9954db3159cfb5434c99297f5b
+--- /dev/null
++++ b/docs/verification/thumbnail-perf-20261105/baseline/bench_baseline_7b6348a.log
+@@ -0,0 +1,782 @@
++   Woah! You appear to be trying to run flutter as root.
++   We strongly recommend running the flutter tool without superuser privileges.
++  /
++📎
++00:00 +0: loading /root/work/baseline/tool/thumbnail_bench/thumbnail_queue_bench_test.dart
++00:00 +0: (setUpAll)
++00:00 +0: cold grid: 32 misses at once
++00:04 +1: cache hits while the network queue is full
++00:19 +2: slot hand-off after one response
++00:27 +3: history and cover tiles of the same comics
++00:29 +4: valid cache hit: provider path vs full stream
++00:31 +5: broken cache entries: first load and one retry
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++00:32 +6: (tearDownAll)
++00:32 +6: All tests passed!
+diff --git a/docs/verification/thumbnail-perf-20261105/baseline/cover_cache_test_on_7b6348a.log b/docs/verification/thumbnail-perf-20261105/baseline/cover_cache_test_on_7b6348a.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..f69dbf8e6159a7bf4799fdebb6f873939b132638
+--- /dev/null
++++ b/docs/verification/thumbnail-perf-20261105/baseline/cover_cache_test_on_7b6348a.log
+@@ -0,0 +1,242 @@
++   Woah! You appear to be trying to run flutter as root.
++   We strongly recommend running the flutter tool without superuser privileges.
++  /
++📎
++00:00 +0: loading /root/work/baseline/test/network/thumbnail_cover_cache_test.dart
++00:00 +0: (setUpAll)
++00:00 +0: CachedImageProvider a valid disk hit is shown without requests
++00:00 +1: CachedImageProvider a memory hit needs neither the disk nor the network
++00:01 +2: CachedImageProvider a miss and an expired entry request once and are stored
++00:01 +3: CachedImageProvider an undecodable entry is invalidated alone and a retry recovers
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
++The following TestFailure was thrown while running async test code:
++Expected: null
++  Actual: _File:<File:
++'/tmp/yorunote_cover_testBURRAB/cache/cache/6/0df618759e4d47c4eacd78d2022b1988-1793813796629060-5'>
++the broken entry is invalidated
++
++When the exception was thrown, this was the stack:
++#0      fail (package:matcher/src/expect/expect.dart:187:31)
++#1      _expect (package:matcher/src/expect/expect.dart:182:3)
++#2      expect (package:matcher/src/expect/expect.dart:65:3)
++#3      expect (package:flutter_test/src/widget_tester.dart:473:18)
++#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:143:11)
++<asynchronous suspension>
++<asynchronous suspension>
++#6      main.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:130:9)
++<asynchronous suspension>
++#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
++<asynchronous suspension>
++#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
++<asynchronous suspension>
++<asynchronous suspension>
++(elided 2 frames from dart:async and package:stack_trace)
++
++The exception was caught asynchronously.
++════════════════════════════════════════════════════════════════════════════════════════════════════
++00:02 +3 -1: CachedImageProvider an undecodable entry is invalidated alone and a retry recovers [E]
++  Test failed. See exception logs above.
++  The test description was: an undecodable entry is invalidated alone and a retry recovers
++  
++00:02 +3 -1: CachedImageProvider an empty entry is invalidated alone and a retry recovers
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
++The following TestFailure was thrown while running async test code:
++Expected: null
++  Actual: _File:<File:
++'/tmp/yorunote_cover_testBURRAB/cache/cache/8/78490c00035a73a9eb9b0f0d4ada9593-1793813797204186-7'>
++the broken entry is invalidated
++
++When the exception was thrown, this was the stack:
++#0      fail (package:matcher/src/expect/expect.dart:187:31)
++#1      _expect (package:matcher/src/expect/expect.dart:182:3)
++#2      expect (package:matcher/src/expect/expect.dart:65:3)
++#3      expect (package:flutter_test/src/widget_tester.dart:473:18)
++#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:143:11)
++<asynchronous suspension>
++<asynchronous suspension>
++#6      main.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:130:9)
++<asynchronous suspension>
++#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
++<asynchronous suspension>
++#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
++<asynchronous suspension>
++<asynchronous suspension>
++(elided 2 frames from dart:async and package:stack_trace)
++
++The exception was caught asynchronously.
++════════════════════════════════════════════════════════════════════════════════════════════════════
++00:02 +3 -2: CachedImageProvider an empty entry is invalidated alone and a retry recovers [E]
++  Test failed. See exception logs above.
++  The test description was: an empty entry is invalidated alone and a retry recovers
++  
++00:02 +3 -2: CachedImageProvider a broken download is not kept in the cache
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
++The following TestFailure was thrown while running async test code:
++Expected: null
++  Actual: _File:<File:
++'/tmp/yorunote_cover_testBURRAB/cache/cache/10/53846fff5dfe21e7dc4a8f7df5041337-1793813797757334-9'>
++
++When the exception was thrown, this was the stack:
++#0      fail (package:matcher/src/expect/expect.dart:187:31)
++#1      _expect (package:matcher/src/expect/expect.dart:182:3)
++#2      expect (package:matcher/src/expect/expect.dart:65:3)
++#3      expect (package:flutter_test/src/widget_tester.dart:473:18)
++#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:167:9)
++<asynchronous suspension>
++<asynchronous suspension>
++#6      main.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:162:7)
++<asynchronous suspension>
++#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
++<asynchronous suspension>
++#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
++<asynchronous suspension>
++<asynchronous suspension>
++(elided 2 frames from dart:async and package:stack_trace)
++
++The exception was caught asynchronously.
++════════════════════════════════════════════════════════════════════════════════════════════════════
++00:02 +3 -3: CachedImageProvider a broken download is not kept in the cache [E]
++  Test failed. See exception logs above.
++  The test description was: a broken download is not kept in the cache
++  
++00:02 +3 -3: CachedImageProvider invalidation keeps an entry repaired in the meantime
++00:02 +4 -3: CachedImageProvider a broken local file is reported and never deleted
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++00:02 +5 -3: CachedImageProvider the local cover fallback is used and never deleted
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++00:02 +6 -3: CachedImageProvider the same URL with another source or cid is kept apart
++00:03 +7 -3: CachedImageProvider the source thumbnail config still rewrites the request
++00:03 +8 -3: HistoryImageProvider a valid disk hit is shown without requests
++00:03 +9 -3: HistoryImageProvider an undecodable entry is invalidated alone and a retry recovers
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
++The following TestFailure was thrown while running async test code:
++Expected: null
++  Actual: _File:<File:
++'/tmp/yorunote_cover_testBURRAB/cache/cache/19/bbb17539f47ec66695dee85e3c15cbe8-1793813798691441-18'>
++
++When the exception was thrown, this was the stack:
++#0      fail (package:matcher/src/expect/expect.dart:187:31)
++#1      _expect (package:matcher/src/expect/expect.dart:182:3)
++#2      expect (package:matcher/src/expect/expect.dart:65:3)
++#3      expect (package:flutter_test/src/widget_tester.dart:473:18)
++#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:330:11)
++<asynchronous suspension>
++<asynchronous suspension>
++#6      main.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:317:9)
++<asynchronous suspension>
++#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
++<asynchronous suspension>
++#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
++<asynchronous suspension>
++<asynchronous suspension>
++(elided 2 frames from dart:async and package:stack_trace)
++
++The exception was caught asynchronously.
++════════════════════════════════════════════════════════════════════════════════════════════════════
++00:04 +9 -4: HistoryImageProvider an undecodable entry is invalidated alone and a retry recovers [E]
++  Test failed. See exception logs above.
++  The test description was: an undecodable entry is invalidated alone and a retry recovers
++  
++00:04 +9 -4: HistoryImageProvider an empty entry is invalidated alone and a retry recovers
++[31mException: Empty image data
++#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
++<asynchronous suspension>
++#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
++The following TestFailure was thrown while running async test code:
++Expected: null
++  Actual: _File:<File:
++'/tmp/yorunote_cover_testBURRAB/cache/cache/21/50b9773d6eb17a7ec74c38c1f1eb50f4-1793813799221998-20'>
++
++When the exception was thrown, this was the stack:
++#0      fail (package:matcher/src/expect/expect.dart:187:31)
++#1      _expect (package:matcher/src/expect/expect.dart:182:3)
++#2      expect (package:matcher/src/expect/expect.dart:65:3)
++#3      expect (package:flutter_test/src/widget_tester.dart:473:18)
++#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:330:11)
++<asynchronous suspension>
++<asynchronous suspension>
++#6      main.<anonymous closure>.<anonymous closure> (file:///root/work/baseline/test/network/thumbnail_cover_cache_test.dart:317:9)
++<asynchronous suspension>
++#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
++<asynchronous suspension>
++#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
++<asynchronous suspension>
++<asynchronous suspension>
++(elided 2 frames from dart:async and package:stack_trace)
++
++The exception was caught asynchronously.
++════════════════════════════════════════════════════════════════════════════════════════════════════
++00:04 +9 -5: HistoryImageProvider an empty entry is invalidated alone and a retry recovers [E]
++  Test failed. See exception logs above.
++  The test description was: an empty entry is invalidated alone and a retry recovers
++  
++00:04 +9 -5: HistoryImageProvider a local history cover is shown and never deleted
++[31mException: Invalid image data
++#0      _futurize (dart:ui/painting.dart:8570:5)
++#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
++#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
++#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
++#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
++<asynchronous suspension>
++#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
++<asynchronous suspension>
++[0m
++00:04 +10 -5: (tearDownAll)
++00:04 +10 -5: Some tests failed.
+diff --git a/lib/foundation/image_provider/cached_image.dart b/lib/foundation/image_provider/cached_image.dart
+index 9410502ed379f4cc05b3cf34ac87aa5dd6e42f38..c54757a18ad956a2d715587b71b93fc3d20bc9a8 100644
+--- a/lib/foundation/image_provider/cached_image.dart
++++ b/lib/foundation/image_provider/cached_image.dart
+@@ -31,33 +31,29 @@ class CachedImageProvider
+   // Use local cover if network image fails to load.
+   final bool fallbackToLocalCover;
+ 
+-  static int loadingCount = 0;
+-
+-  static const _kMaxLoadingCount = 8;
+-
+   @override
+   Future<Uint8List> load(chunkEvents, checkStop) async {
+-    while(loadingCount > _kMaxLoadingCount) {
+-      await Future.delayed(const Duration(milliseconds: 100));
+-      checkStop();
+-    }
+-    loadingCount++;
+     try {
+       if(url.startsWith("file://")) {
+         var file = File(url.substring(7));
+         return file.readAsBytes();
+       }
+-      await for (var progress in ImageDownloader.loadThumbnail(url, sourceKey, cid)) {
+-        checkStop();
+-        chunkEvents.add(ImageChunkEvent(
+-          cumulativeBytesLoaded: progress.currentBytes,
+-          expectedTotalBytes: progress.totalBytes,
+-        ));
+-        if(progress.imageBytes != null) {
+-          return progress.imageBytes!;
+-        }
+-      }
+-      throw "Error: Empty response body.";
++      // Network requests are limited by ImageDownloader.coverRequestLimiter;
++      // cache hits and local files do not wait for it.
++      return await ImageDownloader.loadCoverThumbnail(
++        url,
++        sourceKey,
++        cid,
++        checkStop: checkStop,
++        onProgress: (currentBytes, totalBytes) {
++          chunkEvents.add(
++            ImageChunkEvent(
++              cumulativeBytesLoaded: currentBytes,
++              expectedTotalBytes: totalBytes,
++            ),
++          );
++        },
++      );
+     }
+     catch(e) {
+       if (fallbackToLocalCover && sourceKey != null && cid != null) {
+@@ -77,11 +73,14 @@ class CachedImageProvider
+       }
+       rethrow;
+     }
+-    finally {
+-      loadingCount--;
+-    }
+   }
+ 
++  /// Invalidates only the disk cache entry the broken cover was read from or
++  /// written to; local files and the local cover fallback are never deleted.
++  @override
++  Future<void> onInvalidImageData(Uint8List data) =>
++      ImageDownloader.invalidateCoverCache(data);
++
+   @override
+   Future<CachedImageProvider> obtainKey(ImageConfiguration configuration) {
+     return SynchronousFuture(this);
+diff --git a/lib/foundation/image_provider/history_image_provider.dart b/lib/foundation/image_provider/history_image_provider.dart
+index d188b3480f0af5ec683f6851436cf6499f6a9732..8df681ceaab256e5e0796eab636603b8883c4dfa 100644
+--- a/lib/foundation/image_provider/history_image_provider.dart
++++ b/lib/foundation/image_provider/history_image_provider.dart
+@@ -32,23 +32,28 @@ class HistoryImageProvider
+       history.cover = url;
+       HistoryManager().addHistory(history);
+     }
+-    await for (var progress in ImageDownloader.loadThumbnail(
++    return ImageDownloader.loadCoverThumbnail(
+       url,
+       history.type.sourceKey,
+       history.id,
+-    )) {
+-      checkStop();
+-      chunkEvents.add(ImageChunkEvent(
+-        cumulativeBytesLoaded: progress.currentBytes,
+-        expectedTotalBytes: progress.totalBytes,
+-      ));
+-      if (progress.imageBytes != null) {
+-        return progress.imageBytes!;
+-      }
+-    }
+-    throw "Error: Empty response body.";
++      checkStop: checkStop,
++      onProgress: (currentBytes, totalBytes) {
++        chunkEvents.add(
++          ImageChunkEvent(
++            cumulativeBytesLoaded: currentBytes,
++            expectedTotalBytes: totalBytes,
++          ),
++        );
++      },
++    );
+   }
+ 
++  /// Invalidates only the disk cache entry the broken cover was read from or
++  /// written to; local comic covers are never deleted.
++  @override
++  Future<void> onInvalidImageData(Uint8List data) =>
++      ImageDownloader.invalidateCoverCache(data);
++
+   @override
+   Future<HistoryImageProvider> obtainKey(ImageConfiguration configuration) {
+     return SynchronousFuture(this);
+diff --git a/lib/network/images.dart b/lib/network/images.dart
+index 3038c080ad5c4fb9ab1de137976504a59c4a7f0c..f29e803f4de5398c0f99857286166eb2f095f534 100644
+--- a/lib/network/images.dart
++++ b/lib/network/images.dart
+@@ -1,19 +1,22 @@
+ import 'dart:async';
+ import 'dart:typed_data';
+ 
++import 'package:flutter/foundation.dart' show listEquals;
+ import 'package:flutter_qjs/flutter_qjs.dart';
+ import 'package:venera/foundation/cache_manager.dart';
+ import 'package:venera/foundation/comic_source/comic_source.dart';
+ import 'package:venera/foundation/consts.dart';
++import 'package:venera/foundation/log.dart';
+ import 'package:venera/utils/image.dart';
+ 
+ import 'app_dio.dart';
++import 'request_limiter.dart';
+ 
+ abstract class ImageDownloader {
+   static Stream<ImageDownloadProgress> loadThumbnail(
+       String url, String? sourceKey,
+       [String? cid]) async* {
+-    final cacheKey = "$url@$sourceKey${cid != null ? '@$cid' : ''}";
++    final cacheKey = thumbnailCacheKey(url, sourceKey, cid);
+     final cache = await CacheManager().findCache(cacheKey);
+ 
+     if (cache != null) {
+@@ -88,6 +91,215 @@ abstract class ImageDownloader {
+     );
+   }
+ 
++  /// Disk cache key of a thumbnail.
++  static String thumbnailCacheKey(
++    String url,
++    String? sourceKey, [
++    String? cid,
++  ]) => "$url@$sourceKey${cid != null ? '@$cid' : ''}";
++
++  /// Maximum number of cover requests of [loadCoverThumbnail] running at the
++  /// same time.
++  static const maxCoverRequests = 8;
++
++  /// Limits the network requests of [loadCoverThumbnail].
++  /// Disk cache hits and local files never wait for it.
++  static final coverRequestLimiter = RequestLimiter(maxCoverRequests);
++
++  /// Cover network loads in progress, by disk cache key.
++  static final _coverLoads = <String, _CoverLoad>{};
++
++  /// Disk cache key of the cover bytes returned by [loadCoverThumbnail].
++  /// Bytes from anywhere else (local files) have no entry.
++  static final _coverCacheKeys = Expando<String>();
++
++  /// Loads a cover for an image provider.
++  ///
++  /// Same cache and request behaviour as [loadThumbnail], except that:
++  /// - a valid disk cache hit is returned without any request;
++  /// - requests wait for a slot of [coverRequestLimiter];
++  /// - concurrent loads of the same disk cache key share one request, which is
++  ///   abandoned only when every load sharing it has been stopped.
++  ///
++  /// [checkStop] throws once the caller's load has been stopped.
++  static Future<Uint8List> loadCoverThumbnail(
++    String url,
++    String? sourceKey,
++    String? cid, {
++    required void Function() checkStop,
++    void Function(int currentBytes, int? totalBytes)? onProgress,
++  }) async {
++    final consumer = _CoverConsumer(() {
++      try {
++        checkStop();
++        return false;
++      } catch (_) {
++        return true;
++      }
++    }, onProgress);
++    while (true) {
++      try {
++        return await _loadCover(url, sourceKey, cid, consumer);
++      } on RequestCancelledException {
++        checkStop();
++        // Joined a shared load just as all its other loads were stopped.
++      }
++    }
++  }
++
++  /// Deletes the disk cache entry that [data] was read from or written to by
++  /// [loadCoverThumbnail], if the entry still holds exactly these bytes.
++  ///
++  /// Call it only for bytes that are empty or cannot be decoded. Bytes from
++  /// local files, and entries replaced in the meantime, are left alone.
++  static Future<void> invalidateCoverCache(Uint8List data) async {
++    final cacheKey = _coverCacheKeys[data];
++    if (cacheKey == null) {
++      return;
++    }
++    try {
++      final file = await CacheManager().findCache(cacheKey);
++      if (file == null) {
++        return;
++      }
++      if (!listEquals(await file.readAsBytes(), data)) {
++        return;
++      }
++      await CacheManager().delete(cacheKey, onlyIfStoredIn: file);
++    } catch (e, s) {
++      Log.error("Image Loading", e, s);
++    }
++  }
++
++  static Future<Uint8List> _loadCover(
++    String url,
++    String? sourceKey,
++    String? cid,
++    _CoverConsumer consumer,
++  ) async {
++    final cacheKey = thumbnailCacheKey(url, sourceKey, cid);
++    final cache = await _readCoverCache(cacheKey);
++    if (cache != null) {
++      return cache;
++    }
++    var load = _coverLoads[cacheKey];
++    if (load != null) {
++      load.consumers.add(consumer);
++      return load.future;
++    }
++    final newLoad = _CoverLoad()..consumers.add(consumer);
++    _coverLoads[cacheKey] = newLoad;
++    newLoad.future = _fetchCover(url, sourceKey, cid, cacheKey, newLoad)
++        .whenComplete(() {
++          if (_coverLoads[cacheKey] == newLoad) {
++            _coverLoads.remove(cacheKey);
++          }
++        });
++    return newLoad.future;
++  }
++
++  static Future<Uint8List?> _readCoverCache(String cacheKey) async {
++    final cache = await CacheManager().findCache(cacheKey);
++    if (cache == null) {
++      return null;
++    }
++    final data = await cache.readAsBytes();
++    _coverCacheKeys[data] = cacheKey;
++    return data;
++  }
++
++  static Future<Uint8List> _fetchCover(
++    String url,
++    String? sourceKey,
++    String? cid,
++    String cacheKey,
++    _CoverLoad load,
++  ) async {
++    var configs = <String, dynamic>{};
++    if (sourceKey != null) {
++      var comicSource = ComicSource.find(sourceKey);
++      configs = comicSource?.getThumbnailLoadingConfig?.call(url) ?? {};
++    }
++    configs['headers'] ??= {};
++    if (configs['headers']['user-agent'] == null &&
++        configs['headers']['User-Agent'] == null) {
++      configs['headers']['user-agent'] = webUA;
++    }
++
++    if (((configs['url'] as String?) ?? url).startsWith('cover.') &&
++        sourceKey != null) {
++      var comicSource = ComicSource.find(sourceKey);
++      if (comicSource != null) {
++        var comicInfo = await comicSource.loadComicInfo!(cid!);
++        return _loadCover(
++          comicInfo.data.cover,
++          sourceKey,
++          null,
++          _CoverConsumer(load.isCancelled, load.progress),
++        );
++      }
++    }
++
++    final release = await coverRequestLimiter.acquire(
++      isCancelled: load.isCancelled,
++    );
++    try {
++      // Another load may have stored the cover while this one was waiting.
++      final cache = await _readCoverCache(cacheKey);
++      if (cache != null) {
++        return cache;
++      }
++      if (load.isCancelled()) {
++        throw const RequestCancelledException();
++      }
++
++      var dio = AppDio(
++        BaseOptions(
++          headers: Map<String, dynamic>.from(configs['headers']),
++          method: configs['method'] ?? 'GET',
++          responseType: ResponseType.stream,
++        ),
++      );
++
++      String requestUrl = configs['url'] ?? url;
++      if (requestUrl.startsWith('//')) {
++        requestUrl = 'https:$requestUrl';
++      }
++      var req = await dio.request<ResponseBody>(
++        requestUrl,
++        data: configs['data'],
++      );
++      var stream = req.data?.stream ?? (throw "Error: Empty response body.");
++      int? expectedBytes = req.data!.contentLength;
++      if (expectedBytes == -1) {
++        expectedBytes = null;
++      }
++      var buffer = <int>[];
++      await for (var data in stream) {
++        if (load.isCancelled()) {
++          throw const RequestCancelledException();
++        }
++        buffer.addAll(data);
++        if (expectedBytes != null) {
++          load.progress(buffer.length, expectedBytes);
++        }
++      }
++
++      if (configs['onResponse'] is JSInvokable) {
++        final uint8List = Uint8List.fromList(buffer);
++        buffer = (configs['onResponse'] as JSInvokable)([uint8List]);
++        (configs['onResponse'] as JSInvokable).free();
++      }
++
++      await CacheManager().writeCache(cacheKey, buffer);
++      final result = Uint8List.fromList(buffer);
++      _coverCacheKeys[result] = cacheKey;
++      return result;
++    } finally {
++      release();
++    }
++  }
++
+   static final _loadingImages = <String, _StreamWrapper<ImageDownloadProgress>>{};
+ 
+   /// Cancel all loading images.
+@@ -272,6 +484,32 @@ abstract class ImageDownloader {
+   }
+ }
+ 
++/// One cover network load and the provider loads sharing it.
++class _CoverLoad {
++  final consumers = <_CoverConsumer>[];
++
++  late final Future<Uint8List> future;
++
++  /// True once every load sharing this one has been stopped.
++  bool isCancelled() => consumers.every((c) => c.isCancelled());
++
++  void progress(int currentBytes, int? totalBytes) {
++    for (final c in consumers) {
++      if (!c.isCancelled()) {
++        c.onProgress?.call(currentBytes, totalBytes);
++      }
++    }
++  }
++}
++
++class _CoverConsumer {
++  const _CoverConsumer(this.isCancelled, this.onProgress);
++
++  final bool Function() isCancelled;
++
++  final void Function(int currentBytes, int? totalBytes)? onProgress;
++}
++
+ /// A wrapper class for a stream that
+ /// allows multiple listeners to listen to the same stream.
+ class _StreamWrapper<T> {
+diff --git a/lib/network/request_limiter.dart b/lib/network/request_limiter.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..14c2f33c1882fd58aad2166f6cf243cd1f7ad2f5
+--- /dev/null
++++ b/lib/network/request_limiter.dart
+@@ -0,0 +1,85 @@
++import 'dart:async';
++import 'dart:collection';
++
++/// Thrown by [RequestLimiter.acquire] when a waiter was cancelled before it
++/// got a slot.
++class RequestCancelledException implements Exception {
++  const RequestCancelledException();
++
++  @override
++  String toString() => 'RequestCancelledException';
++}
++
++/// Lets at most [maxConcurrent] requests run at the same time.
++///
++/// Waiters are served in FIFO order. A released slot is handed to the next
++/// waiter right away (no polling). Waiters whose [acquire] `isCancelled`
++/// callback returns true when their turn comes are skipped, so cancelled loads
++/// never hold or lose a slot.
++class RequestLimiter {
++  RequestLimiter(this.maxConcurrent) : assert(maxConcurrent > 0);
++
++  final int maxConcurrent;
++
++  int _active = 0;
++
++  final _waiters = Queue<_Waiter>();
++
++  /// Number of slots in use.
++  int get active => _active;
++
++  /// Number of waiters, including cancelled ones not yet skipped.
++  int get waiting => _waiters.length;
++
++  /// Waits for a free slot and returns the function that gives it back.
++  ///
++  /// The returned function must be called once the request has finished,
++  /// failed or been abandoned; calling it again has no effect.
++  Future<void Function()> acquire({bool Function()? isCancelled}) {
++    if (_active < maxConcurrent && _waiters.isEmpty) {
++      _active++;
++      return Future.value(_releaser());
++    }
++    final waiter = _Waiter(isCancelled);
++    _waiters.add(waiter);
++    return waiter.completer.future;
++  }
++
++  void Function() _releaser() {
++    var released = false;
++    return () {
++      if (released) return;
++      released = true;
++      _active--;
++      _grantNext();
++    };
++  }
++
++  void _grantNext() {
++    while (_active < maxConcurrent && _waiters.isNotEmpty) {
++      final waiter = _waiters.removeFirst();
++      if (waiter.cancelled) {
++        waiter.completer.completeError(const RequestCancelledException());
++        continue;
++      }
++      _active++;
++      waiter.completer.complete(_releaser());
++    }
++  }
++}
++
++class _Waiter {
++  _Waiter(this.isCancelled);
++
++  final bool Function()? isCancelled;
++
++  final completer = Completer<void Function()>();
++
++  bool get cancelled {
++    try {
++      return isCancelled?.call() ?? false;
++    } catch (_) {
++      return false;
++    }
++  }
++}
+diff --git a/test/network/request_limiter_test.dart b/test/network/request_limiter_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..23b8d7950108f6e4eb4af742833c54d82b68d7fd
+--- /dev/null
++++ b/test/network/request_limiter_test.dart
+@@ -0,0 +1,116 @@
++// Unit tests of RequestLimiter, the event-driven limit of cover requests.
++// No timers are used: a waiter must get a freed slot within microtasks.
++
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/network/images.dart';
++import 'package:venera/network/request_limiter.dart';
++
++/// Runs pending microtasks only; a timer-based (polling) hand-off would not
++/// complete here.
++Future<void> _microtasks() async {
++  for (var i = 0; i < 10; i++) {
++    await Future<void>.value();
++  }
++}
++
++void main() {
++  test('cover requests are limited to 8', () {
++    expect(ImageDownloader.maxCoverRequests, 8);
++    expect(ImageDownloader.coverRequestLimiter.maxConcurrent, 8);
++  });
++
++  test('grants up to the limit, then hands slots over in FIFO order', () async {
++    final limiter = RequestLimiter(2);
++    final a = await limiter.acquire();
++    final b = await limiter.acquire();
++    expect(limiter.active, 2);
++
++    final order = <String>[];
++    final c = limiter.acquire().then((r) {
++      order.add('c');
++      return r;
++    });
++    final d = limiter.acquire().then((r) {
++      order.add('d');
++      return r;
++    });
++    await _microtasks();
++    expect(order, isEmpty);
++    expect(limiter.waiting, 2);
++
++    a();
++    await _microtasks();
++    expect(order, ['c']);
++    expect(limiter.active, 2);
++
++    b();
++    await _microtasks();
++    expect(order, ['c', 'd']);
++    (await c)();
++    (await d)();
++    expect(limiter.active, 0);
++    expect(limiter.waiting, 0);
++  });
++
++  test('a cancelled waiter is skipped and takes no slot', () async {
++    final limiter = RequestLimiter(1);
++    final first = await limiter.acquire();
++    var cancelled = false;
++    final skipped = limiter.acquire(isCancelled: () => cancelled);
++    final next = limiter.acquire();
++    cancelled = true;
++
++    first();
++    await expectLater(skipped, throwsA(isA<RequestCancelledException>()));
++    final release = await next;
++    expect(limiter.active, 1);
++    release();
++    expect(limiter.active, 0);
++  });
++
++  test('releasing twice frees only one slot', () async {
++    final limiter = RequestLimiter(1);
++    final release = await limiter.acquire();
++    final waiter = limiter.acquire();
++    release();
++    release();
++    final second = await waiter;
++    expect(limiter.active, 1);
++    final third = limiter.acquire();
++    await _microtasks();
++    expect(limiter.waiting, 1, reason: 'the double release granted nothing');
++    second();
++    (await third)();
++    expect(limiter.active, 0);
++  });
++
++  test('a failing isCancelled callback does not lose the slot', () async {
++    final limiter = RequestLimiter(1);
++    final first = await limiter.acquire();
++    final waiter = limiter.acquire(isCancelled: () => throw StateError('x'));
++    first();
++    (await waiter)();
++    expect(limiter.active, 0);
++  });
++
++  test('slots come back after work fails', () async {
++    final limiter = RequestLimiter(3);
++    Future<void> failingWork() async {
++      final release = await limiter.acquire();
++      try {
++        await Future<void>.value();
++        throw Exception('request failed');
++      } finally {
++        release();
++      }
++    }
++
++    final results = await Future.wait([
++      for (var i = 0; i < 10; i++)
++        failingWork().then((_) => 0, onError: (_) => 1),
++    ]);
++    expect(results.reduce((a, b) => a + b), 10);
++    expect(limiter.active, 0);
++    expect(limiter.waiting, 0);
++  });
++}
+diff --git a/test/network/thumbnail_cover_cache_test.dart b/test/network/thumbnail_cover_cache_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..7bd6b13815b31a4afadce18b9c6bda9cb8ee4631
+--- /dev/null
++++ b/test/network/thumbnail_cover_cache_test.dart
+@@ -0,0 +1,384 @@
++// Cover (thumbnail) cache behaviour of CachedImageProvider and
++// HistoryImageProvider, driven through ImageProvider.resolve with a local
++// HTTP server, synthetic PNGs and a temporary data directory.
++//
++// A retry is simulated by resolving the provider again after the error, as
++// the cover widgets do when they are rebuilt; no automatic retry is expected.
++
++import 'dart:io';
++
++import 'package:flutter/foundation.dart';
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/cache_manager.dart';
++import 'package:venera/foundation/comic_type.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/foundation/image_provider/history_image_provider.dart';
++import 'package:venera/network/images.dart';
++
++import 'thumbnail_test_support.dart';
++
++void main() {
++  final server = CoverServer();
++  // Lets work that continues after a provider finishes reach the server.
++  const settle = Duration(milliseconds: 500);
++  final srcA = testSource('thumb_test_a');
++  final srcB = testSource('thumb_test_b');
++  final srcCfg = testSource(
++    'thumb_test_cfg',
++    thumbnailConfig: (url) => {
++      'url': url.replaceFirst('/original/', '/rewritten/'),
++      'headers': {'x-thumb-test': 'cfg'},
++    },
++  );
++  late Directory root;
++
++  setUpAll(() async {
++    root = await initCoverTestEnvironment(
++      server,
++      sources: [srcA, srcB, srcCfg],
++    );
++  });
++
++  tearDownAll(() => server.stop());
++
++  setUp(() => PaintingBinding.instance.imageCache.clear());
++
++  CachedImageProvider cover(
++    String url, {
++    String? cid = 'c1',
++    bool fb = false,
++  }) => CachedImageProvider(
++    url,
++    sourceKey: srcA.key,
++    cid: cid,
++    fallbackToLocalCover: fb,
++  );
++
++  group('CachedImageProvider', () {
++    testWidgets('a valid disk hit is shown without requests', (tester) async {
++      await tester.runAsync(() async {
++        const path = '/c/hit.png';
++        final url = server.url(path);
++        server.images[path] = png(10);
++        await CacheManager().writeCache(
++          thumbDiskKey(url, srcA.key, 'c1'),
++          png(10),
++        );
++
++        expect(await resolveOnce(cover(url)), isNull);
++        await Future<void>.delayed(settle);
++        expect(server.count(path), 0);
++      });
++    }, skip: !hasNativeHttp);
++
++    testWidgets('a memory hit needs neither the disk nor the network', (
++      tester,
++    ) async {
++      await tester.runAsync(() async {
++        const path = '/c/memory.png';
++        final url = server.url(path);
++        server.images[path] = png(11);
++        final key = thumbDiskKey(url, srcA.key, 'c1');
++        await CacheManager().writeCache(key, png(11));
++        final provider = cover(url);
++        final first = Resolution(provider);
++        expect(await first.result, isNull);
++        // Keep the image alive in memory, then remove the disk copy.
++        await CacheManager().delete(key);
++        expect(await resolveOnce(cover(url)), isNull);
++        first.dispose();
++        await Future<void>.delayed(settle);
++        expect(server.count(path), 0);
++        expect(await CacheManager().findCache(key), isNull);
++      });
++    }, skip: !hasNativeHttp);
++
++    testWidgets(
++      'a miss and an expired entry request once and are stored',
++      (tester) async {
++        await tester.runAsync(() async {
++          const missPath = '/c/miss.png';
++          final missUrl = server.url(missPath);
++          server.images[missPath] = png(20);
++          expect(await resolveOnce(cover(missUrl)), isNull);
++          expect(server.count(missPath), 1);
++          final stored = await CacheManager().findCache(
++            thumbDiskKey(missUrl, srcA.key, 'c1'),
++          );
++          expect(await stored!.readAsBytes(), png(20));
++
++          const expiredPath = '/c/expired.png';
++          final expiredUrl = server.url(expiredPath);
++          server.images[expiredPath] = png(30);
++          await CacheManager().writeCache(
++            thumbDiskKey(expiredUrl, srcA.key, 'c1'),
++            png(31),
++            -1000,
++          );
++          expect(await resolveOnce(cover(expiredUrl)), isNull);
++          expect(server.count(expiredPath), 1);
++          final refreshed = await CacheManager().findCache(
++            thumbDiskKey(expiredUrl, srcA.key, 'c1'),
++          );
++          expect(await refreshed!.readAsBytes(), png(30));
++        });
++      },
++      skip: !hasNativeHttp,
++    );
++
++    for (final (name, broken) in [
++      ('undecodable', corruptPng),
++      ('empty', Uint8List(0)),
++    ]) {
++      testWidgets(
++        'an $name entry is invalidated alone and a retry recovers',
++        (tester) async {
++          await tester.runAsync(() async {
++            final path = '/c/$name-recover.png';
++            final url = server.url(path);
++            final otherUrl = server.url('/c/$name-other.png');
++            server.images[path] = png(40);
++            final key = thumbDiskKey(url, srcA.key, 'c1');
++            final otherKey = thumbDiskKey(otherUrl, srcA.key, 'c1');
++            await CacheManager().writeCache(key, broken);
++            await CacheManager().writeCache(otherKey, png(41));
++
++            expect(await resolveOnce(cover(url)), isNotNull);
++            await Future<void>.delayed(settle);
++            expect(server.count(path), 0, reason: 'no automatic refetch');
++            expect(
++              await CacheManager().findCache(key),
++              isNull,
++              reason: 'the broken entry is invalidated',
++            );
++            expect(await CacheManager().findCache(otherKey), isNotNull);
++
++            expect(await resolveOnce(cover(url)), isNull, reason: 'retry');
++            expect(server.count(path), 1);
++
++            PaintingBinding.instance.imageCache.clear();
++            expect(await resolveOnce(cover(url)), isNull, reason: 'read again');
++            await Future<void>.delayed(settle);
++            expect(server.count(path), 1);
++          });
++        },
++        skip: !hasNativeHttp,
++      );
++    }
++
++    testWidgets('a broken download is not kept in the cache', (tester) async {
++      await tester.runAsync(() async {
++        const path = '/c/broken-download.png';
++        final url = server.url(path);
++        server.images[path] = corruptPng;
++        expect(await resolveOnce(cover(url)), isNotNull);
++        expect(
++          await CacheManager().findCache(thumbDiskKey(url, srcA.key, 'c1')),
++          isNull,
++        );
++        server.images[path] = png(42);
++        expect(await resolveOnce(cover(url)), isNull);
++        expect(server.count(path), 2);
++      });
++    }, skip: !hasNativeHttp);
++
++    testWidgets('invalidation keeps an entry repaired in the meantime', (
++      tester,
++    ) async {
++      await tester.runAsync(() async {
++        const path = '/c/repaired.png';
++        final url = server.url(path);
++        final key = thumbDiskKey(url, srcA.key, 'c1');
++        await CacheManager().writeCache(key, corruptPng);
++        // The bytes a failing load read from the broken entry ...
++        Uint8List? stale;
++        await for (final p in ImageDownloader.loadThumbnail(
++          url,
++          srcA.key,
++          'c1',
++        )) {
++          if (p.imageBytes != null) {
++            stale = p.imageBytes;
++            break;
++          }
++        }
++        // ... arrive after another request has stored a good image.
++        await CacheManager().writeCache(key, png(50));
++        // ignore: invalid_use_of_protected_member
++        await cover(url).onInvalidImageData(stale!);
++        final file = await CacheManager().findCache(key);
++        expect(await file!.readAsBytes(), png(50));
++      });
++    }, skip: !hasNativeHttp);
++
++    testWidgets('a broken local file is reported and never deleted', (
++      tester,
++    ) async {
++      await tester.runAsync(() async {
++        final file = File('${root.path}/plain_local.png');
++        await file.writeAsBytes(corruptPng);
++        final url = 'file://${file.path}';
++        await CacheManager().writeCache(thumbDiskKey(url, null), png(60));
++        expect(await resolveOnce(CachedImageProvider(url)), isNotNull);
++        expect(await file.exists(), isTrue);
++        expect(await file.readAsBytes(), corruptPng);
++        expect(
++          await CacheManager().findCache(thumbDiskKey(url, null)),
++          isNotNull,
++        );
++
++        await file.writeAsBytes(png(61));
++        expect(await resolveOnce(CachedImageProvider(url)), isNull);
++      });
++    });
++
++    testWidgets('the local cover fallback is used and never deleted', (
++      tester,
++    ) async {
++      await tester.runAsync(() async {
++        final type = ComicType.fromKey(srcA.key);
++        await addLocalComic(root, 'fb-ok', type, png(70));
++        final okUrl = server.url('/c/fallback-missing.png');
++        expect(await resolveOnce(cover(okUrl, cid: 'fb-ok', fb: true)), isNull);
++
++        final badCover = await addLocalComic(root, 'fb-bad', type, corruptPng);
++        final badUrl = server.url('/c/fallback-missing-2.png');
++        expect(
++          await resolveOnce(cover(badUrl, cid: 'fb-bad', fb: true)),
++          isNotNull,
++        );
++        expect(await badCover.readAsBytes(), corruptPng);
++      });
++    }, skip: !hasNativeHttp);
++
++    testWidgets(
++      'the same URL with another source or cid is kept apart',
++      (tester) async {
++        await tester.runAsync(() async {
++          const path = '/c/shared-url.png';
++          final url = server.url(path);
++          server.images[path] = png(80);
++          server.delay = const Duration(milliseconds: 200);
++          final results = await Future.wait([
++            resolveOnce(
++              CachedImageProvider(url, sourceKey: srcA.key, cid: '1'),
++            ),
++            resolveOnce(
++              CachedImageProvider(url, sourceKey: srcB.key, cid: '1'),
++            ),
++            resolveOnce(
++              CachedImageProvider(url, sourceKey: srcA.key, cid: '2'),
++            ),
++          ]);
++          server.delay = Duration.zero;
++          expect(results, [null, null, null]);
++          expect(server.count(path), 3);
++          for (final (s, c) in [(srcA, '1'), (srcB, '1'), (srcA, '2')]) {
++            expect(
++              await CacheManager().findCache(thumbDiskKey(url, s.key, c)),
++              isNotNull,
++            );
++          }
++        });
++      },
++      skip: !hasNativeHttp,
++    );
++
++    testWidgets(
++      'the source thumbnail config still rewrites the request',
++      (tester) async {
++        await tester.runAsync(() async {
++          final url = server.url('/original/cfg.png');
++          server.images['/rewritten/cfg.png'] = png(90);
++          final provider = CachedImageProvider(
++            url,
++            sourceKey: srcCfg.key,
++            cid: 'x',
++          );
++          expect(await resolveOnce(provider), isNull);
++          expect(server.count('/rewritten/cfg.png'), 1);
++          expect(server.count('/original/cfg.png'), 0);
++          final headers = server.requestHeaders['/rewritten/cfg.png']!;
++          expect(headers.value('x-thumb-test'), 'cfg');
++          expect(headers.value('user-agent'), isNotEmpty);
++          expect(
++            await CacheManager().findCache(thumbDiskKey(url, srcCfg.key, 'x')),
++            isNotNull,
++          );
++        });
++      },
++      skip: !hasNativeHttp,
++    );
++  });
++
++  group('HistoryImageProvider', () {
++    testWidgets('a valid disk hit is shown without requests', (tester) async {
++      await tester.runAsync(() async {
++        const path = '/h/hit.png';
++        final url = server.url(path);
++        server.images[path] = png(100);
++        await CacheManager().writeCache(
++          thumbDiskKey(url, srcA.key, 'h1'),
++          png(100),
++        );
++        final provider = HistoryImageProvider(testHistory('h1', srcA, url));
++        expect(await resolveOnce(provider), isNull);
++        await Future<void>.delayed(settle);
++        expect(server.count(path), 0);
++      });
++    }, skip: !hasNativeHttp);
++
++    for (final (name, broken) in [
++      ('undecodable', corruptPng),
++      ('empty', Uint8List(0)),
++    ]) {
++      testWidgets(
++        'an $name entry is invalidated alone and a retry recovers',
++        (tester) async {
++          await tester.runAsync(() async {
++            final path = '/h/$name-recover.png';
++            final url = server.url(path);
++            server.images[path] = png(110);
++            final key = thumbDiskKey(url, srcA.key, 'h-$name');
++            final otherKey = thumbDiskKey(
++              server.url('/h/$name-o.png'),
++              srcA.key,
++            );
++            await CacheManager().writeCache(key, broken);
++            await CacheManager().writeCache(otherKey, png(111));
++            final history = testHistory('h-$name', srcA, url);
++
++            expect(await resolveOnce(HistoryImageProvider(history)), isNotNull);
++            await Future<void>.delayed(settle);
++            expect(server.count(path), 0, reason: 'no automatic refetch');
++            expect(await CacheManager().findCache(key), isNull);
++            expect(await CacheManager().findCache(otherKey), isNotNull);
++
++            expect(await resolveOnce(HistoryImageProvider(history)), isNull);
++            expect(server.count(path), 1);
++          });
++        },
++        skip: !hasNativeHttp,
++      );
++    }
++
++    testWidgets('a local history cover is shown and never deleted', (
++      tester,
++    ) async {
++      await tester.runAsync(() async {
++        final before = server.total;
++        final type = ComicType.fromKey(srcB.key);
++        await addLocalComic(root, 'hl-ok', type, png(120));
++        final ok = testHistory('hl-ok', srcB, 'cover.png');
++        expect(await resolveOnce(HistoryImageProvider(ok)), isNull);
++
++        final badCover = await addLocalComic(root, 'hl-bad', type, corruptPng);
++        final bad = testHistory('hl-bad', srcB, 'cover.png');
++        expect(await resolveOnce(HistoryImageProvider(bad)), isNotNull);
++        expect(await badCover.readAsBytes(), corruptPng);
++        expect(server.total, before);
++      });
++    });
++  });
++}
+diff --git a/test/network/thumbnail_cover_queue_test.dart b/test/network/thumbnail_cover_queue_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..ee8fd33040e3c9f19eabf7902e5f1732bb1bc824
+--- /dev/null
++++ b/test/network/thumbnail_cover_queue_test.dart
+@@ -0,0 +1,346 @@
++// Cover (thumbnail) loading queue: concurrency limit, cache hits and local
++// files while the network queue is full, cancellation and failures.
++//
++// The server holds responses until the test releases them, so the order of
++// events is set by the test. A short fixed wait is used only where the test
++// checks that something does NOT happen (no extra request, no blocked load);
++// timeouts only stop a broken run from hanging.
++
++import 'dart:io';
++
++import 'package:flutter/foundation.dart' show FlutterError;
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/cache_manager.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/foundation/image_provider/history_image_provider.dart';
++
++import 'thumbnail_test_support.dart';
++
++/// Concurrency limit of cover network requests.
++const _limit = 8;
++
++void main() {
++  final server = CoverServer();
++  const quiet = Duration(milliseconds: 400);
++  final src = testSource('thumb_queue_src');
++  late Directory root;
++
++  setUpAll(() async {
++    root = await initCoverTestEnvironment(server, sources: [src]);
++  });
++
++  tearDownAll(() => server.stop());
++
++  setUp(() => PaintingBinding.instance.imageCache.clear());
++
++  CachedImageProvider cover(String path, {String cid = 'q'}) =>
++      CachedImageProvider(server.url(path), sourceKey: src.key, cid: cid);
++
++  List<String> paths(String prefix, int n, {int shade = 0}) {
++    return [
++      for (var i = 0; i < n; i++)
++        () {
++          final p = '/q/$prefix-$i.png';
++          server.images[p] = png(shade + i);
++          return p;
++        }(),
++    ];
++  }
++
++  /// All [_limit] slots are busy with held requests once this completes.
++  Future<List<Resolution>> fillQueue(String prefix, int n) async {
++    server.holdResponses = true;
++    final rs = [for (final p in paths(prefix, n)) Resolution(cover(p))];
++    await server.inflightAtLeast(_limit).timeout(const Duration(seconds: 20));
++    return rs;
++  }
++
++  /// ImageCache gives up evicted images after the next frame, as in the app;
++  /// only then is the load of a cancelled [Resolution] stopped.
++  Future<void> cancelEvicted(WidgetTester tester) async {
++    tester.binding.scheduleFrame();
++    await tester.pump();
++  }
++
++  /// Runs [body] while ignoring the stop errors BaseImageProvider reports
++  /// (silently, as in the app) for loads that were cancelled.
++  Future<void> ignoringStopErrors(Future<void> Function() body) async {
++    final previous = FlutterError.onError;
++    FlutterError.onError = (details) {
++      if (details.exception.toString().contains('ImageLoadingStopException')) {
++        return;
++      }
++      previous?.call(details);
++    };
++    try {
++      await body();
++    } finally {
++      FlutterError.onError = previous;
++    }
++  }
++
++  testWidgets('at most $_limit cover requests run at the same time', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      // A failed earlier test must not leave held requests behind.
++      await server.drain();
++      server.resetCounters();
++      final rs = await fillQueue('peak', 20);
++      await Future<void>.delayed(quiet);
++      final peakWhileHeld = server.peakInflight;
++      server.holdResponses = false;
++      server.releaseAll();
++      final results = await Future.wait(rs.map((r) => r.result));
++      expect(results, everyElement(isNull));
++      expect(peakWhileHeld, _limit);
++      expect(server.peakInflight, lessThanOrEqualTo(_limit));
++      expect(server.total, 20, reason: 'each cover is requested once');
++      for (final r in rs) {
++        r.dispose();
++      }
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets(
++    'cache hits and local files do not wait for a full queue',
++    (tester) async {
++      await tester.runAsync(() async {
++        // A failed earlier test must not leave held requests behind.
++        await server.drain();
++        final held = await fillQueue('busy', _limit + 4);
++        final hitPaths = paths('hit', 3, shade: 100);
++        for (final p in hitPaths) {
++          await CacheManager().writeCache(
++            thumbDiskKey(server.url(p), src.key, 'q'),
++            png(100),
++          );
++        }
++        final file = File('${root.path}/queue_local.png');
++        await file.writeAsBytes(png(7));
++        await CacheManager().writeCache(
++          thumbDiskKey(server.url('/q/hist.png'), src.key, 'qh'),
++          png(8),
++        );
++        final fast = [
++          for (final p in hitPaths) Resolution(cover(p)),
++          Resolution(CachedImageProvider('file://${file.path}')),
++          Resolution(
++            HistoryImageProvider(
++              testHistory('qh', src, server.url('/q/hist.png')),
++            ),
++          ),
++        ];
++        final before = server.total;
++        // Fails (times out) if these loads wait for a network slot.
++        final fastResults = await Future.wait(
++          fast.map((r) => r.result),
++        ).timeout(const Duration(seconds: 10));
++        expect(fastResults, everyElement(isNull));
++        expect(server.total, before, reason: 'no request for cached covers');
++        expect(server.heldCount, _limit, reason: 'network still blocked');
++
++        server.holdResponses = false;
++        server.releaseAll();
++        expect(
++          await Future.wait(held.map((r) => r.result)),
++          everyElement(isNull),
++        );
++        for (final r in [...held, ...fast]) {
++          r.dispose();
++        }
++      });
++    },
++    skip: !hasNativeHttp,
++  );
++
++  testWidgets('cancelled loads give their slots back', (tester) async {
++    await ignoringStopErrors(() async {
++      late List<Resolution> rs;
++      late List<Resolution> waiting;
++      late List<Resolution> cancelled;
++      await tester.runAsync(() async {
++        // A failed earlier test must not leave held requests behind.
++        await server.drain();
++        rs = await fillQueue('cancel', 16);
++        // Every load that will start without a free slot has reached the server.
++        await Future<void>.delayed(quiet);
++        final active = <Resolution>[];
++        waiting = <Resolution>[];
++        for (final r in rs) {
++          final path = Uri.parse((r.provider as CachedImageProvider).url).path;
++          (server.count(path) > 0 ? active : waiting).add(r);
++        }
++        expect(active, isNotEmpty);
++        // Cancel half of the running and half of the waiting loads.
++        cancelled = [...active.take(4), ...waiting.take(4)];
++        for (final r in cancelled) {
++          r.cancel();
++        }
++      });
++      await cancelEvicted(tester);
++      await tester.runAsync(() async {
++        server.holdResponses = false;
++        server.releaseAll();
++        final kept = rs.where((r) => !cancelled.contains(r)).toList();
++        expect(
++          await Future.wait(kept.map((r) => r.result)),
++          everyElement(isNull),
++        );
++        for (final r in waiting.take(4)) {
++          final path = Uri.parse((r.provider as CachedImageProvider).url).path;
++          expect(server.count(path), 0, reason: 'cancelled before its turn');
++        }
++        for (final r in kept) {
++          r.dispose();
++        }
++
++        // All slots are free again: a new batch fills the queue completely.
++        final again = await fillQueue('after-cancel', _limit);
++        server.holdResponses = false;
++        server.releaseAll();
++        expect(
++          await Future.wait(again.map((r) => r.result)),
++          everyElement(isNull),
++        );
++        for (final r in again) {
++          r.dispose();
++        }
++      });
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets(
++    'a shared request survives when one of its loads is cancelled',
++    (tester) async {
++      await ignoringStopErrors(() async {
++        late Resolution history;
++        late Resolution tile;
++        late String p;
++        await tester.runAsync(() async {
++          await server.drain();
++          p = paths('shared-cancel', 1).single;
++          final url = server.url(p);
++          server.holdResponses = true;
++          tile = Resolution(
++            CachedImageProvider(url, sourceKey: src.key, cid: 's'),
++          );
++          history = Resolution(
++            HistoryImageProvider(testHistory('s', src, url)),
++          );
++          await server.inflightAtLeast(1).timeout(const Duration(seconds: 20));
++          await Future<void>.delayed(quiet);
++          tile.cancel();
++        });
++        await cancelEvicted(tester);
++        await tester.runAsync(() async {
++          server.holdResponses = false;
++          server.releaseAll();
++          expect(await history.result, isNull);
++          expect(
++            tile.isDone,
++            isFalse,
++            reason: 'the cancelled tile shows nothing',
++          );
++          expect(server.count(p), 1);
++          history.dispose();
++        });
++      });
++    },
++    skip: !hasNativeHttp,
++  );
++
++  testWidgets(
++    'HTTP errors and broken responses release slots, cache nothing',
++    (tester) async {
++      await tester.runAsync(() async {
++        // A failed earlier test must not leave held requests behind.
++        await server.drain();
++        final failing = <String>[];
++        for (final code in [403, 404, 500]) {
++          for (var i = 0; i < 3; i++) {
++            final p = '/q/status-$code-$i.png';
++            server.statusCodes[p] = code;
++            failing.add(p);
++          }
++        }
++        for (var i = 0; i < 3; i++) {
++          final p = '/q/partial-$i.png';
++          server.images[p] = png(200 + i, width: 64, height: 64);
++          server.partial.add(p);
++          failing.add(p);
++        }
++        final good = paths('after-errors', 6, shade: 50);
++        final fails = [for (final p in failing) Resolution(cover(p))];
++        final oks = [for (final p in good) Resolution(cover(p))];
++        expect(
++          await Future.wait(oks.map((r) => r.result)),
++          everyElement(isNull),
++        );
++        expect(
++          await Future.wait(fails.map((r) => r.result)),
++          everyElement(isNotNull),
++        );
++        for (final p in failing) {
++          expect(
++            await CacheManager().findCache(
++              thumbDiskKey(server.url(p), src.key, 'q'),
++            ),
++            isNull,
++          );
++        }
++        for (final r in [...fails, ...oks]) {
++          r.dispose();
++        }
++
++        // No slot is lost: a new batch fills the queue completely.
++        final again = await fillQueue('after-errors-2', _limit);
++        server.holdResponses = false;
++        server.releaseAll();
++        expect(
++          await Future.wait(again.map((r) => r.result)),
++          everyElement(isNull),
++        );
++        for (final r in again) {
++          r.dispose();
++        }
++      });
++    },
++    skip: !hasNativeHttp,
++    timeout: const Timeout(Duration(minutes: 3)),
++  );
++
++  testWidgets('history and cover tiles of one comic share one request', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      // A failed earlier test must not leave held requests behind.
++      await server.drain();
++      final p = paths('dup', 1).single;
++      final url = server.url(p);
++      server.holdResponses = true;
++      final rs = [
++        Resolution(CachedImageProvider(url, sourceKey: src.key, cid: 'd')),
++        Resolution(HistoryImageProvider(testHistory('d', src, url))),
++        Resolution(
++          CachedImageProvider(
++            url,
++            sourceKey: src.key,
++            cid: 'd',
++            fallbackToLocalCover: true,
++          ),
++        ),
++      ];
++      await server.inflightAtLeast(1);
++      await Future<void>.delayed(quiet);
++      server.holdResponses = false;
++      server.releaseAll();
++      expect(await Future.wait(rs.map((r) => r.result)), everyElement(isNull));
++      expect(server.count(p), 1);
++      for (final r in rs) {
++        r.dispose();
++      }
++    });
++  }, skip: !hasNativeHttp);
++}
+diff --git a/test/network/thumbnail_test_support.dart b/test/network/thumbnail_test_support.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..239311a5b66d13457245dc3ae8ffa3b9bed17032
+--- /dev/null
++++ b/test/network/thumbnail_test_support.dart
+@@ -0,0 +1,399 @@
++// Shared fixtures for the cover / thumbnail tests and the queue benchmark.
++// Synthetic images only; no third-party covers, accounts or reading history.
++
++import 'dart:async';
++import 'dart:collection';
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter/foundation.dart';
++import 'package:flutter/painting.dart';
++import 'package:rhttp/rhttp.dart' show Rhttp;
++import 'package:venera/foundation/app.dart';
++import 'package:venera/foundation/comic_source/comic_source.dart';
++import 'package:venera/foundation/comic_type.dart';
++import 'package:venera/foundation/history.dart';
++import 'package:venera/foundation/local.dart';
++
++/// Directory of a host build of librhttp.so, as used by flutter_rust_bridge.
++/// Tests that need real HTTP are skipped when it is not provided; set
++/// FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR to run them.
++final String? nativeLibDir =
++    Platform.environment['FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR'];
++
++final bool hasNativeHttp =
++    nativeLibDir != null &&
++    File('$nativeLibDir${Platform.pathSeparator}librhttp.so').existsSync();
++
++/// A valid grayscale PNG built from scratch.
++Uint8List png(int shade, {int width = 8, int height = 8}) {
++  List<int> chunk(String type, List<int> data) {
++    final body = [...ascii.encode(type), ...data];
++    return [..._u32(data.length), ...body, ..._u32(_crc32(body))];
++  }
++
++  final raw = <int>[];
++  for (var y = 0; y < height; y++) {
++    raw.add(0);
++    for (var x = 0; x < width; x++) {
++      raw.add((shade + x + y) & 0xff);
++    }
++  }
++  return Uint8List.fromList([
++    0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, //
++    ...chunk('IHDR', [..._u32(width), ..._u32(height), 8, 0, 0, 0, 0]),
++    ...chunk('IDAT', zlib.encode(raw)),
++    ...chunk('IEND', const []),
++  ]);
++}
++
++List<int> _u32(int v) => [
++  v >> 24 & 0xff,
++  v >> 16 & 0xff,
++  v >> 8 & 0xff,
++  v & 0xff,
++];
++
++int _crc32(List<int> bytes) {
++  var crc = 0xffffffff;
++  for (final b in bytes) {
++    crc ^= b;
++    for (var k = 0; k < 8; k++) {
++      crc = crc & 1 != 0 ? 0xedb88320 ^ (crc >> 1) : crc >> 1;
++    }
++  }
++  return crc ^ 0xffffffff;
++}
++
++/// PNG signature followed by bytes that cannot be decoded.
++final Uint8List corruptPng = Uint8List.fromList([
++  ...png(0).sublist(0, 16),
++  ...List<int>.filled(64, 0x5a),
++]);
++
++/// How the server answers one path.
++enum Reply { image, status, partial }
++
++/// Local cover server: counts requests, tracks concurrency and can hold
++/// responses until the test releases them.
++class CoverServer {
++  HttpServer? _server;
++
++  final requests = <String, int>{};
++  final images = <String, Uint8List>{};
++  final statusCodes = <String, int>{};
++  final partial = <String>{};
++  final requestHeaders = <String, HttpHeaders>{};
++
++  /// Microseconds of [clock] at which each request for a path arrived.
++  final arrivals = <String, List<int>>{};
++
++  /// Shared clock for arrival times.
++  final Stopwatch clock = Stopwatch()..start();
++
++  /// Responses wait for [release] / [releaseAll] while this is true.
++  bool holdResponses = false;
++
++  /// Fixed delay before each response (after any hold).
++  Duration delay = Duration.zero;
++
++  final _held = Queue<Completer<void>>();
++
++  int inflight = 0;
++  int peakInflight = 0;
++  int total = 0;
++
++  final _inflightWaiters = <(int, Completer<void>)>[];
++  final _arrivalWaiters = <Completer<int>>[];
++
++  /// Completes with the [clock] time of the next request that arrives.
++  Future<int> nextArrival() {
++    final c = Completer<int>();
++    _arrivalWaiters.add(c);
++    return c.future;
++  }
++
++  Future<void> start() async {
++    _server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
++    _server!.listen(_handle);
++  }
++
++  Future<void> _handle(HttpRequest request) async {
++    final path = request.uri.path;
++    requests[path] = (requests[path] ?? 0) + 1;
++    requestHeaders[path] = request.headers;
++    (arrivals[path] ??= []).add(clock.elapsedMicroseconds);
++    total++;
++    final now = clock.elapsedMicroseconds;
++    for (final c in _arrivalWaiters) {
++      c.complete(now);
++    }
++    _arrivalWaiters.clear();
++    inflight++;
++    if (inflight > peakInflight) peakInflight = inflight;
++    _notifyInflight();
++    try {
++      if (holdResponses) {
++        final c = Completer<void>();
++        _held.add(c);
++        await c.future;
++      }
++      if (delay > Duration.zero) {
++        await Future<void>.delayed(delay);
++      }
++      final data = images[path];
++      final code = statusCodes[path];
++      if (code != null) {
++        request.response.statusCode = code;
++        request.response.write('error $code');
++        await request.response.close();
++      } else if (data == null) {
++        request.response.statusCode = HttpStatus.notFound;
++        await request.response.close();
++      } else if (partial.contains(path)) {
++        // Announces the full length, sends half and drops the connection.
++        request.response.headers.contentLength = data.length;
++        final socket = await request.response.detachSocket();
++        socket.add(data.sublist(0, data.length ~/ 2));
++        await socket.flush();
++        socket.destroy();
++      } else {
++        request.response.headers.contentLength = data.length;
++        request.response.add(data);
++        await request.response.close();
++      }
++    } catch (_) {
++      // The client may have gone away.
++    } finally {
++      inflight--;
++    }
++  }
++
++  void _notifyInflight() {
++    _inflightWaiters.removeWhere((w) {
++      if (inflight >= w.$1) {
++        w.$2.complete();
++        return true;
++      }
++      return false;
++    });
++  }
++
++  /// Completes once at least [n] requests are being served at the same time.
++  Future<void> inflightAtLeast(int n) {
++    if (inflight >= n) return Future.value();
++    final c = Completer<void>();
++    _inflightWaiters.add((n, c));
++    return c.future;
++  }
++
++  int get heldCount => _held.length;
++
++  /// Releases everything and completes once no request is being served.
++  Future<void> drain() async {
++    holdResponses = false;
++    delay = Duration.zero;
++    releaseAll();
++    while (inflight > 0) {
++      await Future<void>.delayed(const Duration(milliseconds: 10));
++    }
++  }
++
++  /// Releases the oldest held response.
++  void release() {
++    if (_held.isNotEmpty) _held.removeFirst().complete();
++  }
++
++  void releaseAll() {
++    while (_held.isNotEmpty) {
++      _held.removeFirst().complete();
++    }
++  }
++
++  void resetCounters() {
++    peakInflight = inflight;
++    total = 0;
++  }
++
++  /// Without a running server the URL points at an unused port.
++  String url(String path) => 'http://127.0.0.1:${_server?.port ?? 9}$path';
++
++  int count(String path) => requests[path] ?? 0;
++
++  Future<void> stop() async {
++    releaseAll();
++    await _server?.close(force: true);
++  }
++}
++
++/// Starts resolving [provider]; the returned handle reports the outcome.
++class Resolution {
++  Resolution(this.provider, {this.clock}) {
++    startUs = clock?.elapsedMicroseconds;
++    stream = provider.resolve(ImageConfiguration.empty);
++    _listener = ImageStreamListener(
++      (info, _) {
++        info.dispose();
++        doneUs ??= clock?.elapsedMicroseconds;
++        if (!_done.isCompleted) _done.complete(null);
++      },
++      onError: (error, _) {
++        doneUs ??= clock?.elapsedMicroseconds;
++        if (!_done.isCompleted) _done.complete(error);
++      },
++    );
++    stream.addListener(_listener);
++  }
++
++  final ImageProvider provider;
++
++  /// Optional clock for [startUs] and [doneUs], in microseconds.
++  final Stopwatch? clock;
++  int? startUs;
++  int? doneUs;
++  late final ImageStream stream;
++  late final ImageStreamListener _listener;
++  final _done = Completer<Object?>();
++
++  bool get isDone => _done.isCompleted;
++
++  /// Null on success, otherwise the reported error.
++  Future<Object?> get result =>
++      _done.future.timeout(const Duration(seconds: 60));
++
++  /// Stops listening and evicts the pending image, which cancels its load the
++  /// way an image cache eviction does in the app.
++  void cancel() {
++    stream.removeListener(_listener);
++    PaintingBinding.instance.imageCache.evict(provider);
++  }
++
++  void dispose() => stream.removeListener(_listener);
++}
++
++/// Resolves [provider] and returns null on success or the reported error.
++Future<Object?> resolveOnce(ImageProvider provider) async {
++  final r = Resolution(provider);
++  try {
++    return await r.result;
++  } finally {
++    r.dispose();
++    // Lets the provider evict a failed image before a retry.
++    await Future<void>.delayed(Duration.zero);
++  }
++}
++
++/// A comic source with only a key and, optionally, a thumbnail config.
++ComicSource testSource(
++  String key, {
++  Map<String, dynamic> Function(String url)? thumbnailConfig,
++}) {
++  return ComicSource(
++    key, // name
++    key, // key
++    null, // account
++    null, // categoryData
++    null, // categoryComicsData
++    null, // favoriteData
++    const [], // explorePages
++    null, // searchPageData
++    null, // settings
++    null, // loadComicInfo
++    null, // loadComicThumbnail
++    null, // loadComicPages
++    null, // getImageLoadingConfig
++    thumbnailConfig, // getThumbnailLoadingConfig
++    '', // filePath
++    '', // url
++    '1.0.0', // version
++    null, // commentsLoader
++    null, // sendCommentFunc
++    null, // chapterCommentsLoader
++    null, // sendChapterCommentFunc
++    null, // likeOrUnlikeComic
++    null, // voteCommentFunc
++    null, // likeCommentFunc
++    null, // idMatcher
++    null, // translations
++    null, // handleClickTagEvent
++    null, // onTagSuggestionSelected
++    null, // linkHandler
++    false, // enableTagsSuggestions
++    false, // enableTagsTranslate
++    null, // starRatingFunc
++    null, // archiveDownloader
++  );
++}
++
++/// Points App at a fresh temporary data directory, opens the local comic
++/// database and starts [server] when real HTTP is available.
++///
++/// LocalManager.init() opens its database first and then waits for the JS
++/// engine, which a host test does not have, so only the database part is
++/// awaited here.
++Future<Directory> initCoverTestEnvironment(
++  CoverServer server, {
++  List<ComicSource> sources = const [],
++}) async {
++  final dir = await Directory.systemTemp.createTemp('yorunote_cover_test');
++  App.cachePath = '${dir.path}/cache';
++  App.dataPath = '${dir.path}/data';
++  await Directory(App.dataPath).create(recursive: true);
++  for (final s in sources) {
++    ComicSourceManager().add(s);
++  }
++  unawaited(LocalManager().init().catchError((_) {}));
++  // The database is opened synchronously at the start of init().
++  await Future<void>.delayed(Duration.zero);
++  if (hasNativeHttp) {
++    await Rhttp.init();
++    await server.start();
++  }
++  return dir;
++}
++
++/// Adds a local comic whose cover file holds [coverBytes].
++Future<File> addLocalComic(
++  Directory root,
++  String id,
++  ComicType type,
++  Uint8List coverBytes,
++) async {
++  final dir = Directory('${root.path}/local_comics/${type.value}_$id');
++  await dir.create(recursive: true);
++  final cover = File('${dir.path}/cover.png');
++  await cover.writeAsBytes(coverBytes);
++  await LocalManager().add(
++    LocalComic(
++      id: id,
++      title: 'synthetic $id',
++      subtitle: '',
++      tags: const [],
++      directory: dir.path,
++      chapters: null,
++      cover: 'cover.png',
++      comicType: type,
++      downloadedChapters: [],
++      createdAt: DateTime(2026),
++    ),
++  );
++  return cover;
++}
++
++/// A reading history entry of a synthetic comic.
++History testHistory(String id, ComicSource source, String cover) {
++  return History.fromMap({
++    'type': source.intKey,
++    'time': 0,
++    'title': 'synthetic $id',
++    'subtitle': '',
++    'cover': cover,
++    'ep': 1,
++    'page': 1,
++    'id': id,
++  });
++}
++
++/// Disk cache key used by ImageDownloader.loadThumbnail.
++String thumbDiskKey(String url, String? sourceKey, [String? cid]) =>
++    "$url@$sourceKey${cid != null ? '@$cid' : ''}";
+diff --git a/tool/thumbnail_bench/mutation_check.py b/tool/thumbnail_bench/mutation_check.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..20c3e9de5c03a454177cc5643e739a377d8af2b0
+--- /dev/null
++++ b/tool/thumbnail_bench/mutation_check.py
+@@ -0,0 +1,162 @@
++#!/usr/bin/env python3
++"""Mutation check for the cover cache / queue protections.
++
++Applies one mutation at a time to a scratch copy of the candidate, runs the
++related tests and records whether they fail (the mutation is "killed").
++The copy is restored after every mutation; nothing is kept.
++
++Usage: python3 -I mutation_check.py <scratch_repo> <out.json>
++Requires flutter on PATH and FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR.
++"""
++import json
++import pathlib
++import subprocess
++import sys
++import time
++
++REPO = pathlib.Path(sys.argv[1]).resolve()
++OUT = pathlib.Path(sys.argv[2]).resolve()
++
++IMAGES = "lib/network/images.dart"
++LIMITER = "lib/network/request_limiter.dart"
++CACHED = "lib/foundation/image_provider/cached_image.dart"
++HISTORY = "lib/foundation/image_provider/history_image_provider.dart"
++T_CACHE = "test/network/thumbnail_cover_cache_test.dart"
++T_QUEUE = "test/network/thumbnail_cover_queue_test.dart"
++T_LIMIT = "test/network/request_limiter_test.dart"
++
++MUTANTS = [
++    {
++        "id": "M1_invalidate_without_byte_check",
++        "why": "invalidation must not delete an entry repaired in the meantime",
++        "file": IMAGES,
++        "old": "      if (!listEquals(await file.readAsBytes(), data)) {\n        return;\n      }\n",
++        "new": "",
++        "tests": [T_CACHE],
++    },
++    {
++        "id": "M2_cached_provider_default_invalidation",
++        "why": "CachedImageProvider must invalidate the real disk key",
++        "file": CACHED,
++        "old": "  @override\n  Future<void> onInvalidImageData(Uint8List data) =>\n      ImageDownloader.invalidateCoverCache(data);\n",
++        "new": "",
++        "tests": [T_CACHE],
++    },
++    {
++        "id": "M3_history_provider_default_invalidation",
++        "why": "HistoryImageProvider must invalidate the real disk key",
++        "file": HISTORY,
++        "old": "  @override\n  Future<void> onInvalidImageData(Uint8List data) =>\n      ImageDownloader.invalidateCoverCache(data);\n",
++        "new": "",
++        "tests": [T_CACHE],
++    },
++    {
++        "id": "M4_limit_9",
++        "why": "explicit limit of 8 concurrent cover requests",
++        "file": IMAGES,
++        "old": "static const maxCoverRequests = 8;",
++        "new": "static const maxCoverRequests = 9;",
++        "tests": [T_QUEUE, T_LIMIT],
++    },
++    {
++        "id": "M5_release_without_handoff",
++        "why": "a released slot must be handed to the next waiter (event driven)",
++        "file": LIMITER,
++        "old": "      _active--;\n      _grantNext();\n",
++        "new": "      _active--;\n",
++        "tests": [T_QUEUE, T_LIMIT],
++    },
++    {
++        "id": "M6_grant_cancelled_waiters",
++        "why": "cancelled waiters must be skipped without taking a slot",
++        "file": LIMITER,
++        "old": "      if (waiter.cancelled) {",
++        "new": "      if (false && waiter.cancelled) {",
++        "tests": [T_QUEUE, T_LIMIT],
++    },
++    {
++        "id": "M7_cache_hit_waits_for_slot",
++        "why": "valid cache hits must not wait for a network slot",
++        "file": IMAGES,
++        "old": "    final cacheKey = thumbnailCacheKey(url, sourceKey, cid);\n    final cache = await _readCoverCache(cacheKey);\n    if (cache != null) {\n      return cache;\n    }\n    var load = _coverLoads[cacheKey];",
++        "new": "    final cacheKey = thumbnailCacheKey(url, sourceKey, cid);\n    final r0 = await coverRequestLimiter.acquire();\n    Uint8List? cache;\n    try {\n      cache = await _readCoverCache(cacheKey);\n    } finally {\n      r0();\n    }\n    if (cache != null) {\n      return cache;\n    }\n    var load = _coverLoads[cacheKey];",
++        "tests": [T_QUEUE],
++    },
++    {
++        "id": "M8_no_request_sharing",
++        "why": "loads of the same cache key share one request",
++        "file": IMAGES,
++        "old": "    var load = _coverLoads[cacheKey];\n    if (load != null) {",
++        "new": "    var load = _coverLoads[cacheKey];\n    if (false && load != null) {",
++        "tests": [T_QUEUE],
++    },
++    {
++        "id": "M9_abort_when_any_consumer_leaves",
++        "why": "one cancelled load must not abort a request others still use",
++        "file": IMAGES,
++        "old": "  bool isCancelled() => consumers.every((c) => c.isCancelled());",
++        "new": "  bool isCancelled() => consumers.any((c) => c.isCancelled());",
++        "tests": [T_QUEUE],
++    },
++    {
++        "id": "M10_release_only_on_success",
++        "why": "errors must give the slot back",
++        "file": IMAGES,
++        "old": "      _coverCacheKeys[result] = cacheKey;\n      return result;\n    } finally {\n      release();\n    }",
++        "new": "      _coverCacheKeys[result] = cacheKey;\n      release();\n      return result;\n    } finally {\n    }",
++        "tests": [T_QUEUE],
++    },
++]
++
++
++def run_tests(tests):
++    t0 = time.time()
++    p = subprocess.run(
++        ["flutter", "test", "--no-pub", *tests],
++        cwd=REPO,
++        capture_output=True,
++        text=True,
++        timeout=900,
++    )
++    tail = [l for l in p.stdout.splitlines() if l.strip()][-1:] or [""]
++    return p.returncode, round(time.time() - t0, 1), tail[0][-200:]
++
++
++def main():
++    results = []
++    for m in MUTANTS:
++        path = REPO / m["file"]
++        original = path.read_text()
++        if original.count(m["old"]) != 1:
++            results.append({**m, "status": "NOT_APPLIED (pattern not unique)"})
++            continue
++        path.write_text(original.replace(m["old"], m["new"]))
++        try:
++            code, secs, tail = run_tests(m["tests"])
++        except subprocess.TimeoutExpired:
++            code, secs, tail = "timeout", 900, "timeout"
++        finally:
++            path.write_text(original)
++        killed = code != 0
++        results.append({
++            "id": m["id"],
++            "why": m["why"],
++            "file": m["file"],
++            "tests": m["tests"],
++            "exit_code": code,
++            "seconds": secs,
++            "last_line": tail,
++            "status": "KILLED" if killed else "SURVIVED",
++        })
++        print(m["id"], results[-1]["status"], code, secs, flush=True)
++    # Sanity: the unmutated copy passes the same tests.
++    code, secs, tail = run_tests([T_CACHE, T_QUEUE, T_LIMIT])
++    OUT.write_text(json.dumps(
++        {"unmutated_exit_code": code, "unmutated_last_line": tail,
++         "mutants": results},
++        indent=2, ensure_ascii=False))
++    print("unmutated", code, tail)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tool/thumbnail_bench/thumbnail_queue_bench_test.dart b/tool/thumbnail_bench/thumbnail_queue_bench_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..b78953ae548e435c37da610af1394073d3f65867
+--- /dev/null
++++ b/tool/thumbnail_bench/thumbnail_queue_bench_test.dart
+@@ -0,0 +1,342 @@
++// Host benchmark of cover (thumbnail) loading through ImageProvider.resolve.
++//
++// Run explicitly (it is not part of `flutter test` under test/):
++//   FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR=<dir of librhttp.so> \
++//   THUMB_BENCH_OUT=<file.json> THUMB_BENCH_LABEL=<label> \
++//   flutter test --no-pub tool/thumbnail_bench/thumbnail_queue_bench_test.dart
++//
++// Only public provider APIs and ImageDownloader.loadThumbnail are used, so the
++// same file runs unchanged against the baseline and the candidate. Results are
++// host (x86_64 Linux, loopback HTTP) timings; they say nothing about frame
++// rate or power use on a phone or tablet.
++
++import 'dart:convert';
++import 'dart:io';
++
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/cache_manager.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/foundation/image_provider/history_image_provider.dart';
++import 'package:venera/network/images.dart';
++
++import '../../test/network/thumbnail_test_support.dart';
++
++const _warmup = 1;
++const _samples = 7;
++const _latency = Duration(milliseconds: 40);
++
++double _ms(int us) => us / 1000.0;
++
++Map<String, dynamic> _stats(List<double> xs) {
++  if (xs.isEmpty) return {'n': 0};
++  final s = [...xs]..sort();
++  double pct(double p) {
++    final i = (p * (s.length - 1)).round();
++    return s[i];
++  }
++
++  return {
++    'n': s.length,
++    'median': pct(0.5),
++    'p95': pct(0.95),
++    'min': s.first,
++    'max': s.last,
++  };
++}
++
++void main() {
++  final server = CoverServer();
++  final src = testSource('thumb_bench_src');
++  final out = Platform.environment['THUMB_BENCH_OUT'];
++  final label = Platform.environment['THUMB_BENCH_LABEL'] ?? 'unlabelled';
++  final cover = png(1, width: 160, height: 240);
++  final results = <String, dynamic>{
++    'label': label,
++    'samples': _samples,
++    'warmup': _warmup,
++    'server_latency_ms': _latency.inMilliseconds,
++    'fixture': 'synthetic grayscale PNG 160x240, ${cover.length} bytes',
++    'platform': '${Platform.operatingSystem} ${Platform.version}',
++    'scenarios': <String, dynamic>{},
++  };
++  var run = 0;
++
++  setUpAll(() async {
++    await initCoverTestEnvironment(server, sources: [src]);
++  });
++
++  tearDownAll(() async {
++    await server.stop();
++    if (out != null) {
++      await File(
++        out,
++      ).writeAsString(const JsonEncoder.withIndent('  ').convert(results));
++    }
++  });
++
++  String path(String scenario, int i) => '/b/${run++}/$scenario/$i.png';
++
++  CachedImageProvider cp(String p) =>
++      CachedImageProvider(server.url(p), sourceKey: src.key, cid: 'b');
++
++  /// Runs [body] _warmup + _samples times; returns the measured samples.
++  Future<List<Map<String, dynamic>>> repeat(
++    Future<Map<String, dynamic>> Function() body,
++  ) async {
++    final samples = <Map<String, dynamic>>[];
++    for (var i = 0; i < _warmup + _samples; i++) {
++      PaintingBinding.instance.imageCache.clear();
++      await server.drain();
++      final r = await body();
++      if (i >= _warmup) samples.add(r);
++    }
++    return samples;
++  }
++
++  testWidgets('cold grid: 32 misses at once', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.delay = _latency;
++        server.resetCounters();
++        final ps = [for (var i = 0; i < 32; i++) path('cold', i)];
++        for (final p in ps) {
++          server.images[p] = cover;
++        }
++        final t0 = server.clock.elapsedMicroseconds;
++        final rs = [for (final p in ps) Resolution(cp(p), clock: server.clock)];
++        final errors = await Future.wait(rs.map((r) => r.result));
++        final waits = <double>[];
++        final done = <double>[];
++        for (var i = 0; i < rs.length; i++) {
++          final arrival = server.arrivals[Uri.parse(server.url(ps[i])).path]!;
++          waits.add(_ms(arrival.first - rs[i].startUs!));
++          done.add(_ms(rs[i].doneUs! - rs[i].startUs!));
++        }
++        for (final r in rs) {
++          r.dispose();
++        }
++        return {
++          'errors': errors.where((e) => e != null).length,
++          'http_requests': server.total,
++          'peak_inflight': server.peakInflight,
++          'first_display_ms': done.reduce((a, b) => a < b ? a : b),
++          'all_done_ms': _ms(server.clock.elapsedMicroseconds - t0),
++          'queue_wait_ms': waits,
++          'completion_ms': done,
++        };
++      });
++      results['scenarios']['cold_grid_32'] = {
++        'raw': raw,
++        'http_requests': raw.map((r) => r['http_requests']).toList(),
++        'peak_inflight': raw.map((r) => r['peak_inflight']).toList(),
++        'errors': raw.map((r) => r['errors']).toList(),
++        'first_display_ms': _stats([
++          for (final r in raw) r['first_display_ms'] as double,
++        ]),
++        'all_done_ms': _stats([
++          for (final r in raw) r['all_done_ms'] as double,
++        ]),
++        'queue_wait_ms': _stats([
++          for (final r in raw) ...(r['queue_wait_ms'] as List<double>),
++        ]),
++        'completion_ms': _stats([
++          for (final r in raw) ...(r['completion_ms'] as List<double>),
++        ]),
++      };
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('cache hits while the network queue is full', (tester) async {
++    await tester.runAsync(() async {
++      const holdFor = Duration(milliseconds: 1500);
++      final raw = await repeat(() async {
++        server.resetCounters();
++        server.holdResponses = true;
++        final busy = [for (var i = 0; i < 12; i++) path('busy', i)];
++        for (final p in busy) {
++          server.images[p] = cover;
++        }
++        final hits = [for (var i = 0; i < 16; i++) path('hit', i)];
++        for (final p in hits) {
++          await CacheManager().writeCache(
++            thumbDiskKey(server.url(p), src.key, 'b'),
++            cover,
++          );
++        }
++        final held = [for (final p in busy) Resolution(cp(p))];
++        await server.inflightAtLeast(8).timeout(const Duration(seconds: 20));
++        final rs = [
++          for (final p in hits) Resolution(cp(p), clock: server.clock),
++        ];
++        final t0 = server.clock.elapsedMicroseconds;
++        await Future<void>.delayed(holdFor);
++        final doneWhileHeld = rs.where((r) => r.isDone).length;
++        server.holdResponses = false;
++        server.releaseAll();
++        final errors = await Future.wait(rs.map((r) => r.result));
++        await Future.wait(held.map((r) => r.result));
++        final lat = [for (final r in rs) _ms(r.doneUs! - r.startUs!)];
++        for (final r in [...held, ...rs]) {
++          r.dispose();
++        }
++        return {
++          'errors': errors.where((e) => e != null).length,
++          'hits_done_while_network_held': doneWhileHeld,
++          'hit_requests': [
++            for (final p in hits) server.count(p),
++          ].fold<int>(0, (a, b) => a + b),
++          'network_held_ms': _ms(server.clock.elapsedMicroseconds - t0),
++          'hit_completion_ms': lat,
++        };
++      });
++      results['scenarios']['cache_hits_with_full_queue'] = {
++        'raw': raw,
++        'hits_total_per_sample': 16,
++        'hits_done_while_network_held': [
++          for (final r in raw) r['hits_done_while_network_held'],
++        ],
++        'hit_http_requests': [for (final r in raw) r['hit_requests']],
++        'hit_completion_ms': _stats([
++          for (final r in raw) ...(r['hit_completion_ms'] as List<double>),
++        ]),
++      };
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('slot hand-off after one response', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.resetCounters();
++        server.holdResponses = true;
++        final ps = [for (var i = 0; i < 16; i++) path('handoff', i)];
++        for (final p in ps) {
++          server.images[p] = cover;
++        }
++        final rs = [for (final p in ps) Resolution(cp(p))];
++        await server.inflightAtLeast(8).timeout(const Duration(seconds: 20));
++        await Future<void>.delayed(const Duration(milliseconds: 300));
++        final handoff = <double>[];
++        for (var k = 0; k < 6; k++) {
++          final next = server.nextArrival();
++          final t = server.clock.elapsedMicroseconds;
++          server.release();
++          // Event driven: completes when the next queued request arrives.
++          final arrival = await next.timeout(const Duration(seconds: 10));
++          handoff.add(_ms(arrival - t));
++        }
++        server.holdResponses = false;
++        server.releaseAll();
++        final errors = await Future.wait(rs.map((r) => r.result));
++        for (final r in rs) {
++          r.dispose();
++        }
++        return {
++          'errors': errors.where((e) => e != null).length,
++          'handoff_ms': handoff,
++        };
++      });
++      results['scenarios']['slot_handoff'] = {
++        'raw': raw,
++        'handoff_ms': _stats([
++          for (final r in raw) ...(r['handoff_ms'] as List<double>),
++        ]),
++      };
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('history and cover tiles of the same comics', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.delay = _latency;
++        server.resetCounters();
++        final ps = [for (var i = 0; i < 10; i++) path('dup', i)];
++        final rs = <Resolution>[];
++        for (var i = 0; i < ps.length; i++) {
++          server.images[ps[i]] = cover;
++          final url = server.url(ps[i]);
++          rs.add(
++            Resolution(
++              CachedImageProvider(url, sourceKey: src.key, cid: 'd$i'),
++            ),
++          );
++          rs.add(
++            Resolution(HistoryImageProvider(testHistory('d$i', src, url))),
++          );
++        }
++        final errors = await Future.wait(rs.map((r) => r.result));
++        for (final r in rs) {
++          r.dispose();
++        }
++        return {
++          'errors': errors.where((e) => e != null).length,
++          'http_requests': server.total,
++          'distinct_covers': ps.length,
++        };
++      });
++      results['scenarios']['history_and_cover_same_comic'] = {
++        'raw': raw,
++        'http_requests': [for (final r in raw) r['http_requests']],
++      };
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('valid cache hit: provider path vs full stream', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.resetCounters();
++        final p1 = path('hit-provider', 0);
++        final p2 = path('hit-stream', 0);
++        for (final p in [p1, p2]) {
++          server.images[p] = cover;
++          await CacheManager().writeCache(
++            thumbDiskKey(server.url(p), src.key, 'b'),
++            cover,
++          );
++        }
++        final err = await resolveOnce(cp(p1));
++        var yields = 0;
++        await for (final e in ImageDownloader.loadThumbnail(
++          server.url(p2),
++          src.key,
++          'b',
++        )) {
++          if (e.imageBytes != null) yields++;
++        }
++        await Future<void>.delayed(const Duration(milliseconds: 300));
++        return {
++          'provider_error': err?.toString(),
++          'provider_http_requests': server.count(p1),
++          'full_stream_http_requests': server.count(p2),
++          'full_stream_image_events': yields,
++        };
++      });
++      results['scenarios']['cache_hit_paths'] = {'raw': raw};
++    });
++  }, skip: !hasNativeHttp);
++
++  testWidgets('broken cache entries: first load and one retry', (tester) async {
++    await tester.runAsync(() async {
++      final raw = await repeat(() async {
++        server.resetCounters();
++        final ps = [for (var i = 0; i < 6; i++) path('broken', i)];
++        for (var i = 0; i < ps.length; i++) {
++          server.images[ps[i]] = cover;
++          await CacheManager().writeCache(
++            thumbDiskKey(server.url(ps[i]), src.key, 'b'),
++            i.isEven ? corruptPng : <int>[],
++          );
++        }
++        final first = await Future.wait(ps.map((p) => resolveOnce(cp(p))));
++        final retry = await Future.wait(ps.map((p) => resolveOnce(cp(p))));
++        return {
++          'first_load_errors': first.where((e) => e != null).length,
++          'retry_errors': retry.where((e) => e != null).length,
++          'http_requests': server.total,
++          'entries': ps.length,
++        };
++      });
++      results['scenarios']['broken_cache_retry'] = {'raw': raw};
++    });
++  }, skip: !hasNativeHttp);
++}

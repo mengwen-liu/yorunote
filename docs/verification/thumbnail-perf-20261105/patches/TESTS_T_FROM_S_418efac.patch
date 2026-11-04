@@ -1,0 +1,420 @@
+diff --git a/.github/workflows/phase1a-android-baseline.yml b/.github/workflows/phase1a-android-baseline.yml
+index 759110fe45ae40d113f7e51b970a5a80cdd8f8ab..345fd5081bafbeb6b3ce93030d7af3a5c465a4ea 100644
+--- a/.github/workflows/phase1a-android-baseline.yml
++++ b/.github/workflows/phase1a-android-baseline.yml
+@@ -1,11 +1,13 @@
+ name: Phase1A Android Baseline
+-run-name: Yorunote ARM64 Profile APK (fixed commit a789d2a)
++run-name: Yorunote thumbnail-perf ARM64 Profile APK (fixed commit 418efac)
+ 
+ # Manual-only (workflow_dispatch). No inputs: the application source commit is
+ # fixed below and cannot be changed at dispatch time. This copy of the file is
+-# valid ONLY on branch claude/yorunote-arm64-ci-20261104 (the job is skipped on
+-# any other ref). Build + static APK checks only; it does NOT provide Android
+-# runtime acceptance. Disposable test signing key; no repository secrets.
++# valid ONLY on branch claude/yorunote-thumbnail-perf-20261105 (the job is
++# skipped on any other ref). Host tests (with a host librhttp built from the
++# locked rhttp sources) + analyzer diagnostics check + build + static APK
++# checks only; it does NOT provide Android runtime acceptance. Disposable test
++# signing key; no repository secrets.
+ on:
+   workflow_dispatch: {}
+ 
+@@ -13,7 +15,7 @@ permissions:
+   contents: read
+ 
+ concurrency:
+-  group: yorunote-arm64-profile-ci
++  group: yorunote-thumbnail-perf-ci
+   cancel-in-progress: false
+ 
+ defaults:
+@@ -21,11 +23,17 @@ defaults:
+     shell: bash   # GitHub expands this to: bash --noprofile --norc -eo pipefail {0}
+ 
+ env:
+-  BASELINE_SHA: a789d2a091c94d35f3c9ce9f2c9103c22383b922
+-  BASELINE_TREE: f95c10f0e480b91c8cae60eb0e1a7cce6c413086
++  # App/test source commit S of the thumbnail-perf round (not this workflow commit).
++  BASELINE_SHA: 418efacd0bb03e1da180ff105c4566821a4e69fd
++  BASELINE_TREE: bd2f77027cdd152682dadae4a1abec0335d77908
+   BASELINE_LOCK_BLOB: c061e4fc0057646a0a5561dbc607114c00e44bfb
+   BASELINE_PUBSPEC_BLOB: 489d6acd5fcd2fc5979205db9b877c9e1bf1761b
+-  APK_BASENAME: Yorunote_a789d2a_arm64_profile
++  IMAGES_DART_BLOB: f29e803f4de5398c0f99857286166eb2f095f534
++  LIMITER_DART_BLOB: 14c2f33c1882fd58aad2166f6cf243cd1f7ad2f5
++  APK_BASENAME: Yorunote_418efac_thumbnail_perf_arm64_profile
++  RHTTP_VERSION: '0.15.1'
++  RHTTP_CARGO_LOCK_SHA256: 232c3f91d09446ff821cb15f2d86b15934da29e6395e856eb3afd8571eff5eb4
++  EXPECTED_TEST_COUNT: '313'
+   FLUTTER_VERSION: '3.41.4'
+   FLUTTER_REVISION_PREFIX: ff37bef603
+   DART_VERSION: '3.11.1'
+@@ -54,9 +62,9 @@ env:
+ jobs:
+   android-arm64-baseline:
+     name: Yorunote Android ARM64 Profile build
+-    if: github.repository == 'mengwen-liu/yorunote' && github.ref == 'refs/heads/claude/yorunote-arm64-ci-20261104'
++    if: github.repository == 'mengwen-liu/yorunote' && github.ref == 'refs/heads/claude/yorunote-thumbnail-perf-20261105'
+     runs-on: ubuntu-24.04   # ubuntu-22.04 images are in deprecation (see audit report)
+-    timeout-minutes: 60
++    timeout-minutes: 75
+     steps:
+       - name: Init evidence directories and helpers
+         run: |
+@@ -113,10 +121,10 @@ jobs:
+           } > "$EVID/context.txt"
+           . "$P/lib.sh"; disk_snapshot "start"
+ 
+-      - name: Checkout fixed application baseline
++      - name: Checkout fixed application source (commit S)
+         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+         with:
+-          ref: a789d2a091c94d35f3c9ce9f2c9103c22383b922
++          ref: 418efacd0bb03e1da180ff105c4566821a4e69fd
+           fetch-depth: 1
+           fetch-tags: false
+           persist-credentials: false
+@@ -128,6 +136,8 @@ jobs:
+           [ "$(git rev-parse 'HEAD^{tree}')" = "$BASELINE_TREE" ] || { echo "::error::tree mismatch"; exit 1; }
+           [ "$(git rev-parse HEAD:pubspec.lock)" = "$BASELINE_LOCK_BLOB" ] || { echo "::error::pubspec.lock blob mismatch"; exit 1; }
+           [ "$(git rev-parse HEAD:pubspec.yaml)" = "$BASELINE_PUBSPEC_BLOB" ] || { echo "::error::pubspec.yaml blob mismatch"; exit 1; }
++          [ "$(git rev-parse HEAD:lib/network/images.dart)" = "$IMAGES_DART_BLOB" ] || { echo "::error::images.dart blob mismatch"; exit 1; }
++          [ "$(git rev-parse HEAD:lib/network/request_limiter.dart)" = "$LIMITER_DART_BLOB" ] || { echo "::error::request_limiter.dart blob mismatch"; exit 1; }
+           grep -Eq "^[[:space:]]+flutter:[[:space:]]*${FLUTTER_VERSION}[[:space:]]*$" pubspec.yaml || { echo "::error::pubspec flutter pin is not ${FLUTTER_VERSION}"; exit 1; }
+           [ -z "$(git status --porcelain)" ] || { echo "::error::working tree not clean after checkout"; exit 1; }
+           {
+@@ -281,10 +291,66 @@ jobs:
+           run_logged flutter_pub_get "$LOGS/03_pub_get.log" flutter pub get --enforce-lockfile
+           disk_snapshot "after-pub-get"
+ 
+-      - name: Brand regression tests (test/brand only)
++      - name: Build host librhttp from the locked rhttp sources (for real-HTTP tests)
+         run: |
+           . "$PHASE/lib.sh"
+-          run_logged flutter_test_brand "$LOGS/05_test_brand.log" flutter test --no-pub test/brand
++          RS="$PUB_CACHE/hosted/pub.dev/rhttp-${RHTTP_VERSION}/rust"
++          [ -f "$RS/Cargo.lock" ] || { echo "::error::rhttp ${RHTTP_VERSION} sources not found in pub cache"; exit 1; }
++          echo "${RHTTP_CARGO_LOCK_SHA256}  $RS/Cargo.lock" | sha256sum -c - | tee -a "$EVID/rhttp_host.txt"
++          export CARGO_TARGET_DIR="$BASE/rhttp-host-target"
++          ( cd "$RS" && export RUSTFLAGS='--cfg reqwest_unstable' && run_logged rhttp_host_build "$LOGS/04a_rhttp_host_build.log" cargo "+${RUST_VERSION}" build --release --locked )
++          LIBDIR="$CARGO_TARGET_DIR/release"
++          [ -f "$LIBDIR/librhttp.so" ] || { echo "::error::host librhttp.so not built"; exit 1; }
++          sha256sum "$LIBDIR/librhttp.so" | tee -a "$EVID/rhttp_host.txt"
++          echo "FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR=$LIBDIR" >> "$GITHUB_ENV"
++          disk_snapshot "after-rhttp-host-build"
++
++      - name: Thumbnail regression tests (cover cache, queue, limiter)
++        run: |
++          . "$PHASE/lib.sh"
++          # Explicit reporter: on GitHub Actions flutter test defaults to the "github"
++          # reporter, whose summary line the checks below do not parse.
++          run_logged flutter_test_thumbnail "$LOGS/05a_test_thumbnail.log" flutter test --no-pub --reporter expanded \
++            test/network/thumbnail_cover_cache_test.dart test/network/thumbnail_cover_queue_test.dart test/network/request_limiter_test.dart
++          last="$(grep -E '^[0-9:]+ \+[0-9]+' "$LOGS/05a_test_thumbnail.log" | tail -1)"
++          echo "$last" | tee "$EVID/test_thumbnail_summary.txt"
++          case "$last" in *"~"*) echo "::error::thumbnail tests were skipped (native HTTP missing?)"; exit 1 ;; esac
++          grep -q 'All tests passed!' <<< "$last" || { echo "::error::thumbnail tests did not pass"; exit 1; }
++
++      - name: Full flutter test (includes brand, reader cache and native-HTTP tests)
++        run: |
++          . "$PHASE/lib.sh"
++          run_logged flutter_test_full "$LOGS/05b_test_full.log" flutter test --no-pub --reporter expanded
++          last="$(grep -E '^[0-9:]+ \+[0-9]+' "$LOGS/05b_test_full.log" | tail -1)"
++          echo "$last" | tee "$EVID/test_full_summary.txt"
++          case "$last" in *"~"*) echo "::error::some tests were skipped"; exit 1 ;; esac
++          grep -Eq "\+${EXPECTED_TEST_COUNT}: All tests passed!" <<< "$last" || { echo "::error::expected +${EXPECTED_TEST_COUNT} passing tests"; exit 1; }
++
++      - name: Analyzer diagnostics must equal the known baseline set
++        run: |
++          . "$PHASE/lib.sh"
++          set +e; flutter analyze --no-pub > "$LOGS/05c_analyze.log" 2>&1; rc=$?; set -e
++          echo "flutter_analyze_exit=${rc}" >> "$EVID/exit_codes.txt"
++          # flutter analyze exits 1 for info-level issues as well; the gate is the exact diagnostic set.
++          grep -E '^\s*(info|warning|error) •' "$LOGS/05c_analyze.log" \
++            | awk -F ' • ' '{gsub(/^ +/, "", $1); print $1 "|" $4 "|" $3}' | sort > "$EVID/analyze_actual.txt" || true
++          cat > "$EVID/analyze_expected.txt" <<'DIAG'
++          info|deprecated_member_use|lib/components/image.dart:115:20
++          info|deprecated_member_use|lib/pages/reader/comic_image.dart:116:20
++          info|deprecated_member_use|lib/utils/io.dart:410:15
++          info|deprecated_member_use|lib/utils/io.dart:410:9
++          info|deprecated_member_use|lib/utils/io.dart:418:15
++          info|deprecated_member_use|lib/utils/io.dart:418:9
++          info|deprecated_member_use|lib/utils/io.dart:423:13
++          info|deprecated_member_use|lib/utils/io.dart:423:7
++          DIAG
++          sed -i 's/^ *//' "$EVID/analyze_expected.txt"; sort -o "$EVID/analyze_expected.txt" "$EVID/analyze_expected.txt"
++          if diff -u "$EVID/analyze_expected.txt" "$EVID/analyze_actual.txt" > "$EVID/analyze_diff.txt"; then
++            echo "analyzer diagnostics identical to the known set ($(wc -l < "$EVID/analyze_actual.txt") info)" | tee -a "$EVID/analyze_diff.txt"
++          else
++            cat "$EVID/analyze_diff.txt"; echo "::error::analyzer diagnostics differ from the known baseline set"; exit 1
++          fi
++          case "$rc" in 0|1) ;; *) echo "::error::flutter analyze exit code $rc"; exit 1 ;; esac
+ 
+       - name: Build Yorunote Android ARM64 Profile APK
+         run: |
+@@ -326,7 +392,7 @@ jobs:
+           libs="$(unzip -Z1 "$APK" | grep '^lib/' | cut -d/ -f2 | sort -u | tr '\n' ' ')"
+           [ "$libs" = "arm64-v8a " ] || { echo "::error::lib/ ABI dirs: $libs"; exit 1; }
+           unzip -Z1 "$APK" | grep '^lib/arm64-v8a/.*\.so$' | sort > "$EVID/native_libs.txt"
+-          for must in lib/arm64-v8a/libflutter.so lib/arm64-v8a/libapp.so; do
++          for must in lib/arm64-v8a/libflutter.so lib/arm64-v8a/libapp.so lib/arm64-v8a/librhttp.so; do
+             grep -qx "$must" "$EVID/native_libs.txt" || { echo "::error::missing native library $must"; exit 1; }
+           done
+           # Packaged icons (pixel comparison against the repository files) and About asset
+@@ -567,12 +633,12 @@ jobs:
+         run: |
+           S="$PHASE/sanitized/evidence"
+           {
+-            echo "## Yorunote ARM64 Profile APK (source commit ${BASELINE_SHA:0:7})"
++            echo "## Yorunote thumbnail-perf ARM64 Profile APK (source commit ${BASELINE_SHA:0:7})"
+             echo "**STATIC CHECKS ONLY. Android runtime acceptance was NOT performed. Disposable test signing key.**"
+             echo
+             echo '```'
+             if [ -d "$S" ]; then
+-              for f in exit_codes.txt verification.txt icon_check.txt git_integrity.txt disk.txt; do
++              for f in exit_codes.txt test_thumbnail_summary.txt test_full_summary.txt analyze_diff.txt rhttp_host.txt verification.txt icon_check.txt git_integrity.txt disk.txt; do
+                 if [ -f "$S/$f" ]; then cat "$S/$f"; fi
+               done
+             else
+@@ -585,7 +651,7 @@ jobs:
+         if: always() && steps.sanitize.outcome == 'success'
+         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+         with:
+-          name: yorunote-diagnostic-logs
++          name: yorunote-thumbnail-perf-diagnostic-logs
+           path: ${{ runner.temp }}/phase1a/sanitized
+           retention-days: 7
+           if-no-files-found: warn
+@@ -595,7 +661,7 @@ jobs:
+         if: ${{ !cancelled() && steps.verify.outcome == 'success' && steps.gitcheck.outcome == 'success' }}
+         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+         with:
+-          name: yorunote-arm64-profile-apk
++          name: yorunote-thumbnail-perf-arm64-profile-apk
+           path: ${{ runner.temp }}/phase1a/apk_out
+           retention-days: 7
+           if-no-files-found: error
+diff --git a/test/network/thumbnail_cover_cache_test.dart b/test/network/thumbnail_cover_cache_test.dart
+index 7bd6b13815b31a4afadce18b9c6bda9cb8ee4631..7ff2ed8b8ce7ad966c1b835139b39ac5f7127a74 100644
+--- a/test/network/thumbnail_cover_cache_test.dart
++++ b/test/network/thumbnail_cover_cache_test.dart
+@@ -14,7 +14,6 @@ import 'package:venera/foundation/cache_manager.dart';
+ import 'package:venera/foundation/comic_type.dart';
+ import 'package:venera/foundation/image_provider/cached_image.dart';
+ import 'package:venera/foundation/image_provider/history_image_provider.dart';
+-import 'package:venera/network/images.dart';
+ 
+ import 'thumbnail_test_support.dart';
+ 
+@@ -183,35 +182,6 @@ void main() {
+       });
+     }, skip: !hasNativeHttp);
+ 
+-    testWidgets('invalidation keeps an entry repaired in the meantime', (
+-      tester,
+-    ) async {
+-      await tester.runAsync(() async {
+-        const path = '/c/repaired.png';
+-        final url = server.url(path);
+-        final key = thumbDiskKey(url, srcA.key, 'c1');
+-        await CacheManager().writeCache(key, corruptPng);
+-        // The bytes a failing load read from the broken entry ...
+-        Uint8List? stale;
+-        await for (final p in ImageDownloader.loadThumbnail(
+-          url,
+-          srcA.key,
+-          'c1',
+-        )) {
+-          if (p.imageBytes != null) {
+-            stale = p.imageBytes;
+-            break;
+-          }
+-        }
+-        // ... arrive after another request has stored a good image.
+-        await CacheManager().writeCache(key, png(50));
+-        // ignore: invalid_use_of_protected_member
+-        await cover(url).onInvalidImageData(stale!);
+-        final file = await CacheManager().findCache(key);
+-        expect(await file!.readAsBytes(), png(50));
+-      });
+-    }, skip: !hasNativeHttp);
+-
+     testWidgets('a broken local file is reported and never deleted', (
+       tester,
+     ) async {
+diff --git a/test/network/thumbnail_cover_invalidation_test.dart b/test/network/thumbnail_cover_invalidation_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..620fd972b61badea4f0c84bd5f7089d50cb547b4
+--- /dev/null
++++ b/test/network/thumbnail_cover_invalidation_test.dart
+@@ -0,0 +1,95 @@
++// Hook-level tests of cover cache invalidation (candidate API only).
++//
++// The bytes are obtained through ImageDownloader.loadCoverThumbnail, the same
++// call the cover providers make, so they carry the disk cache key they were
++// read from. The provider's onInvalidImageData hook is then called directly,
++// which lets the test place a repair between the read and the invalidation.
++
++import 'package:flutter/foundation.dart';
++import 'package:flutter/painting.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/foundation/cache_manager.dart';
++import 'package:venera/foundation/image_provider/cached_image.dart';
++import 'package:venera/foundation/image_provider/history_image_provider.dart';
++import 'package:venera/network/images.dart';
++
++import 'thumbnail_test_support.dart';
++
++void main() {
++  final server = CoverServer();
++  final src = testSource('thumb_invalidation_src');
++
++  setUpAll(() async {
++    await initCoverTestEnvironment(server, sources: [src]);
++  });
++
++  tearDownAll(() => server.stop());
++
++  setUp(() => PaintingBinding.instance.imageCache.clear());
++
++  Future<Uint8List> readCover(String url, String cid) =>
++      ImageDownloader.loadCoverThumbnail(url, src.key, cid, checkStop: () {});
++
++  testWidgets('the entry the broken bytes came from is deleted', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      final url = server.url('/i/broken.png');
++      final key = thumbDiskKey(url, src.key, 'i1');
++      final otherKey = thumbDiskKey(server.url('/i/other.png'), src.key, 'i1');
++      await CacheManager().writeCache(key, corruptPng);
++      await CacheManager().writeCache(otherKey, corruptPng);
++      final broken = await readCover(url, 'i1');
++      expect(broken, corruptPng);
++      // ignore: invalid_use_of_protected_member
++      await CachedImageProvider(
++        url,
++        sourceKey: src.key,
++        cid: 'i1',
++      ).onInvalidImageData(broken);
++      expect(await CacheManager().findCache(key), isNull);
++      expect(
++        await CacheManager().findCache(otherKey),
++        isNotNull,
++        reason: 'only the entry the bytes came from',
++      );
++    });
++  });
++
++  testWidgets('an entry repaired after the read is kept', (tester) async {
++    await tester.runAsync(() async {
++      final url = server.url('/i/repaired.png');
++      final key = thumbDiskKey(url, src.key, 'i2');
++      await CacheManager().writeCache(key, corruptPng);
++      // A failing load read the broken entry ...
++      final stale = await readCover(url, 'i2');
++      // ... and another load stored a good image before the invalidation.
++      await CacheManager().writeCache(key, png(5));
++      // ignore: invalid_use_of_protected_member
++      await HistoryImageProvider(
++        testHistory('i2', src, url),
++      ).onInvalidImageData(stale);
++      final file = await CacheManager().findCache(key);
++      expect(await file!.readAsBytes(), png(5));
++    });
++  });
++
++  testWidgets('bytes that did not come from the cover cache delete nothing', (
++    tester,
++  ) async {
++    await tester.runAsync(() async {
++      final url = server.url('/i/foreign.png');
++      final key = thumbDiskKey(url, src.key, 'i3');
++      await CacheManager().writeCache(key, corruptPng);
++      // Same content, but read elsewhere (e.g. a local file).
++      final foreign = Uint8List.fromList(corruptPng);
++      // ignore: invalid_use_of_protected_member
++      await CachedImageProvider(
++        url,
++        sourceKey: src.key,
++        cid: 'i3',
++      ).onInvalidImageData(foreign);
++      expect(await CacheManager().findCache(key), isNotNull);
++    });
++  });
++}
+diff --git a/tool/thumbnail_bench/mutation_check.py b/tool/thumbnail_bench/mutation_check.py
+index 20c3e9de5c03a454177cc5643e739a377d8af2b0..326e1e113842f244695ddeb9da6d854fde38a8cd 100644
+--- a/tool/thumbnail_bench/mutation_check.py
++++ b/tool/thumbnail_bench/mutation_check.py
+@@ -5,7 +5,7 @@ Applies one mutation at a time to a scratch copy of the candidate, runs the
+ related tests and records whether they fail (the mutation is "killed").
+ The copy is restored after every mutation; nothing is kept.
+ 
+-Usage: python3 -I mutation_check.py <scratch_repo> <out.json>
++Usage: python3 -I mutation_check.py <scratch_repo> <out.json> [ID,ID,...]
+ Requires flutter on PATH and FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR.
+ """
+ import json
+@@ -16,6 +16,7 @@ import time
+ 
+ REPO = pathlib.Path(sys.argv[1]).resolve()
+ OUT = pathlib.Path(sys.argv[2]).resolve()
++ONLY = set(sys.argv[3].split(",")) if len(sys.argv) > 3 else None
+ 
+ IMAGES = "lib/network/images.dart"
+ LIMITER = "lib/network/request_limiter.dart"
+@@ -24,6 +25,7 @@ HISTORY = "lib/foundation/image_provider/history_image_provider.dart"
+ T_CACHE = "test/network/thumbnail_cover_cache_test.dart"
+ T_QUEUE = "test/network/thumbnail_cover_queue_test.dart"
+ T_LIMIT = "test/network/request_limiter_test.dart"
++T_INVAL = "test/network/thumbnail_cover_invalidation_test.dart"
+ 
+ MUTANTS = [
+     {
+@@ -32,7 +34,7 @@ MUTANTS = [
+         "file": IMAGES,
+         "old": "      if (!listEquals(await file.readAsBytes(), data)) {\n        return;\n      }\n",
+         "new": "",
+-        "tests": [T_CACHE],
++        "tests": [T_CACHE, T_INVAL],
+     },
+     {
+         "id": "M2_cached_provider_default_invalidation",
+@@ -40,7 +42,7 @@ MUTANTS = [
+         "file": CACHED,
+         "old": "  @override\n  Future<void> onInvalidImageData(Uint8List data) =>\n      ImageDownloader.invalidateCoverCache(data);\n",
+         "new": "",
+-        "tests": [T_CACHE],
++        "tests": [T_CACHE, T_INVAL],
+     },
+     {
+         "id": "M3_history_provider_default_invalidation",
+@@ -48,7 +50,7 @@ MUTANTS = [
+         "file": HISTORY,
+         "old": "  @override\n  Future<void> onInvalidImageData(Uint8List data) =>\n      ImageDownloader.invalidateCoverCache(data);\n",
+         "new": "",
+-        "tests": [T_CACHE],
++        "tests": [T_CACHE, T_INVAL],
+     },
+     {
+         "id": "M4_limit_9",
+@@ -125,6 +127,8 @@ def run_tests(tests):
+ def main():
+     results = []
+     for m in MUTANTS:
++        if ONLY and m["id"] not in ONLY:
++            continue
+         path = REPO / m["file"]
+         original = path.read_text()
+         if original.count(m["old"]) != 1:
+@@ -150,7 +154,7 @@ def main():
+         })
+         print(m["id"], results[-1]["status"], code, secs, flush=True)
+     # Sanity: the unmutated copy passes the same tests.
+-    code, secs, tail = run_tests([T_CACHE, T_QUEUE, T_LIMIT])
++    code, secs, tail = run_tests([T_CACHE, T_QUEUE, T_LIMIT, T_INVAL])
+     OUT.write_text(json.dumps(
+         {"unmutated_exit_code": code, "unmutated_last_line": tail,
+          "mutants": results},

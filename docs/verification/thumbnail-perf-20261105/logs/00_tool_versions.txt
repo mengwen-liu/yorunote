@@ -1,0 +1,20 @@
+# 本機（雲端容器）工具版本
+date_utc=2026-11-04T18:27:23Z
+uname=Linux 6.18.44-fc-v233 x86_64
+
+Flutter 3.41.4 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ff37bef603 (8 months ago) • 2026-03-03 16:03:22 -0800
+Engine • hash 99578ad0355da00edb26301c874a3c250a5716f5 (revision e4b8dca3f1) (7 months ago) • 2026-03-03 18:24:54.000Z
+Tools • Dart 3.11.1 • DevTools 2.54.1
+
+openjdk version "21.0.12.1" 2026-08-18
+OpenJDK Runtime Environment (build 21.0.12.1+1-1-24.04.4-Ubuntu)
+OpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)
+
+rustc 1.85.1 (4eb161250 2025-03-15)
+cargo 1.85.1 (d73d2caf9 2024-12-31)
+
+flutter archive: flutter_linux_3.41.4-stable.tar.xz sha256=c9c4e741ebcf83ee88303404176f7e22c3b6abfc8e9d60781098b6d4104327a9 (verified against releases_linux.json)
+rhttp 0.15.1 Cargo.lock sha256=232c3f91d09446ff821cb15f2d86b15934da29e6395e856eb3afd8571eff5eb4
+host librhttp.so sha256=66a372d66d1ce99e6efb5c0021db376a215957b287b9db59c3acbba0272fbbf3 (local build; differs from CI build, not compared)
+Android SDK/NDK: not installed locally; APK built only on GitHub Actions

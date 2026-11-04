@@ -1,0 +1,45 @@
+{
+  "unmutated_exit_code": 0,
+  "unmutated_last_line": "00:17 +29: All tests passed!",
+  "mutants": [
+    {
+      "id": "M1_invalidate_without_byte_check",
+      "why": "invalidation must not delete an entry repaired in the meantime",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cache_test.dart",
+        "test/network/thumbnail_cover_invalidation_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 11.2,
+      "last_line": "00:06 +16 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M2_cached_provider_default_invalidation",
+      "why": "CachedImageProvider must invalidate the real disk key",
+      "file": "lib/foundation/image_provider/cached_image.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cache_test.dart",
+        "test/network/thumbnail_cover_invalidation_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 9.5,
+      "last_line": "00:04 +13 -4: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M3_history_provider_default_invalidation",
+      "why": "HistoryImageProvider must invalidate the real disk key",
+      "file": "lib/foundation/image_provider/history_image_provider.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cache_test.dart",
+        "test/network/thumbnail_cover_invalidation_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 10.3,
+      "last_line": "00:05 +15 -2: Some tests failed.",
+      "status": "KILLED"
+    }
+  ]
+}

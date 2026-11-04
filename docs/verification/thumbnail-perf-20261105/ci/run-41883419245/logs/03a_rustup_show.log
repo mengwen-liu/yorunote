@@ -1,0 +1,26 @@
+Default host: x86_64-unknown-linux-gnu
+rustup home:  /home/runner/.rustup
+
+info: syncing channel updates for 1.85.1-x86_64-unknown-linux-gnu
+info: latest update on 2025-03-18 for version 1.85.1 (4eb161250 2025-03-15)
+info: downloading 8 components
+warn: the missing active toolchain `1.85.1-x86_64-unknown-linux-gnu` has been auto-installed
+warn: auto-installation is deprecated for most `rustup` commands
+warn: scripts relying on this behavior in `rustup` may stop working in the future
+warn: to install the active toolchain, use `rustup install` instead
+warn: see <https://github.com/rust-lang/rustup/issues/4836> for more info
+installed toolchains
+--------------------
+stable-x86_64-unknown-linux-gnu (default)
+
+active toolchain
+----------------
+name: 1.85.1-x86_64-unknown-linux-gnu
+active because: overridden by '/home/runner/work/yorunote/yorunote/rust-toolchain.toml'
+installed targets:
+  aarch64-apple-darwin
+  aarch64-linux-android
+  armv7-linux-androideabi
+  x86_64-apple-darwin
+  x86_64-linux-android
+  x86_64-unknown-linux-gnu

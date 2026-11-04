@@ -1,0 +1,3 @@
+post_build_head=418efacd0bb03e1da180ff105c4566821a4e69fd
+post_build_status_lines=0
+git_integrity_ok=1

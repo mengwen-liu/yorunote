@@ -1,0 +1,56 @@
+{
+  "run_id": 41883419245,
+  "run_url": "https://github.com/mengwen-liu/yorunote/actions/runs/41883419245",
+  "workflow_commit": "084f296acf259efd90a479d32f9d2b6ce76be389",
+  "app_source_commit": "418efacd0bb03e1da180ff105c4566821a4e69fd",
+  "conclusion": "success",
+  "apk_artifact": {
+    "id": 13351207705,
+    "name": "yorunote-thumbnail-perf-arm64-profile-apk",
+    "zip_digest_reported_by_github": "sha256:f9d81a3313bd02cbd214ea79a0d158f28f65601d73c01bdedcbc27d9222dfe0b",
+    "zip_sha256_downloaded": "f9d81a3313bd02cbd214ea79a0d158f28f65601d73c01bdedcbc27d9222dfe0b",
+    "expires_at": "2026-11-11T18:18:59Z"
+  },
+  "apk": {
+    "file": "Yorunote_418efac_thumbnail_perf_arm64_profile.apk",
+    "size_bytes": 27865243,
+    "sha256_ci": "f300eecd9e7b3151f05e28b6e1fa0a2807e417660c18415fcd9dd74492e7b766",
+    "sha256_downloaded": "f300eecd9e7b3151f05e28b6e1fa0a2807e417660c18415fcd9dd74492e7b766",
+    "sha256sum_check": "OK"
+  },
+  "local_static_checks_after_download": {
+    "unzip_-t": "No errors detected",
+    "lib_abis": [
+      "arm64-v8a"
+    ],
+    "native_libs": [
+      "libapp.so",
+      "libflutter-saf.so",
+      "libflutter.so",
+      "libflutter_7zip.so",
+      "liblodepng_flutter.so",
+      "libqjs.so",
+      "librhttp.so",
+      "libsqlite3.so",
+      "libvmservice_snapshot.so",
+      "libzip_flutter.so"
+    ],
+    "libapp_contains_strings": {
+      "RequestCancelledException": 1,
+      "loadCoverThumbnail": 1,
+      "coverRequestLimiter": 2
+    },
+    "apksigner_local": "not run locally (no Android build-tools in this container); CI apksigner result: Verifies, v2, 1 signer, CN=Yorunote CI Disposable"
+  },
+  "diagnostic_logs_artifact": {
+    "id": 13350348805,
+    "zip_sha256": "8836ce12e2ff50dd6fffec5c5661fbee9a984997b37bb167ba288ef17a1ae202"
+  },
+  "first_run": {
+    "run_id": 41881391792,
+    "workflow_commit": "31b50aa1639d59a615c8a59f2b73be0244ede361",
+    "conclusion": "failure",
+    "reason": "summary parser expected the expanded reporter; on GitHub Actions flutter test used the github reporter. The 27 thumbnail tests themselves passed (exit 0). No APK was built or uploaded.",
+    "diagnostic_logs_zip_sha256": "75c17981e878b58854fca1e5877d20da3780714276da380d0615a03411698cb4"
+  }
+}

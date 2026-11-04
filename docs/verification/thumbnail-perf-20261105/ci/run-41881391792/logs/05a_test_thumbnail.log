@@ -1,0 +1,333 @@
+
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a valid disk hit is shown without requests
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a memory hit needs neither the disk nor the network
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a miss and an expired entry request once and are stored
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: cache hits and local files do not wait for a full queue
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: cancelled loads give their slots back
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+::endgroup::
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: a shared request survives when one of its loads is cancelled
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+::endgroup::
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken download is not kept in the cache
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+::endgroup::
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider invalidation keeps an entry repaired in the meantime
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken local file is reported and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+::endgroup::
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider the local cover fallback is used and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+::endgroup::
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider the same URL with another source or cid is kept apart
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider the source thumbnail config still rewrites the request
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider a valid disk hit is shown without requests
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+::endgroup::
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+::endgroup::
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider a local history cover is shown and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+::endgroup::
+✅ /home/runner/work/yorunote/yorunote/test/network/request_limiter_test.dart: cover requests are limited to 8
+✅ /home/runner/work/yorunote/yorunote/test/network/request_limiter_test.dart: grants up to the limit, then hands slots over in FIFO order
+✅ /home/runner/work/yorunote/yorunote/test/network/request_limiter_test.dart: a cancelled waiter is skipped and takes no slot
+✅ /home/runner/work/yorunote/yorunote/test/network/request_limiter_test.dart: releasing twice frees only one slot
+✅ /home/runner/work/yorunote/yorunote/test/network/request_limiter_test.dart: a failing isCancelled callback does not lose the slot
+✅ /home/runner/work/yorunote/yorunote/test/network/request_limiter_test.dart: slots come back after work fails
+::group::✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:268:17)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      ImageDownloader.loadCoverThumbnail (package:venera/network/images.dart:142:16)
+<asynchronous suspension>
+#4      CachedImageProvider.load (package:venera/foundation/image_provider/cached_image.dart:43:14)
+<asynchronous suspension>
+#5      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:70:18)
+<asynchronous suspension>
+#6      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: <unknown>
+   9: <unknown>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: <unknown>
+   9: <unknown>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: <unknown>
+   9: <unknown>
+[0m
+::endgroup::
+✅ /home/runner/work/yorunote/yorunote/test/network/thumbnail_cover_queue_test.dart: history and cover tiles of one comic share one request
+
+🎉 27 tests passed.

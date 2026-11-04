@@ -1,0 +1,129 @@
+{
+  "unmutated_exit_code": 0,
+  "unmutated_last_line": "00:18 +27: All tests passed!",
+  "mutants": [
+    {
+      "id": "M1_invalidate_without_byte_check",
+      "why": "invalidation must not delete an entry repaired in the meantime",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cache_test.dart"
+      ],
+      "exit_code": 0,
+      "seconds": 22.6,
+      "last_line": "00:05 +15: All tests passed!",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "M2_cached_provider_default_invalidation",
+      "why": "CachedImageProvider must invalidate the real disk key",
+      "file": "lib/foundation/image_provider/cached_image.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cache_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 9.0,
+      "last_line": "00:04 +12 -3: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M3_history_provider_default_invalidation",
+      "why": "HistoryImageProvider must invalidate the real disk key",
+      "file": "lib/foundation/image_provider/history_image_provider.dart",
+      "tests": [
+        "test/network/thumbnail_cover_cache_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 10.6,
+      "last_line": "00:06 +13 -2: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M4_limit_9",
+      "why": "explicit limit of 8 concurrent cover requests",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_test.dart",
+        "test/network/request_limiter_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 21.9,
+      "last_line": "00:17 +9 -3: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M5_release_without_handoff",
+      "why": "a released slot must be handed to the next waiter (event driven)",
+      "file": "lib/network/request_limiter.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_test.dart",
+        "test/network/request_limiter_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 845.7,
+      "last_line": "14:01 +1 -11: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M6_grant_cancelled_waiters",
+      "why": "cancelled waiters must be skipped without taking a slot",
+      "file": "lib/network/request_limiter.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_test.dart",
+        "test/network/request_limiter_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 21.8,
+      "last_line": "00:16 +11 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M7_cache_hit_waits_for_slot",
+      "why": "valid cache hits must not wait for a network slot",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 32.0,
+      "last_line": "00:27 +5 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M8_no_request_sharing",
+      "why": "loads of the same cache key share one request",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 21.7,
+      "last_line": "00:17 +4 -2: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M9_abort_when_any_consumer_leaves",
+      "why": "one cancelled load must not abort a request others still use",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 21.4,
+      "last_line": "00:16 +5 -1: Some tests failed.",
+      "status": "KILLED"
+    },
+    {
+      "id": "M10_release_only_on_success",
+      "why": "errors must give the slot back",
+      "file": "lib/network/images.dart",
+      "tests": [
+        "test/network/thumbnail_cover_queue_test.dart"
+      ],
+      "exit_code": 1,
+      "seconds": 687.2,
+      "last_line": "11:22 +3 -3: Some tests failed.",
+      "status": "KILLED"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+label,scenario,metric,n,median,p95,min,max,per_sample_values
+baseline_7b6348a,cold_grid_32,http_requests,7,,,32,32,32 32 32 32 32 32 32
+baseline_7b6348a,cold_grid_32,peak_inflight,7,,,9,9,9 9 9 9 9 9 9
+baseline_7b6348a,cold_grid_32,errors,7,,,0,0,0 0 0 0 0 0 0
+baseline_7b6348a,cold_grid_32,first_display_ms,7,102.963,117.45,86.758,117.45,
+baseline_7b6348a,cold_grid_32,all_done_ms,7,389.902,485.264,379.168,485.264,
+baseline_7b6348a,cold_grid_32,queue_wait_ms,224,131.242,324.055,13.868,423.513,
+baseline_7b6348a,cold_grid_32,completion_ms,224,231.113,415.503,86.758,481.506,
+baseline_7b6348a,cache_hits_with_full_queue,hits_done_while_network_held,7,,,0,0,0 0 0 0 0 0 0
+baseline_7b6348a,cache_hits_with_full_queue,hit_http_requests,7,,,0,0,0 0 0 0 0 0 0
+baseline_7b6348a,cache_hits_with_full_queue,hit_completion_ms,112,1745.604,1759.995,1645.265,1839.143,
+baseline_7b6348a,slot_handoff,handoff_ms,42,100.865,102.094,86.198,102.774,
+baseline_7b6348a,history_and_cover_same_comic,http_requests,7,,,19,20,19 19 19 20 19 20 20
+baseline_7b6348a,cache_hit_paths,provider_error,7,,,,,None None None None None None None
+baseline_7b6348a,cache_hit_paths,provider_http_requests,7,,,,,0 0 0 0 0 0 0
+baseline_7b6348a,cache_hit_paths,full_stream_http_requests,7,,,,,1 1 1 1 1 1 1
+baseline_7b6348a,cache_hit_paths,full_stream_image_events,7,,,,,2 2 2 2 2 2 2
+baseline_7b6348a,broken_cache_retry,first_load_errors,7,,,,,6 6 6 6 6 6 6
+baseline_7b6348a,broken_cache_retry,retry_errors,7,,,,,6 6 6 6 6 6 6
+baseline_7b6348a,broken_cache_retry,http_requests,7,,,,,0 0 0 0 0 0 0
+baseline_7b6348a,broken_cache_retry,entries,7,,,,,6 6 6 6 6 6 6
+candidate_418efac,cold_grid_32,http_requests,7,,,32,32,32 32 32 32 32 32 32
+candidate_418efac,cold_grid_32,peak_inflight,7,,,8,8,8 8 8 8 8 8 8
+candidate_418efac,cold_grid_32,errors,7,,,0,0,0 0 0 0 0 0 0
+candidate_418efac,cold_grid_32,first_display_ms,7,107.999,122.595,104.06,122.595,
+candidate_418efac,cold_grid_32,all_done_ms,7,420.206,451.421,395.123,451.421,
+candidate_418efac,cold_grid_32,queue_wait_ms,224,210.169,350.994,17.851,356.829,
+candidate_418efac,cold_grid_32,completion_ms,224,284.49,427.643,104.06,440.878,
+candidate_418efac,cache_hits_with_full_queue,hits_done_while_network_held,7,,,16,16,16 16 16 16 16 16 16
+candidate_418efac,cache_hits_with_full_queue,hit_http_requests,7,,,0,0,0 0 0 0 0 0 0
+candidate_418efac,cache_hits_with_full_queue,hit_completion_ms,112,38.673,45.756,33.82,46.651,
+candidate_418efac,slot_handoff,handoff_ms,42,8.639,10.775,5.903,12.416,
+candidate_418efac,history_and_cover_same_comic,http_requests,7,,,10,10,10 10 10 10 10 10 10
+candidate_418efac,cache_hit_paths,provider_error,7,,,,,None None None None None None None
+candidate_418efac,cache_hit_paths,provider_http_requests,7,,,,,0 0 0 0 0 0 0
+candidate_418efac,cache_hit_paths,full_stream_http_requests,7,,,,,1 1 1 1 1 1 1
+candidate_418efac,cache_hit_paths,full_stream_image_events,7,,,,,2 2 2 2 2 2 2
+candidate_418efac,broken_cache_retry,first_load_errors,7,,,,,6 6 6 6 6 6 6
+candidate_418efac,broken_cache_retry,retry_errors,7,,,,,0 0 0 0 0 0 0
+candidate_418efac,broken_cache_retry,http_requests,7,,,,,6 6 6 6 6 6 6
+candidate_418efac,broken_cache_retry,entries,7,,,,,6 6 6 6 6 6 6
+experiment_no_recheck,cold_grid_32,http_requests,7,,,32,32,32 32 32 32 32 32 32
+experiment_no_recheck,cold_grid_32,peak_inflight,7,,,8,8,8 8 8 8 8 8 8
+experiment_no_recheck,cold_grid_32,errors,7,,,0,0,0 0 0 0 0 0 0
+experiment_no_recheck,cold_grid_32,first_display_ms,7,98.867,103.187,89.915,103.187,
+experiment_no_recheck,cold_grid_32,all_done_ms,7,394.095,414.845,363.95,414.845,
+experiment_no_recheck,cold_grid_32,queue_wait_ms,224,168.86,329.322,17.087,331.423,
+experiment_no_recheck,cold_grid_32,completion_ms,224,230.24,398.485,89.915,407.59,
+experiment_no_recheck,cache_hits_with_full_queue,hits_done_while_network_held,7,,,16,16,16 16 16 16 16 16 16
+experiment_no_recheck,cache_hits_with_full_queue,hit_http_requests,7,,,0,0,0 0 0 0 0 0 0
+experiment_no_recheck,cache_hits_with_full_queue,hit_completion_ms,112,38.832,42.794,28.257,43.861,
+experiment_no_recheck,slot_handoff,handoff_ms,42,8.517,13.423,5.973,20.979,
+experiment_no_recheck,history_and_cover_same_comic,http_requests,7,,,10,10,10 10 10 10 10 10 10
+experiment_no_recheck,cache_hit_paths,provider_error,7,,,,,None None None None None None None
+experiment_no_recheck,cache_hit_paths,provider_http_requests,7,,,,,0 0 0 0 0 0 0
+experiment_no_recheck,cache_hit_paths,full_stream_http_requests,7,,,,,1 1 1 1 1 1 1
+experiment_no_recheck,cache_hit_paths,full_stream_image_events,7,,,,,2 2 2 2 2 2 2
+experiment_no_recheck,broken_cache_retry,first_load_errors,7,,,,,6 6 6 6 6 6 6
+experiment_no_recheck,broken_cache_retry,retry_errors,7,,,,,0 0 0 0 0 0 0
+experiment_no_recheck,broken_cache_retry,http_requests,7,,,,,6 6 6 6 6 6 6
+experiment_no_recheck,broken_cache_retry,entries,7,,,,,6 6 6 6 6 6 6
+experiment_limit9,cold_grid_32,http_requests,7,,,32,32,32 32 32 32 32 32 32
+experiment_limit9,cold_grid_32,peak_inflight,7,,,9,9,9 9 9 9 9 9 9
+experiment_limit9,cold_grid_32,errors,7,,,0,0,0 0 0 0 0 0 0
+experiment_limit9,cold_grid_32,first_display_ms,7,107.834,120.827,93.335,120.827,
+experiment_limit9,cold_grid_32,all_done_ms,7,376.893,418.247,356.366,418.247,
+experiment_limit9,cold_grid_32,queue_wait_ms,224,134.11,337.333,16.725,343.578,
+experiment_limit9,cold_grid_32,completion_ms,224,232.216,403.209,93.335,409.953,
+experiment_limit9,cache_hits_with_full_queue,hits_done_while_network_held,7,,,16,16,16 16 16 16 16 16 16
+experiment_limit9,cache_hits_with_full_queue,hit_http_requests,7,,,0,0,0 0 0 0 0 0 0
+experiment_limit9,cache_hits_with_full_queue,hit_completion_ms,112,35.628,37.549,30.868,38.425,
+experiment_limit9,slot_handoff,handoff_ms,42,8.42,10.983,6.138,14.031,
+experiment_limit9,history_and_cover_same_comic,http_requests,7,,,10,10,10 10 10 10 10 10 10
+experiment_limit9,cache_hit_paths,provider_error,7,,,,,None None None None None None None
+experiment_limit9,cache_hit_paths,provider_http_requests,7,,,,,0 0 0 0 0 0 0
+experiment_limit9,cache_hit_paths,full_stream_http_requests,7,,,,,1 1 1 1 1 1 1
+experiment_limit9,cache_hit_paths,full_stream_image_events,7,,,,,2 2 2 2 2 2 2
+experiment_limit9,broken_cache_retry,first_load_errors,7,,,,,6 6 6 6 6 6 6
+experiment_limit9,broken_cache_retry,retry_errors,7,,,,,0 0 0 0 0 0 0
+experiment_limit9,broken_cache_retry,http_requests,7,,,,,6 6 6 6 6 6 6
+experiment_limit9,broken_cache_retry,entries,7,,,,,6 6 6 6 6 6 6

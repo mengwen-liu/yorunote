@@ -6,10 +6,9 @@
 // checks that something does NOT happen (no extra request, no blocked load);
 // timeouts only stop a broken run from hanging.
 
-import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show FlutterError;
 import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:venera/foundation/cache_manager.dart';
@@ -57,6 +56,30 @@ void main() {
     return rs;
   }
 
+  /// ImageCache gives up evicted images after the next frame, as in the app;
+  /// only then is the load of a cancelled [Resolution] stopped.
+  Future<void> cancelEvicted(WidgetTester tester) async {
+    tester.binding.scheduleFrame();
+    await tester.pump();
+  }
+
+  /// Runs [body] while ignoring the stop errors BaseImageProvider reports
+  /// (silently, as in the app) for loads that were cancelled.
+  Future<void> ignoringStopErrors(Future<void> Function() body) async {
+    final previous = FlutterError.onError;
+    FlutterError.onError = (details) {
+      if (details.exception.toString().contains('ImageLoadingStopException')) {
+        return;
+      }
+      previous?.call(details);
+    };
+    try {
+      await body();
+    } finally {
+      FlutterError.onError = previous;
+    }
+  }
+
   testWidgets('at most $_limit cover requests run at the same time', (
     tester,
   ) async {
@@ -80,155 +103,213 @@ void main() {
     });
   }, skip: !hasNativeHttp);
 
-  testWidgets('cache hits and local files do not wait for a full queue', (
-    tester,
-  ) async {
-    await tester.runAsync(() async {
-      // A failed earlier test must not leave held requests behind.
-      await server.drain();
-      final held = await fillQueue('busy', _limit + 4);
-      final hitPaths = paths('hit', 3, shade: 100);
-      for (final p in hitPaths) {
+  testWidgets(
+    'cache hits and local files do not wait for a full queue',
+    (tester) async {
+      await tester.runAsync(() async {
+        // A failed earlier test must not leave held requests behind.
+        await server.drain();
+        final held = await fillQueue('busy', _limit + 4);
+        final hitPaths = paths('hit', 3, shade: 100);
+        for (final p in hitPaths) {
+          await CacheManager().writeCache(
+            thumbDiskKey(server.url(p), src.key, 'q'),
+            png(100),
+          );
+        }
+        final file = File('${root.path}/queue_local.png');
+        await file.writeAsBytes(png(7));
         await CacheManager().writeCache(
-          thumbDiskKey(server.url(p), src.key, 'q'),
-          png(100),
+          thumbDiskKey(server.url('/q/hist.png'), src.key, 'qh'),
+          png(8),
         );
-      }
-      final file = File('${root.path}/queue_local.png');
-      await file.writeAsBytes(png(7));
-      await CacheManager().writeCache(
-        thumbDiskKey(server.url('/q/hist.png'), src.key, 'qh'),
-        png(8),
-      );
-      final fast = [
-        for (final p in hitPaths) Resolution(cover(p)),
-        Resolution(CachedImageProvider('file://${file.path}')),
-        Resolution(
-          HistoryImageProvider(testHistory('qh', src, server.url('/q/hist.png'))),
-        ),
-      ];
-      final before = server.total;
-      // Fails (times out) if these loads wait for a network slot.
-      final fastResults = await Future.wait(
-        fast.map((r) => r.result),
-      ).timeout(const Duration(seconds: 10));
-      expect(fastResults, everyElement(isNull));
-      expect(server.total, before, reason: 'no request for cached covers');
-      expect(server.heldCount, _limit, reason: 'network still blocked');
+        final fast = [
+          for (final p in hitPaths) Resolution(cover(p)),
+          Resolution(CachedImageProvider('file://${file.path}')),
+          Resolution(
+            HistoryImageProvider(
+              testHistory('qh', src, server.url('/q/hist.png')),
+            ),
+          ),
+        ];
+        final before = server.total;
+        // Fails (times out) if these loads wait for a network slot.
+        final fastResults = await Future.wait(
+          fast.map((r) => r.result),
+        ).timeout(const Duration(seconds: 10));
+        expect(fastResults, everyElement(isNull));
+        expect(server.total, before, reason: 'no request for cached covers');
+        expect(server.heldCount, _limit, reason: 'network still blocked');
 
-      server.holdResponses = false;
-      server.releaseAll();
-      expect(
-        await Future.wait(held.map((r) => r.result)),
-        everyElement(isNull),
-      );
-      for (final r in [...held, ...fast]) {
-        r.dispose();
-      }
-    });
-  }, skip: !hasNativeHttp);
+        server.holdResponses = false;
+        server.releaseAll();
+        expect(
+          await Future.wait(held.map((r) => r.result)),
+          everyElement(isNull),
+        );
+        for (final r in [...held, ...fast]) {
+          r.dispose();
+        }
+      });
+    },
+    skip: !hasNativeHttp,
+  );
 
   testWidgets('cancelled loads give their slots back', (tester) async {
-    await tester.runAsync(() async {
-      // A failed earlier test must not leave held requests behind.
-      await server.drain();
-      final rs = await fillQueue('cancel', 16);
-      // Every load that will start without a free slot has reached the server.
-      await Future<void>.delayed(quiet);
-      final active = <Resolution>[];
-      final waiting = <Resolution>[];
-      for (final r in rs) {
-        final path = Uri.parse((r.provider as CachedImageProvider).url).path;
-        (server.count(path) > 0 ? active : waiting).add(r);
-      }
-      expect(active, isNotEmpty);
-      // Cancel half of the running and half of the waiting loads.
-      final cancelled = [...active.take(4), ...waiting.take(4)];
-      for (final r in cancelled) {
-        r.cancel();
-      }
-      server.holdResponses = false;
-      server.releaseAll();
-      final kept = rs.where((r) => !cancelled.contains(r)).toList();
-      expect(
-        await Future.wait(kept.map((r) => r.result)),
-        everyElement(isNull),
-      );
-      for (final r in waiting.take(4)) {
-        final path = Uri.parse((r.provider as CachedImageProvider).url).path;
-        expect(server.count(path), 0, reason: 'cancelled before its turn');
-      }
-      for (final r in kept) {
-        r.dispose();
-      }
+    await ignoringStopErrors(() async {
+      late List<Resolution> rs;
+      late List<Resolution> waiting;
+      late List<Resolution> cancelled;
+      await tester.runAsync(() async {
+        // A failed earlier test must not leave held requests behind.
+        await server.drain();
+        rs = await fillQueue('cancel', 16);
+        // Every load that will start without a free slot has reached the server.
+        await Future<void>.delayed(quiet);
+        final active = <Resolution>[];
+        waiting = <Resolution>[];
+        for (final r in rs) {
+          final path = Uri.parse((r.provider as CachedImageProvider).url).path;
+          (server.count(path) > 0 ? active : waiting).add(r);
+        }
+        expect(active, isNotEmpty);
+        // Cancel half of the running and half of the waiting loads.
+        cancelled = [...active.take(4), ...waiting.take(4)];
+        for (final r in cancelled) {
+          r.cancel();
+        }
+      });
+      await cancelEvicted(tester);
+      await tester.runAsync(() async {
+        server.holdResponses = false;
+        server.releaseAll();
+        final kept = rs.where((r) => !cancelled.contains(r)).toList();
+        expect(
+          await Future.wait(kept.map((r) => r.result)),
+          everyElement(isNull),
+        );
+        for (final r in waiting.take(4)) {
+          final path = Uri.parse((r.provider as CachedImageProvider).url).path;
+          expect(server.count(path), 0, reason: 'cancelled before its turn');
+        }
+        for (final r in kept) {
+          r.dispose();
+        }
 
-      // All slots are free again: a new batch fills the queue completely.
-      final again = await fillQueue('after-cancel', _limit);
-      server.holdResponses = false;
-      server.releaseAll();
-      expect(
-        await Future.wait(again.map((r) => r.result)),
-        everyElement(isNull),
-      );
-      for (final r in again) {
-        r.dispose();
-      }
+        // All slots are free again: a new batch fills the queue completely.
+        final again = await fillQueue('after-cancel', _limit);
+        server.holdResponses = false;
+        server.releaseAll();
+        expect(
+          await Future.wait(again.map((r) => r.result)),
+          everyElement(isNull),
+        );
+        for (final r in again) {
+          r.dispose();
+        }
+      });
     });
   }, skip: !hasNativeHttp);
 
-  testWidgets('HTTP errors and broken responses release slots, cache nothing', (
-    tester,
-  ) async {
-    await tester.runAsync(() async {
-      // A failed earlier test must not leave held requests behind.
-      await server.drain();
-      final failing = <String>[];
-      for (final code in [403, 404, 500]) {
+  testWidgets(
+    'a shared request survives when one of its loads is cancelled',
+    (tester) async {
+      await ignoringStopErrors(() async {
+        late Resolution history;
+        late Resolution tile;
+        late String p;
+        await tester.runAsync(() async {
+          await server.drain();
+          p = paths('shared-cancel', 1).single;
+          final url = server.url(p);
+          server.holdResponses = true;
+          tile = Resolution(
+            CachedImageProvider(url, sourceKey: src.key, cid: 's'),
+          );
+          history = Resolution(
+            HistoryImageProvider(testHistory('s', src, url)),
+          );
+          await server.inflightAtLeast(1).timeout(const Duration(seconds: 20));
+          await Future<void>.delayed(quiet);
+          tile.cancel();
+        });
+        await cancelEvicted(tester);
+        await tester.runAsync(() async {
+          server.holdResponses = false;
+          server.releaseAll();
+          expect(await history.result, isNull);
+          expect(
+            tile.isDone,
+            isFalse,
+            reason: 'the cancelled tile shows nothing',
+          );
+          expect(server.count(p), 1);
+          history.dispose();
+        });
+      });
+    },
+    skip: !hasNativeHttp,
+  );
+
+  testWidgets(
+    'HTTP errors and broken responses release slots, cache nothing',
+    (tester) async {
+      await tester.runAsync(() async {
+        // A failed earlier test must not leave held requests behind.
+        await server.drain();
+        final failing = <String>[];
+        for (final code in [403, 404, 500]) {
+          for (var i = 0; i < 3; i++) {
+            final p = '/q/status-$code-$i.png';
+            server.statusCodes[p] = code;
+            failing.add(p);
+          }
+        }
         for (var i = 0; i < 3; i++) {
-          final p = '/q/status-$code-$i.png';
-          server.statusCodes[p] = code;
+          final p = '/q/partial-$i.png';
+          server.images[p] = png(200 + i, width: 64, height: 64);
+          server.partial.add(p);
           failing.add(p);
         }
-      }
-      for (var i = 0; i < 3; i++) {
-        final p = '/q/partial-$i.png';
-        server.images[p] = png(200 + i, width: 64, height: 64);
-        server.partial.add(p);
-        failing.add(p);
-      }
-      final good = paths('after-errors', 6, shade: 50);
-      final fails = [for (final p in failing) Resolution(cover(p))];
-      final oks = [for (final p in good) Resolution(cover(p))];
-      expect(await Future.wait(oks.map((r) => r.result)), everyElement(isNull));
-      expect(
-        await Future.wait(fails.map((r) => r.result)),
-        everyElement(isNotNull),
-      );
-      for (final p in failing) {
+        final good = paths('after-errors', 6, shade: 50);
+        final fails = [for (final p in failing) Resolution(cover(p))];
+        final oks = [for (final p in good) Resolution(cover(p))];
         expect(
-          await CacheManager().findCache(
-            thumbDiskKey(server.url(p), src.key, 'q'),
-          ),
-          isNull,
+          await Future.wait(oks.map((r) => r.result)),
+          everyElement(isNull),
         );
-      }
-      for (final r in [...fails, ...oks]) {
-        r.dispose();
-      }
+        expect(
+          await Future.wait(fails.map((r) => r.result)),
+          everyElement(isNotNull),
+        );
+        for (final p in failing) {
+          expect(
+            await CacheManager().findCache(
+              thumbDiskKey(server.url(p), src.key, 'q'),
+            ),
+            isNull,
+          );
+        }
+        for (final r in [...fails, ...oks]) {
+          r.dispose();
+        }
 
-      // No slot is lost: a new batch fills the queue completely.
-      final again = await fillQueue('after-errors-2', _limit);
-      server.holdResponses = false;
-      server.releaseAll();
-      expect(
-        await Future.wait(again.map((r) => r.result)),
-        everyElement(isNull),
-      );
-      for (final r in again) {
-        r.dispose();
-      }
-    });
-  }, skip: !hasNativeHttp, timeout: const Timeout(Duration(minutes: 3)));
+        // No slot is lost: a new batch fills the queue completely.
+        final again = await fillQueue('after-errors-2', _limit);
+        server.holdResponses = false;
+        server.releaseAll();
+        expect(
+          await Future.wait(again.map((r) => r.result)),
+          everyElement(isNull),
+        );
+        for (final r in again) {
+          r.dispose();
+        }
+      });
+    },
+    skip: !hasNativeHttp,
+    timeout: const Timeout(Duration(minutes: 3)),
+  );
 
   testWidgets('history and cover tiles of one comic share one request', (
     tester,

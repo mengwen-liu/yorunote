@@ -32,22 +32,27 @@ class HistoryImageProvider
       history.cover = url;
       HistoryManager().addHistory(history);
     }
-    await for (var progress in ImageDownloader.loadThumbnail(
+    return ImageDownloader.loadCoverThumbnail(
       url,
       history.type.sourceKey,
       history.id,
-    )) {
-      checkStop();
-      chunkEvents.add(ImageChunkEvent(
-        cumulativeBytesLoaded: progress.currentBytes,
-        expectedTotalBytes: progress.totalBytes,
-      ));
-      if (progress.imageBytes != null) {
-        return progress.imageBytes!;
-      }
-    }
-    throw "Error: Empty response body.";
+      checkStop: checkStop,
+      onProgress: (currentBytes, totalBytes) {
+        chunkEvents.add(
+          ImageChunkEvent(
+            cumulativeBytesLoaded: currentBytes,
+            expectedTotalBytes: totalBytes,
+          ),
+        );
+      },
+    );
   }
+
+  /// Invalidates only the disk cache entry the broken cover was read from or
+  /// written to; local comic covers are never deleted.
+  @override
+  Future<void> onInvalidImageData(Uint8List data) =>
+      ImageDownloader.invalidateCoverCache(data);
 
   @override
   Future<HistoryImageProvider> obtainKey(ImageConfiguration configuration) {

@@ -10,7 +10,6 @@
 // host (x86_64 Linux, loopback HTTP) timings; they say nothing about frame
 // rate or power use on a phone or tablet.
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -70,9 +69,9 @@ void main() {
   tearDownAll(() async {
     await server.stop();
     if (out != null) {
-      await File(out).writeAsString(
-        const JsonEncoder.withIndent('  ').convert(results),
-      );
+      await File(
+        out,
+      ).writeAsString(const JsonEncoder.withIndent('  ').convert(results));
     }
   });
 
@@ -135,7 +134,9 @@ void main() {
         'first_display_ms': _stats([
           for (final r in raw) r['first_display_ms'] as double,
         ]),
-        'all_done_ms': _stats([for (final r in raw) r['all_done_ms'] as double]),
+        'all_done_ms': _stats([
+          for (final r in raw) r['all_done_ms'] as double,
+        ]),
         'queue_wait_ms': _stats([
           for (final r in raw) ...(r['queue_wait_ms'] as List<double>),
         ]),
@@ -165,7 +166,9 @@ void main() {
         }
         final held = [for (final p in busy) Resolution(cp(p))];
         await server.inflightAtLeast(8).timeout(const Duration(seconds: 20));
-        final rs = [for (final p in hits) Resolution(cp(p), clock: server.clock)];
+        final rs = [
+          for (final p in hits) Resolution(cp(p), clock: server.clock),
+        ];
         final t0 = server.clock.elapsedMicroseconds;
         await Future<void>.delayed(holdFor);
         final doneWhileHeld = rs.where((r) => r.isDone).length;
@@ -252,8 +255,14 @@ void main() {
         for (var i = 0; i < ps.length; i++) {
           server.images[ps[i]] = cover;
           final url = server.url(ps[i]);
-          rs.add(Resolution(CachedImageProvider(url, sourceKey: src.key, cid: 'd$i')));
-          rs.add(Resolution(HistoryImageProvider(testHistory('d$i', src, url))));
+          rs.add(
+            Resolution(
+              CachedImageProvider(url, sourceKey: src.key, cid: 'd$i'),
+            ),
+          );
+          rs.add(
+            Resolution(HistoryImageProvider(testHistory('d$i', src, url))),
+          );
         }
         final errors = await Future.wait(rs.map((r) => r.result));
         for (final r in rs) {
@@ -306,9 +315,7 @@ void main() {
     });
   }, skip: !hasNativeHttp);
 
-  testWidgets('broken cache entries: first load and one retry', (
-    tester,
-  ) async {
+  testWidgets('broken cache entries: first load and one retry', (tester) async {
     await tester.runAsync(() async {
       final raw = await repeat(() async {
         server.resetCounters();

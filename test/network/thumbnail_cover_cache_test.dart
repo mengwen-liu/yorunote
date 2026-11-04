@@ -5,7 +5,6 @@
 // A retry is simulated by resolving the provider again after the error, as
 // the cover widgets do when they are rebuilt; no automatic retry is expected.
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -45,13 +44,16 @@ void main() {
 
   setUp(() => PaintingBinding.instance.imageCache.clear());
 
-  CachedImageProvider cover(String url, {String? cid = 'c1', bool fb = false}) =>
-      CachedImageProvider(
-        url,
-        sourceKey: srcA.key,
-        cid: cid,
-        fallbackToLocalCover: fb,
-      );
+  CachedImageProvider cover(
+    String url, {
+    String? cid = 'c1',
+    bool fb = false,
+  }) => CachedImageProvider(
+    url,
+    sourceKey: srcA.key,
+    cid: cid,
+    fallbackToLocalCover: fb,
+  );
 
   group('CachedImageProvider', () {
     testWidgets('a valid disk hit is shown without requests', (tester) async {
@@ -59,7 +61,10 @@ void main() {
         const path = '/c/hit.png';
         final url = server.url(path);
         server.images[path] = png(10);
-        await CacheManager().writeCache(thumbDiskKey(url, srcA.key, 'c1'), png(10));
+        await CacheManager().writeCache(
+          thumbDiskKey(url, srcA.key, 'c1'),
+          png(10),
+        );
 
         expect(await resolveOnce(cover(url)), isNull);
         await Future<void>.delayed(settle);
@@ -89,73 +94,77 @@ void main() {
       });
     }, skip: !hasNativeHttp);
 
-    testWidgets('a miss and an expired entry request once and are stored', (
-      tester,
-    ) async {
-      await tester.runAsync(() async {
-        const missPath = '/c/miss.png';
-        final missUrl = server.url(missPath);
-        server.images[missPath] = png(20);
-        expect(await resolveOnce(cover(missUrl)), isNull);
-        expect(server.count(missPath), 1);
-        final stored = await CacheManager().findCache(
-          thumbDiskKey(missUrl, srcA.key, 'c1'),
-        );
-        expect(await stored!.readAsBytes(), png(20));
+    testWidgets(
+      'a miss and an expired entry request once and are stored',
+      (tester) async {
+        await tester.runAsync(() async {
+          const missPath = '/c/miss.png';
+          final missUrl = server.url(missPath);
+          server.images[missPath] = png(20);
+          expect(await resolveOnce(cover(missUrl)), isNull);
+          expect(server.count(missPath), 1);
+          final stored = await CacheManager().findCache(
+            thumbDiskKey(missUrl, srcA.key, 'c1'),
+          );
+          expect(await stored!.readAsBytes(), png(20));
 
-        const expiredPath = '/c/expired.png';
-        final expiredUrl = server.url(expiredPath);
-        server.images[expiredPath] = png(30);
-        await CacheManager().writeCache(
-          thumbDiskKey(expiredUrl, srcA.key, 'c1'),
-          png(31),
-          -1000,
-        );
-        expect(await resolveOnce(cover(expiredUrl)), isNull);
-        expect(server.count(expiredPath), 1);
-        final refreshed = await CacheManager().findCache(
-          thumbDiskKey(expiredUrl, srcA.key, 'c1'),
-        );
-        expect(await refreshed!.readAsBytes(), png(30));
-      });
-    }, skip: !hasNativeHttp);
+          const expiredPath = '/c/expired.png';
+          final expiredUrl = server.url(expiredPath);
+          server.images[expiredPath] = png(30);
+          await CacheManager().writeCache(
+            thumbDiskKey(expiredUrl, srcA.key, 'c1'),
+            png(31),
+            -1000,
+          );
+          expect(await resolveOnce(cover(expiredUrl)), isNull);
+          expect(server.count(expiredPath), 1);
+          final refreshed = await CacheManager().findCache(
+            thumbDiskKey(expiredUrl, srcA.key, 'c1'),
+          );
+          expect(await refreshed!.readAsBytes(), png(30));
+        });
+      },
+      skip: !hasNativeHttp,
+    );
 
     for (final (name, broken) in [
       ('undecodable', corruptPng),
       ('empty', Uint8List(0)),
     ]) {
-      testWidgets('an $name entry is invalidated alone and a retry recovers', (
-        tester,
-      ) async {
-        await tester.runAsync(() async {
-          final path = '/c/$name-recover.png';
-          final url = server.url(path);
-          final otherUrl = server.url('/c/$name-other.png');
-          server.images[path] = png(40);
-          final key = thumbDiskKey(url, srcA.key, 'c1');
-          final otherKey = thumbDiskKey(otherUrl, srcA.key, 'c1');
-          await CacheManager().writeCache(key, broken);
-          await CacheManager().writeCache(otherKey, png(41));
+      testWidgets(
+        'an $name entry is invalidated alone and a retry recovers',
+        (tester) async {
+          await tester.runAsync(() async {
+            final path = '/c/$name-recover.png';
+            final url = server.url(path);
+            final otherUrl = server.url('/c/$name-other.png');
+            server.images[path] = png(40);
+            final key = thumbDiskKey(url, srcA.key, 'c1');
+            final otherKey = thumbDiskKey(otherUrl, srcA.key, 'c1');
+            await CacheManager().writeCache(key, broken);
+            await CacheManager().writeCache(otherKey, png(41));
 
-          expect(await resolveOnce(cover(url)), isNotNull);
-          await Future<void>.delayed(settle);
-          expect(server.count(path), 0, reason: 'no automatic refetch');
-          expect(
-            await CacheManager().findCache(key),
-            isNull,
-            reason: 'the broken entry is invalidated',
-          );
-          expect(await CacheManager().findCache(otherKey), isNotNull);
+            expect(await resolveOnce(cover(url)), isNotNull);
+            await Future<void>.delayed(settle);
+            expect(server.count(path), 0, reason: 'no automatic refetch');
+            expect(
+              await CacheManager().findCache(key),
+              isNull,
+              reason: 'the broken entry is invalidated',
+            );
+            expect(await CacheManager().findCache(otherKey), isNotNull);
 
-          expect(await resolveOnce(cover(url)), isNull, reason: 'retry');
-          expect(server.count(path), 1);
+            expect(await resolveOnce(cover(url)), isNull, reason: 'retry');
+            expect(server.count(path), 1);
 
-          PaintingBinding.instance.imageCache.clear();
-          expect(await resolveOnce(cover(url)), isNull, reason: 'read again');
-          await Future<void>.delayed(settle);
-          expect(server.count(path), 1);
-        });
-      }, skip: !hasNativeHttp);
+            PaintingBinding.instance.imageCache.clear();
+            expect(await resolveOnce(cover(url)), isNull, reason: 'read again');
+            await Future<void>.delayed(settle);
+            expect(server.count(path), 1);
+          });
+        },
+        skip: !hasNativeHttp,
+      );
     }
 
     testWidgets('a broken download is not kept in the cache', (tester) async {
@@ -243,54 +252,64 @@ void main() {
       });
     }, skip: !hasNativeHttp);
 
-    testWidgets('the same URL with another source or cid is kept apart', (
-      tester,
-    ) async {
-      await tester.runAsync(() async {
-        const path = '/c/shared-url.png';
-        final url = server.url(path);
-        server.images[path] = png(80);
-        server.delay = const Duration(milliseconds: 200);
-        final results = await Future.wait([
-          resolveOnce(CachedImageProvider(url, sourceKey: srcA.key, cid: '1')),
-          resolveOnce(CachedImageProvider(url, sourceKey: srcB.key, cid: '1')),
-          resolveOnce(CachedImageProvider(url, sourceKey: srcA.key, cid: '2')),
-        ]);
-        server.delay = Duration.zero;
-        expect(results, [null, null, null]);
-        expect(server.count(path), 3);
-        for (final (s, c) in [(srcA, '1'), (srcB, '1'), (srcA, '2')]) {
+    testWidgets(
+      'the same URL with another source or cid is kept apart',
+      (tester) async {
+        await tester.runAsync(() async {
+          const path = '/c/shared-url.png';
+          final url = server.url(path);
+          server.images[path] = png(80);
+          server.delay = const Duration(milliseconds: 200);
+          final results = await Future.wait([
+            resolveOnce(
+              CachedImageProvider(url, sourceKey: srcA.key, cid: '1'),
+            ),
+            resolveOnce(
+              CachedImageProvider(url, sourceKey: srcB.key, cid: '1'),
+            ),
+            resolveOnce(
+              CachedImageProvider(url, sourceKey: srcA.key, cid: '2'),
+            ),
+          ]);
+          server.delay = Duration.zero;
+          expect(results, [null, null, null]);
+          expect(server.count(path), 3);
+          for (final (s, c) in [(srcA, '1'), (srcB, '1'), (srcA, '2')]) {
+            expect(
+              await CacheManager().findCache(thumbDiskKey(url, s.key, c)),
+              isNotNull,
+            );
+          }
+        });
+      },
+      skip: !hasNativeHttp,
+    );
+
+    testWidgets(
+      'the source thumbnail config still rewrites the request',
+      (tester) async {
+        await tester.runAsync(() async {
+          final url = server.url('/original/cfg.png');
+          server.images['/rewritten/cfg.png'] = png(90);
+          final provider = CachedImageProvider(
+            url,
+            sourceKey: srcCfg.key,
+            cid: 'x',
+          );
+          expect(await resolveOnce(provider), isNull);
+          expect(server.count('/rewritten/cfg.png'), 1);
+          expect(server.count('/original/cfg.png'), 0);
+          final headers = server.requestHeaders['/rewritten/cfg.png']!;
+          expect(headers.value('x-thumb-test'), 'cfg');
+          expect(headers.value('user-agent'), isNotEmpty);
           expect(
-            await CacheManager().findCache(thumbDiskKey(url, s.key, c)),
+            await CacheManager().findCache(thumbDiskKey(url, srcCfg.key, 'x')),
             isNotNull,
           );
-        }
-      });
-    }, skip: !hasNativeHttp);
-
-    testWidgets('the source thumbnail config still rewrites the request', (
-      tester,
-    ) async {
-      await tester.runAsync(() async {
-        final url = server.url('/original/cfg.png');
-        server.images['/rewritten/cfg.png'] = png(90);
-        final provider = CachedImageProvider(
-          url,
-          sourceKey: srcCfg.key,
-          cid: 'x',
-        );
-        expect(await resolveOnce(provider), isNull);
-        expect(server.count('/rewritten/cfg.png'), 1);
-        expect(server.count('/original/cfg.png'), 0);
-        final headers = server.requestHeaders['/rewritten/cfg.png']!;
-        expect(headers.value('x-thumb-test'), 'cfg');
-        expect(headers.value('user-agent'), isNotEmpty);
-        expect(
-          await CacheManager().findCache(thumbDiskKey(url, srcCfg.key, 'x')),
-          isNotNull,
-        );
-      });
-    }, skip: !hasNativeHttp);
+        });
+      },
+      skip: !hasNativeHttp,
+    );
   });
 
   group('HistoryImageProvider', () {
@@ -299,7 +318,10 @@ void main() {
         const path = '/h/hit.png';
         final url = server.url(path);
         server.images[path] = png(100);
-        await CacheManager().writeCache(thumbDiskKey(url, srcA.key, 'h1'), png(100));
+        await CacheManager().writeCache(
+          thumbDiskKey(url, srcA.key, 'h1'),
+          png(100),
+        );
         final provider = HistoryImageProvider(testHistory('h1', srcA, url));
         expect(await resolveOnce(provider), isNull);
         await Future<void>.delayed(settle);
@@ -311,29 +333,34 @@ void main() {
       ('undecodable', corruptPng),
       ('empty', Uint8List(0)),
     ]) {
-      testWidgets('an $name entry is invalidated alone and a retry recovers', (
-        tester,
-      ) async {
-        await tester.runAsync(() async {
-          final path = '/h/$name-recover.png';
-          final url = server.url(path);
-          server.images[path] = png(110);
-          final key = thumbDiskKey(url, srcA.key, 'h-$name');
-          final otherKey = thumbDiskKey(server.url('/h/$name-o.png'), srcA.key);
-          await CacheManager().writeCache(key, broken);
-          await CacheManager().writeCache(otherKey, png(111));
-          final history = testHistory('h-$name', srcA, url);
+      testWidgets(
+        'an $name entry is invalidated alone and a retry recovers',
+        (tester) async {
+          await tester.runAsync(() async {
+            final path = '/h/$name-recover.png';
+            final url = server.url(path);
+            server.images[path] = png(110);
+            final key = thumbDiskKey(url, srcA.key, 'h-$name');
+            final otherKey = thumbDiskKey(
+              server.url('/h/$name-o.png'),
+              srcA.key,
+            );
+            await CacheManager().writeCache(key, broken);
+            await CacheManager().writeCache(otherKey, png(111));
+            final history = testHistory('h-$name', srcA, url);
 
-          expect(await resolveOnce(HistoryImageProvider(history)), isNotNull);
-          await Future<void>.delayed(settle);
-          expect(server.count(path), 0, reason: 'no automatic refetch');
-          expect(await CacheManager().findCache(key), isNull);
-          expect(await CacheManager().findCache(otherKey), isNotNull);
+            expect(await resolveOnce(HistoryImageProvider(history)), isNotNull);
+            await Future<void>.delayed(settle);
+            expect(server.count(path), 0, reason: 'no automatic refetch');
+            expect(await CacheManager().findCache(key), isNull);
+            expect(await CacheManager().findCache(otherKey), isNotNull);
 
-          expect(await resolveOnce(HistoryImageProvider(history)), isNull);
-          expect(server.count(path), 1);
-        });
-      }, skip: !hasNativeHttp);
+            expect(await resolveOnce(HistoryImageProvider(history)), isNull);
+            expect(server.count(path), 1);
+          });
+        },
+        skip: !hasNativeHttp,
+      );
     }
 
     testWidgets('a local history cover is shown and never deleted', (

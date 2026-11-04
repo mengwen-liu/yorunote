@@ -1,0 +1,151 @@
+Running Gradle task 'assembleProfile'...                        
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':gradle:compileKotlin'.
+> Could not isolate parameters org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@eedd177 of artifact transform BuildToolsApiClasspathEntrySnapshotTransform
+   > Could not isolate value org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@eedd177 of type BuildToolsApiClasspathEntrySnapshotTransform.Parameters
+      > Could not resolve all files for configuration ':gradle:kotlinBuildToolsApiClasspath'.
+         > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-impl:2.0.21.
+           Required by:
+               project :gradle
+            > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-impl:2.0.21.
+               > Could not get resource 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-impl/2.0.21/kotlin-build-tools-impl-2.0.21.pom'.
+                  > Could not GET 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-impl/2.0.21/kotlin-build-tools-impl-2.0.21.pom'. Received status code 429 from server: Too Many Requests
+
+* Try:
+> Run the 'artifactTransforms' report task to view details about registered transforms.
+> Review the documentation on Artifact Transforms at https://docs.gradle.org/8.13/userguide/artifact_transforms.html.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 12s
+Running Gradle task 'assembleProfile'...                           73.1s
+[!] Gradle threw an error while downloading artifacts from the network.
+Retrying Gradle Build: #1, wait time: 100ms
+Running Gradle task 'assembleProfile'...                        
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Could not resolve all artifacts for configuration 'classpath'.
+> Could not resolve org.apache.httpcomponents:httpmime:4.5.6.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools:sdklib:31.12.3
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools.analytics-library:crash:31.12.3
+   > Could not resolve org.apache.httpcomponents:httpmime:4.5.6.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpmime/4.5.6/httpmime-4.5.6.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpmime/4.5.6/httpmime-4.5.6.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve org.apache.httpcomponents:httpmime:4.5.6.
+      > Could not get resource 'https://plugins.gradle.org/m2/org/apache/httpcomponents/httpmime/4.5.6/httpmime-4.5.6.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpmime/4.5.6/httpmime-4.5.6.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve commons-io:commons-io:2.16.1.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > androidx.databinding:databinding-compiler-common:8.12.3
+   > Could not resolve commons-io:commons-io:2.16.1.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/commons-io/commons-io/2.16.1/commons-io-2.16.1.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/commons-io/commons-io/2.16.1/commons-io-2.16.1.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve commons-io:commons-io:2.16.1.
+      > Could not get resource 'https://plugins.gradle.org/m2/commons-io/commons-io/2.16.1/commons-io-2.16.1.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/commons-io/commons-io/2.16.1/commons-io-2.16.1.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve org.ow2.asm:asm-analysis:9.7.1.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > org.ow2.asm:asm-util:9.7.1
+   > Could not resolve org.ow2.asm:asm-analysis:9.7.1.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/org/ow2/asm/asm-analysis/9.7.1/asm-analysis-9.7.1.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/ow2/asm/asm-analysis/9.7.1/asm-analysis-9.7.1.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve org.ow2.asm:asm-analysis:9.7.1.
+      > Could not get resource 'https://plugins.gradle.org/m2/org/ow2/asm/asm-analysis/9.7.1/asm-analysis-9.7.1.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/ow2/asm/asm-analysis/9.7.1/asm-analysis-9.7.1.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.1.0.
+  Required by:
+      unspecified:unspecified:unspecified > project :gradle > org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0
+   > Could not resolve org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.1.0.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.1.0/kotlin-klib-commonizer-api-2.1.0.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.1.0/kotlin-klib-commonizer-api-2.1.0.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.1.0.
+      > Could not get resource 'https://plugins.gradle.org/m2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.1.0/kotlin-klib-commonizer-api-2.1.0.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.1.0/kotlin-klib-commonizer-api-2.1.0.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve org.apache.commons:commons-compress:1.21.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools:sdk-common:31.12.3
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools:sdklib:31.12.3
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools:repository:31.12.3
+   > Could not resolve org.apache.commons:commons-compress:1.21.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.21/commons-compress-1.21.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.21/commons-compress-1.21.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve org.apache.commons:commons-compress:1.21.
+      > Could not get resource 'https://plugins.gradle.org/m2/org/apache/commons/commons-compress/1.21/commons-compress-1.21.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.21/commons-compress-1.21.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve org.apache.httpcomponents:httpcore:4.4.16.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools:sdklib:31.12.3
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools.analytics-library:crash:31.12.3
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools.analytics-library:crash:31.12.3 > org.apache.httpcomponents:httpclient:4.5.14
+   > Could not resolve org.apache.httpcomponents:httpcore:4.4.16.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve org.apache.httpcomponents:httpcore:4.4.16.
+      > Could not get resource 'https://plugins.gradle.org/m2/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve jakarta.xml.bind:jakarta.xml.bind-api:2.3.2.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > org.glassfish.jaxb:jaxb-runtime:2.3.2
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > org.glassfish.jaxb:jaxb-runtime:2.3.2 > org.jvnet.staxex:stax-ex:1.8.1
+   > Could not resolve jakarta.xml.bind:jakarta.xml.bind-api:2.3.2.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/jakarta/xml/bind/jakarta.xml.bind-api/2.3.2/jakarta.xml.bind-api-2.3.2.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/jakarta/xml/bind/jakarta.xml.bind-api/2.3.2/jakarta.xml.bind-api-2.3.2.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve jakarta.xml.bind:jakarta.xml.bind-api:2.3.2.
+      > Could not get resource 'https://plugins.gradle.org/m2/jakarta/xml/bind/jakarta.xml.bind-api/2.3.2/jakarta.xml.bind-api-2.3.2.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/jakarta/xml/bind/jakarta.xml.bind-api/2.3.2/jakarta.xml.bind-api-2.3.2.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve com.sun.istack:istack-commons-runtime:3.0.8.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > org.glassfish.jaxb:jaxb-runtime:2.3.2
+   > Could not resolve com.sun.istack:istack-commons-runtime:3.0.8.
+      > Could not parse POM https://repo.maven.apache.org/maven2/com/sun/istack/istack-commons-runtime/3.0.8/istack-commons-runtime-3.0.8.pom
+         > Could not resolve com.sun.istack:istack-commons:3.0.8.
+            > Could not resolve com.sun.istack:istack-commons:3.0.8.
+               > Could not get resource 'https://repo.maven.apache.org/maven2/com/sun/istack/istack-commons/3.0.8/istack-commons-3.0.8.pom'.
+                  > Could not GET 'https://repo.maven.apache.org/maven2/com/sun/istack/istack-commons/3.0.8/istack-commons-3.0.8.pom'. Received status code 429 from server: Too Many Requests
+            > Could not resolve com.sun.istack:istack-commons:3.0.8.
+               > Could not get resource 'https://plugins.gradle.org/m2/com/sun/istack/istack-commons/3.0.8/istack-commons-3.0.8.pom'.
+                  > Could not GET 'https://repo.maven.apache.org/maven2/com/sun/istack/istack-commons/3.0.8/istack-commons-3.0.8.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve com.sun.istack:istack-commons-runtime:3.0.8.
+      > Could not get resource 'https://plugins.gradle.org/m2/com/sun/istack/istack-commons-runtime/3.0.8/istack-commons-runtime-3.0.8.pom'.
+         > Could not HEAD 'https://repo.maven.apache.org/maven2/com/sun/istack/istack-commons-runtime/3.0.8/istack-commons-runtime-3.0.8.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve com.google.auto.value:auto-value-annotations:1.6.2.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > com.android.tools.build:bundletool:1.18.1
+   > Could not resolve com.google.auto.value:auto-value-annotations:1.6.2.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/com/google/auto/value/auto-value-annotations/1.6.2/auto-value-annotations-1.6.2.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/com/google/auto/value/auto-value-annotations/1.6.2/auto-value-annotations-1.6.2.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve com.google.auto.value:auto-value-annotations:1.6.2.
+      > Could not get resource 'https://plugins.gradle.org/m2/com/google/auto/value/auto-value-annotations/1.6.2/auto-value-annotations-1.6.2.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/com/google/auto/value/auto-value-annotations/1.6.2/auto-value-annotations-1.6.2.pom'. Received status code 429 from server: Too Many Requests
+> Could not resolve io.netty:netty-codec-http2:4.1.110.Final.
+  Required by:
+      unspecified:unspecified:unspecified > com.android.application:com.android.application.gradle.plugin:8.12.3 > com.android.tools.build:gradle:8.12.3 > io.grpc:grpc-netty:1.69.1
+   > Could not resolve io.netty:netty-codec-http2:4.1.110.Final.
+      > Could not get resource 'https://repo.maven.apache.org/maven2/io/netty/netty-codec-http2/4.1.110.Final/netty-codec-http2-4.1.110.Final.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/io/netty/netty-codec-http2/4.1.110.Final/netty-codec-http2-4.1.110.Final.pom'. Received status code 429 from server: Too Many Requests
+   > Could not resolve io.netty:netty-codec-http2:4.1.110.Final.
+      > Could not get resource 'https://plugins.gradle.org/m2/io/netty/netty-codec-http2/4.1.110.Final/netty-codec-http2-4.1.110.Final.pom'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/io/netty/netty-codec-http2/4.1.110.Final/netty-codec-http2-4.1.110.Final.pom'. Received status code 429 from server: Too Many Requests
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 58s
+Running Gradle task 'assembleProfile'...                          118.9s
+[!] Gradle threw an error while downloading artifacts from the network.
+Gradle task assembleProfile failed with exit code 1
+exit 1

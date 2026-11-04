@@ -1,0 +1,7 @@
+00:00 +0: loading /opt/build/venera/test/brand/yorunote_brand_test.dart
+00:00 +0: About 品牌文案在簡繁翻譯中都有對應
+00:00 +1: 自適應圖示各密度尺寸正確，背景為 #17283B 純色
+00:00 +2: 前景透明、主體位於可見區；單色層不是整張不透明方塊
+00:00 +3: assets/app_icon.png 為 1024 方形且非空白
+00:00 +4: All tests passed!
+exit 0

@@ -1,0 +1,22 @@
+== flutter
+   Woah! You appear to be trying to run flutter as root.
+   We strongly recommend running the flutter tool without superuser privileges.
+  /
+📎
+== java
+openjdk version "17.0.21" 2026-10-20
+OpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)
+OpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)
+== rust
+rustc 1.85.1 (4eb161250 2025-03-15)
+== ndk
+Pkg.Revision = 28.0.13004108
+== build-tools/platform
+/opt/tc/android-sdk/build-tools:
+36.0.0
+
+/opt/tc/android-sdk/platforms:
+android-36
+== accepted license hashes (android-sdk-license)
+
+24333f8a63b6825ea9c5514f83c2829b004d1fee== packages installed via sdkmanager: platforms;android-36, build-tools;36.0.0, ndk;28.0.13004108, platform-tools

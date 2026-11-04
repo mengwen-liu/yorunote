@@ -1,0 +1,9 @@
+f3869427e394ef2a45e572af9066aed8cc31553de9f1a2c35b0cc1384cb0bbb7  pubspec.lock
+ff69f7709f239a63633970337090ebdc491cbf2a692dd5bf2e0a98aebbefc125  pubspec.yaml
+24bda6b5aebd5e2f79aeb5199075539a46729543c7d43b159ac6cef62ae83cc4  android/app/build.gradle
+935c3d6e47270dacb8d043cedd67813a5d5312537080190f2647a89c59327da0  android/app/src/main/AndroidManifest.xml
+33:    namespace = "com.github.wgh136.venera"
+60:    signingConfigs {
+76:        applicationId = "com.github.wgh136.venera"
+92:            signingConfig signingConfigs.release
+98:            signingConfig signingConfigs.debug

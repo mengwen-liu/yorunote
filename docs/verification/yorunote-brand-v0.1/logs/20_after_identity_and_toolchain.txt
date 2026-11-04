@@ -1,0 +1,16 @@
+f3869427e394ef2a45e572af9066aed8cc31553de9f1a2c35b0cc1384cb0bbb7  pubspec.lock
+ff69f7709f239a63633970337090ebdc491cbf2a692dd5bf2e0a98aebbefc125  pubspec.yaml
+24bda6b5aebd5e2f79aeb5199075539a46729543c7d43b159ac6cef62ae83cc4  android/app/build.gradle
+33:    namespace = "com.github.wgh136.venera"
+60:    signingConfigs {
+76:        applicationId = "com.github.wgh136.venera"
+92:            signingConfig signingConfigs.release
+98:            signingConfig signingConfigs.debug
+ README.md                                | 7 +++++++
+ android/app/src/main/AndroidManifest.xml | 2 +-
+ assets/translation.json                  | 4 ++++
+ lib/main.dart                            | 2 +-
+ lib/pages/settings/about.dart            | 4 +++-
+ 5 files changed, 16 insertions(+), 3 deletions(-)
+changed identity/workflow files:
+flutter/dart: not installed

@@ -1,4 +1,4 @@
-import 'dart:async' show Future;
+import 'dart:async' show Future, StreamController;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:venera/foundation/local.dart';
@@ -17,7 +17,18 @@ class HistoryImageProvider
   final History history;
 
   @override
-  Future<Uint8List> load(chunkEvents, checkStop) async {
+  Future<Uint8List> load(chunkEvents, checkStop) =>
+      _load(chunkEvents, checkStop, null);
+
+  @override
+  Future<Uint8List> loadCancellable(chunkEvents, checkStop, stopped) =>
+      _load(chunkEvents, checkStop, stopped);
+
+  Future<Uint8List> _load(
+    StreamController<ImageChunkEvent> chunkEvents,
+    void Function() checkStop,
+    Future<void>? stopped,
+  ) async {
     var url = history.cover;
     if (!url.contains('/')) {
       var localComic = LocalManager().find(history.id, history.type);
@@ -37,6 +48,7 @@ class HistoryImageProvider
       history.type.sourceKey,
       history.id,
       checkStop: checkStop,
+      stopped: stopped,
       onProgress: (currentBytes, totalBytes) {
         chunkEvents.add(
           ImageChunkEvent(

@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
-import 'package:flutter/foundation.dart' show listEquals;
+import 'package:flutter/foundation.dart' show listEquals, visibleForTesting;
 import 'package:flutter_qjs/flutter_qjs.dart';
 import 'package:venera/foundation/cache_manager.dart';
 import 'package:venera/foundation/comic_source/comic_source.dart';
@@ -106,6 +107,13 @@ abstract class ImageDownloader {
   /// Disk cache hits and local files never wait for it.
   static final coverRequestLimiter = RequestLimiter(maxCoverRequests);
 
+  /// Test-only timing probe for cover network loads: called with
+  /// `enqueue` (before waiting for a slot of [coverRequestLimiter]),
+  /// `granted` (slot obtained) and `request` (request handed to Dio), and the
+  /// disk cache key. Null in the app.
+  @visibleForTesting
+  static void Function(String event, String cacheKey)? debugCoverLoadEvent;
+
   /// Cover network loads in progress, by disk cache key.
   static final _coverLoads = <String, _CoverLoad>{};
 
@@ -121,22 +129,31 @@ abstract class ImageDownloader {
   /// - concurrent loads of the same disk cache key share one request, which is
   ///   abandoned only when every load sharing it has been stopped.
   ///
-  /// [checkStop] throws once the caller's load has been stopped.
+  /// [checkStop] throws once the caller's load has been stopped. [stopped],
+  /// if given, completes at that moment; the caller then returns right away,
+  /// and when it was the last load using the request, the request is
+  /// cancelled down to rhttp (also while waiting for headers or body bytes)
+  /// or, if still queued, removed from [coverRequestLimiter].
   static Future<Uint8List> loadCoverThumbnail(
     String url,
     String? sourceKey,
     String? cid, {
     required void Function() checkStop,
     void Function(int currentBytes, int? totalBytes)? onProgress,
+    Future<void>? stopped,
   }) async {
-    final consumer = _CoverConsumer(() {
-      try {
-        checkStop();
-        return false;
-      } catch (_) {
-        return true;
-      }
-    }, onProgress);
+    final consumer = _CoverConsumer(
+      () {
+        try {
+          checkStop();
+          return false;
+        } catch (_) {
+          return true;
+        }
+      },
+      onProgress,
+      stopped,
+    );
     while (true) {
       try {
         return await _loadCover(url, sourceKey, cid, consumer);
@@ -183,19 +200,29 @@ abstract class ImageDownloader {
       return cache;
     }
     var load = _coverLoads[cacheKey];
-    if (load != null) {
-      load.consumers.add(consumer);
-      return load.future;
+    if (load == null) {
+      final newLoad = _CoverLoad(cacheKey);
+      load = newLoad;
+      _coverLoads[cacheKey] = newLoad;
+      newLoad.attach(consumer);
+      newLoad.future = _fetchCover(
+        url,
+        sourceKey,
+        cid,
+        cacheKey,
+        newLoad,
+      ).whenComplete(() => _forgetCoverLoad(newLoad));
+    } else {
+      load.attach(consumer);
     }
-    final newLoad = _CoverLoad()..consumers.add(consumer);
-    _coverLoads[cacheKey] = newLoad;
-    newLoad.future = _fetchCover(url, sourceKey, cid, cacheKey, newLoad)
-        .whenComplete(() {
-          if (_coverLoads[cacheKey] == newLoad) {
-            _coverLoads.remove(cacheKey);
-          }
-        });
-    return newLoad.future;
+    return consumer.wait(load.future);
+  }
+
+  /// Removes [load] from the loads that new consumers can join.
+  static void _forgetCoverLoad(_CoverLoad load) {
+    if (_coverLoads[load.cacheKey] == load) {
+      _coverLoads.remove(load.cacheKey);
+    }
   }
 
   static Future<Uint8List?> _readCoverCache(String cacheKey) async {
@@ -206,6 +233,33 @@ abstract class ImageDownloader {
     final data = await cache.readAsBytes();
     _coverCacheKeys[data] = cacheKey;
     return data;
+  }
+
+  /// [_readCoverCache] for the check made after waiting for a slot: empty or
+  /// undecodable bytes are treated as a miss, so the request goes out and its
+  /// result replaces them. The decode happens only when an entry appeared
+  /// while waiting, never for an ordinary cache hit.
+  static Future<Uint8List?> _readValidCoverCache(String cacheKey) async {
+    final data = await _readCoverCache(cacheKey);
+    if (data == null || data.isEmpty || !await _canDecode(data)) {
+      return null;
+    }
+    return data;
+  }
+
+  static Future<bool> _canDecode(Uint8List data) async {
+    try {
+      final codec = await ui.instantiateImageCodec(data);
+      try {
+        final frame = await codec.getNextFrame();
+        frame.image.dispose();
+      } finally {
+        codec.dispose();
+      }
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   static Future<Uint8List> _fetchCover(
@@ -235,23 +289,25 @@ abstract class ImageDownloader {
           comicInfo.data.cover,
           sourceKey,
           null,
-          _CoverConsumer(load.isCancelled, load.progress),
+          _CoverConsumer(load.isCancelled, load.progress, load.abandoned),
         );
       }
     }
 
+    debugCoverLoadEvent?.call('enqueue', cacheKey);
     final release = await coverRequestLimiter.acquire(
       isCancelled: load.isCancelled,
+      cancelSignal: load.abandoned,
     );
+    debugCoverLoadEvent?.call('granted', cacheKey);
     try {
-      // Another load may have stored the cover while this one was waiting.
-      final cache = await _readCoverCache(cacheKey);
+      // Another path may have stored the cover while this load was waiting
+      // for its slot; empty or broken bytes stored meanwhile are no hit.
+      final cache = await _readValidCoverCache(cacheKey);
       if (cache != null) {
         return cache;
       }
-      if (load.isCancelled()) {
-        throw const RequestCancelledException();
-      }
+      load.throwIfCancelled();
 
       var dio = AppDio(
         BaseOptions(
@@ -265,24 +321,39 @@ abstract class ImageDownloader {
       if (requestUrl.startsWith('//')) {
         requestUrl = 'https:$requestUrl';
       }
-      var req = await dio.request<ResponseBody>(
-        requestUrl,
-        data: configs['data'],
-      );
-      var stream = req.data?.stream ?? (throw "Error: Empty response body.");
-      int? expectedBytes = req.data!.contentLength;
-      if (expectedBytes == -1) {
-        expectedBytes = null;
-      }
+      debugCoverLoadEvent?.call('request', cacheKey);
+      Response<ResponseBody> req;
       var buffer = <int>[];
-      await for (var data in stream) {
-        if (load.isCancelled()) {
+      int? expectedBytes;
+      try {
+        req = await dio.request<ResponseBody>(
+          requestUrl,
+          data: configs['data'],
+          cancelToken: load.cancelToken,
+        );
+        load.headersReceived = true;
+        if (load.isAbandoned) {
+          // Abandoned while waiting for the headers: tear it down now.
+          load.cancelToken.cancel();
           throw const RequestCancelledException();
         }
-        buffer.addAll(data);
-        if (expectedBytes != null) {
-          load.progress(buffer.length, expectedBytes);
+        var stream = req.data?.stream ?? (throw "Error: Empty response body.");
+        expectedBytes = req.data!.contentLength;
+        if (expectedBytes == -1) {
+          expectedBytes = null;
         }
+        await for (var data in stream) {
+          load.throwIfCancelled();
+          buffer.addAll(data);
+          if (expectedBytes != null) {
+            load.progress(buffer.length, expectedBytes);
+          }
+        }
+      } on DioException catch (e) {
+        if (CancelToken.isCancel(e) || load.isAbandoned) {
+          throw const RequestCancelledException();
+        }
+        rethrow;
       }
 
       if (configs['onResponse'] is JSInvokable) {
@@ -486,12 +557,58 @@ abstract class ImageDownloader {
 
 /// One cover network load and the provider loads sharing it.
 class _CoverLoad {
+  _CoverLoad(this.cacheKey);
+
+  final String cacheKey;
+
   final consumers = <_CoverConsumer>[];
 
   late final Future<Uint8List> future;
 
+  /// Cancels the request in Dio and, through RHttpAdapter, in rhttp.
+  /// Only used once the headers are in (see RHttpAdapter.fetch): before
+  /// that, Dio would give up on the request while rhttp keeps it open, so
+  /// the slot would be returned for a request that is still running.
+  final cancelToken = CancelToken();
+
+  /// True once the response headers have arrived.
+  bool headersReceived = false;
+
+  final _abandoned = Completer<void>();
+
+  /// Completes once every load sharing this one has been stopped.
+  Future<void> get abandoned => _abandoned.future;
+
+  bool get isAbandoned => _abandoned.isCompleted;
+
+  void attach(_CoverConsumer consumer) {
+    consumers.add(consumer);
+    consumer.onStop(_abandonIfUnused);
+  }
+
   /// True once every load sharing this one has been stopped.
-  bool isCancelled() => consumers.every((c) => c.isCancelled());
+  bool isCancelled() => isAbandoned || consumers.every((c) => c.isCancelled());
+
+  void throwIfCancelled() {
+    if (isCancelled()) {
+      _abandonIfUnused();
+      throw const RequestCancelledException();
+    }
+  }
+
+  /// Abandons the load when no consumer needs it any more: new consumers
+  /// start a new load, a queued request leaves the queue and a running
+  /// request is cancelled.
+  void _abandonIfUnused() {
+    if (isAbandoned || !consumers.every((c) => c.isCancelled())) {
+      return;
+    }
+    _abandoned.complete();
+    ImageDownloader._forgetCoverLoad(this);
+    if (headersReceived) {
+      cancelToken.cancel();
+    }
+  }
 
   void progress(int currentBytes, int? totalBytes) {
     for (final c in consumers) {
@@ -503,11 +620,49 @@ class _CoverLoad {
 }
 
 class _CoverConsumer {
-  const _CoverConsumer(this.isCancelled, this.onProgress);
+  _CoverConsumer(this._isStopped, this.onProgress, this._stopped) {
+    _stopped?.then((_) {
+      _stopSignalled = true;
+      for (final listener in _stopListeners) {
+        listener();
+      }
+      _stopListeners.clear();
+    });
+  }
 
-  final bool Function() isCancelled;
+  final bool Function() _isStopped;
 
   final void Function(int currentBytes, int? totalBytes)? onProgress;
+
+  final Future<void>? _stopped;
+
+  bool _stopSignalled = false;
+
+  final _stopListeners = <void Function()>[];
+
+  bool isCancelled() => _stopSignalled || _isStopped();
+
+  /// Calls [listener] when this consumer's stop signal fires.
+  void onStop(void Function() listener) {
+    if (_stopSignalled) {
+      listener();
+    } else {
+      _stopListeners.add(listener);
+    }
+  }
+
+  /// Waits for [load], or fails with [RequestCancelledException] as soon as
+  /// this consumer is stopped (other consumers keep the load alive).
+  Future<Uint8List> wait(Future<Uint8List> load) {
+    final stopped = _stopped;
+    if (stopped == null) {
+      return load;
+    }
+    return Future.any([
+      load,
+      stopped.then<Uint8List>((_) => throw const RequestCancelledException()),
+    ]);
+  }
 }
 
 /// A wrapper class for a stream that

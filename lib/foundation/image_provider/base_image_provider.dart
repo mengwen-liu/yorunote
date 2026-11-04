@@ -1,4 +1,4 @@
-import 'dart:async' show Future, StreamController, scheduleMicrotask;
+import 'dart:async' show Completer, Future, StreamController, scheduleMicrotask;
 import 'dart:convert';
 import 'dart:math';
 import 'dart:ui' as ui show Codec;
@@ -59,19 +59,25 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
 
       bool stop = false;
 
+      // Completes when the image is no longer needed (see [loadCancellable]).
+      final stopped = Completer<void>();
+
       chunkEvents.onCancel = () {
         stop = true;
+        if (!stopped.isCompleted) {
+          stopped.complete();
+        }
       };
 
       Uint8List? data;
 
       while (data == null && !stop) {
         try {
-          data = await load(chunkEvents, () {
+          data = await loadCancellable(chunkEvents, () {
             if (stop) {
               throw const _ImageLoadingStopException();
             }
-          });
+          }, stopped.future);
         } on _ImageLoadingStopException {
           rethrow;
         } catch (e) {
@@ -140,6 +146,19 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
     StreamController<ImageChunkEvent> chunkEvents,
     void Function() checkStop,
   );
+
+  /// Same as [load], with [stopped] completing as soon as the image is no
+  /// longer needed, so that a provider can abort work that does not produce
+  /// events (e.g. a request waiting for headers) instead of waiting for the
+  /// next [checkStop] call.
+  ///
+  /// The default implementation ignores [stopped] and calls [load].
+  @protected
+  Future<Uint8List> loadCancellable(
+    StreamController<ImageChunkEvent> chunkEvents,
+    void Function() checkStop,
+    Future<void> stopped,
+  ) => load(chunkEvents, checkStop);
 
   String get key;
 

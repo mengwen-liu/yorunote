@@ -1,6 +1,8 @@
 // Unit tests of RequestLimiter, the event-driven limit of cover requests.
 // No timers are used: a waiter must get a freed slot within microtasks.
 
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:venera/network/images.dart';
 import 'package:venera/network/request_limiter.dart';
@@ -112,5 +114,38 @@ void main() {
     expect(results.reduce((a, b) => a + b), 10);
     expect(limiter.active, 0);
     expect(limiter.waiting, 0);
+  });
+
+  test('a cancel signal removes a waiter from the queue at once', () async {
+    final limiter = RequestLimiter(1);
+    final first = await limiter.acquire();
+    final signal = Completer<void>();
+    final cancelled = limiter.acquire(cancelSignal: signal.future);
+    final next = limiter.acquire();
+    expect(limiter.waiting, 2);
+    signal.complete();
+    await expectLater(cancelled, throwsA(isA<RequestCancelledException>()));
+    expect(limiter.waiting, 1, reason: 'left the queue before any release');
+    first();
+    final release = await next;
+    expect(limiter.active, 1);
+    release();
+    expect(limiter.active, 0);
+    expect(limiter.waiting, 0);
+  });
+
+  test('a cancel signal after the grant does not take the slot away', () async {
+    final limiter = RequestLimiter(1);
+    final first = await limiter.acquire();
+    final signal = Completer<void>();
+    final waiter = limiter.acquire(cancelSignal: signal.future);
+    first();
+    final release = await waiter;
+    signal.complete();
+    await _microtasks();
+    expect(limiter.active, 1);
+    release();
+    release();
+    expect(limiter.active, 0);
   });
 }

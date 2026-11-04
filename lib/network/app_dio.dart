@@ -227,12 +227,49 @@ class RHttpAdapter implements HttpClientAdapter {
       options.headers['User-Agent'] = "venera/v${App.version}";
     }
 
+    // Without a cancel signal the request is made exactly as before.
+    //
+    // With one, the rhttp request is cancelled only after its headers have
+    // arrived. rhttp 0.15.1 (built with panic = "abort") cancels by dropping
+    // the Rust future; if that future is waiting for the reply of a Dart
+    // callback (onResponse / onError, i.e. around the arrival of the
+    // headers), flutter_rust_bridge 2.11.1 panics when the reply comes and
+    // the whole process aborts. Once the headers are in and one event-loop
+    // turn has passed, the Rust side only streams the body, so dropping it
+    // is safe. A request still waiting for its headers is therefore not torn
+    // down until they arrive.
+    rhttp.CancelToken? cancelToken;
+    var cancelled = false;
+    var headersReceived = false;
+    var rhttpCancelScheduled = false;
+    void scheduleRhttpCancel() {
+      final token = cancelToken;
+      if (token == null || rhttpCancelScheduled) return;
+      rhttpCancelScheduled = true;
+      Timer.run(() {
+        token.cancel().catchError((Object e, StackTrace s) {
+          Log.error("Network", "Failed to cancel request: $e", s);
+        });
+      });
+    }
+
+    if (cancelFuture != null) {
+      cancelToken = rhttp.CancelToken();
+      unawaited(
+        cancelFuture.then((_) {
+          cancelled = true;
+          if (headersReceived) scheduleRhttpCancel();
+        }),
+      );
+    }
+
     var res = await rhttp.Rhttp.request(
       method: rhttp.HttpMethod(options.method),
       url: options.uri.toString(),
       settings: await settings,
       expectBody: rhttp.HttpExpectBody.stream,
       body: requestStream == null ? null : rhttp.HttpBody.stream(requestStream),
+      cancelToken: cancelToken,
       headers: rhttp.HttpHeaders.rawMap(
         Map.fromEntries(
           options.headers.entries.map(
@@ -241,6 +278,8 @@ class RHttpAdapter implements HttpClientAdapter {
         ),
       ),
     );
+    headersReceived = true;
+    if (cancelled) scheduleRhttpCancel();
     if (res is! rhttp.HttpStreamResponse) {
       throw Exception("Invalid response type: ${res.runtimeType}");
     }
@@ -251,12 +290,48 @@ class RHttpAdapter implements HttpClientAdapter {
       headers[key]!.add(entry.$2);
     }
     return ResponseBody(
-      res.body,
+      cancelToken == null
+          ? res.body
+          : _drainAfterCancel(res.body, () => cancelled),
       res.statusCode,
       statusMessage: _getStatusMessage(res.statusCode),
       isRedirect: false,
       headers: headers,
     );
+  }
+
+  /// Forwards [body]. Once the request was cancelled, the rhttp stream is
+  /// kept and drained until it ends (rhttp ends it with a cancel error right
+  /// after the cancellation) so that this error has a listener; data is no
+  /// longer forwarded then. Before the cancellation every event, errors
+  /// included, is forwarded unchanged.
+  static Stream<Uint8List> _drainAfterCancel(
+    Stream<Uint8List> body,
+    bool Function() cancelled,
+  ) {
+    late StreamSubscription<Uint8List> sub;
+    final out = StreamController<Uint8List>(
+      onCancel: () {
+        if (cancelled()) {
+          return null;
+        }
+        return sub.cancel();
+      },
+    );
+    sub = body.listen(
+      (data) {
+        if (!cancelled()) {
+          out.add(data);
+        }
+      },
+      onError: (Object e, StackTrace s) {
+        if (!cancelled()) {
+          out.addError(e, s);
+        }
+      },
+      onDone: out.close,
+    );
+    return out.stream;
   }
 
   static String _getStatusMessage(int statusCode) {

@@ -1,4 +1,4 @@
-import 'dart:async' show Future;
+import 'dart:async' show Future, StreamController;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:venera/foundation/comic_type.dart';
@@ -32,7 +32,18 @@ class CachedImageProvider
   final bool fallbackToLocalCover;
 
   @override
-  Future<Uint8List> load(chunkEvents, checkStop) async {
+  Future<Uint8List> load(chunkEvents, checkStop) =>
+      _load(chunkEvents, checkStop, null);
+
+  @override
+  Future<Uint8List> loadCancellable(chunkEvents, checkStop, stopped) =>
+      _load(chunkEvents, checkStop, stopped);
+
+  Future<Uint8List> _load(
+    StreamController<ImageChunkEvent> chunkEvents,
+    void Function() checkStop,
+    Future<void>? stopped,
+  ) async {
     try {
       if(url.startsWith("file://")) {
         var file = File(url.substring(7));
@@ -45,6 +56,7 @@ class CachedImageProvider
         sourceKey,
         cid,
         checkStop: checkStop,
+        stopped: stopped,
         onProgress: (currentBytes, totalBytes) {
           chunkEvents.add(
             ImageChunkEvent(

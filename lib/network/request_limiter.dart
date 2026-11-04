@@ -13,7 +13,8 @@ class RequestCancelledException implements Exception {
 /// Lets at most [maxConcurrent] requests run at the same time.
 ///
 /// Waiters are served in FIFO order. A released slot is handed to the next
-/// waiter right away (no polling). Waiters whose [acquire] `isCancelled`
+/// waiter right away (no polling). A waiter leaves the queue as soon as its
+/// [acquire] `cancelSignal` completes, and waiters whose `isCancelled`
 /// callback returns true when their turn comes are skipped, so cancelled loads
 /// never hold or lose a slot.
 class RequestLimiter {
@@ -35,13 +36,25 @@ class RequestLimiter {
   ///
   /// The returned function must be called once the request has finished,
   /// failed or been abandoned; calling it again has no effect.
-  Future<void Function()> acquire({bool Function()? isCancelled}) {
+  ///
+  /// When [cancelSignal] completes before a slot is granted, the waiter is
+  /// removed from the queue and the future fails with
+  /// [RequestCancelledException].
+  Future<void Function()> acquire({
+    bool Function()? isCancelled,
+    Future<void>? cancelSignal,
+  }) {
     if (_active < maxConcurrent && _waiters.isEmpty) {
       _active++;
       return Future.value(_releaser());
     }
     final waiter = _Waiter(isCancelled);
     _waiters.add(waiter);
+    cancelSignal?.then((_) {
+      if (!waiter.completer.isCompleted && _waiters.remove(waiter)) {
+        waiter.completer.completeError(const RequestCancelledException());
+      }
+    });
     return waiter.completer.future;
   }
 

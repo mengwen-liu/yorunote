@@ -141,4 +141,35 @@ void main() {
     },
     skip: !hasNativeHttp,
   );
+
+  test(
+    'cancelling right as the headers arrive never aborts the process',
+    () async {
+      // rhttp 0.15.1 aborts the whole process if a request is dropped while its
+      // onResponse callback is in flight. The cancel is fired the moment the
+      // server has flushed the headers, many times over.
+      for (var i = 0; i < 200; i++) {
+        final p = path('race-$i', RawMode.holdHeaders);
+        final token = CancelToken();
+        final req = streamDio()
+            .request<ResponseBody>(server.url(p), cancelToken: token)
+            .then<Object?>((r) => r, onError: (Object e) => e);
+        await server.until(() => server.count(p) == 1);
+        final h = server.heldFor(p).single;
+        await h.sendHeadersAndStall();
+        token.cancel();
+        final r = await req;
+        if (r is Response<ResponseBody>) {
+          await r.data!.stream.drain<void>().catchError((_) {});
+        }
+        await h.closedByClient.timeout(const Duration(seconds: 10));
+      }
+      // Still alive and able to make requests.
+      final ok = path('race-after', RawMode.immediate);
+      final res = await streamDio().request<ResponseBody>(server.url(ok));
+      expect(await readAll(res.data!.stream), server.images[ok]);
+    },
+    skip: !hasNativeHttp,
+    timeout: const Timeout(Duration(minutes: 3)),
+  );
 }

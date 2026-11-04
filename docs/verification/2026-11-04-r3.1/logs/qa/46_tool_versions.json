@@ -1,0 +1,21 @@
+{
+  "java -version": {
+    "exit_code": 0,
+    "output": "Picked up JAVA_TOOL_OPTIONS: -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=45637 -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=45637 -Dhttp.nonProxyHosts=localhost|127.* -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2\nopenjdk version \"17.0.20\" 2026-07-21\nOpenJDK Runtime Environment (build 17.0.20+8-1-24.04-Ubuntu)\nOpenJDK 64-Bit Server VM (build 17.0.20+8-1-24.04-Ubuntu, mixed mode, sharing)\n"
+  },
+  "rustc --version": {
+    "exit_code": 0,
+    "output": "rustc 1.85.1 (4eb161250 2025-03-15)\n"
+  },
+  "cargo --version": {
+    "exit_code": 0,
+    "output": "cargo 1.85.1 (d73d2caf9 2024-12-31)\n"
+  },
+  "dart --version": {
+    "exit_code": 0,
+    "output": "Dart SDK version: 3.11.1 (stable) (Tue Feb 24 00:03:07 2026 -0800) on \"linux_x64\"\n"
+  },
+  "ndk/28.0.13004108/source.properties": "Pkg.Desc = Android NDK\nPkg.Revision = 28.0.13004108\nPkg.BaseRevision = 28.0.13004108\nPkg.ReleaseName = r28\n",
+  "platforms/android-36/source.properties": "Pkg.Desc=Android SDK Platform 16\nPkg.UserSrc=false\nPlatform.Version=16\nPlatform.CodeName=\nPkg.Revision=2\nAndroidVersion.ApiLevel=36\nAndroidVersion.ExtensionLevel=17\nAndroidVersion.IsBaseSdk=true\nLayoutlib.Api=15\nLayoutlib.Revision=1\nPlatform.MinToolsRev=22\n",
+  "build-tools/36.0.0/source.properties": "Pkg.UserSrc=false\nPkg.Revision=36.0.0\n#Pkg.Revision=36.0.0 rc5"
+}

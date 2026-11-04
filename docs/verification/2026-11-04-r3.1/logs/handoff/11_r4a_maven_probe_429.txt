@@ -1,0 +1,7 @@
+Probe time (UTC): 2026-11-03T18:55:52Z (one request only)
+URL: https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-statistics/2.0.21/kotlin-build-statistics-2.0.21.pom
+Command: curl -sS --cacert /root/.ccr/ca-bundle.crt --max-time 30 -D - -o /dev/null <URL>
+Result: HTTP/2 429 (content-type text/plain, content-length 96, server: cloudflare, cf-ray a54d987e7c1a16b7-IAD)
+Retry-After: not present in the returned headers
+Decision: stopped per instruction; flutter build apk NOT re-run.
+(Header values transcribed from the terminal output; set-cookie omitted.)

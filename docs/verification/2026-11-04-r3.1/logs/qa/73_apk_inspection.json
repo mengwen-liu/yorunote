@@ -1,0 +1,144 @@
+{
+  "input_apk": "/workspace/scratch/4030c9529908/venera_r31_review/git_baseline/build/app/outputs/flutter-apk/app-arm64-v8a-profile.apk",
+  "size_bytes": 26924355,
+  "sha256": "4193a7bf69339e7b2e62d8473f12aac40bb8459609d479029ec58d3fe1aa7799",
+  "package_id": "com.github.wgh136.venera",
+  "version_code": 2163,
+  "version_name": "1.6.3",
+  "version_code_basis": "Flutter 3.41.4 ARM64 split: 2 * 1000 + pubspec build number 163",
+  "min_sdk": "24",
+  "target_sdk": "36",
+  "abis": [
+    "arm64-v8a"
+  ],
+  "signer_sha256": "fbb1c751962c1b6942c2117749d4f486c4e1013a03fb7605c2a39675b1f921a4",
+  "signature_verified": true,
+  "zip_crc_verified": true,
+  "zipalign_16k_check_exit": 0,
+  "libraries": [
+    {
+      "path": "lib/arm64-v8a/libapp.so",
+      "size": 15860656,
+      "sha256": "c6ea583858e571f8139f409ef6cd82e17eb5d05c648005846888651320a925d8",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        65536,
+        65536,
+        65536
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/libflutter-saf.so",
+      "size": 19320,
+      "sha256": "76da228d3bc36cfdc13da2bc24181dbc2a57ab7b68871832b2c7099f5b9fb4d1",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/libflutter.so",
+      "size": 12149496,
+      "sha256": "abeb9b0a534abf465efeec7111df5071e2a39e02c4b7482c9b2225bb6c27e681",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        65536,
+        65536,
+        65536
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/libflutter_7zip.so",
+      "size": 1059416,
+      "sha256": "85ac1b9a730d026fc4cd6b0c58e5dae9c348468eaf70b59e7a61277579c9997c",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/liblodepng_flutter.so",
+      "size": 139672,
+      "sha256": "d4c686913c42e1701b339b63111b0b41851d53e8551a92b7304c74b6af003da3",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/libqjs.so",
+      "size": 1483128,
+      "sha256": "6e04ee3d1df845c2ae41178f2b4294c1e65e0fbc30143da6447fbf9df7e55987",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/librhttp.so",
+      "size": 4288072,
+      "sha256": "60635aeceacab6f85ef02a29ddb1c4428a166a0ff2193228014e17fce560fe9a",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/libsqlite3.so",
+      "size": 1401104,
+      "sha256": "d5412984fc5b1aadc054f3313071a6910d20105156abccb4598d8b2b63dcb044",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/libvmservice_snapshot.so",
+      "size": 1639344,
+      "sha256": "5fd7c86701a55c7a2d3839bb42b935fc69ba9f2024779ae90d3907d504a7f962",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        65536,
+        65536,
+        65536
+      ],
+      "load_alignment_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/libzip_flutter.so",
+      "size": 1227560,
+      "sha256": "8642f3984dcafcdab93001bbb449cde63b058a34c75865a6944d5afa85af29ee",
+      "machine": "AArch64",
+      "load_segment_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "load_alignment_at_least_16k": true
+    }
+  ],
+  "all_native_load_segments_aligned_at_least_16k": true,
+  "device_installation_tested": false,
+  "device_fps_measured": false
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "cumulative_apply": 331
+  },
+  {
+    "reverse_apply_clean": true,
+    "baseline_tracked_files": 324
+  },
+  {
+    "ordered_patch_chain": 331
+  }
+]

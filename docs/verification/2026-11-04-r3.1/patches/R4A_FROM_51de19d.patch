@@ -1,0 +1,3651 @@
+diff --git a/lib/components/home_widgets.dart b/lib/components/home_widgets.dart
+index a567953358668e913936f1aec34ee75146fa87e6..1ca411aeb37d8a88bfca7f5b3afd3a2c22cbeb36 100644
+--- a/lib/components/home_widgets.dart
++++ b/lib/components/home_widgets.dart
+@@ -142,6 +142,8 @@ class HomeSectionHeading extends StatelessWidget {
+     this.count,
+     this.actionLabel,
+     this.onAction,
++    this.icon,
++    this.emphasized = false,
+   });
+ 
+   final String title;
+@@ -153,6 +155,9 @@ class HomeSectionHeading extends StatelessWidget {
+ 
+   final VoidCallback? onAction;
+ 
++  final IconData? icon;
++  final bool emphasized;
++
+   @override
+   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
+@@ -165,8 +170,14 @@ class HomeSectionHeading extends StatelessWidget {
+       // wraps instead of overflowing. It does not support intrinsic sizing.
+       child: LayoutBuilder(
+         builder: (context, constraints) {
+-          return Row(
++          final titleWidget = Row(
+             children: [
++              if (icon != null) ...[
++                ExcludeSemantics(
++                  child: Icon(icon, color: scheme.primary, size: 24),
++                ),
++                const SizedBox(width: UiSpace.s2),
++              ],
+               Expanded(
+                 child: Wrap(
+                   crossAxisAlignment: WrapCrossAlignment.center,
+@@ -178,6 +189,8 @@ class HomeSectionHeading extends StatelessWidget {
+                         title,
+                         style: theme.textTheme.uiSectionTitle?.copyWith(
+                           color: scheme.uiTextPrimary,
++                          fontSize: emphasized ? 22 : null,
++                          fontWeight: emphasized ? FontWeight.w700 : null,
+                         ),
+                       ),
+                     ),
+@@ -201,26 +214,43 @@ class HomeSectionHeading extends StatelessWidget {
+                   ],
+                 ),
+               ),
+-              if (label != null && onAction != null)
++            ],
++          );
++          final action = label != null && onAction != null
++              ? TextButton(
++                  onPressed: onAction,
++                  style: TextButton.styleFrom(
++                    minimumSize: const Size(
++                      UiSize.minTouchTarget,
++                      UiSize.minTouchTarget,
++                    ),
++                  ),
++                  child: Text(label, textAlign: TextAlign.center),
++                )
++              : null;
++          // Give both the title and action their full width at large text sizes.
++          if (MediaQuery.textScalerOf(context).scale(18) > 25) {
++            return Column(
++              crossAxisAlignment: CrossAxisAlignment.stretch,
++              children: [
++                titleWidget,
++                if (action != null)
++                  Align(
++                    alignment: AlignmentDirectional.centerEnd,
++                    child: action,
++                  ),
++              ],
++            );
++          }
++          return Row(
++            children: [
++              Expanded(child: titleWidget),
++              if (action != null)
+                 ConstrainedBox(
+                   constraints: BoxConstraints(
+                     maxWidth: constraints.maxWidth / 2,
+                   ),
+-                  child: TextButton(
+-                    onPressed: onAction,
+-                    style: TextButton.styleFrom(
+-                      minimumSize: const Size(
+-                        UiSize.minTouchTarget,
+-                        UiSize.minTouchTarget,
+-                      ),
+-                    ),
+-                    child: Text(
+-                      label,
+-                      maxLines: 2,
+-                      overflow: TextOverflow.ellipsis,
+-                      textAlign: TextAlign.center,
+-                    ),
+-                  ),
++                  child: action,
+                 ),
+             ],
+           );
+@@ -230,8 +260,175 @@ class HomeSectionHeading extends StatelessWidget {
+   }
+ }
+ 
+-/// Card for a recently read comic: cover, title, detail, progress and an
+-/// optional action button.
++/// Shared home panel. Color roles follow the current light/dark/dynamic theme.
++class HomeSurface extends StatelessWidget {
++  const HomeSurface({super.key, required this.child, this.emphasized = false});
++
++  final Widget child;
++  final bool emphasized;
++
++  @override
++  Widget build(BuildContext context) {
++    final scheme = Theme.of(context).colorScheme;
++    return Container(
++      margin: const EdgeInsets.symmetric(
++        horizontal: UiSpace.s4,
++        vertical: UiSpace.s2,
++      ),
++      padding: const EdgeInsets.all(UiSpace.s4),
++      decoration: BoxDecoration(
++        color: emphasized
++            ? scheme.surfaceContainer
++            : scheme.surfaceContainerLow,
++        border: Border.all(color: scheme.outlineVariant),
++        borderRadius: BorderRadius.circular(UiRadius.card),
++      ),
++      child: child,
++    );
++  }
++}
++
++/// Compact search entry, sized by its content instead of a fixed text height.
++class HomeSearchEntry extends StatelessWidget {
++  const HomeSearchEntry({super.key, required this.label, required this.onTap});
++
++  final String label;
++  final VoidCallback onTap;
++
++  @override
++  Widget build(BuildContext context) {
++    final theme = Theme.of(context);
++    final scheme = theme.colorScheme;
++    return Padding(
++      padding: const EdgeInsets.symmetric(
++        horizontal: UiSpace.s6,
++        vertical: UiSpace.s2,
++      ),
++      child: Material(
++        color: scheme.surfaceContainerHigh,
++        shape: RoundedRectangleBorder(
++          side: BorderSide(color: scheme.outlineVariant),
++          borderRadius: BorderRadius.circular(UiRadius.card),
++        ),
++        clipBehavior: Clip.antiAlias,
++        child: Semantics(
++          button: true,
++          label: label,
++          onTap: onTap,
++          excludeSemantics: true,
++          child: InkWell(
++            onTap: onTap,
++            child: ConstrainedBox(
++              constraints: const BoxConstraints(minHeight: 54),
++              child: Padding(
++                padding: const EdgeInsets.symmetric(
++                  horizontal: UiSpace.s3,
++                  vertical: UiSpace.s2,
++                ),
++                child: Row(
++                  children: [
++                    Icon(Icons.search_rounded, color: scheme.primary),
++                    const SizedBox(width: UiSpace.s3),
++                    Expanded(
++                      child: Text(label, style: theme.textTheme.uiItemTitle),
++                    ),
++                    const SizedBox(width: UiSpace.s2),
++                    Icon(
++                      Icons.arrow_forward_rounded,
++                      size: 18,
++                      color: scheme.onSurfaceVariant,
++                    ),
++                  ],
++                ),
++              ),
++            ),
++          ),
++        ),
++      ),
++    );
++  }
++}
++
++/// A bookshelf item with the caller's existing cover and navigation callback.
++/// No chapter, progress, source lookup or Reader resume is inferred here.
++class HomeCoverCard extends StatelessWidget {
++  const HomeCoverCard({
++    super.key,
++    required this.title,
++    required this.cover,
++    required this.onTap,
++  });
++  final String title;
++  final Widget cover;
++  final VoidCallback onTap;
++
++  static const double width = 112;
++  static const double coverHeight = 168;
++
++  static double cardWidth(BuildContext context) =>
++      width +
++      (MediaQuery.textScalerOf(context).scale(13) / 13 - 1).clamp(0.0, 1.0) *
++          32;
++
++  static TextStyle titleStyle(BuildContext context) => Theme.of(context)
++      .textTheme
++      .bodyMedium!
++      .copyWith(fontSize: 13, height: 1.55, fontWeight: FontWeight.w500);
++
++  static double shelfHeight(BuildContext context) {
++    final painter = TextPainter(
++      text: TextSpan(text: 'Ag\nAg', style: titleStyle(context)),
++      textDirection: Directionality.of(context),
++      textScaler: MediaQuery.textScalerOf(context),
++      maxLines: 2,
++    )..layout();
++    final height = cardWidth(context) * 1.5 + UiSpace.s3 + painter.height + 4;
++    painter.dispose();
++    return height;
++  }
++
++  @override
++  Widget build(BuildContext context) => SizedBox(
++    width: cardWidth(context),
++    child: Material(
++      color: Colors.transparent,
++      borderRadius: BorderRadius.circular(UiRadius.cover),
++      clipBehavior: Clip.antiAlias,
++      child: Semantics(
++        button: true,
++        label: title,
++        onTap: onTap,
++        excludeSemantics: true,
++        child: InkWell(
++          onTap: onTap,
++          child: Column(
++            crossAxisAlignment: CrossAxisAlignment.start,
++            children: [
++              IgnorePointer(
++                child: SizedBox(
++                  key: const ValueKey('home-portrait-cover'),
++                  width: cardWidth(context),
++                  height: cardWidth(context) * 1.5,
++                  child: cover,
++                ),
++              ),
++              const SizedBox(height: UiSpace.s3),
++              Expanded(
++                child: Text(
++                  title.replaceAll('\n', ' '),
++                  maxLines: 2,
++                  overflow: TextOverflow.ellipsis,
++                  style: titleStyle(context),
++                ),
++              ),
++            ],
++          ),
++        ),
++      ),
++    ),
++  );
++}
++
+ class RecentComicCard extends StatelessWidget {
+   const RecentComicCard({
+     super.key,
+@@ -468,3 +665,386 @@ class HomeCardPlaceholder extends StatelessWidget {
+     return Semantics(container: true, label: label, child: box);
+   }
+ }
++
++/// Low-weight tool presentation; all data and actions belong to the caller.
++class HomeToolRow extends StatelessWidget {
++  const HomeToolRow({
++    super.key,
++    required this.title,
++    required this.icon,
++    required this.actionLabel,
++    required this.onAction,
++    this.summary,
++    this.count,
++    this.children = const [],
++    this.highlight = false,
++    this.additionalActions = const [],
++  });
++  final String title;
++  final IconData icon;
++  final String actionLabel;
++  final VoidCallback onAction;
++  final Widget? summary;
++  final int? count;
++  final List<Widget> children;
++  final bool highlight;
++  final List<Widget> additionalActions;
++
++  @override
++  Widget build(BuildContext context) {
++    final theme = Theme.of(context);
++    final scheme = theme.colorScheme;
++    final heading = Row(
++      crossAxisAlignment: CrossAxisAlignment.center,
++      children: [
++        ExcludeSemantics(
++          child: Icon(
++            icon,
++            size: 22,
++            color: highlight ? scheme.primary : scheme.onSurfaceVariant,
++          ),
++        ),
++        const SizedBox(width: UiSpace.s3),
++        Expanded(
++          child: Column(
++            crossAxisAlignment: CrossAxisAlignment.start,
++            children: [
++              Wrap(
++                spacing: UiSpace.s2,
++                crossAxisAlignment: WrapCrossAlignment.center,
++                children: [
++                  Text(title, style: theme.textTheme.titleMedium),
++                  if (count != null)
++                    Text(
++                      '$count',
++                      style: theme.textTheme.bodyMedium?.copyWith(
++                        color: scheme.onSurfaceVariant,
++                      ),
++                    ),
++                ],
++              ),
++              if (summary != null)
++                DefaultTextStyle.merge(
++                  style: theme.textTheme.bodySmall?.copyWith(
++                    color: scheme.onSurfaceVariant,
++                  ),
++                  child: summary!,
++                ),
++            ],
++          ),
++        ),
++      ],
++    );
++    final primaryAction = TextButton(
++      style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
++      onPressed: onAction,
++      child: Text(actionLabel, textAlign: TextAlign.center),
++    );
++    final action = additionalActions.isEmpty
++        ? primaryAction
++        : Wrap(
++            alignment: WrapAlignment.end,
++            crossAxisAlignment: WrapCrossAlignment.center,
++            children: [primaryAction, ...additionalActions],
++          );
++    return Container(
++      margin: const EdgeInsets.symmetric(horizontal: UiSpace.s6),
++      constraints: BoxConstraints(minHeight: highlight ? 78 : 0),
++      padding: EdgeInsets.symmetric(
++        horizontal: highlight ? UiSpace.s4 : 0,
++        vertical: UiSpace.s3,
++      ),
++      decoration: BoxDecoration(
++        color: highlight ? scheme.surfaceContainerHigh : null,
++        borderRadius: highlight ? BorderRadius.circular(UiRadius.card) : null,
++        border: highlight
++            ? null
++            : Border(bottom: BorderSide(color: scheme.outlineVariant)),
++      ),
++      child: Column(
++        crossAxisAlignment: CrossAxisAlignment.stretch,
++        children: [
++          LayoutBuilder(
++            builder: (context, constraints) {
++              if (MediaQuery.textScalerOf(context).scale(16) > 22) {
++                return Column(
++                  crossAxisAlignment: CrossAxisAlignment.stretch,
++                  children: [
++                    heading,
++                    Align(
++                      alignment: AlignmentDirectional.centerEnd,
++                      child: action,
++                    ),
++                  ],
++                );
++              }
++              return Row(
++                children: [
++                  Expanded(child: heading),
++                  ConstrainedBox(
++                    constraints: BoxConstraints(
++                      maxWidth:
++                          constraints.maxWidth *
++                          (additionalActions.isEmpty ? .4 : .6),
++                    ),
++                    child: action,
++                  ),
++                ],
++              );
++            },
++          ),
++          ...children,
++        ],
++      ),
++    );
++  }
++}
++
++/// Follow-up status only. The original FollowUpdatesWidget owns its State.
++class HomeFollowUpdatesRow extends StatelessWidget {
++  const HomeFollowUpdatesRow({
++    super.key,
++    required this.configured,
++    required this.count,
++    required this.onView,
++    required this.title,
++    required this.status,
++    required this.actionLabel,
++  });
++  final bool configured;
++  final int count;
++  final VoidCallback onView;
++  final String title, status, actionLabel;
++  @override
++  Widget build(BuildContext context) => HomeToolRow(
++    title: title,
++    icon: Icons.notifications_none_rounded,
++    actionLabel: actionLabel,
++    onAction: onView,
++    highlight: true,
++    summary: Text(status),
++  );
++}
++
++/// Sync controls wrap independently so error and retry paths survive large text.
++class HomeSyncSection extends StatelessWidget {
++  const HomeSyncSection({
++    super.key,
++    required this.title,
++    required this.uploadLabel,
++    required this.downloadLabel,
++    required this.onUpload,
++    required this.onDownload,
++    this.busy = false,
++    this.errorLabel,
++    this.onError,
++  });
++  final String title, uploadLabel, downloadLabel;
++  final VoidCallback onUpload, onDownload;
++  final bool busy;
++  final String? errorLabel;
++  final VoidCallback? onError;
++  @override
++  Widget build(BuildContext context) => Padding(
++    padding: const EdgeInsets.symmetric(
++      horizontal: UiSpace.s6,
++      vertical: UiSpace.s2,
++    ),
++    child: Column(
++      crossAxisAlignment: CrossAxisAlignment.stretch,
++      children: [
++        Row(
++          children: [
++            Icon(
++              Icons.sync,
++              size: 22,
++              color: Theme.of(context).colorScheme.onSurfaceVariant,
++            ),
++            const SizedBox(width: UiSpace.s3),
++            Expanded(
++              child: Text(
++                title,
++                style: Theme.of(context).textTheme.titleMedium,
++              ),
++            ),
++            if (busy)
++              const SizedBox(
++                width: 18,
++                height: 18,
++                child: CircularProgressIndicator(strokeWidth: 2),
++              ),
++          ],
++        ),
++        if (!busy)
++          Wrap(
++            alignment: WrapAlignment.end,
++            spacing: UiSpace.s2,
++            children: [
++              if (errorLabel != null && onError != null)
++                TextButton.icon(
++                  style: TextButton.styleFrom(
++                    minimumSize: const Size(48, 48),
++                    foregroundColor: Theme.of(context).colorScheme.error,
++                  ),
++                  onPressed: onError,
++                  icon: const Icon(Icons.error_outline),
++                  label: Text(errorLabel!),
++                ),
++              IconButton(
++                tooltip: uploadLabel,
++                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
++                onPressed: onUpload,
++                icon: const Icon(Icons.cloud_upload_outlined),
++              ),
++              IconButton(
++                tooltip: downloadLabel,
++                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
++                onPressed: onDownload,
++                icon: const Icon(Icons.cloud_download_outlined),
++              ),
++            ],
++          ),
++      ],
++    ),
++  );
++}
++
++/// Editorial tool card. Real counts/actions are supplied by the owner Widget.
++class HomeLibraryTool extends StatelessWidget {
++  const HomeLibraryTool({
++    super.key,
++    required this.title,
++    required this.icon,
++    required this.actionLabel,
++    required this.onAction,
++    this.count,
++    this.detail,
++  });
++  final String title, actionLabel;
++  final IconData icon;
++  final VoidCallback onAction;
++  final int? count;
++  final String? detail;
++
++  @override
++  Widget build(BuildContext context) {
++    final theme = Theme.of(context);
++    final scheme = theme.colorScheme;
++    return Material(
++      color: scheme.surfaceContainerHigh,
++      borderRadius: BorderRadius.circular(UiRadius.card),
++      clipBehavior: Clip.antiAlias,
++      child: Padding(
++        padding: const EdgeInsets.fromLTRB(16, 16, 8, 4),
++        child: Column(
++          crossAxisAlignment: CrossAxisAlignment.start,
++          children: [
++            Icon(icon, size: 24, color: scheme.primary),
++            const SizedBox(height: UiSpace.s3),
++            Text(title, style: theme.textTheme.titleSmall),
++            if (detail != null) Text(detail!, style: theme.textTheme.bodySmall),
++            Row(
++              children: [
++                if (count != null)
++                  Text('$count', style: theme.textTheme.bodyMedium),
++                Expanded(
++                  child: Align(
++                    alignment: AlignmentDirectional.centerEnd,
++                    child: TextButton(
++                      onPressed: onAction,
++                      style: TextButton.styleFrom(
++                        minimumSize: const Size(48, 48),
++                      ),
++                      child: Text(actionLabel, textAlign: TextAlign.center),
++                    ),
++                  ),
++                ),
++              ],
++            ),
++          ],
++        ),
++      ),
++    );
++  }
++}
++
++/// Two library entries, with full-width statistics below rather than squeezed
++/// into a narrow card. Large text naturally falls back to one column.
++class HomeLibraryTools extends StatelessWidget {
++  const HomeLibraryTools({
++    super.key,
++    required this.source,
++    required this.favorites,
++    this.statistics,
++  });
++  final Widget source, favorites;
++  final Widget? statistics;
++
++  @override
++  Widget build(BuildContext context) => Padding(
++    padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
++    child: Column(
++      crossAxisAlignment: CrossAxisAlignment.stretch,
++      children: [
++        LayoutBuilder(
++          builder: (context, constraints) {
++            if (constraints.maxWidth < 300 ||
++                MediaQuery.textScalerOf(context).scale(16) >= 24) {
++              return Column(
++                crossAxisAlignment: CrossAxisAlignment.stretch,
++                children: [source, const SizedBox(height: 12), favorites],
++              );
++            }
++            return Row(
++              crossAxisAlignment: CrossAxisAlignment.start,
++              children: [
++                Expanded(child: source),
++                const SizedBox(width: 12),
++                Expanded(child: favorites),
++              ],
++            );
++          },
++        ),
++        if (statistics != null) ...[const SizedBox(height: 16), statistics!],
++      ],
++    ),
++  );
++}
++
++/// Pure segmented statistic control; the existing State owns selection/scroll.
++class HomeFavoriteTypeButton extends StatelessWidget {
++  const HomeFavoriteTypeButton({
++    super.key,
++    required this.label,
++    required this.selected,
++    required this.onTap,
++  });
++  final String label;
++  final bool selected;
++  final VoidCallback onTap;
++  @override
++  Widget build(BuildContext context) => Semantics(
++    button: true,
++    selected: selected,
++    child: InkWell(
++      borderRadius: BorderRadius.circular(24),
++      onTap: onTap,
++      child: AnimatedContainer(
++        constraints: const BoxConstraints(minWidth: 96, minHeight: 48),
++        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
++        decoration: BoxDecoration(
++          color: selected
++              ? Theme.of(context).colorScheme.primaryContainer
++              : null,
++          border: Border.all(
++            color: Theme.of(context).colorScheme.outlineVariant,
++            width: 0.6,
++          ),
++          borderRadius: BorderRadius.circular(24),
++        ),
++        duration: const Duration(milliseconds: 200),
++        child: Center(widthFactor: 1, child: Text(label)),
++      ),
++    ),
++  );
++}
+diff --git a/lib/pages/follow_updates_page.dart b/lib/pages/follow_updates_page.dart
+index 64e1a59a94b38d30d4f83982756c99d45ad63efe..611a6facf59923d3fac40a8c2f1ec77eb6d9f5cf 100644
+--- a/lib/pages/follow_updates_page.dart
++++ b/lib/pages/follow_updates_page.dart
+@@ -2,6 +2,7 @@ import 'dart:async';
+ 
+ import 'package:flutter/material.dart';
+ import 'package:venera/components/components.dart';
++import 'package:venera/components/home_widgets.dart';
+ import 'package:venera/foundation/app.dart';
+ import 'package:venera/foundation/appdata.dart';
+ import 'package:venera/foundation/favorites.dart';
+@@ -54,59 +55,18 @@ class _FollowUpdatesWidgetState
+   @override
+   Widget build(BuildContext context) {
+     return SliverToBoxAdapter(
+-      child: Container(
+-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+-        decoration: BoxDecoration(
+-          border: Border.all(
+-            color: Theme.of(context).colorScheme.outlineVariant,
+-            width: 0.6,
+-          ),
+-          borderRadius: BorderRadius.circular(8),
+-        ),
+-        child: InkWell(
+-          borderRadius: BorderRadius.circular(8),
+-          onTap: () {
+-            context.to(() => FollowUpdatesPage());
+-          },
+-          child: Column(
+-            mainAxisSize: MainAxisSize.min,
+-            crossAxisAlignment: CrossAxisAlignment.start,
+-            children: [
+-              SizedBox(
+-                height: 56,
+-                child: Row(
+-                  children: [
+-                    Center(
+-                      child: Text('Follow Updates'.tl, style: ts.s18),
+-                    ),
+-                    const Spacer(),
+-                    const Icon(Icons.arrow_right),
+-                  ],
+-                ),
+-              ).paddingHorizontal(16),
+-              if (_count > 0)
+-                Container(
+-                  padding:
+-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+-                  margin: const EdgeInsets.only(bottom: 16, left: 16),
+-                  decoration: BoxDecoration(
+-                    borderRadius: BorderRadius.circular(8),
+-                    color: Theme.of(context).colorScheme.primaryContainer,
+-                  ),
+-                  child: Text(
+-                    '@c updates'.tlParams({
+-                      'c': _count,
+-                    }),
+-                    style: ts.s16,
+-                  ),
+-                ),
+-            ],
+-          ),
+-        ),
++      child: HomeFollowUpdatesRow(
++        configured: folder != null,
++        count: _count,
++        title: 'Follow Updates'.tl,
++        status: folder == null
++            ? 'Choose a folder to follow updates.'.tl
++            : '@c updates'.tlParams({'c': _count}),
++        actionLabel: 'View'.tl,
++        onView: () => context.to(() => FollowUpdatesPage()),
+       ),
+     );
+   }
+-
+   @override
+   Object? get key => 'FollowUpdatesWidget';
+ }
+diff --git a/lib/pages/home_page.dart b/lib/pages/home_page.dart
+index ecd06d30a8cf01733b8f431d618e8b14f5c202ca..81323da87a2fc85be33bdd5f258ff37296573b16 100644
+--- a/lib/pages/home_page.dart
++++ b/lib/pages/home_page.dart
+@@ -1,7 +1,7 @@
+ import 'package:flutter/material.dart';
+-import 'package:sliver_tools/sliver_tools.dart';
+ import 'package:url_launcher/url_launcher_string.dart';
+ import 'package:venera/components/components.dart';
++import 'package:venera/components/home_widgets.dart';
+ import 'package:venera/foundation/app.dart';
+ import 'package:venera/foundation/comic_source/comic_source.dart';
+ import 'package:venera/foundation/consts.dart';
+@@ -9,6 +9,7 @@ import 'package:venera/foundation/favorites.dart';
+ import 'package:venera/foundation/history.dart';
+ import 'package:venera/foundation/local.dart';
+ import 'package:venera/foundation/log.dart';
++import 'package:venera/foundation/ui_tokens.dart';
+ import 'package:venera/pages/comic_details_page/comic_page.dart';
+ import 'package:venera/pages/comic_source_page.dart';
+ import 'package:venera/pages/downloading_page.dart';
+@@ -32,12 +33,11 @@ class HomePage extends StatelessWidget {
+       slivers: [
+         SliverPadding(padding: EdgeInsets.only(top: context.padding.top)),
+         const _SearchBar(),
+-        const _SyncDataWidget(),
+         const _History(),
+-        const _Local(),
+         const FollowUpdatesWidget(),
+-        const _ComicSourceWidget(),
+-        const ImageFavorites(),
++        const ImageFavorites(leadingTool: _ComicSourceWidget()),
++        const _Local(),
++        const _SyncDataWidget(),
+         SliverPadding(padding: EdgeInsets.only(top: context.padding.bottom)),
+       ],
+     );
+@@ -45,40 +45,140 @@ class HomePage extends StatelessWidget {
+   }
+ }
+ 
++/// Home presentation only; storage and navigation stay in the caller.
++class HomeHistorySection extends StatelessWidget {
++  const HomeHistorySection({
++    super.key,
++    required this.count,
++    required this.onViewAll,
++    required this.onSearch,
++    this.recentComics,
++  });
++  final int count;
++  final VoidCallback onViewAll, onSearch;
++  final Widget? recentComics;
++  @override
++  Widget build(BuildContext context) => Padding(
++    padding: const EdgeInsets.fromLTRB(
++      UiSpace.s6,
++      UiSpace.s4,
++      UiSpace.s6,
++      UiSpace.s3,
++    ),
++    child: Column(
++      crossAxisAlignment: CrossAxisAlignment.stretch,
++      children: [
++        HomeSectionHeading(
++          title: 'History'.tl,
++          emphasized: true,
++          actionLabel: 'View more'.tl,
++          onAction: onViewAll,
++        ),
++        Text(
++          '${'History'.tl} · $count',
++          style: Theme.of(context).textTheme.bodySmall?.copyWith(
++            color: Theme.of(context).colorScheme.onSurfaceVariant,
++          ),
++        ),
++        const SizedBox(height: UiSpace.s3),
++        if (recentComics != null)
++          recentComics!
++        else
++          HomeEmptyState(
++            icon: Icons.auto_stories_outlined,
++            message: '${'History'.tl}: 0',
++            actionLabel: 'Search'.tl,
++            onAction: onSearch,
++          ),
++      ],
++    ),
++  );
++}
++
++class HomeLocalSection extends StatelessWidget {
++  const HomeLocalSection({
++    super.key,
++    required this.count,
++    required this.onOpen,
++    required this.onImport,
++    this.recentComics,
++    this.downloadingAction,
++  });
++  final int count;
++  final VoidCallback onOpen, onImport;
++  final Widget? recentComics, downloadingAction;
++  @override
++  Widget build(BuildContext context) => HomeToolRow(
++    title: 'Local'.tl,
++    icon: Icons.folder_outlined,
++    count: count,
++    actionLabel: 'View'.tl,
++    onAction: onOpen,
++    additionalActions: [
++      FilledButton(
++        style: FilledButton.styleFrom(
++          minimumSize: const Size(48, 48),
++          backgroundColor: Colors.transparent,
++          foregroundColor: Theme.of(context).colorScheme.primary,
++        ),
++        onPressed: onImport,
++        child: Text('Import Comics'.tl),
++      ),
++    ],
++    children: [
++      if (recentComics != null) ...[
++        const SizedBox(height: UiSpace.s2),
++        recentComics!,
++      ],
++      Wrap(
++        spacing: UiSpace.s2,
++        runSpacing: UiSpace.s2,
++        alignment: WrapAlignment.end,
++        children: [if (downloadingAction != null) downloadingAction!],
++      ),
++    ],
++  );
++}
++
+ class _SearchBar extends StatelessWidget {
+   const _SearchBar();
+ 
+   @override
+   Widget build(BuildContext context) {
+     return SliverToBoxAdapter(
+-      child: Container(
+-        height: App.isMobile ? 52 : 46,
+-        width: double.infinity,
+-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+-        child: Material(
+-          color: context.colorScheme.surfaceContainerHigh,
+-          borderRadius: BorderRadius.circular(32),
+-          child: InkWell(
+-            borderRadius: BorderRadius.circular(32),
+-            onTap: () {
+-              context.to(() => const SearchPage());
+-            },
+-            child: Row(
+-              children: [
+-                const SizedBox(width: 16),
+-                const Icon(Icons.search),
+-                const SizedBox(width: 8),
+-                Text('Search'.tl, style: ts.s16),
+-                const Spacer(),
+-              ],
+-            ),
+-          ),
+-        ),
++      child: HomeSearchEntry(
++        label: 'Search'.tl,
++        onTap: () => context.to(() => const SearchPage()),
+       ),
+     );
+   }
+ }
+ 
++/// Source names are informational labels; only the explicit management entry
++/// navigates. Count and available updates are supplied by the existing caller.
++class HomeSourceSection extends StatelessWidget {
++  const HomeSourceSection({
++    super.key,
++    required this.names,
++    required this.onManage,
++    this.availableUpdates = 0,
++  });
++  final List<String> names;
++  final VoidCallback onManage;
++  final int availableUpdates;
++  @override
++  Widget build(BuildContext context) => HomeLibraryTool(
++    title: 'Comic Source'.tl,
++    icon: Icons.hub_outlined,
++    count: names.length,
++    actionLabel: 'Manage'.tl,
++    onAction: onManage,
++    detail: availableUpdates > 0
++        ? '@c updates'.tlParams({'c': availableUpdates})
++        : null,
++  );
++}
++
+ class _SyncDataWidget extends StatefulWidget {
+   const _SyncDataWidget();
+ 
+@@ -124,97 +224,25 @@ class _SyncDataWidgetState extends State<_SyncDataWidget>
+ 
+   @override
+   Widget build(BuildContext context) {
+-    Widget child;
+     if (!DataSync().isEnabled) {
+-      child = const SliverPadding(padding: EdgeInsets.zero);
+-    } else if (DataSync().isUploading || DataSync().isDownloading) {
+-      child = SliverToBoxAdapter(
+-        child: Container(
+-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+-          decoration: BoxDecoration(
+-            border: Border.all(
+-              color: Theme.of(context).colorScheme.primary,
+-            ),
+-            borderRadius: BorderRadius.circular(8),
+-          ),
+-          child: ListTile(
+-            leading: const Icon(Icons.sync),
+-            title: Text('Syncing Data'.tl),
+-            trailing: const CircularProgressIndicator(strokeWidth: 2)
+-                .fixWidth(18)
+-                .fixHeight(18),
+-          ),
+-        ),
+-      );
+-    } else {
+-      child = SliverToBoxAdapter(
+-        child: Container(
+-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+-          decoration: BoxDecoration(
+-            border: Border.all(
+-              color: Theme.of(context).colorScheme.outlineVariant,
+-            ),
+-            borderRadius: BorderRadius.circular(8),
+-          ),
+-          child: ListTile(
+-            leading: const Icon(Icons.sync),
+-            title: Text('Sync Data'.tl),
+-            trailing: Row(
+-              mainAxisSize: MainAxisSize.min,
+-              children: [
+-                if (DataSync().lastError != null)
+-                  InkWell(
+-                    borderRadius: BorderRadius.circular(16),
+-                    onTap: () {
+-                      showDialogMessage(
+-                        App.rootContext,
+-                        "Error".tl,
+-                        DataSync().lastError!,
+-                      );
+-                    },
+-                    child: Container(
+-                      padding: const EdgeInsets.symmetric(
+-                        horizontal: 8,
+-                        vertical: 4,
+-                      ),
+-                      decoration: BoxDecoration(
+-                        color: context.colorScheme.errorContainer,
+-                        borderRadius: BorderRadius.circular(16),
+-                      ),
+-                      child: Row(
+-                        children: [
+-                          Icon(
+-                            Icons.error_outline,
+-                            color: Colors.red,
+-                            size: 18,
+-                          ),
+-                          const SizedBox(width: 4),
+-                          Text('Error'.tl, style: ts.s12),
+-                        ],
+-                      ),
+-                    ),
+-                  ).paddingRight(4),
+-                IconButton(
+-                  icon: const Icon(Icons.cloud_upload_outlined),
+-                  onPressed: () async {
+-                    DataSync().uploadData();
+-                  },
+-                ),
+-                IconButton(
+-                  icon: const Icon(Icons.cloud_download_outlined),
+-                  onPressed: () async {
+-                    DataSync().downloadData();
+-                  },
+-                ),
+-              ],
+-            ),
+-          ),
+-        ),
+-      );
++      return const SliverPadding(padding: EdgeInsets.zero);
+     }
+-    return SliverAnimatedPaintExtent(
+-      duration: const Duration(milliseconds: 200),
+-      child: child,
++    final busy = DataSync().isUploading || DataSync().isDownloading;
++    return SliverToBoxAdapter(
++      child: HomeSyncSection(
++        title: (busy ? 'Syncing Data' : 'Sync Data').tl,
++        busy: busy,
++        uploadLabel: 'Upload'.tl,
++        downloadLabel: 'Download'.tl,
++        onUpload: () => DataSync().uploadData(),
++        onDownload: () => DataSync().downloadData(),
++        errorLabel: DataSync().lastError == null ? null : 'Error'.tl,
++        onError: () => showDialogMessage(
++          App.rootContext,
++          'Error'.tl,
++          DataSync().lastError!,
++        ),
++      ),
+     );
+   }
+ }
+@@ -256,74 +284,43 @@ class _HistoryState extends State<_History> {
+   @override
+   Widget build(BuildContext context) {
+     return SliverToBoxAdapter(
+-      child: Container(
+-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+-        decoration: BoxDecoration(
+-          border: Border.all(
+-            color: Theme.of(context).colorScheme.outlineVariant,
+-            width: 0.6,
+-          ),
+-          borderRadius: BorderRadius.circular(8),
+-        ),
+-        child: InkWell(
+-          borderRadius: BorderRadius.circular(8),
+-          onTap: () {
+-            context.to(() => const HistoryPage());
+-          },
+-          child: Column(
+-            mainAxisSize: MainAxisSize.min,
+-            children: [
+-              SizedBox(
+-                height: 56,
+-                child: Row(
+-                  children: [
+-                    Center(
+-                      child: Text('History'.tl, style: ts.s18),
+-                    ),
+-                    Container(
+-                      margin: const EdgeInsets.symmetric(horizontal: 8),
+-                      padding: const EdgeInsets.symmetric(
+-                          horizontal: 8, vertical: 2),
+-                      decoration: BoxDecoration(
+-                        color: Theme.of(context).colorScheme.secondaryContainer,
+-                        borderRadius: BorderRadius.circular(8),
+-                      ),
+-                      child: Text(count.toString(), style: ts.s12),
+-                    ),
+-                    const Spacer(),
+-                    const Icon(Icons.arrow_right),
+-                  ],
+-                ),
+-              ).paddingHorizontal(16),
+-              if (history.isNotEmpty)
+-                SizedBox(
+-                  height: 136,
+-                  child: ListView.builder(
+-                    scrollDirection: Axis.horizontal,
+-                    itemCount: history.length,
+-                    itemBuilder: (context, index) {
+-                      final heroID = history[index].id.hashCode;
+-                      return SimpleComicTile(
++      child: HomeHistorySection(
++        count: count,
++        onViewAll: () => context.to(() => const HistoryPage()),
++        onSearch: () => context.to(() => const SearchPage()),
++        recentComics: history.isEmpty
++            ? null
++            : SizedBox(
++                height: HomeCoverCard.shelfHeight(context),
++                child: ListView.separated(
++                  key: const PageStorageKey('home-history-shelf'),
++                  scrollDirection: Axis.horizontal,
++                  itemCount: history.length,
++                  separatorBuilder: (context, index) =>
++                      const SizedBox(width: UiSpace.s4),
++                  itemBuilder: (context, index) {
++                    final heroID = history[index].id.hashCode;
++                    return HomeCoverCard(
++                      title: history[index].title,
++                      cover: SimpleComicTile(
+                         comic: history[index],
+                         heroID: heroID,
+-                        onTap: () {
+-                          context.to(
+-                            () => ComicPage(
+-                              id: history[index].id,
+-                              sourceKey: history[index].type.sourceKey,
+-                              cover: history[index].cover,
+-                              title: history[index].title,
+-                              heroID: heroID,
+-                            ),
+-                          );
+-                        },
+-                      ).paddingHorizontal(8).paddingVertical(2);
+-                    },
+-                  ),
+-                ).paddingHorizontal(8).paddingBottom(16),
+-            ],
+-          ),
+-        ),
++                      ),
++                      onTap: () {
++                        context.to(
++                          () => ComicPage(
++                            id: history[index].id,
++                            sourceKey: history[index].type.sourceKey,
++                            cover: history[index].cover,
++                            title: history[index].title,
++                            heroID: heroID,
++                          ),
++                        );
++                      },
++                    );
++                  },
++                ),
++              ),
+       ),
+     );
+   }
+@@ -364,103 +361,65 @@ class _LocalState extends State<_Local> {
+   @override
+   Widget build(BuildContext context) {
+     return SliverToBoxAdapter(
+-      child: Container(
+-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+-        decoration: BoxDecoration(
+-          border: Border.all(
+-            color: Theme.of(context).colorScheme.outlineVariant,
+-            width: 0.6,
+-          ),
+-          borderRadius: BorderRadius.circular(8),
+-        ),
+-        child: InkWell(
+-          borderRadius: BorderRadius.circular(8),
+-          onTap: () {
+-            context.to(() => const LocalComicsPage());
+-          },
+-          child: Column(
+-            mainAxisSize: MainAxisSize.min,
+-            children: [
+-              SizedBox(
+-                height: 56,
+-                child: Row(
+-                  children: [
+-                    Center(
+-                      child: Text('Local'.tl, style: ts.s18),
+-                    ),
+-                    Container(
+-                      margin: const EdgeInsets.symmetric(horizontal: 8),
+-                      padding: const EdgeInsets.symmetric(
+-                        horizontal: 8,
+-                        vertical: 2,
+-                      ),
+-                      decoration: BoxDecoration(
+-                        color: Theme.of(context).colorScheme.secondaryContainer,
+-                        borderRadius: BorderRadius.circular(8),
+-                      ),
+-                      child: Text(count.toString(), style: ts.s12),
+-                    ),
+-                    const Spacer(),
+-                    const Icon(Icons.arrow_right),
+-                  ],
+-                ),
+-              ).paddingHorizontal(16),
+-              if (local.isNotEmpty)
+-                SizedBox(
+-                  height: 136,
+-                  child: ListView.builder(
+-                    scrollDirection: Axis.horizontal,
+-                    itemCount: local.length,
+-                    itemBuilder: (context, index) {
+-                      final heroID = local[index].id.hashCode;
+-                      return SimpleComicTile(
++      child: HomeLocalSection(
++        count: count,
++        onOpen: () => context.to(() => const LocalComicsPage()),
++        onImport: import,
++        recentComics: local.isEmpty
++            ? null
++            : SizedBox(
++                height: HomeCoverCard.shelfHeight(context),
++                child: ListView.separated(
++                  key: const PageStorageKey('home-local-shelf'),
++                  scrollDirection: Axis.horizontal,
++                  itemCount: local.length,
++                  separatorBuilder: (context, index) =>
++                      const SizedBox(width: UiSpace.s4),
++                  itemBuilder: (context, index) {
++                    final heroID = local[index].id.hashCode;
++                    return HomeCoverCard(
++                      title: local[index].title,
++                      cover: SimpleComicTile(
+                         comic: local[index],
+                         heroID: heroID,
+-                        onTap: () {
+-                          context.to(
+-                            () => ComicPage(
+-                              id: local[index].id,
+-                              sourceKey: local[index].sourceKey,
+-                              cover: local[index].cover,
+-                              title: local[index].title,
+-                              heroID: heroID,
+-                            ),
+-                          );
+-                        },
+-                      ).paddingHorizontal(8).paddingVertical(2);
+-                    },
+-                  ),
+-                ).paddingHorizontal(8),
+-              Row(
+-                children: [
+-                  if (LocalManager().downloadingTasks.isNotEmpty)
+-                    Button.outlined(
+-                      child: Row(
+-                        children: [
+-                          if (LocalManager().downloadingTasks.first.isPaused)
+-                            const Icon(Icons.pause_circle_outline, size: 18)
+-                          else
+-                            const _AnimatedDownloadingIcon(),
+-                          const SizedBox(width: 8),
+-                          Text("@a Tasks".tlParams({
+-                            'a': LocalManager().downloadingTasks.length,
+-                          })),
+-                        ],
+                       ),
+-                      onPressed: () {
+-                        showPopUpWidget(context, const DownloadingPage());
++                      onTap: () {
++                        context.to(
++                          () => ComicPage(
++                            id: local[index].id,
++                            sourceKey: local[index].sourceKey,
++                            cover: local[index].cover,
++                            title: local[index].title,
++                            heroID: heroID,
++                          ),
++                        );
+                       },
++                    );
++                  },
++                ),
++              ),
++        downloadingAction: LocalManager().downloadingTasks.isEmpty
++            ? null
++            : Button.outlined(
++                child: Row(
++                  mainAxisSize: MainAxisSize.min,
++                  children: [
++                    if (LocalManager().downloadingTasks.first.isPaused)
++                      const Icon(Icons.pause_circle_outline, size: 18)
++                    else
++                      const _AnimatedDownloadingIcon(),
++                    const SizedBox(width: UiSpace.s2),
++                    Text(
++                      '@a Tasks'.tlParams({
++                        'a': LocalManager().downloadingTasks.length,
++                      }),
+                     ),
+-                  const Spacer(),
+-                  Button.filled(
+-                    onPressed: import,
+-                    child: Text("Import".tl),
+-                  ),
+-                ],
+-              ).paddingHorizontal(16).paddingVertical(8),
+-            ],
+-          ),
+-        ),
++                  ],
++                ),
++                onPressed: () {
++                  showPopUpWidget(context, const DownloadingPage());
++                },
++              ),
+       ),
+     );
+   }
+@@ -532,9 +491,7 @@ class _ImportComicsWidgetState extends State<_ImportComicsWidget> {
+           ? SizedBox(
+               width: 600,
+               height: height,
+-              child: const Center(
+-                child: CircularProgressIndicator(),
+-              ),
++              child: const Center(child: CircularProgressIndicator()),
+             )
+           : RadioGroup<int>(
+               groupValue: type,
+@@ -577,19 +534,20 @@ class _ImportComicsWidgetState extends State<_ImportComicsWidget> {
+                       type != 3 &&
+                       type != 5)
+                     CheckboxListTile(
+-                        enabled: true,
+-                        title: Text("Copy to app local path".tl),
+-                        value: copyToLocalFolder,
+-                        onChanged: (v) {
+-                          setState(() {
+-                            copyToLocalFolder = !copyToLocalFolder;
+-                          });
+-                        }).paddingHorizontal(8),
++                      enabled: true,
++                      title: Text("Copy to app local path".tl),
++                      value: copyToLocalFolder,
++                      onChanged: (v) {
++                        setState(() {
++                          copyToLocalFolder = !copyToLocalFolder;
++                        });
++                      },
++                    ).paddingHorizontal(8),
+                   const SizedBox(height: 8),
+                   Text(info).paddingHorizontal(24),
+                 ],
+               ),
+-          ),
++            ),
+       actions: [
+         Button.text(
+           child: Row(
+@@ -605,14 +563,15 @@ class _ImportComicsWidgetState extends State<_ImportComicsWidget> {
+           ),
+           onPressed: () {
+             launchUrlString(
+-                "https://github.com/venera-app/venera/blob/master/doc/import_comic.md");
++              "https://github.com/venera-app/venera/blob/master/doc/import_comic.md",
++            );
+           },
+         ).fixWidth(90).paddingRight(8),
+         Button.filled(
+           isLoading: loading,
+           onPressed: selectAndImport,
+           child: Text("Select".tl),
+-        )
++        ),
+       ],
+     );
+   }
+@@ -624,7 +583,9 @@ class _ImportComicsWidgetState extends State<_ImportComicsWidget> {
+       loading = true;
+     });
+     var importer = ImportComic(
+-        selectedFolder: selectedFolder, copyToLocal: copyToLocalFolder);
++      selectedFolder: selectedFolder,
++      copyToLocal: copyToLocalFolder,
++    );
+     var result = switch (type) {
+       0 => await importer.directory(true),
+       1 => await importer.directory(false),
+@@ -688,105 +649,10 @@ class _ComicSourceWidgetState extends State<_ComicSourceWidget> {
+ 
+   @override
+   Widget build(BuildContext context) {
+-    return SliverToBoxAdapter(
+-      child: Container(
+-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+-        decoration: BoxDecoration(
+-          border: Border.all(
+-            color: Theme.of(context).colorScheme.outlineVariant,
+-            width: 0.6,
+-          ),
+-          borderRadius: BorderRadius.circular(8),
+-        ),
+-        child: InkWell(
+-          borderRadius: BorderRadius.circular(8),
+-          onTap: () {
+-            context.to(() => const ComicSourcePage());
+-          },
+-          child: Column(
+-            mainAxisSize: MainAxisSize.min,
+-            children: [
+-              SizedBox(
+-                height: 56,
+-                child: Row(
+-                  children: [
+-                    Center(
+-                      child: Text('Comic Source'.tl, style: ts.s18),
+-                    ),
+-                    Container(
+-                      margin: const EdgeInsets.symmetric(horizontal: 8),
+-                      padding: const EdgeInsets.symmetric(
+-                          horizontal: 8, vertical: 2),
+-                      decoration: BoxDecoration(
+-                        color: Theme.of(context).colorScheme.secondaryContainer,
+-                        borderRadius: BorderRadius.circular(8),
+-                      ),
+-                      child:
+-                          Text(comicSources.length.toString(), style: ts.s12),
+-                    ),
+-                    const Spacer(),
+-                    const Icon(Icons.arrow_right),
+-                  ],
+-                ),
+-              ).paddingHorizontal(16),
+-              if (comicSources.isNotEmpty)
+-                SizedBox(
+-                  width: double.infinity,
+-                  child: Wrap(
+-                    runSpacing: 8,
+-                    spacing: 8,
+-                    children: comicSources.map((e) {
+-                      return Container(
+-                        padding: const EdgeInsets.symmetric(
+-                            horizontal: 8, vertical: 2),
+-                        decoration: BoxDecoration(
+-                          color:
+-                              Theme.of(context).colorScheme.secondaryContainer,
+-                          borderRadius: BorderRadius.circular(8),
+-                        ),
+-                        child: Text(e),
+-                      );
+-                    }).toList(),
+-                  ).paddingHorizontal(16).paddingBottom(16),
+-                ),
+-              if (_availableUpdates > 0)
+-                Container(
+-                  padding: const EdgeInsets.symmetric(
+-                    horizontal: 8,
+-                    vertical: 4,
+-                  ),
+-                  decoration: BoxDecoration(
+-                    border: Border.all(
+-                      color: context.colorScheme.outlineVariant,
+-                      width: 0.6,
+-                    ),
+-                    borderRadius: BorderRadius.circular(12),
+-                  ),
+-                  child: Row(
+-                    mainAxisSize: MainAxisSize.min,
+-                    children: [
+-                      Icon(
+-                        Icons.update,
+-                        color: context.colorScheme.primary,
+-                        size: 20,
+-                      ),
+-                      const SizedBox(width: 8),
+-                      Text(
+-                        "@c updates".tlParams({
+-                          'c': _availableUpdates,
+-                        }),
+-                        style: ts.withColor(context.colorScheme.primary),
+-                      ),
+-                    ],
+-                  ),
+-                )
+-                    .toAlign(Alignment.centerLeft)
+-                    .paddingHorizontal(16)
+-                    .paddingBottom(8),
+-            ],
+-          ),
+-        ),
+-      ),
++    return HomeSourceSection(
++      names: comicSources,
++      availableUpdates: _availableUpdates,
++      onManage: () => context.to(() => const ComicSourcePage()),
+     );
+   }
+ }
+@@ -851,7 +717,10 @@ class __AnimatedDownloadingIconState extends State<_AnimatedDownloadingIcon>
+ }
+ 
+ class ImageFavorites extends StatefulWidget {
+-  const ImageFavorites({super.key});
++  const ImageFavorites({super.key, this.leadingTool});
++
++  /// Optional adjacent tool; manager lifecycle and statistics remain here.
++  final Widget? leadingTool;
+ 
+   @override
+   State<ImageFavorites> createState() => _ImageFavoritesState();
+@@ -891,130 +760,101 @@ class _ImageFavoritesState extends State<ImageFavorites> {
+   Widget build(BuildContext context) {
+     bool hasData =
+         imageFavoritesCompute != null && !imageFavoritesCompute!.isEmpty;
++    final tool = HomeLibraryTool(
++      title: 'Image Favorites'.tl,
++      icon: Icons.collections_outlined,
++      count: hasData ? imageFavoritesCompute!.count : null,
++      actionLabel: 'View'.tl,
++      onAction: () => context.to(() => const ImageFavoritesPage()),
++    );
++    final statistics = hasData
++        ? HomeImageFavoritesStatistics(
++            computed: imageFavoritesCompute!,
++            displayType: displayType,
++            onSelect: (type) async {
++              setState(() {
++                displayType = type;
++              });
++              await Future.delayed(const Duration(milliseconds: 20));
++              var scrollController = ScrollState.of(context).controller;
++              scrollController.animateTo(
++                scrollController.position.maxScrollExtent,
++                duration: const Duration(milliseconds: 200),
++                curve: Curves.ease,
++              );
++            },
++            onKeyword: (text) {
++              context.to(() => ImageFavoritesPage(initialKeyword: text));
++            },
++          )
++        : null;
+     return SliverToBoxAdapter(
+-      child: Container(
+-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+-        decoration: BoxDecoration(
+-          border: Border.all(
+-            color: Theme.of(context).colorScheme.outlineVariant,
+-            width: 0.6,
+-          ),
+-          borderRadius: BorderRadius.circular(8),
+-        ),
+-        child: InkWell(
+-          borderRadius: BorderRadius.circular(8),
+-          onTap: () {
+-            context.to(
+-              () => const ImageFavoritesPage()
+-            );
+-          },
+-          child: Column(
+-            mainAxisSize: MainAxisSize.min,
+-            children: [
+-              SizedBox(
+-                height: 56,
+-                child: Row(
+-                  children: [
+-                    Center(
+-                      child: Text('Image Favorites'.tl, style: ts.s18),
+-                    ),
+-                    if (hasData)
+-                      Container(
+-                        margin: const EdgeInsets.symmetric(horizontal: 8),
+-                        padding: const EdgeInsets.symmetric(
+-                            horizontal: 8, vertical: 2),
+-                        decoration: BoxDecoration(
+-                          color:
+-                              Theme.of(context).colorScheme.secondaryContainer,
+-                          borderRadius: BorderRadius.circular(8),
+-                        ),
+-                        child: Text(
+-                          imageFavoritesCompute!.count.toString(),
+-                          style: ts.s12,
+-                        ),
+-                      ),
+-                    const Spacer(),
+-                    const Icon(Icons.arrow_right),
+-                  ],
+-                ),
+-              ).paddingHorizontal(16),
+-              if (hasData)
+-                Row(
+-                  children: [
+-                    const Spacer(),
+-                    buildTypeButton(0, "Tags".tl),
+-                    const Spacer(),
+-                    buildTypeButton(1, "Authors".tl),
+-                    const Spacer(),
+-                    buildTypeButton(2, "Comics".tl),
+-                    const Spacer(),
+-                  ],
+-                ),
+-              if (hasData) const SizedBox(height: 8),
+-              if (hasData)
+-                buildChart(switch (displayType) {
+-                  0 => imageFavoritesCompute!.tags,
+-                  1 => imageFavoritesCompute!.authors,
+-                  2 => imageFavoritesCompute!.comics,
+-                  _ => [],
+-                })
+-                    .paddingHorizontal(16)
+-                    .paddingBottom(16),
+-            ],
+-          ),
+-        ),
+-      ),
++      child: widget.leadingTool == null
++          ? Padding(
++              padding: const EdgeInsets.all(24),
++              child: Column(
++                children: [tool, if (statistics != null) statistics],
++              ),
++            )
++          : HomeLibraryTools(
++              source: widget.leadingTool!,
++              favorites: tool,
++              statistics: statistics,
++            ),
+     );
+   }
++}
+ 
+-  Widget buildTypeButton(int type, String text) {
+-    const radius = 24.0;
+-    return InkWell(
+-      borderRadius: BorderRadius.circular(radius),
+-      onTap: () async {
+-        setState(() {
+-          displayType = type;
+-        });
+-        await Future.delayed(const Duration(milliseconds: 20));
+-        var scrollController = ScrollState.of(context).controller;
+-        scrollController.animateTo(
+-          scrollController.position.maxScrollExtent,
+-          duration: const Duration(milliseconds: 200),
+-          curve: Curves.ease,
+-        );
+-      },
+-      child: AnimatedContainer(
+-        width: 96,
+-        padding: const EdgeInsets.symmetric(vertical: 4),
+-        decoration: BoxDecoration(
+-          color:
+-              displayType == type ? context.colorScheme.primaryContainer : null,
+-          border: Border.all(
+-            color: Theme.of(context).colorScheme.outlineVariant,
+-            width: 0.6,
+-          ),
+-          borderRadius: BorderRadius.circular(radius),
+-        ),
+-        duration: const Duration(milliseconds: 200),
+-        child: Center(
+-          child: Text(
+-            text,
+-            style: ts.s16,
+-          ),
+-        ),
++/// Storage-free rendering of the existing computed statistics. The owning
++/// State still supplies selection, scroll and filtered-navigation callbacks.
++class HomeImageFavoritesStatistics extends StatelessWidget {
++  const HomeImageFavoritesStatistics({
++    super.key,
++    required this.computed,
++    required this.displayType,
++    required this.onSelect,
++    required this.onKeyword,
++  });
++  final ImageFavoritesComputed computed;
++  final int displayType;
++  final ValueChanged<int> onSelect;
++  final ValueChanged<String> onKeyword;
++
++  @override
++  Widget build(BuildContext context) => Column(
++    crossAxisAlignment: CrossAxisAlignment.stretch,
++    children: [
++      Wrap(
++        spacing: UiSpace.s2,
++        runSpacing: UiSpace.s2,
++        children: [
++          for (final (type, label) in [
++            (0, 'Tags'.tl),
++            (1, 'Authors'.tl),
++            (2, 'Comics'.tl),
++          ])
++            HomeFavoriteTypeButton(
++              label: label,
++              selected: displayType == type,
++              onTap: () => onSelect(type),
++            ),
++        ],
+       ),
+-    );
+-  }
++      const SizedBox(height: UiSpace.s2),
++      buildChart(switch (displayType) {
++        0 => computed.tags,
++        1 => computed.authors,
++        2 => computed.comics,
++        _ => [],
++      }),
++    ],
++  );
+ 
+   Widget buildChart(List<TextWithCount> data) {
+-    if (data.isEmpty) {
+-      return const SizedBox();
+-    }
++    if (data.isEmpty) return const SizedBox();
+     var maxCount = data.map((e) => e.count).reduce((a, b) => a > b ? a : b);
+     return ConstrainedBox(
+-      constraints: BoxConstraints(
+-        maxHeight: 164,
+-      ),
++      constraints: const BoxConstraints(maxHeight: 164),
+       child: SingleChildScrollView(
+         child: Column(
+           key: ValueKey(displayType),
+@@ -1024,11 +864,7 @@ class _ImageFavoritesState extends State<ImageFavorites> {
+               count: e.count,
+               maxCount: maxCount,
+               enableTranslation: displayType != 2,
+-              onTap: (text) {
+-                context.to(
+-                  () => ImageFavoritesPage(initialKeyword: text),
+-                );
+-              },
++              onTap: onKeyword,
+             );
+           }).toList(),
+         ),
+@@ -1098,11 +934,7 @@ class __ChartLineState extends State<_ChartLine>
+           onTap: () {
+             widget.onTap?.call(widget.text);
+           },
+-          child: Text(
+-            text,
+-            maxLines: 1,
+-            overflow: TextOverflow.ellipsis,
+-          )
++          child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis)
+               .paddingHorizontal(4)
+               .toAlign(Alignment.centerLeft)
+               .fixWidth(context.width > 600 ? 120 : 80)
+@@ -1110,32 +942,28 @@ class __ChartLineState extends State<_ChartLine>
+         ),
+         const SizedBox(width: 8),
+         Expanded(
+-          child: LayoutBuilder(builder: (context, constrains) {
+-            var width = constrains.maxWidth * widget.count / widget.maxCount;
+-            return AnimatedBuilder(
+-              animation: _controller,
+-              builder: (context, child) {
+-                return Container(
+-                  width: width * _controller.value,
+-                  height: 18,
+-                  decoration: BoxDecoration(
+-                    borderRadius: BorderRadius.circular(2),
+-                    gradient: LinearGradient(
+-                      colors: context.isDarkMode
+-                          ? [
+-                              Colors.blue.shade800,
+-                              Colors.blue.shade500,
+-                            ]
+-                          : [
+-                              Colors.blue.shade300,
+-                              Colors.blue.shade600,
+-                            ],
++          child: LayoutBuilder(
++            builder: (context, constrains) {
++              var width = constrains.maxWidth * widget.count / widget.maxCount;
++              return AnimatedBuilder(
++                animation: _controller,
++                builder: (context, child) {
++                  return Container(
++                    width: width * _controller.value,
++                    height: 18,
++                    decoration: BoxDecoration(
++                      borderRadius: BorderRadius.circular(2),
++                      gradient: LinearGradient(
++                        colors: context.isDarkMode
++                            ? [Colors.blue.shade800, Colors.blue.shade500]
++                            : [Colors.blue.shade300, Colors.blue.shade600],
++                      ),
+                     ),
+-                  ),
+-                ).toAlign(Alignment.centerLeft);
+-              },
+-            );
+-          }),
++                  ).toAlign(Alignment.centerLeft);
++                },
++              );
++            },
++          ),
+         ),
+         const SizedBox(width: 8),
+         Text(
+@@ -1143,6 +971,6 @@ class __ChartLineState extends State<_ChartLine>
+           style: ts.s12,
+         ).fixWidth(context.width > 600 ? 60 : 30),
+       ],
+-    ).fixHeight(28);
++    ).fixHeight(48);
+   }
+ }
+diff --git a/test/ui/home_page_test.dart b/test/ui/home_page_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..95d897f78e04339484ec6383dd4853d2c85764f1
+--- /dev/null
++++ b/test/ui/home_page_test.dart
+@@ -0,0 +1,239 @@
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/components/components.dart';
++import 'package:venera/components/home_widgets.dart';
++import 'package:venera/foundation/appdata.dart';
++import 'package:venera/pages/home_page.dart';
++import 'package:venera/utils/translations.dart';
++
++Widget harness(Widget child, {double scale = 1, Brightness? brightness}) {
++  return MaterialApp(
++    theme: ThemeData(
++      colorScheme: ColorScheme.fromSeed(
++        seedColor: Colors.teal,
++        brightness: brightness ?? Brightness.light,
++      ),
++    ),
++    builder: (context, app) => MediaQuery(
++      data: MediaQuery.of(
++        context,
++      ).copyWith(textScaler: TextScaler.linear(scale)),
++      child: app!,
++    ),
++    home: Scaffold(body: SingleChildScrollView(child: child)),
++  );
++}
++
++void main() {
++  TestWidgetsFlutterBinding.ensureInitialized();
++
++  setUpAll(() async {
++    // Only load the repository's translations. Never initialize App or a DB.
++    await AppTranslation.init();
++  });
++
++  setUp(() => appdata.settings['language'] = 'en-US');
++  tearDown(() => appdata.settings['language'] = 'system');
++
++  testWidgets('empty history retains history and working search callbacks', (
++    tester,
++  ) async {
++    var history = 0;
++    var search = 0;
++    await tester.pumpWidget(
++      harness(
++        HomeHistorySection(
++          count: 0,
++          onViewAll: () => history++,
++          onSearch: () => search++,
++        ),
++      ),
++    );
++    expect(find.byType(HomeEmptyState), findsOneWidget);
++    expect(find.text('History: 0'), findsOneWidget);
++    expect(find.textContaining('Continue'), findsNothing);
++    await tester.tap(find.text('Search'));
++    await tester.tap(find.text('View more'));
++    expect((search, history), (1, 1));
++    expect(tester.takeException(), isNull);
++  });
++
++  testWidgets('nonempty history keeps recent comic and history actions', (
++    tester,
++  ) async {
++    var comic = 0;
++    var history = 0;
++    await tester.pumpWidget(
++      harness(
++        HomeHistorySection(
++          count: 1,
++          onViewAll: () => history++,
++          onSearch: () => fail('Empty-state search must be hidden'),
++          recentComics: TextButton(
++            onPressed: () => comic++,
++            child: const Text('Synthetic recent comic'),
++          ),
++        ),
++      ),
++    );
++    expect(find.byType(HomeEmptyState), findsNothing);
++    expect(find.text('Search'), findsNothing);
++    await tester.tap(find.text('Synthetic recent comic'));
++    await tester.tap(find.text('View more'));
++    expect((comic, history), (1, 1));
++  });
++
++  testWidgets('empty local keeps browse, import and download actions', (
++    tester,
++  ) async {
++    var browse = 0;
++    var imports = 0;
++    var downloads = 0;
++    await tester.pumpWidget(
++      harness(
++        HomeLocalSection(
++          count: 0,
++          onOpen: () => browse++,
++          onImport: () => imports++,
++          downloadingAction: OutlinedButton(
++            onPressed: () => downloads++,
++            child: const Text('1 Tasks'),
++          ),
++        ),
++      ),
++    );
++    expect(find.byType(ListView), findsNothing);
++    expect(find.text('Local'), findsOneWidget);
++    await tester.tap(find.text('View'));
++    await tester.tap(find.text('Import Comics'));
++    await tester.tap(find.text('1 Tasks'));
++    expect((browse, imports, downloads), (1, 1, 1));
++    expect(tester.takeException(), isNull);
++  });
++
++  testWidgets('nonempty local still displays supplied recent comics', (
++    tester,
++  ) async {
++    await tester.pumpWidget(
++      harness(
++        HomeLocalSection(
++          count: 1,
++          onOpen: () {},
++          onImport: () {},
++          recentComics: const Text('Synthetic local comic'),
++        ),
++      ),
++    );
++    expect(find.text('Synthetic local comic'), findsOneWidget);
++    expect(find.text('Import Comics'), findsOneWidget);
++  });
++
++  testWidgets('home composition retains all original sections in UX02 order', (
++    tester,
++  ) async {
++    // Inspect composition without mounting storage-backed stateful sections.
++    // This avoids App.init(), personal databases, sources and network I/O.
++    late List<Widget> sections;
++    await tester.pumpWidget(
++      harness(
++        Builder(
++          builder: (context) {
++            final home = const HomePage().build(context);
++            final scroll = home is SmoothCustomScrollView
++                ? home
++                : (home as Padding).child! as SmoothCustomScrollView;
++            sections = scroll.slivers;
++            return const SizedBox();
++          },
++        ),
++      ),
++    );
++    expect(
++      sections.where((w) => w is! SliverPadding).map((w) => '${w.runtimeType}'),
++      [
++        '_SearchBar',
++        '_History',
++        'FollowUpdatesWidget',
++        'ImageFavorites',
++        '_Local',
++        '_SyncDataWidget',
++      ],
++    );
++    // R4 groups the original source Widget beside image favorites; its
++    // stateful owner remains present rather than being replaced by a fake card.
++    expect(
++      sections
++          .whereType<ImageFavorites>()
++          .single
++          .leadingTool
++          .runtimeType
++          .toString(),
++      '_ComicSourceWidget',
++    );
++  });
++
++  for (final language in ['en-US', 'zh-TW']) {
++    for (final brightness in Brightness.values) {
++      for (final width in [360.0, 393.0]) {
++        for (final scale in [1.0, 1.5, 2.0]) {
++          testWidgets(
++            'empty sections $language $brightness ${width}dp ${scale}x',
++            (tester) async {
++              appdata.settings['language'] = language;
++              tester.view.physicalSize = Size(width, 1200);
++              tester.view.devicePixelRatio = 1;
++              addTearDown(tester.view.resetPhysicalSize);
++              addTearDown(tester.view.resetDevicePixelRatio);
++              final semantics = tester.ensureSemantics();
++              var searches = 0;
++              var imports = 0;
++              await tester.pumpWidget(
++                harness(
++                  Column(
++                    children: [
++                      HomeHistorySection(
++                        count: 0,
++                        onViewAll: () {},
++                        onSearch: () => searches++,
++                      ),
++                      HomeLocalSection(
++                        count: 0,
++                        onOpen: () {},
++                        onImport: () => imports++,
++                      ),
++                    ],
++                  ),
++                  scale: scale,
++                  brightness: brightness,
++                ),
++              );
++              expect(tester.takeException(), isNull);
++              final search = find.widgetWithText(FilledButton, 'Search'.tl);
++              final import = find.widgetWithText(
++                FilledButton,
++                'Import Comics'.tl,
++              );
++              await tester.ensureVisible(search);
++              await tester.tap(search);
++              await tester.ensureVisible(import);
++              await tester.tap(import);
++              expect((searches, imports), (1, 1));
++              expect(tester.getSize(search).height, greaterThanOrEqualTo(48));
++              expect(tester.getSize(import).height, greaterThanOrEqualTo(48));
++              await expectLater(
++                tester,
++                meetsGuideline(androidTapTargetGuideline),
++              );
++              await expectLater(
++                tester,
++                meetsGuideline(labeledTapTargetGuideline),
++              );
++              expect(tester.takeException(), isNull);
++              semantics.dispose();
++            },
++          );
++        }
++      }
++    }
++  }
++}
+diff --git a/test/ui/home_visual_r2_test.dart b/test/ui/home_visual_r2_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..5ca6d447d55729315a83c531d4a841522fc006ad
+--- /dev/null
++++ b/test/ui/home_visual_r2_test.dart
+@@ -0,0 +1,423 @@
++import 'dart:io';
++import 'dart:ui' as ui;
++
++import 'package:flutter/material.dart';
++import 'package:flutter/rendering.dart';
++import 'package:flutter/services.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/components/home_widgets.dart';
++import 'package:venera/foundation/appdata.dart';
++import 'package:venera/foundation/global_state.dart';
++import 'package:venera/pages/follow_updates_page.dart';
++import 'package:venera/pages/home_page.dart';
++import 'package:venera/utils/translations.dart';
++
++const _sources = [
++  'Source Alpha',
++  'Source Beta',
++  'Source Gamma',
++  'Source Delta',
++  'Source Epsilon',
++];
++
++Widget _shelf(BuildContext context, {VoidCallback? onTap}) => SizedBox(
++  height: HomeCoverCard.shelfHeight(context),
++  child: ListView.separated(
++    scrollDirection: Axis.horizontal,
++    itemCount: 6,
++    separatorBuilder: (_, _) => const SizedBox(width: 8),
++    itemBuilder: (_, i) => HomeCoverCard(
++      title: appdata.settings['language'] == 'zh-TW'
++          ? '合成閱讀樣本 ${i + 1}'
++          : 'Synthetic shelf ${i + 1}',
++      cover: const CoverImage(),
++      onTap: onTap ?? () {},
++    ),
++  ),
++);
++
++Widget _fixture({
++  int history = 181,
++  int local = 0,
++  List<String> sources = _sources,
++  Brightness brightness = Brightness.dark,
++  double scale = 1,
++  GlobalKey? captureKey,
++  bool comparison = false,
++  Color seed = Colors.teal,
++  VoidCallback? onSearch,
++  VoidCallback? onHistory,
++  VoidCallback? onComic,
++  VoidCallback? onManage,
++  VoidCallback? onLocal,
++  VoidCallback? onImport,
++  VoidCallback? onDownloads,
++}) {
++  return MaterialApp(
++    theme: ThemeData(
++      fontFamily: Platform.environment['VENERA_VISUAL_FONT'] == null
++          ? null
++          : 'VisualFixture',
++      colorScheme: ColorScheme.fromSeed(
++        seedColor: seed,
++        brightness: brightness,
++      ),
++    ),
++    builder: (context, child) => MediaQuery(
++      data: MediaQuery.of(
++        context,
++      ).copyWith(textScaler: TextScaler.linear(scale)),
++      child: child!,
++    ),
++    home: RepaintBoundary(
++      key: captureKey,
++      child: Scaffold(
++        body: Builder(
++          builder: (context) => CustomScrollView(
++            slivers: [
++              SliverToBoxAdapter(
++                child: HomeSearchEntry(
++                  label: 'Search'.tl,
++                  onTap: onSearch ?? () {},
++                ),
++              ),
++              SliverToBoxAdapter(
++                child: HomeHistorySection(
++                  count: history,
++                  onViewAll: onHistory ?? () {},
++                  onSearch: onSearch ?? () {},
++                  recentComics: history == 0
++                      ? null
++                      : _shelf(context, onTap: onComic),
++                ),
++              ),
++              if (!comparison) ...[
++                const FollowUpdatesWidget(),
++                SliverToBoxAdapter(
++                  child: HomeSourceSection(
++                    names: sources,
++                    onManage: onManage ?? () {},
++                    availableUpdates: sources.isEmpty ? 0 : 2,
++                  ),
++                ),
++              ],
++              SliverToBoxAdapter(
++                child: HomeLocalSection(
++                  count: local,
++                  onOpen: onLocal ?? () {},
++                  onImport: onImport ?? () {},
++                  recentComics: local == 0 ? null : _shelf(context),
++                  downloadingAction: onDownloads == null
++                      ? null
++                      : OutlinedButton(
++                          onPressed: onDownloads,
++                          child: Text('@a Tasks'.tlParams({'a': 1})),
++                        ),
++                ),
++              ),
++            ],
++          ),
++        ),
++      ),
++    ),
++  );
++}
++
++void _viewport(WidgetTester tester, double width, {double height = 1000}) {
++  tester.view.physicalSize = Size(width, height);
++  tester.view.devicePixelRatio = 1;
++  addTearDown(tester.view.resetPhysicalSize);
++  addTearDown(tester.view.resetDevicePixelRatio);
++}
++
++Future<void> _capture(WidgetTester tester, GlobalKey key, String name) async {
++  final directory = Platform.environment['VENERA_VISUAL_DIR'];
++  if (directory == null) return;
++  final boundary =
++      key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
++  await tester.runAsync(() async {
++    final image = await boundary.toImage(pixelRatio: 2);
++    try {
++      final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
++      final file = File('$directory/$name.png');
++      if (file.existsSync()) {
++        throw StateError('Refuse to overwrite visual evidence: ${file.path}');
++      }
++      await file.writeAsBytes(bytes!.buffer.asUint8List());
++    } finally {
++      image.dispose();
++    }
++  });
++}
++
++void main() {
++  TestWidgetsFlutterBinding.ensureInitialized();
++  setUpAll(() async {
++    await AppTranslation.init();
++    final fontPath = Platform.environment['VENERA_VISUAL_FONT'];
++    if (fontPath != null) {
++      final font = FontLoader('VisualFixture')
++        ..addFont(File(fontPath).readAsBytes().then(ByteData.sublistView));
++      await font.load();
++      final icons = FontLoader('MaterialIcons')
++        ..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
++      await icons.load();
++    }
++  });
++  setUp(() {
++    appdata.settings['language'] = 'en-US';
++    // The original updates widget returns before reading a DB when unset.
++    appdata.settings['followUpdatesFolder'] = null;
++  });
++  tearDown(() => appdata.settings['language'] = 'system');
++
++  for (final language in ['en-US', 'zh-TW']) {
++    for (final brightness in Brightness.values) {
++      for (final width in [360.0, 393.0]) {
++        for (final scale in [1.0, 1.5, 2.0]) {
++          for (final populated in [false, true]) {
++            testWidgets(
++              'R2 $language $brightness ${width}dp ${scale}x populated=$populated',
++              (tester) async {
++                _viewport(tester, width);
++                appdata.settings['language'] = language;
++                final semantics = tester.ensureSemantics();
++                await tester.pumpWidget(
++                  _fixture(
++                    history: populated ? 181 : 0,
++                    local: populated ? 3 : 0,
++                    sources: populated ? _sources : const [],
++                    brightness: brightness,
++                    scale: scale,
++                  ),
++                );
++                await tester.pumpAndSettle();
++                expect(tester.takeException(), isNull);
++                await expectLater(
++                  tester,
++                  meetsGuideline(androidTapTargetGuideline),
++                );
++                await expectLater(
++                  tester,
++                  meetsGuideline(labeledTapTargetGuideline),
++                );
++                await tester.drag(
++                  find.byType(CustomScrollView),
++                  const Offset(0, -1500),
++                );
++                await tester.pumpAndSettle();
++                expect(tester.takeException(), isNull);
++                final import = find.widgetWithText(
++                  FilledButton,
++                  'Import Comics'.tl,
++                );
++                await tester.ensureVisible(import);
++                expect(tester.getSize(import).height, greaterThanOrEqualTo(48));
++                await expectLater(
++                  tester,
++                  meetsGuideline(androidTapTargetGuideline),
++                );
++                await expectLater(
++                  tester,
++                  meetsGuideline(labeledTapTargetGuideline),
++                );
++                semantics.dispose();
++              },
++            );
++          }
++        }
++      }
++    }
++  }
++
++  testWidgets('every R2 entry dispatches its supplied callback', (
++    tester,
++  ) async {
++    _viewport(tester, 393, height: 1800);
++    var search = 0,
++        history = 0,
++        comic = 0,
++        source = 0,
++        local = 0,
++        imports = 0,
++        downloads = 0;
++    await tester.pumpWidget(
++      _fixture(
++        onSearch: () => search++,
++        onHistory: () => history++,
++        onComic: () => comic++,
++        onManage: () => source++,
++        onLocal: () => local++,
++        onImport: () => imports++,
++        onDownloads: () => downloads++,
++      ),
++    );
++    for (final finder in [
++      find.byType(HomeSearchEntry),
++      find.text('View more'),
++      find.text('Synthetic shelf 1'),
++      find.text('Manage'),
++      find.descendant(
++        of: find.byType(HomeLocalSection),
++        matching: find.text('View'),
++      ),
++      find.text('Import Comics'),
++      find.text('1 Tasks'),
++    ]) {
++      await tester.ensureVisible(finder);
++      await tester.tap(finder);
++    }
++    expect(
++      [search, history, comic, source, local, imports, downloads],
++      [1, 1, 1, 1, 1, 1, 1],
++    );
++    expect(tester.takeException(), isNull);
++  });
++
++  testWidgets(
++    'source labels have no button or tap semantics; management does',
++    (tester) async {
++      _viewport(tester, 393, height: 1800);
++      final semantics = tester.ensureSemantics();
++      await tester.pumpWidget(_fixture());
++      expect(
++        find.descendant(
++          of: find.byType(HomeSourceSection),
++          matching: find.text('5'),
++        ),
++        findsOneWidget,
++      );
++      // R4 uses the real count instead of concatenating source names. The
++      // informational count remains noninteractive; Manage retains its action.
++      final node = tester.getSemantics(
++        find.descendant(
++          of: find.byType(HomeSourceSection),
++          matching: find.text('5'),
++        ),
++      );
++      expect(node.getSemanticsData().flagsCollection.isButton, isFalse);
++      expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isFalse);
++      for (final name in _sources) {
++        expect(find.textContaining(name), findsNothing);
++      }
++      expect(node.getSemanticsData().label, contains('5'));
++      expect(
++        tester
++            .getSemantics(find.text('Manage'))
++            .getSemanticsData()
++            .hasAction(SemanticsAction.tap),
++        isTrue,
++      );
++      expect(find.byType(LinearProgressIndicator), findsNothing);
++      expect(find.textContaining('Continue'), findsNothing);
++      semantics.dispose();
++    },
++  );
++
++  testWidgets('original follow-up State still receives its global refresh', (
++    tester,
++  ) async {
++    _viewport(tester, 393);
++    await tester.pumpWidget(_fixture(history: 0, sources: const []));
++    final state = GlobalState.findOrNull<State>('FollowUpdatesWidget');
++    expect(state, isNotNull);
++    expect(state.runtimeType.toString(), '_FollowUpdatesWidgetState');
++    updateFollowUpdatesUI();
++    await tester.pump();
++    expect(GlobalState.findOrNull<State>('FollowUpdatesWidget'), same(state));
++    expect(tester.takeException(), isNull);
++    await tester.pumpWidget(const SizedBox());
++    expect(GlobalState.findOrNull<State>('FollowUpdatesWidget'), isNull);
++  });
++
++  testWidgets('long names and titles retain full semantics at 2x', (
++    tester,
++  ) async {
++    _viewport(tester, 360, height: 1600);
++    const longTitle =
++        '合成測試 Synthetic title with a long descriptive name that should wrap';
++    final semantics = tester.ensureSemantics();
++    await tester.pumpWidget(
++      MaterialApp(
++        home: Scaffold(
++          body: MediaQuery(
++            data: const MediaQueryData(textScaler: TextScaler.linear(2)),
++            child: Builder(
++              builder: (context) => Column(
++                children: [
++                  HomeSourceSection(names: const [longTitle], onManage: () {}),
++                  SizedBox(
++                    height: HomeCoverCard.shelfHeight(context),
++                    child: HomeCoverCard(
++                      title: longTitle,
++                      cover: const CoverImage(),
++                      onTap: () {},
++                    ),
++                  ),
++                ],
++              ),
++            ),
++          ),
++        ),
++      ),
++    );
++    expect(tester.takeException(), isNull);
++    // Only the book displays the long title; sources now display real count.
++    expect(find.bySemanticsLabel(longTitle), findsOneWidget);
++    expect(
++      find.descendant(
++        of: find.byType(HomeSourceSection),
++        matching: find.text('1'),
++      ),
++      findsOneWidget,
++    );
++    semantics.dispose();
++  });
++
++  testWidgets('presentation follows alternate Material seed colors', (
++    tester,
++  ) async {
++    _viewport(tester, 393);
++    for (final seed in [Colors.orange, Colors.green]) {
++      await tester.pumpWidget(_fixture(seed: seed));
++      final context = tester.element(find.byType(HomeHistorySection));
++      final scheme = Theme.of(context).colorScheme;
++      final material = tester.widget<Material>(
++        find
++            .descendant(
++              of: find.byType(HomeSearchEntry),
++              matching: find.byType(Material),
++            )
++            .first,
++      );
++      expect(material.color, scheme.surfaceContainerHigh);
++      expect(tester.takeException(), isNull);
++    }
++  });
++
++  for (final brightness in Brightness.values) {
++    testWidgets('synthetic visual evidence ${brightness.name}', (tester) async {
++      _viewport(tester, 393, height: 700);
++      appdata.settings['language'] = 'zh-TW';
++      var key = GlobalKey();
++      await tester.pumpWidget(
++        _fixture(brightness: brightness, captureKey: key, comparison: true),
++      );
++      await tester.pumpAndSettle();
++      expect(tester.takeException(), isNull);
++      await _capture(tester, key, 'after-${brightness.name}-synthetic');
++      tester.view.physicalSize = const Size(393, 1000);
++      key = GlobalKey();
++      await tester.pumpWidget(
++        _fixture(brightness: brightness, captureKey: key),
++      );
++      await tester.pumpAndSettle();
++      expect(tester.takeException(), isNull);
++      await _capture(
++        tester,
++        key,
++        'after-${brightness.name}-all-sections-synthetic',
++      );
++    });
++  }
++}
+diff --git a/test/ui/home_visual_r3_test.dart b/test/ui/home_visual_r3_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..629f473ad21a6ee53c3f4d2ca279b7f146488e9d
+--- /dev/null
++++ b/test/ui/home_visual_r3_test.dart
+@@ -0,0 +1,375 @@
++import 'dart:io';
++import 'dart:ui' as ui;
++
++import 'package:flutter/material.dart';
++import 'package:flutter/rendering.dart';
++import 'package:flutter/services.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/components/home_widgets.dart';
++import 'package:venera/foundation/appdata.dart';
++import 'package:venera/pages/follow_updates_page.dart';
++import 'package:venera/pages/home_page.dart';
++import 'package:venera/utils/translations.dart';
++
++const sources = [
++  'Source Alpha',
++  'Source Beta',
++  'Source Gamma',
++  'Source Delta',
++  'Source Epsilon',
++];
++
++// Entirely synthetic geometric artwork. Never load the App, a DB or a network.
++class SyntheticCover extends StatelessWidget {
++  const SyntheticCover(this.index, {super.key});
++  final int index;
++  @override
++  Widget build(BuildContext context) => ColoredBox(
++    color: [
++      const Color(0xff35546f),
++      const Color(0xff6c586f),
++      const Color(0xff47685f),
++    ][index % 3],
++    child: Stack(
++      children: [
++        Positioned(
++          top: 16,
++          right: -16,
++          child: Container(
++            width: 84,
++            height: 84,
++            decoration: BoxDecoration(
++              shape: BoxShape.circle,
++              color: Colors.white.withValues(alpha: .16),
++            ),
++          ),
++        ),
++        Positioned(
++          left: 12,
++          bottom: 16,
++          right: 12,
++          child: Column(
++            crossAxisAlignment: CrossAxisAlignment.start,
++            children: [
++              const Text(
++                'NIGHT / STUDIES',
++                style: TextStyle(fontSize: 9, color: Colors.white),
++              ),
++              Text(
++                '0${index + 1}',
++                style: const TextStyle(fontSize: 28, color: Colors.white),
++              ),
++            ],
++          ),
++        ),
++      ],
++    ),
++  );
++}
++
++Widget shelf(BuildContext context) => SizedBox(
++  height: HomeCoverCard.shelfHeight(context),
++  child: ListView.separated(
++    scrollDirection: Axis.horizontal,
++    itemCount: 6,
++    separatorBuilder: (_, _) => const SizedBox(width: 12),
++    itemBuilder: (_, i) => HomeCoverCard(
++      title: appdata.settings['language'] == 'zh-TW'
++          ? '合成閱讀樣本 ${i + 1}'
++          : 'Synthetic shelf ${i + 1}',
++      cover: SyntheticCover(i),
++      onTap: () {},
++    ),
++  ),
++);
++
++// This identical composition is also compiled against byte-backed-up R2 source
++// in the evidence folder. The chrome is fixture chrome, not a device capture.
++Widget comparisonFixture({
++  required Brightness brightness,
++  required GlobalKey boundary,
++}) => MaterialApp(
++  theme: ThemeData(
++    fontFamily: 'VisualFixture',
++    colorScheme: ColorScheme.fromSeed(
++      seedColor: const Color(0xff789bb9),
++      brightness: brightness,
++    ),
++  ),
++  home: RepaintBoundary(
++    key: boundary,
++    child: Scaffold(
++      appBar: AppBar(
++        title: Text('Home'.tl),
++        actions: [
++          IconButton(
++            tooltip: 'Settings'.tl,
++            onPressed: () {},
++            icon: const Icon(Icons.settings_outlined),
++          ),
++        ],
++      ),
++      bottomNavigationBar: NavigationBar(
++        selectedIndex: 0,
++        destinations: [
++          NavigationDestination(
++            icon: const Icon(Icons.home_outlined),
++            label: 'Home'.tl,
++          ),
++          NavigationDestination(
++            icon: const Icon(Icons.bookmark_outline),
++            label: 'Favorites'.tl,
++          ),
++          NavigationDestination(
++            icon: const Icon(Icons.explore_outlined),
++            label: 'Explore'.tl,
++          ),
++          NavigationDestination(
++            icon: const Icon(Icons.category_outlined),
++            label: 'Categories'.tl,
++          ),
++        ],
++      ),
++      body: Builder(
++        builder: (context) => CustomScrollView(
++          slivers: [
++            SliverToBoxAdapter(
++              child: HomeSearchEntry(label: 'Search'.tl, onTap: () {}),
++            ),
++            SliverToBoxAdapter(
++              child: HomeHistorySection(
++                count: 181,
++                onViewAll: () {},
++                onSearch: () {},
++                recentComics: shelf(context),
++              ),
++            ),
++            const FollowUpdatesWidget(),
++            SliverToBoxAdapter(
++              child: HomeSourceSection(names: sources, onManage: () {}),
++            ),
++            SliverToBoxAdapter(
++              child: HomeLocalSection(count: 0, onOpen: () {}, onImport: () {}),
++            ),
++          ],
++        ),
++      ),
++    ),
++  ),
++);
++
++void viewport(WidgetTester tester, double width, {double height = 800}) {
++  tester.view.devicePixelRatio = 1;
++  tester.view.physicalSize = Size(width, height);
++  addTearDown(tester.view.resetDevicePixelRatio);
++  addTearDown(tester.view.resetPhysicalSize);
++}
++
++Future<void> capture(WidgetTester tester, GlobalKey key, String name) async {
++  final dir = Platform.environment['VENERA_VISUAL_DIR'];
++  if (dir == null) return;
++  final boundary =
++      key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
++  await tester.runAsync(() async {
++    final image = await boundary.toImage(pixelRatio: 2);
++    try {
++      final data = await image.toByteData(format: ui.ImageByteFormat.png);
++      final file = File('$dir/$name.png');
++      if (file.existsSync()) throw StateError('No evidence overwrite');
++      await file.writeAsBytes(data!.buffer.asUint8List());
++    } finally {
++      image.dispose();
++    }
++  });
++}
++
++void main() {
++  TestWidgetsFlutterBinding.ensureInitialized();
++  setUpAll(() async {
++    await AppTranslation.init();
++    final path = Platform.environment['VENERA_VISUAL_FONT'];
++    if (path != null) {
++      await (FontLoader(
++        'VisualFixture',
++      )..addFont(File(path).readAsBytes().then(ByteData.sublistView))).load();
++      await (FontLoader(
++        'MaterialIcons',
++      )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
++    }
++  });
++  setUp(() {
++    appdata.settings['language'] = 'zh-TW';
++    appdata.settings['followUpdatesFolder'] = null;
++  });
++  tearDown(() {
++    appdata.settings['language'] = 'system';
++  });
++
++  // CAPTURE_TESTS_BEGIN
++  for (final brightness in Brightness.values) {
++    for (final width in [360.0, 393.0]) {
++      testWidgets(
++        'R3 identical synthetic render ${brightness.name} ${width}dp',
++        (tester) async {
++          // Fully detach prior scene layers before capture at another width.
++          await tester.pumpWidget(const SizedBox.shrink());
++          viewport(tester, width, height: 800);
++          final key = GlobalKey();
++          await tester.pumpWidget(
++            comparisonFixture(brightness: brightness, boundary: key),
++          );
++          await tester.pumpAndSettle();
++          expect(tester.takeException(), isNull);
++          await capture(
++            tester,
++            key,
++            'home-${brightness.name}-${width.toInt()}dp',
++          );
++        },
++      );
++    }
++  }
++  // CAPTURE_TESTS_END
++
++  testWidgets('R3 first screen reading and follow-up hierarchy', (
++    tester,
++  ) async {
++    for (final width in [360.0, 393.0]) {
++      viewport(tester, width);
++      await tester.pumpWidget(
++        comparisonFixture(brightness: Brightness.dark, boundary: GlobalKey()),
++      );
++      await tester.pumpAndSettle();
++      final history = tester.getRect(find.byType(HomeHistorySection));
++      final follow = tester.getRect(find.byType(HomeFollowUpdatesRow));
++      final source = tester.getRect(find.byType(HomeSourceSection));
++      // R4 intentionally grows the old 128dp cover into a 2:3, 168dp cover.
++      // Preserve a bounded first-screen reading section, and check its actual
++      // portrait geometry instead of enforcing the superseded short R3 shelf.
++      expect(history.height, greaterThan(280));
++      expect(history.height, lessThan(360));
++      expect(HomeCoverCard.width / HomeCoverCard.coverHeight, 2 / 3);
++      expect(follow.top, greaterThan(history.top));
++      expect(follow.bottom, lessThan(600));
++      expect(source.top, lessThan(620));
++      expect(find.byType(LinearProgressIndicator), findsNothing);
++      expect(find.textContaining('Continue'), findsNothing);
++      expect(find.byType(HomeSurface), findsNothing);
++      expect(tester.takeException(), isNull);
++    }
++  });
++
++  for (final language in ['en-US', 'zh-TW']) {
++    for (final brightness in Brightness.values) {
++      for (final width in [360.0, 393.0]) {
++        for (final scale in [1.0, 1.5, 2.0]) {
++          testWidgets('R3 tool paths $language $brightness $width $scale', (
++            tester,
++          ) async {
++            viewport(tester, width, height: 1800);
++            appdata.settings['language'] = language;
++            final semantics = tester.ensureSemantics();
++            var follows = 0,
++                errors = 0,
++                uploads = 0,
++                downloads = 0,
++                favorites = 0;
++            await tester.pumpWidget(
++              MaterialApp(
++                theme: ThemeData(
++                  colorScheme: ColorScheme.fromSeed(
++                    seedColor: Colors.blueGrey,
++                    brightness: brightness,
++                  ),
++                ),
++                home: Scaffold(
++                  body: MediaQuery(
++                    data: MediaQueryData(textScaler: TextScaler.linear(scale)),
++                    child: SingleChildScrollView(
++                      child: Column(
++                        children: [
++                          HomeFollowUpdatesRow(
++                            configured: true,
++                            count: 12,
++                            title: 'Follow Updates'.tl,
++                            status: '@c updates'.tlParams({'c': 12}),
++                            actionLabel: 'View'.tl,
++                            onView: () => follows++,
++                          ),
++                          HomeToolRow(
++                            title: 'Image Favorites'.tl,
++                            icon: Icons.collections_outlined,
++                            count: 3,
++                            actionLabel: 'View'.tl,
++                            onAction: () => favorites++,
++                          ),
++                          HomeSyncSection(
++                            title: 'Sync Data'.tl,
++                            uploadLabel: 'Upload'.tl,
++                            downloadLabel: 'Download'.tl,
++                            errorLabel: 'Error'.tl,
++                            onError: () => errors++,
++                            onUpload: () => uploads++,
++                            onDownload: () => downloads++,
++                          ),
++                        ],
++                      ),
++                    ),
++                  ),
++                ),
++              ),
++            );
++            expect(tester.takeException(), isNull);
++            for (final finder in [
++              find.text('View'.tl).at(0),
++              find.text('View'.tl).at(1),
++              find.text('Error'.tl),
++              find.byTooltip('Upload'.tl),
++              find.byTooltip('Download'.tl),
++            ]) {
++              await tester.ensureVisible(finder);
++              await tester.tap(finder);
++            }
++            expect(
++              [follows, favorites, errors, uploads, downloads],
++              [1, 1, 1, 1, 1],
++            );
++            await expectLater(
++              tester,
++              meetsGuideline(androidTapTargetGuideline),
++            );
++            await expectLater(
++              tester,
++              meetsGuideline(labeledTapTargetGuideline),
++            );
++            expect(tester.takeException(), isNull);
++            semantics.dispose();
++          });
++        }
++      }
++    }
++  }
++
++  testWidgets(
++    'R3 busy sync shows real status without duplicate retry controls',
++    (tester) async {
++      await tester.pumpWidget(
++        MaterialApp(
++          home: Scaffold(
++            body: HomeSyncSection(
++              title: 'Syncing Data',
++              busy: true,
++              uploadLabel: 'Upload',
++              downloadLabel: 'Download',
++              onUpload: () {},
++              onDownload: () {},
++            ),
++          ),
++        ),
++      );
++      expect(find.text('Syncing Data'), findsOneWidget);
++      expect(find.byType(CircularProgressIndicator), findsOneWidget);
++      expect(find.byTooltip('Upload'), findsNothing);
++    },
++  );
++}
+diff --git a/test/ui/home_visual_r4_test.dart b/test/ui/home_visual_r4_test.dart
+new file mode 100644
+index 0000000000000000000000000000000000000000..f9d674ef031d2e3ae7329d4f56f31f48203dc7f2
+--- /dev/null
++++ b/test/ui/home_visual_r4_test.dart
+@@ -0,0 +1,729 @@
++import 'dart:convert';
++import 'dart:io';
++import 'dart:ui' as ui;
++
++import 'package:flutter/material.dart';
++import 'package:flutter/rendering.dart';
++import 'package:flutter/services.dart';
++import 'package:flutter_localizations/flutter_localizations.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:venera/components/components.dart';
++import 'package:venera/components/home_widgets.dart';
++import 'package:venera/foundation/appdata.dart';
++import 'package:venera/foundation/history.dart';
++import 'package:venera/pages/home_page.dart';
++import 'package:venera/utils/translations.dart';
++
++const syntheticSources = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon'];
++const syntheticTitles = [
++  '夜航',
++  '走進沒有盡頭的藍色圖書館',
++  'The Quiet Geometry of an Endless Afternoon',
++  '合成閱讀樣本 4',
++  'Synthetic shelf 5',
++  'Synthetic shelf 6',
++];
++const syntheticStatistics = ImageFavoritesComputed(
++  [TextWithCount('fixture:geometry', 7), TextWithCount('fixture:night', 3)],
++  [TextWithCount('Synthetic Author', 5)],
++  [TextWithCount('Synthetic Comic', 4)],
++  9,
++);
++
++// Original design artwork is geometric. This Flutter painter reproduces its
++// geometry for both R3 and R4 fixtures, never an image of the proposed UI.
++class EditorialCover extends StatelessWidget {
++  const EditorialCover(this.index, {super.key});
++  final int index;
++  @override
++  Widget build(BuildContext context) => ClipRRect(
++    borderRadius: BorderRadius.circular(8),
++    child: CustomPaint(painter: _CoverPainter(index)),
++  );
++}
++
++class _CoverPainter extends CustomPainter {
++  const _CoverPainter(this.index);
++  final int index;
++  @override
++  void paint(Canvas canvas, Size size) {
++    canvas.save();
++    canvas.scale(size.width / 112, size.height / 168);
++    const backgrounds = [
++      Color(0xff283e55),
++      Color(0xffc3c9bd),
++      Color(0xffb4abbc),
++    ];
++    const foregrounds = [
++      Color(0xffe2ddd0),
++      Color(0xfff3ead8),
++      Color(0xffe9dcca),
++    ];
++    final i = index % 3;
++    final bg = backgrounds[i], fg = foregrounds[i];
++    canvas.drawRect(const Rect.fromLTWH(0, 0, 112, 168), Paint()..color = bg);
++    if (i == 0) {
++      canvas.drawCircle(
++        const Offset(80, 57),
++        33,
++        Paint()..color = const Color(0xffa8c8dd),
++      );
++      canvas.drawPath(
++        Path()
++          ..moveTo(-10, 150)
++          ..lineTo(68, 72)
++          ..lineTo(122, 152)
++          ..lineTo(122, 168)
++          ..lineTo(0, 168)
++          ..close(),
++        Paint()..color = fg,
++      );
++      canvas.drawPath(
++        Path()
++          ..moveTo(-5, 154)
++          ..lineTo(68, 99)
++          ..lineTo(128, 159),
++        Paint()
++          ..color = bg
++          ..style = PaintingStyle.stroke
++          ..strokeWidth = 1,
++      );
++    } else if (i == 1) {
++      canvas.drawRRect(
++        RRect.fromRectAndCorners(
++          const Rect.fromLTWH(18, 26, 76, 109),
++          topLeft: const Radius.circular(38),
++          topRight: const Radius.circular(38),
++        ),
++        Paint()..color = const Color(0xff37594d),
++      );
++      canvas.drawRRect(
++        RRect.fromRectAndCorners(
++          const Rect.fromLTWH(35, 48, 42, 86),
++          topLeft: const Radius.circular(21),
++          topRight: const Radius.circular(21),
++        ),
++        Paint()..color = bg,
++      );
++      canvas.drawCircle(const Offset(56, 91), 15, Paint()..color = fg);
++    } else {
++      canvas.drawCircle(const Offset(84, 46), 34, Paint()..color = fg);
++      canvas.drawPath(
++        Path()
++          ..moveTo(0, 113)
++          ..lineTo(112, 43)
++          ..lineTo(112, 118)
++          ..lineTo(0, 168)
++          ..close(),
++        Paint()..color = const Color(0xff5a4863),
++      );
++      canvas.drawPath(
++        Path()
++          ..moveTo(0, 125)
++          ..lineTo(112, 55)
++          ..moveTo(0, 142)
++          ..lineTo(112, 72),
++        Paint()
++          ..color = bg
++          ..style = PaintingStyle.stroke,
++      );
++    }
++    canvas.drawRect(const Rect.fromLTWH(10, 145, 92, 13), Paint()..color = bg);
++    void label(String text, Offset offset, double fontSize, double spacing) {
++      final p = TextPainter(
++        text: TextSpan(
++          text: text,
++          style: TextStyle(
++            fontFamily: 'VisualFixture',
++            fontSize: fontSize,
++            letterSpacing: spacing,
++            color: fg,
++          ),
++        ),
++        textDirection: TextDirection.ltr,
++      )..layout();
++      p.paint(canvas, offset);
++      p.dispose();
++    }
++
++    label('NIGHT / STUDIES', const Offset(11, 9), 6, 1.3);
++    label('VOLUME / 0${index + 1}', const Offset(12, 145), 7, 2);
++    canvas.restore();
++  }
++
++  @override
++  bool shouldRepaint(_CoverPainter oldDelegate) => oldDelegate.index != index;
++}
++
++class EditorialFixture extends StatefulWidget {
++  const EditorialFixture({
++    super.key,
++    this.populated = true,
++    this.sync = 'disabled',
++    this.onAction,
++    this.missingCover = false,
++    this.designFixture = false,
++  });
++  final bool populated, missingCover;
++  final bool designFixture;
++  final String sync;
++  final ValueChanged<String>? onAction;
++  @override
++  State<EditorialFixture> createState() => _EditorialFixtureState();
++}
++
++class _EditorialFixtureState extends State<EditorialFixture> {
++  int displayType = 0;
++  void action(String name) => widget.onAction?.call(name);
++  Widget shelf(BuildContext context) => SizedBox(
++    height: HomeCoverCard.shelfHeight(context),
++    child: ListView.separated(
++      key: const PageStorageKey('fixture-history-shelf'),
++      scrollDirection: Axis.horizontal,
++      itemCount: syntheticTitles.length,
++      separatorBuilder: (_, _) => const SizedBox(width: 16),
++      itemBuilder: (_, i) => HomeCoverCard(
++        key: ValueKey('fixture-book-$i'),
++        title: syntheticTitles[i],
++        cover: widget.missingCover ? const CoverImage() : EditorialCover(i),
++        onTap: () => action('comic-$i'),
++      ),
++    ),
++  );
++  @override
++  Widget build(BuildContext context) => CustomScrollView(
++    key: const ValueKey('editorial-scroll'),
++    slivers: [
++      SliverToBoxAdapter(
++        child: HomeSearchEntry(
++          label: 'Search'.tl,
++          onTap: () => action('search'),
++        ),
++      ),
++      SliverToBoxAdapter(
++        child: HomeHistorySection(
++          count: widget.populated ? 24 : 0,
++          onViewAll: () => action('history'),
++          onSearch: () => action('search'),
++          recentComics: widget.populated ? shelf(context) : null,
++        ),
++      ),
++      SliverToBoxAdapter(
++        child: HomeFollowUpdatesRow(
++          configured: widget.populated && !widget.designFixture,
++          count: widget.populated && !widget.designFixture ? 7 : 0,
++          title: 'Follow Updates'.tl,
++          status: widget.populated && !widget.designFixture
++              ? '@c updates'.tlParams({'c': 7})
++              : 'Choose a folder to follow updates.'.tl,
++          actionLabel: 'View'.tl,
++          onView: () => action('follow'),
++        ),
++      ),
++      SliverToBoxAdapter(
++        child: HomeLibraryTools(
++          source: HomeSourceSection(
++            names: widget.populated ? syntheticSources : const [],
++            onManage: () => action('source'),
++          ),
++          favorites: HomeLibraryTool(
++            title: 'Image Favorites'.tl,
++            icon: Icons.collections_outlined,
++            count: widget.populated && !widget.designFixture ? 9 : null,
++            actionLabel: 'View'.tl,
++            onAction: () => action('favorites'),
++          ),
++          statistics: widget.populated && !widget.designFixture
++              ? HomeImageFavoritesStatistics(
++                  computed: syntheticStatistics,
++                  displayType: displayType,
++                  onSelect: (type) {
++                    setState(() => displayType = type);
++                    action('type-$type');
++                  },
++                  onKeyword: (keyword) => action('keyword-$keyword'),
++                )
++              : null,
++        ),
++      ),
++      SliverToBoxAdapter(
++        child: HomeLocalSection(
++          count: widget.populated && !widget.designFixture ? 3 : 0,
++          onOpen: () => action('local'),
++          onImport: () => action('import'),
++          recentComics: widget.populated && !widget.designFixture
++              ? shelf(context)
++              : null,
++          downloadingAction: widget.populated && !widget.designFixture
++              ? OutlinedButton(
++                  onPressed: () => action('downloads'),
++                  child: const Text('1 Tasks'),
++                )
++              : null,
++        ),
++      ),
++      if (widget.sync != 'disabled')
++        SliverToBoxAdapter(
++          child: HomeSyncSection(
++            title: (widget.sync == 'busy' ? 'Syncing Data' : 'Sync Data').tl,
++            busy: widget.sync == 'busy',
++            uploadLabel: 'Upload'.tl,
++            downloadLabel: 'Download'.tl,
++            onUpload: () => action('upload'),
++            onDownload: () => action('download'),
++            errorLabel: widget.sync == 'error' ? 'Error'.tl : null,
++            onError: () => action('error'),
++          ),
++        ),
++      const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
++    ],
++  );
++}
++
++Widget fixtureApp({
++  required Widget child,
++  Brightness brightness = Brightness.dark,
++  double scale = 1,
++  String language = 'zh-TW',
++  GlobalKey? boundary,
++  bool shell = false,
++  bool designPalette = false,
++}) {
++  final seeded = ColorScheme.fromSeed(
++    seedColor: const Color(0xff789bb9),
++    brightness: brightness,
++  );
++  // Only synthetic comparison fixtures map the design colors. Production uses
++  // the unchanged app Theme/Dynamic Color. Both seeded and design-mapped views
++  // are captured and explicitly distinguished in the evidence report.
++  final scheme = !designPalette
++      ? seeded
++      : seeded.copyWith(
++          surface: brightness == Brightness.dark
++              ? const Color(0xff101820)
++              : const Color(0xfff4f6f8),
++          surfaceContainerHigh: brightness == Brightness.dark
++              ? const Color(0xff1c2733)
++              : Colors.white,
++          primary: brightness == Brightness.dark
++              ? const Color(0xffb0d4ff)
++              : const Color(0xff315b7d),
++        );
++  return MaterialApp(
++    theme: ThemeData(
++      fontFamily: Platform.environment['VENERA_VISUAL_FONT'] == null
++          ? null
++          : 'VisualFixture',
++      colorScheme: scheme,
++    ),
++    locale: language == 'zh-TW'
++        ? const Locale('zh', 'TW')
++        : const Locale('en', 'US'),
++    supportedLocales: const [Locale('zh', 'TW'), Locale('en', 'US')],
++    localizationsDelegates: GlobalMaterialLocalizations.delegates,
++    builder: (context, child) => MediaQuery(
++      data: MediaQuery.of(context).copyWith(
++        textScaler: TextScaler.linear(scale),
++        padding: const EdgeInsets.only(top: 24, bottom: 20),
++        viewPadding: const EdgeInsets.only(top: 24, bottom: 20),
++      ),
++      child: child!,
++    ),
++    home: RepaintBoundary(
++      key: boundary,
++      child: Scaffold(
++        body: shell
++            ? NaviPane(
++                observer: NaviObserver(),
++                navigatorKey: GlobalKey<NavigatorState>(),
++                paneItems: [
++                  PaneItemEntry(
++                    label: 'Home'.tl,
++                    icon: Icons.home_outlined,
++                    activeIcon: Icons.home,
++                  ),
++                  PaneItemEntry(
++                    label: 'Favorites'.tl,
++                    icon: Icons.local_activity_outlined,
++                    activeIcon: Icons.local_activity,
++                  ),
++                  PaneItemEntry(
++                    label: 'Explore'.tl,
++                    icon: Icons.explore_outlined,
++                    activeIcon: Icons.explore,
++                  ),
++                  PaneItemEntry(
++                    label: 'Categories'.tl,
++                    icon: Icons.category_outlined,
++                    activeIcon: Icons.category,
++                  ),
++                ],
++                paneActions: [
++                  PaneActionEntry(
++                    label: 'Settings'.tl,
++                    icon: Icons.settings,
++                    onTap: () {},
++                  ),
++                ],
++                pageBuilder: (_) => child,
++              )
++            : SafeArea(child: child),
++      ),
++    ),
++  );
++}
++
++void viewport(WidgetTester tester, double width, {double height = 1000}) {
++  tester.view.devicePixelRatio = 1;
++  tester.view.physicalSize = Size(width, height);
++  addTearDown(tester.view.resetDevicePixelRatio);
++  addTearDown(tester.view.resetPhysicalSize);
++}
++
++Future<void> capture(WidgetTester tester, GlobalKey key, String name) async {
++  final directory = Platform.environment['VENERA_VISUAL_DIR'];
++  if (directory == null) return;
++  await tester.pump(const Duration(milliseconds: 32));
++  final boundary =
++      key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
++  await tester.runAsync(() async {
++    final image = await boundary.toImage(pixelRatio: 2);
++    try {
++      final data = await image.toByteData(format: ui.ImageByteFormat.png);
++      final file = File('$directory/$name.png');
++      if (file.existsSync()) throw StateError('No capture overwrite');
++      await file.writeAsBytes(data!.buffer.asUint8List());
++    } finally {
++      image.dispose();
++    }
++  });
++}
++
++void main() {
++  TestWidgetsFlutterBinding.ensureInitialized();
++  setUpAll(() async {
++    await AppTranslation.init();
++    final font = Platform.environment['VENERA_VISUAL_FONT'];
++    if (font != null) {
++      await (FontLoader(
++        'VisualFixture',
++      )..addFont(File(font).readAsBytes().then(ByteData.sublistView))).load();
++      await (FontLoader(
++        'MaterialIcons',
++      )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
++    }
++  });
++  setUp(() {
++    appdata.settings['language'] = 'zh-TW';
++    appdata.settings['followUpdatesFolder'] = null;
++  });
++  tearDown(() {
++    appdata.settings['language'] = 'system';
++  });
++
++  for (final language in ['zh-TW', 'en-US']) {
++    for (final brightness in Brightness.values) {
++      for (final width in [360.0, 393.0, 600.0]) {
++        for (final scale in [1.0, 1.5, 2.0]) {
++          for (final populated in [false, true]) {
++            testWidgets(
++              'R4 matrix $language ${brightness.name} $width $scale populated=$populated',
++              (tester) async {
++                viewport(tester, width);
++                appdata.settings['language'] = language;
++                final semantics = tester.ensureSemantics();
++                await tester.pumpWidget(
++                  fixtureApp(
++                    language: language,
++                    brightness: brightness,
++                    scale: scale,
++                    child: EditorialFixture(
++                      populated: populated,
++                      missingCover: populated,
++                      sync: populated ? 'error' : 'disabled',
++                    ),
++                  ),
++                );
++                await tester.pumpAndSettle();
++                expect(tester.takeException(), isNull);
++                if (populated) {
++                  final rect = tester.getRect(
++                    find.byKey(const ValueKey('home-portrait-cover')).first,
++                  );
++                  expect(rect.width / rect.height, closeTo(2 / 3, .001));
++                  expect(
++                    find.bySemanticsLabel(syntheticTitles[0]),
++                    findsWidgets,
++                  );
++                }
++                for (var scroll = 0; scroll < 7; scroll++) {
++                  await expectLater(
++                    tester,
++                    meetsGuideline(androidTapTargetGuideline),
++                  );
++                  await expectLater(
++                    tester,
++                    meetsGuideline(labeledTapTargetGuideline),
++                  );
++                  await tester.drag(
++                    find.byKey(const ValueKey('editorial-scroll')),
++                    const Offset(0, -600),
++                  );
++                  await tester.pumpAndSettle();
++                  expect(tester.takeException(), isNull);
++                }
++                final imports = find.widgetWithText(
++                  FilledButton,
++                  'Import Comics'.tl,
++                );
++                await tester.ensureVisible(imports);
++                expect(
++                  tester.getSize(imports).height,
++                  greaterThanOrEqualTo(48),
++                );
++                semantics.dispose();
++              },
++            );
++          }
++        }
++      }
++    }
++  }
++
++  testWidgets('R4 actual statistics selectors and exact keyword callbacks', (
++    tester,
++  ) async {
++    viewport(tester, 360, height: 1400);
++    final actions = <String>[];
++    await tester.pumpWidget(
++      fixtureApp(
++        scale: 2,
++        child: EditorialFixture(sync: 'error', onAction: actions.add),
++      ),
++    );
++    await tester.pumpAndSettle();
++    for (final (label, keyword) in [
++      ('Tags', 'geometry'),
++      ('Authors', 'Synthetic Author'),
++      ('Comics', 'Synthetic Comic'),
++    ]) {
++      final tab = find.widgetWithText(HomeFavoriteTypeButton, label.tl);
++      await tester.scrollUntilVisible(
++        tab,
++        350,
++        scrollable: find
++            .descendant(
++              of: find.byKey(const ValueKey('editorial-scroll')),
++              matching: find.byType(Scrollable),
++            )
++            .first,
++      );
++      await tester.tap(tab);
++      await tester.pumpAndSettle();
++      final entry = find.text(keyword);
++      await tester.ensureVisible(entry);
++      await tester.tap(entry);
++      await tester.pumpAndSettle();
++    }
++    expect(actions, [
++      'type-0',
++      'keyword-fixture:geometry',
++      'type-1',
++      'keyword-Synthetic Author',
++      'type-2',
++      'keyword-Synthetic Comic',
++    ]);
++    expect(tester.takeException(), isNull);
++  });
++
++  testWidgets('R4 all entry callbacks reachable by scrolling', (tester) async {
++    viewport(tester, 393);
++    final actions = <String>[];
++    await tester.pumpWidget(
++      fixtureApp(
++        child: EditorialFixture(sync: 'error', onAction: actions.add),
++      ),
++    );
++    await tester.pumpAndSettle();
++    final entries = [
++      find.byType(HomeSearchEntry),
++      find.text('View more'.tl),
++      find.byKey(const ValueKey('fixture-book-0')).first,
++      find.descendant(
++        of: find.byType(HomeFollowUpdatesRow),
++        matching: find.text('View'.tl),
++      ),
++      find.text('Manage'.tl),
++      find.descendant(
++        of: find.byType(HomeLibraryTool),
++        matching: find.text('View'.tl),
++      ),
++      find.descendant(
++        of: find.byType(HomeLocalSection),
++        matching: find.text('View'.tl),
++      ),
++      find.text('Import Comics'.tl),
++      find.text('1 Tasks'),
++      find.byTooltip('Upload'.tl),
++      find.byTooltip('Download'.tl),
++      find.text('Error'.tl),
++    ];
++    for (final finder in entries) {
++      await tester.ensureVisible(finder);
++      await tester.pumpAndSettle();
++      await tester.tap(finder);
++    }
++    expect(actions, [
++      'search',
++      'history',
++      'comic-0',
++      'follow',
++      'source',
++      'favorites',
++      'local',
++      'import',
++      'downloads',
++      'upload',
++      'download',
++      'error',
++    ]);
++    expect(tester.takeException(), isNull);
++  });
++
++  for (final state in ['disabled', 'idle', 'busy', 'error']) {
++    testWidgets('R4 sync $state', (tester) async {
++      viewport(tester, 393, height: 1800);
++      await tester.pumpWidget(
++        fixtureApp(child: EditorialFixture(populated: false, sync: state)),
++      );
++      await tester.pump(const Duration(milliseconds: 250));
++      expect(
++        find.byType(HomeSyncSection),
++        state == 'disabled' ? findsNothing : findsOneWidget,
++      );
++      expect(
++        find.byType(CircularProgressIndicator),
++        state == 'busy' ? findsOneWidget : findsNothing,
++      );
++      expect(
++        find.byTooltip('Upload'.tl),
++        ['idle', 'error'].contains(state) ? findsOneWidget : findsNothing,
++      );
++      expect(
++        find.text('Error'.tl),
++        state == 'error' ? findsOneWidget : findsNothing,
++      );
++      expect(tester.takeException(), isNull);
++    });
++  }
++
++  testWidgets('R4 two-column tools fall back and long titles remain semantic', (
++    tester,
++  ) async {
++    viewport(tester, 393, height: 1600);
++    final semantics = tester.ensureSemantics();
++    for (final scale in [1.0, 1.5, 2.0]) {
++      await tester.pumpWidget(
++        fixtureApp(scale: scale, child: const EditorialFixture()),
++      );
++      await tester.pumpAndSettle();
++      final tools = find.byType(HomeLibraryTool);
++      final source = tester.getRect(tools.at(0));
++      final favorites = tester.getRect(tools.at(1));
++      if (scale == 1) {
++        expect(source.top, favorites.top);
++        expect(source.right, lessThan(favorites.left));
++      } else {
++        expect(favorites.top, greaterThan(source.bottom));
++      }
++      expect(find.bySemanticsLabel(syntheticTitles[1]), findsWidgets);
++      final title = tester.widget<Text>(find.text(syntheticTitles[1]).first);
++      expect(title.maxLines, 2);
++      expect(title.style!.fontSize, greaterThanOrEqualTo(13));
++      expect(tester.takeException(), isNull);
++    }
++    semantics.dispose();
++  });
++
++  for (final brightness in Brightness.values) {
++    for (final width in [360.0, 393.0]) {
++      testWidgets('R4 capture ${brightness.name} ${width.toInt()}', (
++        tester,
++      ) async {
++        viewport(tester, width, height: 850);
++        final key = GlobalKey();
++        await tester.pumpWidget(
++          fixtureApp(
++            brightness: brightness,
++            boundary: key,
++            shell: true,
++            child: const EditorialFixture(designFixture: true, sync: 'idle'),
++          ),
++        );
++        await tester.pumpAndSettle();
++        expect(find.byType(NaviPane), findsOneWidget);
++        expect(find.byTooltip('Settings'.tl), findsOneWidget);
++        expect(tester.takeException(), isNull);
++        await capture(
++          tester,
++          key,
++          'R4_A_FLUTTER_${brightness.name.toUpperCase()}_${width.toInt()}',
++        );
++        final out = Platform.environment['VENERA_VISUAL_DIR'];
++        if (out != null) {
++          final history = tester.getRect(find.byType(HomeHistorySection));
++          final follow = tester.getRect(find.byType(HomeFollowUpdatesRow));
++          final tool = tester.getRect(find.byType(HomeLibraryTools));
++          final data = {
++            'viewport': [width, 850],
++            'topInset': 24,
++            'bottomInset': 20,
++            'history': [history.top, history.bottom],
++            'follow': [follow.top, follow.bottom],
++            'tools': [tool.top, tool.bottom],
++            'source':
++                'actual Flutter widgets with unchanged NaviPane + synthetic data; seeded ColorScheme',
++          };
++          File(
++            '$out/MEASUREMENTS_${brightness.name}_${width.toInt()}.json',
++          ).writeAsStringSync(jsonEncode(data));
++        }
++      });
++    }
++  }
++
++  for (final brightness in Brightness.values) {
++    testWidgets('R4 capture full content ${brightness.name}', (tester) async {
++      viewport(tester, 393, height: 850);
++      final key = GlobalKey();
++      await tester.pumpWidget(
++        fixtureApp(
++          boundary: key,
++          shell: true,
++          brightness: brightness,
++          child: const EditorialFixture(designFixture: true, sync: 'idle'),
++        ),
++      );
++      await tester.pumpAndSettle();
++      final scroll = tester.state<ScrollableState>(
++        find
++            .descendant(
++              of: find.byKey(const ValueKey('editorial-scroll')),
++              matching: find.byType(Scrollable),
++            )
++            .first,
++      );
++      tester.view.physicalSize = Size(
++        393,
++        850 + scroll.position.maxScrollExtent.ceilToDouble(),
++      );
++      await tester.pumpAndSettle();
++      expect(tester.takeException(), isNull);
++      await capture(
++        tester,
++        key,
++        'R4_A_FLUTTER_${brightness.name.toUpperCase()}_393_FULL_CONTENT',
++      );
++    });
++  }
++}
+diff --git a/test/ui/home_widgets_test.dart b/test/ui/home_widgets_test.dart
+index 13d74332a17b2234f181903f37b519567d0c46c5..8c4bdcb890f670e6af89d5620f2e861395b46ca4 100644
+--- a/test/ui/home_widgets_test.dart
++++ b/test/ui/home_widgets_test.dart
+@@ -1,4 +1,5 @@
+ import 'dart:async';
++import 'dart:ui' show SemanticsAction;
+ 
+ import 'package:flutter/foundation.dart';
+ import 'package:flutter/material.dart';
+@@ -428,7 +429,14 @@ void main() {
+ 
+   group('CoverImage', () {
+     testWidgets('uses the supplied size', (tester) async {
+-      await tester.pumpWidget(harness(const CoverImage(width: 50, height: 70)));
++      await tester.pumpWidget(
++        harness(
++          const Align(
++            alignment: Alignment.topLeft,
++            child: CoverImage(width: 50, height: 70),
++          ),
++        ),
++      );
+       expect(tester.getSize(find.byType(CoverImage)), const Size(50, 70));
+     });
+   });

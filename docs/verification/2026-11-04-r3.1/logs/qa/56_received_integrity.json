@@ -1,0 +1,103 @@
+{
+  "received_zip_bytes": 5918195,
+  "received_zip_sha256": "ab84e99a10fccb5176c622ed89f00a08e7585ada29b9226df1148a4cca9f7ba4",
+  "manifest_verified_files": 24,
+  "files": [
+    {
+      "file": "./ALL_FIXES_FROM_51de19d.patch",
+      "sha256": "d2b455edddb5dba33c04fad0aa9b95e258d048980dcf06cf19ee0edb67feed95"
+    },
+    {
+      "file": "./ALL_FIXES_FROM_51de19d.patch.sha256",
+      "sha256": "3ed3fe44895cc4eba650e07514143948390d0f2f1babbd1ed513545114617457"
+    },
+    {
+      "file": "./BUILD_HANDOFF.md",
+      "sha256": "65161a62b92afa0eb2861cda340b22385d197395977f4cd05bb454a7777c463a"
+    },
+    {
+      "file": "./Venera_R4A_R2_R3_R3_1_source.zip",
+      "sha256": "eca3911b68b1e134a4528ff1ef7d07a1569067d7f8a92ef22f78a365e3283702"
+    },
+    {
+      "file": "./Venera_R4A_R2_R3_R3_1_source.zip.sha256",
+      "sha256": "3881d8520565a1db362b04ab908cfabb392648b3b620de359fd73402bfe61133"
+    },
+    {
+      "file": "./evidence/Venera_R4A_Cache_PathReuse_R3_1_Evidence.zip",
+      "sha256": "fe7aeb32cf19c4727584a2580e09ac841e35ee15caf1404cc61c0050ca8797dc"
+    },
+    {
+      "file": "./evidence/Venera_R4A_Cache_Race_R3_Evidence.zip",
+      "sha256": "b32a28d9d8b8ba91b47dbf16fbc7d7571ce15a88faf971c99092c00e59c8f277"
+    },
+    {
+      "file": "./logs/01_source_zip_verify.log",
+      "sha256": "b9e2b7dd27ccb0d7901ee48ee7612b4472a77afad533c43e2a26812e47818ecb"
+    },
+    {
+      "file": "./logs/02_cumulative_patch_generate.log",
+      "sha256": "b08bc32d3ea0d37f54956671122e2e9ce06d1da57fe3313d66a749d980854564"
+    },
+    {
+      "file": "./logs/03_cumulative_patch_verify.log",
+      "sha256": "1b7a0c4f31f222d29370ebb3d07a26a7f257853e59da3f65b24b7001c0c5c944"
+    },
+    {
+      "file": "./logs/04_patch_chain_consistency.log",
+      "sha256": "10560459f1193029c09c78b4748481ba5dc1ddc354caa24524a8ebcaf9bb8727"
+    },
+    {
+      "file": "./logs/05_format_status.log",
+      "sha256": "bd305779f88e3f4c5e273cddcccc7086a26856130e8ae9d27af7cc4e36567f61"
+    },
+    {
+      "file": "./logs/10_r4a_debug_apk_build_429.log",
+      "sha256": "cffa632789821cc88c522e76638dbb470a609b6a43ade0a8d591a5cefd760b1a"
+    },
+    {
+      "file": "./logs/11_r4a_maven_probe_429.txt",
+      "sha256": "e829d737d6607e5c4c0ff3f025a71653b9b4eac3a5da8f8433f92451f2d8d572"
+    },
+    {
+      "file": "./logs/12_r3_profile_apk_build_429.log",
+      "sha256": "5290f0bf3dd86e161ad0285b5e9869ea3f136acdf7424e1a73a34cf574126541"
+    },
+    {
+      "file": "./patches/CACHE_HIT_RECOVERY_ON_R4A.patch",
+      "sha256": "3e528269cff86e982ce7c5255940f51219cacc68dc3abd0434cd20ddcba67457"
+    },
+    {
+      "file": "./patches/CACHE_HIT_RECOVERY_ON_R4A.patch.sha256",
+      "sha256": "f84f56d669fb0e01a22bc93eba7150e43e72f1aa726e0b591b886942b12bbe22"
+    },
+    {
+      "file": "./patches/CACHE_PATH_REUSE_FIX_ON_R3.patch",
+      "sha256": "3643fd62c7b635c1801e597e8b1e3727862ded9e7945add245ea5a6d4dc601a7"
+    },
+    {
+      "file": "./patches/CACHE_PATH_REUSE_FIX_ON_R3.patch.sha256",
+      "sha256": "e43034588b8da80b5d40a7c1e5c1876e2d0759e18c6d91d9b4a7151407e470c3"
+    },
+    {
+      "file": "./patches/CACHE_RACE_FIX_ON_R2.patch",
+      "sha256": "2a5f70573b8f9ff4d99de571ca5ab4005eca4d733ed55b05a18ac04952f04cf8"
+    },
+    {
+      "file": "./patches/CACHE_RACE_FIX_ON_R2.patch.sha256",
+      "sha256": "1957b1c5cecabb07e7a1d398b5b608615e9ac1fc0804b4607cf822572168aade"
+    },
+    {
+      "file": "./patches/R4A_FROM_51de19d.patch",
+      "sha256": "a6a742e68099b728ff4e52c18feb3e8ebc5168ca023010c5f28ca0241f464a7a"
+    },
+    {
+      "file": "./patches/R4A_FROM_51de19d.patch.sha256",
+      "sha256": "ea7e5cf6d0110e1d3866bd7d98e0725c05ff95f9c9bbfd2d17bb3d3593d1d257"
+    },
+    {
+      "file": "./reference/rhttp-0.15.1-rust-Cargo.lock",
+      "sha256": "232c3f91d09446ff821cb15f2d86b15934da29e6395e856eb3afd8571eff5eb4"
+    }
+  ]
+}

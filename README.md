@@ -3,6 +3,8 @@ Yorunote is a personal, open-source fork of [Venera](https://github.com/venera-a
 
 Yorunote 是基於 Venera 的個人開源 Fork（GPL-3.0）。個人修改僅限外觀與問題修正，其餘功能來自上游。
 
+Repository / 儲存庫：https://github.com/mengwen-liu/yorunote（原名 `mengwen-liu/venera`，已改名；舊網址由 GitHub 自動重新導向）。上游：https://github.com/venera-app/venera
+
 ---
 
 > Upstream historical notice (from the original Venera author; it does not describe the status of Yorunote):

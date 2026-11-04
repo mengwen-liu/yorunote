@@ -54,7 +54,7 @@ env:
 jobs:
   android-arm64-baseline:
     name: Yorunote Android ARM64 Profile build
-    if: github.repository == 'mengwen-liu/venera' && github.ref == 'refs/heads/claude/yorunote-arm64-ci-20261104'
+    if: github.repository == 'mengwen-liu/yorunote' && github.ref == 'refs/heads/claude/yorunote-arm64-ci-20261104'
     runs-on: ubuntu-24.04   # ubuntu-22.04 images are in deprecation (see audit report)
     timeout-minutes: 60
     steps:

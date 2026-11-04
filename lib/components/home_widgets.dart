@@ -142,6 +142,8 @@ class HomeSectionHeading extends StatelessWidget {
     this.count,
     this.actionLabel,
     this.onAction,
+    this.icon,
+    this.emphasized = false,
   });
 
   final String title;
@@ -152,6 +154,9 @@ class HomeSectionHeading extends StatelessWidget {
   final String? actionLabel;
 
   final VoidCallback? onAction;
+
+  final IconData? icon;
+  final bool emphasized;
 
   @override
   Widget build(BuildContext context) {
@@ -165,8 +170,14 @@ class HomeSectionHeading extends StatelessWidget {
       // wraps instead of overflowing. It does not support intrinsic sizing.
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return Row(
+          final titleWidget = Row(
             children: [
+              if (icon != null) ...[
+                ExcludeSemantics(
+                  child: Icon(icon, color: scheme.primary, size: 24),
+                ),
+                const SizedBox(width: UiSpace.s2),
+              ],
               Expanded(
                 child: Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
@@ -178,6 +189,8 @@ class HomeSectionHeading extends StatelessWidget {
                         title,
                         style: theme.textTheme.uiSectionTitle?.copyWith(
                           color: scheme.uiTextPrimary,
+                          fontSize: emphasized ? 22 : null,
+                          fontWeight: emphasized ? FontWeight.w700 : null,
                         ),
                       ),
                     ),
@@ -201,26 +214,43 @@ class HomeSectionHeading extends StatelessWidget {
                   ],
                 ),
               ),
-              if (label != null && onAction != null)
+            ],
+          );
+          final action = label != null && onAction != null
+              ? TextButton(
+                  onPressed: onAction,
+                  style: TextButton.styleFrom(
+                    minimumSize: const Size(
+                      UiSize.minTouchTarget,
+                      UiSize.minTouchTarget,
+                    ),
+                  ),
+                  child: Text(label, textAlign: TextAlign.center),
+                )
+              : null;
+          // Give both the title and action their full width at large text sizes.
+          if (MediaQuery.textScalerOf(context).scale(18) > 25) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                titleWidget,
+                if (action != null)
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: action,
+                  ),
+              ],
+            );
+          }
+          return Row(
+            children: [
+              Expanded(child: titleWidget),
+              if (action != null)
                 ConstrainedBox(
                   constraints: BoxConstraints(
                     maxWidth: constraints.maxWidth / 2,
                   ),
-                  child: TextButton(
-                    onPressed: onAction,
-                    style: TextButton.styleFrom(
-                      minimumSize: const Size(
-                        UiSize.minTouchTarget,
-                        UiSize.minTouchTarget,
-                      ),
-                    ),
-                    child: Text(
-                      label,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  child: action,
                 ),
             ],
           );
@@ -230,8 +260,175 @@ class HomeSectionHeading extends StatelessWidget {
   }
 }
 
-/// Card for a recently read comic: cover, title, detail, progress and an
-/// optional action button.
+/// Shared home panel. Color roles follow the current light/dark/dynamic theme.
+class HomeSurface extends StatelessWidget {
+  const HomeSurface({super.key, required this.child, this.emphasized = false});
+
+  final Widget child;
+  final bool emphasized;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: UiSpace.s4,
+        vertical: UiSpace.s2,
+      ),
+      padding: const EdgeInsets.all(UiSpace.s4),
+      decoration: BoxDecoration(
+        color: emphasized
+            ? scheme.surfaceContainer
+            : scheme.surfaceContainerLow,
+        border: Border.all(color: scheme.outlineVariant),
+        borderRadius: BorderRadius.circular(UiRadius.card),
+      ),
+      child: child,
+    );
+  }
+}
+
+/// Compact search entry, sized by its content instead of a fixed text height.
+class HomeSearchEntry extends StatelessWidget {
+  const HomeSearchEntry({super.key, required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: UiSpace.s6,
+        vertical: UiSpace.s2,
+      ),
+      child: Material(
+        color: scheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: scheme.outlineVariant),
+          borderRadius: BorderRadius.circular(UiRadius.card),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Semantics(
+          button: true,
+          label: label,
+          onTap: onTap,
+          excludeSemantics: true,
+          child: InkWell(
+            onTap: onTap,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 54),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: UiSpace.s3,
+                  vertical: UiSpace.s2,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.search_rounded, color: scheme.primary),
+                    const SizedBox(width: UiSpace.s3),
+                    Expanded(
+                      child: Text(label, style: theme.textTheme.uiItemTitle),
+                    ),
+                    const SizedBox(width: UiSpace.s2),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 18,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A bookshelf item with the caller's existing cover and navigation callback.
+/// No chapter, progress, source lookup or Reader resume is inferred here.
+class HomeCoverCard extends StatelessWidget {
+  const HomeCoverCard({
+    super.key,
+    required this.title,
+    required this.cover,
+    required this.onTap,
+  });
+  final String title;
+  final Widget cover;
+  final VoidCallback onTap;
+
+  static const double width = 112;
+  static const double coverHeight = 168;
+
+  static double cardWidth(BuildContext context) =>
+      width +
+      (MediaQuery.textScalerOf(context).scale(13) / 13 - 1).clamp(0.0, 1.0) *
+          32;
+
+  static TextStyle titleStyle(BuildContext context) => Theme.of(context)
+      .textTheme
+      .bodyMedium!
+      .copyWith(fontSize: 13, height: 1.55, fontWeight: FontWeight.w500);
+
+  static double shelfHeight(BuildContext context) {
+    final painter = TextPainter(
+      text: TextSpan(text: 'Ag\nAg', style: titleStyle(context)),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+      maxLines: 2,
+    )..layout();
+    final height = cardWidth(context) * 1.5 + UiSpace.s3 + painter.height + 4;
+    painter.dispose();
+    return height;
+  }
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: cardWidth(context),
+    child: Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(UiRadius.cover),
+      clipBehavior: Clip.antiAlias,
+      child: Semantics(
+        button: true,
+        label: title,
+        onTap: onTap,
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IgnorePointer(
+                child: SizedBox(
+                  key: const ValueKey('home-portrait-cover'),
+                  width: cardWidth(context),
+                  height: cardWidth(context) * 1.5,
+                  child: cover,
+                ),
+              ),
+              const SizedBox(height: UiSpace.s3),
+              Expanded(
+                child: Text(
+                  title.replaceAll('\n', ' '),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: titleStyle(context),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 class RecentComicCard extends StatelessWidget {
   const RecentComicCard({
     super.key,
@@ -467,4 +664,387 @@ class HomeCardPlaceholder extends StatelessWidget {
     if (label == null) return ExcludeSemantics(child: box);
     return Semantics(container: true, label: label, child: box);
   }
+}
+
+/// Low-weight tool presentation; all data and actions belong to the caller.
+class HomeToolRow extends StatelessWidget {
+  const HomeToolRow({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.actionLabel,
+    required this.onAction,
+    this.summary,
+    this.count,
+    this.children = const [],
+    this.highlight = false,
+    this.additionalActions = const [],
+  });
+  final String title;
+  final IconData icon;
+  final String actionLabel;
+  final VoidCallback onAction;
+  final Widget? summary;
+  final int? count;
+  final List<Widget> children;
+  final bool highlight;
+  final List<Widget> additionalActions;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final heading = Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ExcludeSemantics(
+          child: Icon(
+            icon,
+            size: 22,
+            color: highlight ? scheme.primary : scheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(width: UiSpace.s3),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: UiSpace.s2,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(title, style: theme.textTheme.titleMedium),
+                  if (count != null)
+                    Text(
+                      '$count',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                ],
+              ),
+              if (summary != null)
+                DefaultTextStyle.merge(
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                  child: summary!,
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+    final primaryAction = TextButton(
+      style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+      onPressed: onAction,
+      child: Text(actionLabel, textAlign: TextAlign.center),
+    );
+    final action = additionalActions.isEmpty
+        ? primaryAction
+        : Wrap(
+            alignment: WrapAlignment.end,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [primaryAction, ...additionalActions],
+          );
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: UiSpace.s6),
+      constraints: BoxConstraints(minHeight: highlight ? 78 : 0),
+      padding: EdgeInsets.symmetric(
+        horizontal: highlight ? UiSpace.s4 : 0,
+        vertical: UiSpace.s3,
+      ),
+      decoration: BoxDecoration(
+        color: highlight ? scheme.surfaceContainerHigh : null,
+        borderRadius: highlight ? BorderRadius.circular(UiRadius.card) : null,
+        border: highlight
+            ? null
+            : Border(bottom: BorderSide(color: scheme.outlineVariant)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (MediaQuery.textScalerOf(context).scale(16) > 22) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    heading,
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: action,
+                    ),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(child: heading),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth:
+                          constraints.maxWidth *
+                          (additionalActions.isEmpty ? .4 : .6),
+                    ),
+                    child: action,
+                  ),
+                ],
+              );
+            },
+          ),
+          ...children,
+        ],
+      ),
+    );
+  }
+}
+
+/// Follow-up status only. The original FollowUpdatesWidget owns its State.
+class HomeFollowUpdatesRow extends StatelessWidget {
+  const HomeFollowUpdatesRow({
+    super.key,
+    required this.configured,
+    required this.count,
+    required this.onView,
+    required this.title,
+    required this.status,
+    required this.actionLabel,
+  });
+  final bool configured;
+  final int count;
+  final VoidCallback onView;
+  final String title, status, actionLabel;
+  @override
+  Widget build(BuildContext context) => HomeToolRow(
+    title: title,
+    icon: Icons.notifications_none_rounded,
+    actionLabel: actionLabel,
+    onAction: onView,
+    highlight: true,
+    summary: Text(status),
+  );
+}
+
+/// Sync controls wrap independently so error and retry paths survive large text.
+class HomeSyncSection extends StatelessWidget {
+  const HomeSyncSection({
+    super.key,
+    required this.title,
+    required this.uploadLabel,
+    required this.downloadLabel,
+    required this.onUpload,
+    required this.onDownload,
+    this.busy = false,
+    this.errorLabel,
+    this.onError,
+  });
+  final String title, uploadLabel, downloadLabel;
+  final VoidCallback onUpload, onDownload;
+  final bool busy;
+  final String? errorLabel;
+  final VoidCallback? onError;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(
+      horizontal: UiSpace.s6,
+      vertical: UiSpace.s2,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.sync,
+              size: 22,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: UiSpace.s3),
+            Expanded(
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            if (busy)
+              const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+          ],
+        ),
+        if (!busy)
+          Wrap(
+            alignment: WrapAlignment.end,
+            spacing: UiSpace.s2,
+            children: [
+              if (errorLabel != null && onError != null)
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    minimumSize: const Size(48, 48),
+                    foregroundColor: Theme.of(context).colorScheme.error,
+                  ),
+                  onPressed: onError,
+                  icon: const Icon(Icons.error_outline),
+                  label: Text(errorLabel!),
+                ),
+              IconButton(
+                tooltip: uploadLabel,
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                onPressed: onUpload,
+                icon: const Icon(Icons.cloud_upload_outlined),
+              ),
+              IconButton(
+                tooltip: downloadLabel,
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                onPressed: onDownload,
+                icon: const Icon(Icons.cloud_download_outlined),
+              ),
+            ],
+          ),
+      ],
+    ),
+  );
+}
+
+/// Editorial tool card. Real counts/actions are supplied by the owner Widget.
+class HomeLibraryTool extends StatelessWidget {
+  const HomeLibraryTool({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.actionLabel,
+    required this.onAction,
+    this.count,
+    this.detail,
+  });
+  final String title, actionLabel;
+  final IconData icon;
+  final VoidCallback onAction;
+  final int? count;
+  final String? detail;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    return Material(
+      color: scheme.surfaceContainerHigh,
+      borderRadius: BorderRadius.circular(UiRadius.card),
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 8, 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 24, color: scheme.primary),
+            const SizedBox(height: UiSpace.s3),
+            Text(title, style: theme.textTheme.titleSmall),
+            if (detail != null) Text(detail!, style: theme.textTheme.bodySmall),
+            Row(
+              children: [
+                if (count != null)
+                  Text('$count', style: theme.textTheme.bodyMedium),
+                Expanded(
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: TextButton(
+                      onPressed: onAction,
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
+                      child: Text(actionLabel, textAlign: TextAlign.center),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Two library entries, with full-width statistics below rather than squeezed
+/// into a narrow card. Large text naturally falls back to one column.
+class HomeLibraryTools extends StatelessWidget {
+  const HomeLibraryTools({
+    super.key,
+    required this.source,
+    required this.favorites,
+    this.statistics,
+  });
+  final Widget source, favorites;
+  final Widget? statistics;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 300 ||
+                MediaQuery.textScalerOf(context).scale(16) >= 24) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [source, const SizedBox(height: 12), favorites],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: source),
+                const SizedBox(width: 12),
+                Expanded(child: favorites),
+              ],
+            );
+          },
+        ),
+        if (statistics != null) ...[const SizedBox(height: 16), statistics!],
+      ],
+    ),
+  );
+}
+
+/// Pure segmented statistic control; the existing State owns selection/scroll.
+class HomeFavoriteTypeButton extends StatelessWidget {
+  const HomeFavoriteTypeButton({
+    super.key,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    selected: selected,
+    child: InkWell(
+      borderRadius: BorderRadius.circular(24),
+      onTap: onTap,
+      child: AnimatedContainer(
+        constraints: const BoxConstraints(minWidth: 96, minHeight: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          color: selected
+              ? Theme.of(context).colorScheme.primaryContainer
+              : null,
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outlineVariant,
+            width: 0.6,
+          ),
+          borderRadius: BorderRadius.circular(24),
+        ),
+        duration: const Duration(milliseconds: 200),
+        child: Center(widthFactor: 1, child: Text(label)),
+      ),
+    ),
+  );
 }

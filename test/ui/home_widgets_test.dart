@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show SemanticsAction;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -428,7 +429,14 @@ void main() {
 
   group('CoverImage', () {
     testWidgets('uses the supplied size', (tester) async {
-      await tester.pumpWidget(harness(const CoverImage(width: 50, height: 70)));
+      await tester.pumpWidget(
+        harness(
+          const Align(
+            alignment: Alignment.topLeft,
+            child: CoverImage(width: 50, height: 70),
+          ),
+        ),
+      );
       expect(tester.getSize(find.byType(CoverImage)), const Size(50, 70));
     });
   });

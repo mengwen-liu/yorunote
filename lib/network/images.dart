@@ -98,21 +98,44 @@ abstract class ImageDownloader {
     _loadingImages.clear();
   }
 
+  /// Disk cache key of a comic image.
+  static String comicImageCacheKey(
+    String imageKey,
+    String? sourceKey,
+    String cid,
+    String eid,
+  ) => "$imageKey@$sourceKey@$cid@$eid";
+
   /// Load a comic image from the network or cache.
   /// The function will prevent multiple requests for the same image.
+  ///
+  /// If [stopOnCacheHit] is true, a valid disk cache hit ends the stream
+  /// without requesting the image again.
   static Stream<ImageDownloadProgress> loadComicImage(
-      String imageKey, String? sourceKey, String cid, String eid) {
-    final cacheKey = "$imageKey@$sourceKey@$cid@$eid";
-    if (_loadingImages.containsKey(cacheKey)) {
-      return _loadingImages[cacheKey]!.stream;
+    String imageKey,
+    String? sourceKey,
+    String cid,
+    String eid, {
+    bool stopOnCacheHit = false,
+  }) {
+    final cacheKey = comicImageCacheKey(imageKey, sourceKey, cid, eid);
+    final loadingKey = stopOnCacheHit ? "$cacheKey@stopOnCacheHit" : cacheKey;
+    if (_loadingImages.containsKey(loadingKey)) {
+      return _loadingImages[loadingKey]!.stream;
     }
     final stream = _StreamWrapper<ImageDownloadProgress>(
-      _loadComicImage(imageKey, sourceKey, cid, eid),
+      _loadComicImage(
+        imageKey,
+        sourceKey,
+        cid,
+        eid,
+        stopOnCacheHit: stopOnCacheHit,
+      ),
       (wrapper) {
-        _loadingImages.remove(cacheKey);
+        _loadingImages.remove(loadingKey);
       },
     );
-    _loadingImages[cacheKey] = stream;
+    _loadingImages[loadingKey] = stream;
     return stream.stream;
   }
 
@@ -122,8 +145,13 @@ abstract class ImageDownloader {
   }
 
   static Stream<ImageDownloadProgress> _loadComicImage(
-      String imageKey, String? sourceKey, String cid, String eid) async* {
-    final cacheKey = "$imageKey@$sourceKey@$cid@$eid";
+    String imageKey,
+    String? sourceKey,
+    String cid,
+    String eid, {
+    bool stopOnCacheHit = false,
+  }) async* {
+    final cacheKey = comicImageCacheKey(imageKey, sourceKey, cid, eid);
     final cache = await CacheManager().findCache(cacheKey);
 
     if (cache != null) {
@@ -133,6 +161,9 @@ abstract class ImageDownloader {
         totalBytes: data.length,
         imageBytes: data,
       );
+      if (stopOnCacheHit) {
+        return;
+      }
     }
 
     Future<Map<String, dynamic>?> Function()? onLoadFailed;

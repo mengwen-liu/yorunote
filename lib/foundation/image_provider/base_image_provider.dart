@@ -99,6 +99,7 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
       }
 
       if (data!.isEmpty) {
+        await onInvalidImageData(data);
         throw Exception("Empty image data");
       }
 
@@ -109,7 +110,7 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
           getTargetSize: enableResize ? _getTargetSize : null,
         );
       } catch (e) {
-        await CacheManager().delete(this.key);
+        await onInvalidImageData(data);
         if (data.length < 2 * 1024) {
           // data is too short, it's likely that the data is text, not image
           try {
@@ -141,6 +142,18 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
   );
 
   String get key;
+
+  /// Called before the error is reported when the loaded [data] is empty or
+  /// cannot be decoded.
+  ///
+  /// By default, the disk cache entry stored under [key] is deleted when the
+  /// data cannot be decoded, and nothing is done for empty data.
+  @protected
+  Future<void> onInvalidImageData(Uint8List data) async {
+    if (data.isNotEmpty) {
+      await CacheManager().delete(key);
+    }
+  }
 
   @override
   bool operator ==(Object other) {

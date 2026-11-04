@@ -1,0 +1,421 @@
+diff --git a/.github/workflows/phase1a-android-baseline.yml b/.github/workflows/phase1a-android-baseline.yml
+index 7d5f698..373b669 100644
+--- a/.github/workflows/phase1a-android-baseline.yml
++++ b/.github/workflows/phase1a-android-baseline.yml
+@@ -1,9 +1,11 @@
+ name: Phase1A Android Baseline
+-run-name: Phase1A Android ARM64 baseline (fixed commit a0eba91)
++run-name: Yorunote ARM64 Profile APK (fixed commit a789d2a)
+ 
+-# Manual-only. No inputs: the application source commit is fixed below and
+-# cannot be changed at dispatch time. Build acceptance only; this workflow
+-# does NOT provide Android runtime acceptance.
++# Manual-only (workflow_dispatch). No inputs: the application source commit is
++# fixed below and cannot be changed at dispatch time. This copy of the file is
++# valid ONLY on branch claude/yorunote-arm64-ci-20261104 (the job is skipped on
++# any other ref). Build + static APK checks only; it does NOT provide Android
++# runtime acceptance. Disposable test signing key; no repository secrets.
+ on:
+   workflow_dispatch: {}
+ 
+@@ -11,7 +13,7 @@ permissions:
+   contents: read
+ 
+ concurrency:
+-  group: phase1a-android-baseline
++  group: yorunote-arm64-profile-ci
+   cancel-in-progress: false
+ 
+ defaults:
+@@ -19,10 +21,11 @@ defaults:
+     shell: bash   # GitHub expands this to: bash --noprofile --norc -eo pipefail {0}
+ 
+ env:
+-  BASELINE_SHA: a0eba914f4c2a84ac1bc925adec2baabe920b9be
+-  BASELINE_TREE: 63cc5627da0e8173d621e6065ee663bc8f472f32
++  BASELINE_SHA: a789d2a091c94d35f3c9ce9f2c9103c22383b922
++  BASELINE_TREE: f95c10f0e480b91c8cae60eb0e1a7cce6c413086
+   BASELINE_LOCK_BLOB: c061e4fc0057646a0a5561dbc607114c00e44bfb
+   BASELINE_PUBSPEC_BLOB: 489d6acd5fcd2fc5979205db9b877c9e1bf1761b
++  APK_BASENAME: Yorunote_a789d2a_arm64_profile
+   FLUTTER_VERSION: '3.41.4'
+   FLUTTER_REVISION_PREFIX: ff37bef603
+   DART_VERSION: '3.11.1'
+@@ -34,7 +37,7 @@ env:
+   CMDLINE_TOOLS_SHA1: e025545c62a8e64c7559119566a569fb1dec5f60
+   EXPECTED_PACKAGE: com.github.wgh136.venera
+   EXPECTED_VERSION_NAME: '1.6.3'
+-  EXPECTED_CERT_CN: Venera CI Disposable
++  EXPECTED_CERT_CN: Yorunote CI Disposable
+   # Disk model, in MiB, compared against runtime-measured free BYTES (never rounded GB, never the
+   # documented runner capacity). A filesystem needs: the work written to it + ONE headroom.
+   # If "/" and the work area share a filesystem the works add up but the headroom is counted once.
+@@ -50,10 +53,10 @@ env:
+ 
+ jobs:
+   android-arm64-baseline:
+-    name: Android ARM64 release baseline
+-    if: github.repository == 'mengwen-liu/venera' && github.ref == 'refs/heads/master'
++    name: Yorunote Android ARM64 Profile build
++    if: github.repository == 'mengwen-liu/venera' && github.ref == 'refs/heads/claude/yorunote-arm64-ci-20261104'
+     runs-on: ubuntu-24.04   # ubuntu-22.04 images are in deprecation (see audit report)
+-    timeout-minutes: 90
++    timeout-minutes: 60
+     steps:
+       - name: Init evidence directories and helpers
+         run: |
+@@ -113,7 +116,7 @@ jobs:
+       - name: Checkout fixed application baseline
+         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+         with:
+-          ref: a0eba914f4c2a84ac1bc925adec2baabe920b9be
++          ref: a789d2a091c94d35f3c9ce9f2c9103c22383b922
+           fetch-depth: 1
+           fetch-tags: false
+           persist-credentials: false
+@@ -175,6 +178,17 @@ jobs:
+           gate_disk "$ROOT_PATH" "$need_root" after-cleanup-root
+           gate_disk "$BASE" "$need_base" after-cleanup-base
+ 
++      - name: Restore Gradle and Pub dependency caches (no keys or key.properties inside)
++        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
++        with:
++          path: |
++            ${{ env.GRADLE_USER_HOME }}/caches/modules-2
++            ${{ env.GRADLE_USER_HOME }}/wrapper
++            ${{ env.PUB_CACHE }}
++          key: yorunote-${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-ndk-${{ env.NDK_VERSION }}-${{ hashFiles('pubspec.lock', 'android/build.gradle', 'android/settings.gradle', 'android/gradle.properties', 'android/gradle/wrapper/gradle-wrapper.properties', 'android/app/build.gradle') }}
++          restore-keys: |
++            yorunote-${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-ndk-${{ env.NDK_VERSION }}-
++
+       - name: Set up JDK 17 (Temurin)
+         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+         with:
+@@ -223,15 +237,15 @@ jobs:
+           echo "::add-mask::$KS_PW"
+           export KS_PW
+           # Passwords are passed through the environment, never on a command line.
+-          keytool -genkeypair -keystore "$D/disposable-ci.jks" -alias venera_disposable_ci \
++          keytool -genkeypair -keystore "$D/yorunote-disposable-ci.jks" -alias yorunote_disposable_ci \
+             -keyalg RSA -keysize 2048 -validity 7 -storepass:env KS_PW -keypass:env KS_PW \
+             -dname "CN=${EXPECTED_CERT_CN}, O=CI Test Only" > /dev/null 2>&1
+-          printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=venera_disposable_ci\nstoreFile=%s\n' \
+-            "$KS_PW" "$KS_PW" "$D/disposable-ci.jks" > android/key.properties
+-          chmod 600 android/key.properties "$D/disposable-ci.jks"
++          printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=yorunote_disposable_ci\nstoreFile=%s\n' \
++            "$KS_PW" "$KS_PW" "$D/yorunote-disposable-ci.jks" > android/key.properties
++          chmod 600 android/key.properties "$D/yorunote-disposable-ci.jks"
+           mkdir -p "$PHASE/markers"; : > "$PHASE/markers/signing_created"
+           # Expected certificate fingerprint (public value) taken from the keystore just generated.
+-          listing="$(keytool -list -v -keystore "$D/disposable-ci.jks" -alias venera_disposable_ci -storepass:env KS_PW 2>/dev/null)"
++          listing="$(keytool -list -v -keystore "$D/yorunote-disposable-ci.jks" -alias yorunote_disposable_ci -storepass:env KS_PW 2>/dev/null)"
+           unset KS_PW
+           fp="$(printf '%s\n' "$listing" | sed -n 's/^[[:space:]]*SHA256:[[:space:]]*//p' | tr -d ':' | tr 'A-F' 'a-f')"
+           [ "$(printf '%s\n' "$fp" | wc -l)" -eq 1 ] && printf '%s' "$fp" | grep -Eq '^[0-9a-f]{64}$' || { echo "::error::could not read keystore certificate SHA-256"; exit 1; }
+@@ -267,118 +281,17 @@ jobs:
+           run_logged flutter_pub_get "$LOGS/03_pub_get.log" flutter pub get --enforce-lockfile
+           disk_snapshot "after-pub-get"
+ 
+-      - name: flutter analyze (exit-code baseline plus fail-closed gate)
+-        id: analyze
+-        env:
+-          EXPECTED_ANALYZE_INFO_COUNT: '8'
+-          EXPECTED_ANALYZE_INFOS: |
+-            info deprecated_member_use lib/components/image.dart:115:20
+-            info deprecated_member_use lib/pages/reader/comic_image.dart:116:20
+-            info deprecated_member_use lib/utils/io.dart:410:9
+-            info deprecated_member_use lib/utils/io.dart:410:15
+-            info deprecated_member_use lib/utils/io.dart:418:9
+-            info deprecated_member_use lib/utils/io.dart:418:15
+-            info deprecated_member_use lib/utils/io.dart:423:7
+-            info deprecated_member_use lib/utils/io.dart:423:13
++      - name: Brand regression tests (test/brand only)
+         run: |
+           . "$PHASE/lib.sh"
+-          # --no-pub: dependencies were already resolved with --enforce-lockfile; analyze must not re-resolve.
+-          # Run A (default flags): infos are fatal by default, so the original exit code is preserved (expected 1).
+-          rcA=0
+-          run_logged flutter_analyze_default "$LOGS/04a_analyze_default.log" flutter analyze --no-pub || rcA=$?
+-          # Run B (gate): --no-fatal-infos; warnings and errors stay fatal (expected 0).
+-          rcB=0
+-          run_logged flutter_analyze_gate_no_fatal_infos "$LOGS/04b_analyze_gate.log" flutter analyze --no-pub --no-fatal-infos || rcB=$?
+-          python3 - "$LOGS/04a_analyze_default.log" "$rcA" "$LOGS/04b_analyze_gate.log" "$rcB" <<'PY' | tee "$EVID/analyze_summary.txt"
+-          import os, re, sys
+-          logA, rcA, logB, rcB = sys.argv[1], int(sys.argv[2]), sys.argv[3], int(sys.argv[4])
+-          exp_count = int(os.environ["EXPECTED_ANALYZE_INFO_COUNT"])
+-          expected = sorted(l.strip() for l in os.environ["EXPECTED_ANALYZE_INFOS"].splitlines() if l.strip())
+-          HEAD = re.compile(r"^Analyzing .+\.\.\.$")
+-          SUMM = re.compile(r"^(?:(\d+) issues? found\.|No issues found!)(?: \(ran in [0-9.]+s\))?$")
+-          FIND = re.compile(r"^\s*(info|warning|error) \u2022 (.+) \u2022 (\S+:\d+:\d+) \u2022 (\S+)$")
+-
+-          def parse(path):
+-              r = {"find": [], "head": 0, "summ": [], "other": []}
+-              with open(path, encoding="utf-8", errors="replace") as f:
+-                  for raw in f:
+-                      line = raw.rstrip("\r\n").rstrip()
+-                      if not line.strip():
+-                          continue
+-                      m = FIND.match(line)
+-                      if m:
+-                          r["find"].append((m.group(1), m.group(4), m.group(3)))
+-                          continue
+-                      if HEAD.match(line):
+-                          r["head"] += 1
+-                          continue
+-                      m = SUMM.match(line)
+-                      if m:
+-                          r["summ"].append(int(m.group(1) or 0))
+-                          continue
+-                      r["other"].append(line[:200])
+-              return r
+-
+-          def check(tag, r, rc, want_rc):
+-              p = []
+-              if r["other"]:
+-                  p.append(f"{tag}: {len(r['other'])} unclassifiable output line(s); first: {r['other'][0]!r}")
+-              if r["head"] != 1:
+-                  p.append(f"{tag}: expected exactly one 'Analyzing' line, found {r['head']}")
+-              if len(r["summ"]) != 1:
+-                  p.append(f"{tag}: expected exactly one summary line, found {len(r['summ'])}")
+-              elif r["summ"][0] != len(r["find"]):
+-                  p.append(f"{tag}: summary says {r['summ'][0]} issues but {len(r['find'])} were parsed")
+-              kinds = [k for k, _, _ in r["find"]]
+-              errs, warns, infos = kinds.count("error"), kinds.count("warning"), kinds.count("info")
+-              if errs:
+-                  p.append(f"{tag}: {errs} analyzer error(s)")
+-              if warns:
+-                  p.append(f"{tag}: {warns} analyzer warning(s)")
+-              if infos != exp_count:
+-                  p.append(f"{tag}: {infos} info finding(s), baseline is {exp_count}")
+-              sigs = sorted(f"{k} {rule} {loc}" for k, rule, loc in r["find"])
+-              if sigs != expected:
+-                  extra = sorted(set(sigs) - set(expected))
+-                  missing = sorted(set(expected) - set(sigs))
+-                  p.append(f"{tag}: finding set differs from baseline; extra={extra[:5]} missing={missing[:5]}")
+-              if rc != want_rc:
+-                  p.append(f"{tag}: exit code {rc}, expected {want_rc}")
+-              return p, (errs, warns, infos), sigs
+-
+-          A, B = parse(logA), parse(logB)
+-          pa, ca, sa = check("run-A(default)", A, rcA, 1)
+-          pb, cb, sb = check("run-B(--no-fatal-infos)", B, rcB, 0)
+-          problems = pa + pb
+-          if sa != sb:
+-              problems.append("run A and run B report different findings")
+-          print(f"flutter_analyze_default_exit_preserved={rcA}")
+-          print(f"flutter_analyze_gate_exit={rcB}")
+-          print(f"run-A errors/warnings/infos={ca} run-B errors/warnings/infos={cb}")
+-          result = "info_only_baseline_match" if not problems else "failed"
+-          print(f"classification={result}")
+-          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+-              out.write(f"exit_code_default={rcA}\n")
+-              out.write(f"exit_code_gate={rcB}\n")
+-              out.write(f"classification={result}\n")
+-          if problems:
+-              for q in problems:
+-                  print(f"::error::{q}")
+-              sys.exit(1)
+-          print("::notice::analyzer output matches the frozen baseline (8 info findings); recorded, not fixed")
+-          PY
++          run_logged flutter_test_brand "$LOGS/05_test_brand.log" flutter test --no-pub test/brand
+ 
+-      - name: flutter test
+-        run: |
+-          . "$PHASE/lib.sh"
+-          run_logged flutter_test "$LOGS/05_test.log" flutter test
+-
+-      - name: Build Android ARM64 release APK
++      - name: Build Yorunote Android ARM64 Profile APK
+         run: |
+           . "$PHASE/lib.sh"
+           disk_snapshot "before-build"
+-          run_logged flutter_build_apk_arm64 "$LOGS/06_build_apk.log" \
+-            flutter build apk --release --target-platform android-arm64 --split-per-abi -v
++          run_logged flutter_build_apk_arm64_profile "$LOGS/06_build_apk.log" \
++            flutter build apk --profile --target-platform android-arm64 --split-per-abi --no-pub
+           disk_snapshot "after-build"
+ 
+       - name: Inspect and verify APK
+@@ -393,16 +306,126 @@ jobs:
+           sha256sum "${arm[@]}" | tee "$EVID/apk_candidate_hashes.txt"
+           [ "$(awk '{print $1}' "$EVID/apk_candidate_hashes.txt" | sort -u | wc -l)" -eq 1 ] || { echo "::error::arm64 APK copies differ"; exit 1; }
+           APK="${arm[0]}"
++          case "$APK" in *-profile.apk) ;; *) echo "::error::not a profile APK: $APK"; exit 1 ;; esac
++          unzip -tq "$APK" > "$EVID/zip_integrity.txt" 2>&1 || { echo "::error::ZIP integrity check failed"; exit 1; }
++          "$BT/zipalign" -c -v 4 "$APK" > "$EVID/zipalign.txt" 2>&1 || { echo "::error::zipalign check failed"; exit 1; }
++          # Informational only (not a gate): 16 KB page alignment
++          "$BT/zipalign" -c -P 16 -v 4 "$APK" > "$EVID/zipalign_16k_informational.txt" 2>&1 && echo "16k_aligned=yes" >> "$EVID/zipalign.txt" || echo "16k_aligned=no (informational)" >> "$EVID/zipalign.txt"
+           "$BT/aapt2" dump badging "$APK" > "$EVID/aapt2_badging.txt"
+           pkg="$(sed -n "s/^package: name='\([^']*\)'.*/\1/p" "$EVID/aapt2_badging.txt")"
+           vname="$(sed -n "s/^package:.* versionName='\([^']*\)'.*/\1/p" "$EVID/aapt2_badging.txt")"
+           vcode="$(sed -n "s/^package:.* versionCode='\([^']*\)'.*/\1/p" "$EVID/aapt2_badging.txt")"
++          label="$(sed -n "s/^application-label:'\([^']*\)'.*/\1/p" "$EVID/aapt2_badging.txt")"
++          icon_xml="$(sed -n "s/^application: .*icon='\([^']*\)'.*/\1/p" "$EVID/aapt2_badging.txt")"
+           native="$(grep -E '^native-code:' "$EVID/aapt2_badging.txt" | tr -d "'" || true)"
+           [ "$pkg" = "$EXPECTED_PACKAGE" ] || { echo "::error::package mismatch: $pkg"; exit 1; }
+           [ "$vname" = "$EXPECTED_VERSION_NAME" ] || { echo "::error::versionName mismatch: $vname"; exit 1; }
++          [ "$label" = "Yorunote" ] || { echo "::error::application label is not Yorunote: $label"; exit 1; }
++          [ -n "$icon_xml" ] || { echo "::error::no application icon reference"; exit 1; }
+           [ "$native" = "native-code: arm64-v8a" ] || { echo "::error::native-code is not exclusively arm64-v8a: $native"; exit 1; }
+           libs="$(unzip -Z1 "$APK" | grep '^lib/' | cut -d/ -f2 | sort -u | tr '\n' ' ')"
+           [ "$libs" = "arm64-v8a " ] || { echo "::error::lib/ ABI dirs: $libs"; exit 1; }
++          unzip -Z1 "$APK" | grep '^lib/arm64-v8a/.*\.so$' | sort > "$EVID/native_libs.txt"
++          for must in lib/arm64-v8a/libflutter.so lib/arm64-v8a/libapp.so; do
++            grep -qx "$must" "$EVID/native_libs.txt" || { echo "::error::missing native library $must"; exit 1; }
++          done
++          # Packaged icons (pixel comparison against the repository files) and About asset
++          cat > "$PHASE/check_icons.py" <<'PY'
++          import hashlib, re, struct, subprocess, sys, zipfile, zlib
++
++          apk, res_dir, app_icon, aapt2, icon_xml = sys.argv[1:6]
++
++          def decode_png(data):
++              """Pure-python PNG -> (w, h, RGBA bytes). Non-interlaced, depth 1/2/4/8, color types 0/2/3/4/6."""
++              assert data[:8] == b"\x89PNG\r\n\x1a\n", "not a PNG"
++              pos, idat, plte, trns, ihdr = 8, b"", None, None, None
++              while pos < len(data):
++                  ln, typ = struct.unpack(">I4s", data[pos:pos + 8])
++                  body = data[pos + 8:pos + 8 + ln]
++                  pos += 12 + ln
++                  if typ == b"IHDR": ihdr = struct.unpack(">IIBBBBB", body)
++                  elif typ == b"PLTE": plte = body
++                  elif typ == b"tRNS": trns = body
++                  elif typ == b"IDAT": idat += body
++              w, h, depth, ctype, _, _, interlace = ihdr
++              assert interlace == 0, "interlaced PNG unsupported"
++              ch = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[ctype]
++              bpp = max(1, ch * depth // 8)
++              stride = (w * ch * depth + 7) // 8
++              raw = zlib.decompress(idat)
++              rows, prev, p = [], bytearray(stride), 0
++              for _ in range(h):
++                  f = raw[p]; line = bytearray(raw[p + 1:p + 1 + stride]); p += 1 + stride
++                  for i in range(stride):
++                      a = line[i - bpp] if i >= bpp else 0
++                      b = prev[i]
++                      c = prev[i - bpp] if i >= bpp else 0
++                      if f == 1: line[i] = (line[i] + a) & 255
++                      elif f == 2: line[i] = (line[i] + b) & 255
++                      elif f == 3: line[i] = (line[i] + (a + b) // 2) & 255
++                      elif f == 4:
++                          pa, pb, pc = abs(b - c), abs(a - c), abs(a + b - 2 * c)
++                          pr = a if pa <= pb and pa <= pc else (b if pb <= pc else c)
++                          line[i] = (line[i] + pr) & 255
++                  rows.append(line); prev = line
++              out = bytearray()
++              mask = (1 << depth) - 1
++              for line in rows:
++                  vals = []
++                  if depth == 8: vals = list(line)
++                  elif depth == 16: vals = [line[i] for i in range(0, len(line), 2)]  # high byte
++                  else:
++                      for byte in line:
++                          for sh in range(8 - depth, -1, -depth): vals.append((byte >> sh) & mask)
++                  for x in range(w):
++                      if ctype == 6: out += bytes(vals[x * 4:x * 4 + 4])
++                      elif ctype == 2: out += bytes(vals[x * 3:x * 3 + 3]) + b"\xff"
++                      elif ctype == 4: g, a = vals[x * 2:x * 2 + 2]; out += bytes((g, g, g, a))
++                      elif ctype == 0:
++                          g = vals[x] * 255 // mask if depth < 8 else vals[x]; out += bytes((g, g, g, 255))
++                      else:
++                          i = vals[x]; r, g, b = plte[i * 3:i * 3 + 3]
++                          a = trns[i] if trns and i < len(trns) else 255
++                          out += bytes((r, g, b, a))
++              return w, h, bytes(out)
++
++          def sh(*cmd): return subprocess.run(cmd, check=True, capture_output=True, text=True).stdout
++
++          z = zipfile.ZipFile(apk)
++          # 以像素內容比對（不依賴資源名稱，避免資源縮減／混淆改名造成誤判）
++          pngs = {}
++          for n in z.namelist():
++              if n.startswith("res/") and n.endswith(".png"):
++                  try: pngs[n] = decode_png(z.read(n))
++                  except Exception as e: print(f"note: cannot decode {n}: {e}")
++          problems, report = [], []
++          for layer in ("ic_launcher", "ic_launcher_background", "ic_launcher_foreground", "ic_launcher_monochrome"):
++              for d in ("mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"):
++                  w, h, px = decode_png(open(f"{res_dir}/mipmap-{d}/{layer}.png", "rb").read())
++                  hit = [n for n, (w2, h2, p2) in pngs.items() if (w2, h2) == (w, h) and p2 == px]
++                  report.append(f"{layer} {d} {w}x{h}: " + (f"packaged pixel-identical as {hit[0]}" if hit else "NOT FOUND in APK"))
++                  if not hit: problems.append(f"{layer} {d}: repo pixels not found in APK")
++
++          # 自適應圖示 XML（由 manifest 實際引用的路徑）必須含三個圖層
++          if not icon_xml.endswith(".xml"): problems.append(f"launcher icon is not adaptive xml: {icon_xml}")
++          else:
++              tree = sh(aapt2, "dump", "xmltree", "--file", icon_xml, apk)
++              report.append("adaptive icon xmltree (" + icon_xml + "):\n" + tree.strip())
++              for tag in ("background", "foreground", "monochrome"):
++                  if f"E: {tag}" not in tree: problems.append(f"{icon_xml}: missing <{tag}>")
++
++          a = "assets/flutter_assets/assets/app_icon.png"
++          if a not in z.namelist(): problems.append("app_icon.png not packaged")
++          else:
++              h1 = hashlib.sha256(z.read(a)).hexdigest(); h2 = hashlib.sha256(open(app_icon, "rb").read()).hexdigest()
++              report.append(f"{a} sha256={h1} repo={h2}")
++              if h1 != h2: problems.append("packaged app_icon.png differs from repo")
++          print("\n".join(report))
++          for p in problems: print("::error::" + p)
++          sys.exit(1 if problems else 0)
++          PY
++          python3 -I "$PHASE/check_icons.py" "$APK" android/app/src/main/res assets/app_icon.png "$BT/aapt2" "$icon_xml" 2>&1 | tee "$EVID/icon_check.txt"
++          [ "${PIPESTATUS[0]}" -eq 0 ] || { echo "::error::packaged icon check failed"; exit 1; }
+           "$BT/apksigner" verify --print-certs -v "$APK" > "$EVID/apksigner.txt" 2>&1
+           grep -q '^Verifies' "$EVID/apksigner.txt" || { echo "::error::apksigner did not verify"; exit 1; }
+           grep -q "Number of signers: 1" "$EVID/apksigner.txt" || { echo "::error::unexpected signer count"; exit 1; }
+@@ -413,15 +436,17 @@ jobs:
+           expected_fp="$(cat "$EVID/expected_cert_sha256.txt")"
+           [ "$actual_fp" = "$expected_fp" ] || { echo "::error::APK signing certificate does not match the job keystore certificate"; exit 1; }
+           echo "signing certificate SHA-256 matches keystore: $actual_fp" | tee "$EVID/cert_fingerprint_match.txt"
+-          NAME="$(basename "$APK")"
++          NAME="${APK_BASENAME}.apk"
+           cp "$APK" "$APK_OUT/$NAME"
+           (cd "$APK_OUT" && sha256sum "$NAME" | tee "$NAME.sha256")
+           {
+-            echo "file=$NAME size_bytes=$(stat -c %s "$APK")"
+-            echo "package=$pkg versionName=$vname versionCode=$vcode"
++            echo "file=$NAME size_bytes=$(stat -c %s "$APK") source_commit=$BASELINE_SHA"
++            echo "package=$pkg versionName=$vname versionCode=$vcode label=$label icon=$icon_xml"
+             echo "native-code=arm64-v8a lib_abis=$libs"
++            echo "zip_integrity=ok zipalign(4)=ok icon_check=ok"
+             echo "signature=verified (apksigner) cert=CN=${EXPECTED_CERT_CN} sha256=${actual_fp} (matches job keystore)"
+-            echo "NOTE: build acceptance only; Android runtime acceptance NOT performed"
++            echo "WARNING: signed with a ONE-TIME disposable test key generated in this job; it cannot overwrite-install over an app signed with a different certificate."
++            echo "NOTE: static checks only; Android runtime acceptance NOT performed"
+           } | tee "$APK_OUT/verification.txt"
+           cp "$APK_OUT/verification.txt" "$EVID/verification.txt"
+ 
+@@ -542,12 +567,12 @@ jobs:
+         run: |
+           S="$PHASE/sanitized/evidence"
+           {
+-            echo "## Phase1A Android baseline (fixed commit ${BASELINE_SHA:0:7})"
+-            echo "**BUILD ACCEPTANCE ONLY. Android runtime acceptance was NOT performed.**"
++            echo "## Yorunote ARM64 Profile APK (source commit ${BASELINE_SHA:0:7})"
++            echo "**STATIC CHECKS ONLY. Android runtime acceptance was NOT performed. Disposable test signing key.**"
+             echo
+             echo '```'
+             if [ -d "$S" ]; then
+-              for f in exit_codes.txt analyze_summary.txt verification.txt git_integrity.txt disk.txt; do
++              for f in exit_codes.txt verification.txt icon_check.txt git_integrity.txt disk.txt; do
+                 if [ -f "$S/$f" ]; then cat "$S/$f"; fi
+               done
+             else
+@@ -560,7 +585,7 @@ jobs:
+         if: always() && steps.sanitize.outcome == 'success'
+         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+         with:
+-          name: phase1a-diagnostic-logs
++          name: yorunote-diagnostic-logs
+           path: ${{ runner.temp }}/phase1a/sanitized
+           retention-days: 7
+           if-no-files-found: warn
+@@ -570,7 +595,7 @@ jobs:
+         if: ${{ !cancelled() && steps.verify.outcome == 'success' && steps.gitcheck.outcome == 'success' }}
+         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+         with:
+-          name: phase1a-verified-apk
++          name: yorunote-arm64-profile-apk
+           path: ${{ runner.temp }}/phase1a/apk_out
+           retention-days: 7
+           if-no-files-found: error

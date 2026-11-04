@@ -1,0 +1,8 @@
+build/app/outputs/apk/profile/app-arm64-v8a-profile.apk
+build/app/outputs/apk/profile/app-armeabi-v7a-profile.apk
+build/app/outputs/apk/profile/app-universal-profile.apk
+build/app/outputs/apk/profile/app-x86_64-profile.apk
+build/app/outputs/flutter-apk/app-arm64-v8a-profile.apk
+build/app/outputs/flutter-apk/app-armeabi-v7a-profile.apk
+build/app/outputs/flutter-apk/app-profile.apk
+build/app/outputs/flutter-apk/app-x86_64-profile.apk

@@ -1,0 +1,10 @@
+lib/arm64-v8a/libapp.so
+lib/arm64-v8a/libflutter-saf.so
+lib/arm64-v8a/libflutter.so
+lib/arm64-v8a/libflutter_7zip.so
+lib/arm64-v8a/liblodepng_flutter.so
+lib/arm64-v8a/libqjs.so
+lib/arm64-v8a/librhttp.so
+lib/arm64-v8a/libsqlite3.so
+lib/arm64-v8a/libvmservice_snapshot.so
+lib/arm64-v8a/libzip_flutter.so

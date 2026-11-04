@@ -1,0 +1,4 @@
+flutter_doctor_exit=0
+flutter_pub_get_exit=0
+flutter_test_brand_exit=0
+flutter_build_apk_arm64_profile_exit=0

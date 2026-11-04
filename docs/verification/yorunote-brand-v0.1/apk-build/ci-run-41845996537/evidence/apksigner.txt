@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Yorunote CI Disposable, O=CI Test Only
+Signer #1 certificate SHA-256 digest: 4e45e3b9580255d97d686322963dc760f2cb5a7f199ee6413d5d1a6487238201
+Signer #1 certificate SHA-1 digest: ea33fe2e5d05373938891677ff58b422dfa54aed
+Signer #1 certificate MD5 digest: 9f8fe84eddb65ea540c1cfa54b94dce7
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 0b5ef71944a2fdb87bd3ec02b6e0ff2a034a2fc0b875c34e4a04b340743e00ff
+Signer #1 public key SHA-1 digest: 26e80a94c76fa2bcfc70ac733d32c7553dd04f31
+Signer #1 public key MD5 digest: b3455658e90af1ff78a550163b5f8b85

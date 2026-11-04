@@ -1,0 +1,511 @@
+COMMAND: flutter test --no-pub --concurrency 2 --reporter expanded
+00:00 +0: loading /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart
+00:00 +0: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: 1-1-1
+00:00 +1: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: 1-3-1
+00:00 +2: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: 2-3-1
+00:00 +3: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: 1-1-3
+push 1
+push 2
+pop 1
+push 3
+pop 2
+push done
+pop 3
+00:00 +4: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: close
+00:00 +5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: (setUpAll)
+00:00 +5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+00:01 +5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: before delete: a direct cache write keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:01 +6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+PATH_REUSE before the broken file is removed / a direct cache write: same_directory=true same_path=false
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_path_reuseSYJGFV/cache/cache/1/20b1cd8be32ee46076bd9558b045f86a-1793765857701357-0' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:113:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:01 +6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: delete started: a direct cache write keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:01 +7: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+00:01 +8: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: before delete: a new request keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:01 +9: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a new request in the same directory is kept
+00:01 +9: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: delete started: a new request keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:01 +10: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a new request in the same directory is kept
+PATH_REUSE before the broken file is removed / a new request: same_directory=true same_path=false
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_path_reuseSYJGFV/cache/cache/2/4b54788bbc961e255f184ea58831fa29-1793765858135005-101' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:113:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:01 +11: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a direct cache write in the same directory is kept
+PATH_REUSE after the broken file is removed / a direct cache write: same_directory=true same_path=false
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:01 +12: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a new request in the same directory is kept
+PATH_REUSE after the broken file is removed / a new request: same_directory=true same_path=false
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:02 +13: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:03 +14: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:03 +15: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:03 +16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:03 +17: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:03 +18: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:04 +19: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:04 +20: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:04 +20: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: an undecodable cache entry is invalidated, other entries kept
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:04 +21: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:04 +21: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:04 +22: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +23: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +24: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +25: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +26: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +27: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +28: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +29: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +30: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +31: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +32: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +33: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:04 +34: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:05 +35: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:05 +36: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:05 +37: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:05 +38: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:05 +39: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:05 +40: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 1.0
+00:05 +41: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: an empty cache entry is invalidated, other entries kept
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:05 +42: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 1.5
+00:05 +43: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:05 +44: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:05 +45: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:05 +46: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:05 +47: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:05 +48: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:06 +49: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:06 +50: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:06 +51: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:06 +52: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:06 +53: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:06 +54: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:06 +55: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:06 +56: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:06 +56: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_reader_cacheJQDOGR/cache/cache/14/43a6107081f6518800929f1d17d05b04-1793765863329456-13' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:113:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:06 +57: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:06 +58: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:06 +59: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:06 +60: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:06 +61: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:06 +62: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:06 +63: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:07 +64: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:07 +65: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:07 +66: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:07 +67: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard uses ColorScheme roles (Brightness.dark)
+00:07 +67: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: other providers keep the default invalid-data handling
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:108:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:103:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:07 +68: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard uses ColorScheme roles (Brightness.dark)
+00:07 +69: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps a valid entry when only processed data is broken
+00:07 +70: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard uses ColorScheme roles (Brightness.light)
+00:07 +71: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps an entry another request has just repaired
+00:07 +72: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 320.0dp wide
+00:07 +73: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps local comic files and their keys
+00:07 +74: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 360.0dp wide
+00:07 +75: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 600.0dp wide
+00:07 +76: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 320.0dp wide
+00:07 +77: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 360.0dp wide
+00:07 +78: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 600.0dp wide
+00:07 +79: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 320.0dp wide
+00:07 +80: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 360.0dp wide
+00:07 +81: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 600.0dp wide
+00:07 +82: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard exposes one labeled button with a tap action
+00:07 +83: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard is not exposed as tappable without onTap
+00:07 +84: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard meets tap target and label guidelines (Brightness.dark)
+00:07 +85: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard meets text contrast guideline (Brightness.dark)
+00:07 +86: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard meets tap target and label guidelines (Brightness.light)
+00:07 +87: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: RecentComicCard meets text contrast guideline (Brightness.light)
+00:07 +88: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: CoverImage uses the supplied size
+00:07 +89: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading renders title, count and action
+00:07 +90: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading title is a semantics header
+00:07 +91: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading hides optional parts
+00:07 +92: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/ui_tokens_test.dart: spacing scale
+00:07 +93: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading action meets the tap target guideline
+00:07 +94: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading action meets the tap target guideline
+00:07 +95: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/ui_tokens_test.dart: color roles follow ColorScheme (Brightness.dark, MaterialColor(primary value: Color(alpha: 1.0000, red: 0.0000, green: 0.5882, blue: 0.5333, colorSpace: ColorSpace.sRGB)))
+00:07 +96: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading no overflow at 2x text on a narrow width
+00:07 +97: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/ui_tokens_test.dart: color roles follow ColorScheme (Brightness.dark, MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB)))
+00:07 +98: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 240.0dp
+00:07 +99: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 240.0dp
+00:07 +100: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 240.0dp
+00:07 +101: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/ui_tokens_test.dart: text roles follow TextTheme
+00:07 +102: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 320.0dp
+00:07 +103: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 2.0x, 240.0dp
+00:07 +104: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 2.0x, 320.0dp
+00:07 +105: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeEmptyState renders message and action
+00:08 +106: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeEmptyState message only has no button
+00:08 +107: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeEmptyState no overflow at 2x text
+00:08 +108: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeEmptyState long CTA label: no overflow at 2x text
+00:08 +109: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeEmptyState action meets the tap target guideline
+00:08 +110: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeCardPlaceholder has the default footprint
+00:08 +111: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeCardPlaceholder exposes a loading label when supplied
+00:08 +112: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_widgets_test.dart: HomeCardPlaceholder is silent without a label
+00:08 +113: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: (setUpAll)
+00:08 +113: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:09 +114: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:09 +115: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:09 +116: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:10 +117: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=true
+00:10 +118: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.5x populated=true
+00:10 +119: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=false
+00:10 +120: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=false
+00:10 +121: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 2.0x populated=true
+00:10 +122: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=true
+00:10 +123: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=true
+00:10 +124: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=true
+00:10 +125: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.5x populated=false
+00:10 +126: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=false
+00:10 +127: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.5x populated=true
+00:10 +128: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:10 +129: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:10 +130: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 2.0x populated=true
+00:10 +131: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=false
+00:10 +132: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=false
+00:10 +133: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.0x populated=true
+00:11 +134: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:11 +135: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:11 +136: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.5x populated=true
+00:11 +137: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=false
+00:11 +138: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=false
+00:11 +139: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 2.0x populated=true
+00:11 +140: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:11 +141: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:11 +142: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.0x populated=true
+00:11 +143: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=false
+00:11 +144: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=false
+00:11 +145: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.5x populated=true
+00:11 +146: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:11 +147: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:11 +148: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:11 +149: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.0x populated=false
+00:11 +150: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=false
+00:11 +151: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.0x populated=true
+00:11 +152: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:12 +153: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:12 +154: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:12 +155: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:12 +156: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 2.0x populated=true
+00:12 +157: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=false
+00:12 +158: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=false
+00:12 +159: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.0x populated=true
+00:12 +160: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:12 +161: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:12 +162: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:12 +163: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 2.0x populated=false
+00:12 +164: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=false
+00:12 +165: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 2.0x populated=true
+00:12 +166: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:12 +167: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:12 +168: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:12 +169: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.5x populated=false
+00:12 +170: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=false
+00:12 +171: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.5x populated=true
+00:12 +172: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:12 +173: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:13 +174: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:13 +175: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:13 +176: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.0x populated=true
+00:13 +177: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:13 +178: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.5x populated=false
+00:13 +179: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:13 +180: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:13 +181: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:13 +182: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 2.0x populated=true
+00:13 +183: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:13 +184: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: every R2 entry dispatches its supplied callback
+00:13 +185: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:13 +186: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:13 +187: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: original follow-up State still receives its global refresh
+00:13 +188: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=false
+00:13 +189: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=false
+00:13 +190: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: presentation follows alternate Material seed colors
+00:13 +191: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:13 +192: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:13 +193: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: synthetic visual evidence light
+00:13 +194: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=false
+00:14 +195: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=true
+00:14 +196: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=false
+00:14 +197: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=true
+00:14 +198: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.0 populated=false
+00:14 +199: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.0 populated=true
+00:14 +200: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:14 +201: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:15 +202: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:15 +203: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:15 +204: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:15 +205: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:15 +206: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=true
+00:15 +207: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=true
+00:15 +208: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty local keeps browse, import and download actions
+00:15 +209: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=false
+00:15 +210: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: nonempty local still displays supplied recent comics
+00:15 +211: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=true
+00:15 +212: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=true
+00:15 +213: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=true
+00:15 +214: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=true
+00:15 +215: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 2.0x
+00:15 +216: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=false
+00:15 +217: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=false
+00:15 +218: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 393.0dp 1.5x
+00:15 +219: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=true
+00:15 +220: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=true
+00:16 +221: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 1.0x
+00:16 +222: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=false
+00:16 +223: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=false
+00:16 +224: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 2.0x
+00:16 +225: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=true
+00:16 +226: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=true
+00:16 +227: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=true
+00:16 +228: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 2.0x
+00:16 +229: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=false
+00:16 +230: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=false
+00:16 +231: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.5x
+00:16 +232: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=true
+00:16 +233: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=true
+00:16 +234: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=true
+00:16 +235: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=true
+00:16 +236: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 2.0x
+00:16 +237: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 2.0 populated=false
+00:16 +238: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 1.0x
+00:16 +239: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 2.0 populated=true
+00:16 +240: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 2.0 populated=true
+00:16 +241: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 2.0 populated=true
+00:16 +242: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 1.0x
+00:16 +243: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=false
+00:16 +244: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=false
+00:16 +245: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 2.0x
+00:16 +246: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=true
+00:16 +247: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=false
+00:16 +248: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=true
+00:17 +249: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=false
+00:17 +250: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=true
+00:17 +251: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=false
+00:17 +252: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=true
+00:17 +253: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=false
+00:17 +254: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=true
+00:17 +255: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=false
+00:17 +256: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=true
+00:17 +257: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=false
+00:17 +258: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=true
+00:18 +259: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=false
+00:18 +260: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=true
+00:18 +261: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=false
+00:18 +262: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=true
+00:18 +263: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:18 +264: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=true
+00:18 +265: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.5 populated=false
+00:18 +266: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.5 populated=true
+00:18 +267: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 2.0 populated=false
+00:18 +268: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 2.0 populated=true
+00:19 +269: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 actual statistics selectors and exact keyword callbacks
+00:19 +270: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 all entry callbacks reachable by scrolling
+00:19 +271: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 sync disabled
+00:19 +272: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 sync idle
+00:19 +273: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 sync busy
+00:19 +274: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 sync error
+00:19 +275: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 two-column tools fall back and long titles remain semantic
+00:19 +276: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 capture dark 360
+00:19 +277: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 capture dark 393
+00:20 +278: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 capture light 360
+00:20 +279: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 capture light 393
+00:20 +280: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 capture full content dark
+00:20 +281: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 capture full content light
+00:20 +282: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: (tearDownAll)
+00:20 +282: All tests passed!
+
+EXIT_CODE: 0
+ELAPSED_SECONDS: 23.290

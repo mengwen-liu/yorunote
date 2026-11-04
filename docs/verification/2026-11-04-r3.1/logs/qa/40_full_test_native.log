@@ -1,0 +1,813 @@
+COMMAND: flutter test --no-pub --concurrency 2 --reporter expanded
+00:00 +0: loading /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart
+00:00 +0: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: 1-1-1
+00:00 +1: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: 1-3-1
+00:00 +2: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: 2-3-1
+00:00 +3: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: 1-1-3
+push 1
+push 2
+pop 1
+push 3
+pop 2
+push done
+pop 3
+00:00 +4: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/channel_test.dart: close
+00:09 +5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: (setUpAll)
+00:09 +5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart:249:19)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart:244:24)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:09 +5 -1: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept [E]
+  Test failed. See exception logs above.
+  The test description was: before the broken file is removed: a direct cache write in the same directory is kept
+  
+00:09 +5 -1: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a new request in the same directory is kept
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart:249:19)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart:244:24)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:09 +5 -2: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a new request in the same directory is kept [E]
+  Test failed. See exception logs above.
+  The test description was: before the broken file is removed: a new request in the same directory is kept
+  
+00:09 +5 -2: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a direct cache write in the same directory is kept
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart:249:19)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart:244:24)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:09 +5 -3: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: (setUpAll)
+00:09 +5 -3: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a direct cache write in the same directory is kept [E]
+  Test failed. See exception logs above.
+  The test description was: after the broken file is removed: a direct cache write in the same directory is kept
+  
+00:09 +5 -3: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a new request in the same directory is kept
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart:249:19)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart:244:24)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:09 +5 -4: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: (setUpAll)
+00:09 +5 -4: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a new request in the same directory is kept [E]
+  Test failed. See exception logs above.
+  The test description was: after the broken file is removed: a new request in the same directory is kept
+  
+00:09 +5 -4: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: (setUpAll)
+00:09 +5 -5: loading /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart
+00:09 +5 -5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: (setUpAll) [E]
+  Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open shared object file: No such file or directory
+  dart:ffi                                               new DynamicLibrary.open
+  package:sqlite3/src/ffi/load_library.dart 60:27        _defaultOpen
+  package:sqlite3/src/ffi/load_library.dart 137:12       OpenDynamicLibrary.openSqlite
+  package:sqlite3/src/ffi/api.dart 15:39                 sqlite3
+  package:venera/foundation/cache_manager.dart 73:11     new CacheManager._create
+  package:venera/foundation/cache_manager.dart 90:55     new CacheManager
+  test/network/reader_image_cache_race_test.dart 273:17  main.<fn>
+  
+00:09 +5 -5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_race_test.dart: (tearDownAll)
+00:10 +5 -5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: (setUpAll)
+00:10 +5 -5: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:175:13)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:171:18)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:10 +5 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests [E]
+  Test failed. See exception logs above.
+  The test description was: a valid cache hit is shown without requests
+  
+00:10 +5 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:12 +6 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:12 +7 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:12 +8 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:12 +9 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:12 +10 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +11 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +12 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +13 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +14 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +15 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +16 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +17 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +18 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +19 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +20 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +21 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +22 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +23 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +24 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:13 +25 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +26 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +27 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +28 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +29 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +30 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +31 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +32 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +33 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +34 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:14 +35 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +36 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +37 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +38 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +39 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +40 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +41 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +42 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +43 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:15 +44 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +45 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +46 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +47 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +48 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +49 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +50 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +51 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +52 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +53 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +54 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +55 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +56 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +57 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +58 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +59 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +60 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +61 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +62 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +63 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +64 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +65 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +66 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +67 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +68 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +69 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +70 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +71 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +72 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +73 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +74 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +75 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +76 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +77 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +78 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +79 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +80 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +81 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +82 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +83 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +84 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +85 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +86 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +87 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:18 +88 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:18 +89 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:18 +90 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:18 +91 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:18 +92 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:18 +93 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:18 +94 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:22 +95 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:22 +96 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:22 +97 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:22 +98 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:22 +99 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:23 +100 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:23 +101 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:23 +102 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:23 +103 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:23 +104 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:23 +105 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:24 +106 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:24 +107 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:24 +108 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:24 +109 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:24 +110 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:24 +111 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:24 +112 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:24 +113 -6: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+[31mInvalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open shared object file: No such file or directory
+dart:async/future_impl.dart 21:26                                        _interceptError
+dart:async/future_impl.dart 52:23                                        _interceptUserError
+dart:async/stream_controller.dart 624:39                                 _StreamController.addError
+package:venera/network/images.dart 306:22                                _StreamWrapper._listen
+===== asynchronous gap ===========================
+dart:async/zone.dart 763:19                                              _CustomZone.registerBinaryCallback
+package:venera/network/images.dart 292:7                                 _StreamWrapper._listen
+package:venera/network/images.dart 287:5                                 new _StreamWrapper
+package:venera/network/images.dart 126:20                                ImageDownloader.loadComicImage
+package:venera/foundation/image_provider/reader_image.dart 44:47         ReaderImageProvider.load
+package:venera/foundation/image_provider/base_image_provider.dart 70:24  BaseImageProvider._loadBufferAsync
+===== asynchronous gap ===========================
+dart:async/zone.dart 754:19                                              _CustomZone.registerUnaryCallback
+package:venera/foundation/image_provider/base_image_provider.dart 70:18  BaseImageProvider._loadBufferAsync
+package:venera/foundation/image_provider/base_image_provider.dart 39:14  BaseImageProvider.loadImage
+package:flutter/src/painting/image_provider.dart 546:39                  ImageProvider.resolveStreamForKey.<fn>
+package:flutter/src/painting/image_cache.dart 368:22                     ImageCache.putIfAbsent
+package:flutter/src/painting/image_provider.dart 543:81                  ImageProvider.resolveStreamForKey
+package:flutter/src/painting/image_provider.dart 383:9                   ImageProvider.resolve.<fn>
+package:flutter/src/painting/image_provider.dart 499:28                  ImageProvider._createErrorHandlerAndKey.<fn>
+package:flutter/src/foundation/synchronous_future.dart 44:27             SynchronousFuture.then
+package:flutter/src/painting/image_provider.dart 496:10                  ImageProvider._createErrorHandlerAndKey
+package:flutter/src/painting/image_provider.dart 380:5                   ImageProvider.resolve
+test/network/reader_image_cache_test.dart 113:27                         _resolve
+test/network/reader_image_cache_test.dart 200:22                         main.<fn>.<fn>
+package:flutter_test/src/binding.dart 2007:17                            AutomatedTestWidgetsFlutterBinding.runAsync.<fn>
+dart:async/zone_root.dart 35:13                                          _rootRun
+dart:async/zone.dart 726:19                                              _CustomZone.run
+package:flutter_test/src/binding.dart 2003:26                            AutomatedTestWidgetsFlutterBinding.runAsync
+package:flutter_test/src/widget_tester....[0m
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+Expected: null
+  Actual: ArgumentError:<Invalid argument(s): Failed to load dynamic library 'libsqlite3.so':
+libsqlite3.so: cannot open shared object file: No such file or directory>
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      _expect (package:matcher/src/expect/expect.dart:182:3)
+#2      expect (package:matcher/src/expect/expect.dart:65:3)
+#3      expect (package:flutter_test/src/widget_tester.dart:473:18)
+#4      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:200:9)
+<asynchronous suspension>
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:196:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 2 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:24 +113 -7: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:24 +113 -7: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once [E]
+  Test failed. See exception logs above.
+  The test description was: a miss, an expired entry and parallel misses each request once
+  
+00:24 +114 -7: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: an undecodable cache entry is invalidated, other entries kept
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:239:15)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:236:20)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:24 +114 -8: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:24 +114 -8: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: an undecodable cache entry is invalidated, other entries kept [E]
+  Test failed. See exception logs above.
+  The test description was: an undecodable cache entry is invalidated, other entries kept
+  
+00:24 +114 -8: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:253:15)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:249:20)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:24 +114 -9: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:24 +114 -9: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry [E]
+  Test failed. See exception logs above.
+  The test description was: one retry recovers from an undecodable cache entry
+  
+00:24 +114 -9: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: an empty cache entry is invalidated, other entries kept
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:239:15)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:236:20)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:24 +114 -10: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:24 +114 -10: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: an empty cache entry is invalidated, other entries kept [E]
+  Test failed. See exception logs above.
+  The test description was: an empty cache entry is invalidated, other entries kept
+  
+00:24 +114 -10: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:253:15)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:249:20)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:24 +114 -11: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:24 +114 -11: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry [E]
+  Test failed. See exception logs above.
+  The test description was: one retry recovers from an empty cache entry
+  
+00:25 +114 -11: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:277:13)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:273:18)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:25 +114 -12: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:25 +114 -12: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request [E]
+  Test failed. See exception logs above.
+  The test description was: both resize settings recover with one shared request
+  
+00:25 +114 -12: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: other providers keep the default invalid-data handling
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:301:13)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:300:18)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:25 +114 -13: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:25 +114 -13: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: other providers keep the default invalid-data handling [E]
+  Test failed. See exception logs above.
+  The test description was: other providers keep the default invalid-data handling
+  
+00:25 +114 -13: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps a valid entry when only processed data is broken
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:325:15)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:323:20)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:25 +114 -14: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:25 +114 -14: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps a valid entry when only processed data is broken [E]
+  Test failed. See exception logs above.
+  The test description was: a valid entry when only processed data is broken
+  
+00:25 +114 -14: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps an entry another request has just repaired
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:335:15)
+#8      AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2007:17)
+#11     AutomatedTestWidgetsFlutterBinding.runAsync (package:flutter_test/src/binding.dart:2003:26)
+#12     WidgetTester.runAsync (package:flutter_test/src/widget_tester.dart:838:17)
+#13     main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:333:20)
+#14     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#15     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:25 +114 -15: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:25 +114 -15: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps an entry another request has just repaired [E]
+  Test failed. See exception logs above.
+  The test description was: an entry another request has just repaired
+  
+00:25 +115 -15: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps local comic files and their keys
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Failed to load dynamic library 'libsqlite3.so': libsqlite3.so: cannot open
+shared object file: No such file or directory
+
+When the exception was thrown, this was the stack:
+#0      _open (dart:ffi-patch/ffi_dynamic_library_patch.dart:11:43)
+#1      new DynamicLibrary.open (dart:ffi-patch/ffi_dynamic_library_patch.dart:22:12)
+#2      _defaultOpen (package:sqlite3/src/ffi/load_library.dart:60:27)
+#3      OpenDynamicLibrary.openSqlite (package:sqlite3/src/ffi/load_library.dart:137:12)
+#4      sqlite3 (package:sqlite3/src/ffi/api.dart:15:39)
+#5      new CacheManager._create (package:venera/foundation/cache_manager.dart:73:11)
+#6      new CacheManager (package:venera/foundation/cache_manager.dart:90:55)
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:351:15)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart:346:7)
+<asynchronous suspension>
+#10     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#11     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 2 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:25 +115 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:25 +115 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/network/reader_image_cache_test.dart: ReaderImageProvider.onInvalidImageData keeps local comic files and their keys [E]
+  Test failed. See exception logs above.
+  The test description was: local comic files and their keys
+  
+00:25 +115 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:25 +116 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:25 +117 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:25 +118 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=false
+00:25 +119 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:25 +120 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=false
+00:25 +121 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=true
+00:25 +122 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: (setUpAll)
+00:25 +122 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=false
+00:26 +123 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:26 +124 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:26 +125 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:26 +126 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:26 +127 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:26 +128 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:26 +129 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 2.0 populated=false
+00:26 +130 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=true
+00:26 +131 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=true
+00:26 +132 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=false
+00:27 +133 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.5x populated=false
+00:27 +134 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=true
+00:27 +135 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.5x populated=true
+00:27 +136 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=false
+00:27 +137 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 2.0x populated=false
+00:27 +138 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=true
+00:27 +139 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 2.0x populated=true
+00:27 +140 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=false
+00:27 +141 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.0x populated=false
+00:27 +142 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=true
+00:27 +143 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=true
+00:27 +144 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.5x populated=false
+00:27 +145 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=false
+00:27 +146 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.5x populated=true
+00:27 +147 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=true
+00:27 +148 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 2.0x populated=false
+00:27 +149 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=false
+00:27 +150 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 2.0x populated=true
+00:27 +151 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=true
+00:28 +152 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.5 populated=true
+00:28 +153 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.0x populated=true
+00:28 +154 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 2.0 populated=false
+00:28 +155 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.5x populated=false
+00:28 +156 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 2.0 populated=true
+00:28 +157 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.5x populated=true
+00:28 +158 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=false
+00:28 +159 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 2.0x populated=false
+00:28 +160 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=true
+00:28 +161 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=true
+00:28 +162 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.0x populated=false
+00:28 +163 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=false
+00:28 +164 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.0x populated=true
+00:28 +165 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=true
+00:28 +166 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.5x populated=false
+00:28 +167 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=false
+00:28 +168 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.5x populated=true
+00:28 +169 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=true
+00:28 +170 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 2.0 populated=true
+00:28 +171 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 2.0x populated=true
+00:28 +172 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=false
+00:28 +173 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=false
+00:28 +174 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.0x populated=true
+00:28 +175 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.0 populated=true
+00:28 +176 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.5x populated=false
+00:28 +177 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=false
+00:29 +178 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.5x populated=true
+00:29 +179 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=true
+00:29 +180 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=true
+00:29 +181 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 1.5 populated=true
+00:29 +182 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.0x populated=false
+00:29 +183 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=false
+00:29 +184 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.0x populated=true
+00:29 +185 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=true
+00:29 +186 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 360.0 2.0 populated=true
+00:29 +187 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.5x populated=true
+00:29 +188 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=false
+00:29 +189 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 2.0x populated=false
+00:29 +190 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=true
+00:29 +191 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=true
+00:29 +192 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.0x populated=false
+00:29 +193 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=false
+00:29 +194 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.0x populated=true
+00:29 +195 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=true
+00:29 +196 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=true
+00:29 +197 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.5x populated=true
+00:30 +198 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=false
+00:30 +199 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 2.0x populated=false
+00:30 +200 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=true
+00:30 +201 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 2.0x populated=true
+00:30 +202 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:30 +203 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:30 +204 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.0x populated=true
+00:30 +205 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=true
+00:30 +206 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=true
+00:30 +207 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.5x populated=true
+00:30 +208 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.5 populated=false
+00:30 +209 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 2.0x populated=false
+00:30 +210 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.5 populated=true
+00:30 +211 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.5 populated=true
+00:30 +212 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: every R2 entry dispatches its supplied callback
+00:30 +213 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 2.0 populated=false
+00:30 +214 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: source labels have no button or tap semantics; management does
+00:30 +215 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 2.0 populated=true
+00:30 +216 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 2.0 populated=true
+00:30 +217 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 2.0 populated=true
+00:30 +218 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r2_test.dart: presentation follows alternate Material seed colors
+00:30 +219 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 actual statistics selectors and exact keyword callbacks
+00:31 +220 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 actual statistics selectors and exact keyword callbacks
+00:31 +221 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 actual statistics selectors and exact keyword callbacks
+00:31 +222 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 all entry callbacks reachable by scrolling
+00:31 +223 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 sync disabled
+00:31 +224 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 sync idle
+00:31 +225 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 sync busy
+00:31 +226 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 sync error
+00:31 +227 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 two-column tools fall back and long titles remain semantic
+00:31 +228 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 capture dark 360
+00:31 +229 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: (setUpAll)
+00:31 +229 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_visual_r4_test.dart: R4 capture dark 393
+00:31 +230 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:31 +231 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:32 +232 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:32 +233 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:32 +234 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:32 +235 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: nonempty history keeps recent comic and history actions
+00:32 +236 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty local keeps browse, import and download actions
+00:32 +237 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: nonempty local still displays supplied recent comics
+00:32 +238 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: home composition retains all original sections in UX02 order
+00:32 +239 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 1.0x
+00:32 +240 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 1.5x
+00:32 +241 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 2.0x
+00:32 +242 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 393.0dp 1.0x
+00:32 +243 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 393.0dp 1.5x
+00:32 +244 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 393.0dp 2.0x
+00:32 +245 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 1.0x
+00:33 +246 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 1.5x
+00:33 +247 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 2.0x
+00:33 +248 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 1.0x
+00:33 +249 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 1.5x
+00:33 +250 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 2.0x
+00:33 +251 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.0x
+00:33 +252 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.5x
+00:33 +253 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 2.0x
+00:33 +254 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.0x
+00:33 +255 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.5x
+00:33 +256 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 2.0x
+00:33 +257 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 1.0x
+00:33 +258 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 1.5x
+00:33 +259 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 2.0x
+00:33 +260 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 1.0x
+00:33 +261 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 1.5x
+00:33 +262 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 2.0x
+00:33 +263 -16: /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/test/ui/home_page_test.dart: (tearDownAll)
+00:33 +263 -16: Some tests failed.
+
+EXIT_CODE: 1
+ELAPSED_SECONDS: 43.629

@@ -1,0 +1,11 @@
+chain HEAD=51de19d66a10c23e76e1948e96c2ff3344224a62 remotes=[]
+R4A_FROM_51de19d.patch sha256 OK (a6a742e68099b728ff4e52c18feb3e8ebc5168ca023010c5f28ca0241f464a7a)
+  applied
+CACHE_HIT_RECOVERY_ON_R4A.patch sha256 OK (3e528269cff86e982ce7c5255940f51219cacc68dc3abd0434cd20ddcba67457)
+  applied
+CACHE_RACE_FIX_ON_R2.patch sha256 OK (2a5f70573b8f9ff4d99de571ca5ab4005eca4d733ed55b05a18ac04952f04cf8)
+  applied
+CACHE_PATH_REUSE_FIX_ON_R3.patch sha256 OK (3643fd62c7b635c1801e597e8b1e3727862ded9e7945add245ea5a6d4dc601a7)
+  applied
+  file set identical to candidate
+  byte mismatches, chain result vs final candidate: 0

@@ -1,0 +1,66 @@
+$ flutter build apk --profile --target-platform android-arm64 --split-per-abi --no-pub
+# JAVA_HOME=/tmp/claude-0/-home-user-venera/196846e9-6aca-59e9-9f50-d0da83d4f028/scratchpad/android/jdk17 ANDROID_HOME=/tmp/claude-0/-home-user-venera/196846e9-6aca-59e9-9f50-d0da83d4f028/scratchpad/android/sdk GRADLE_USER_HOME=/tmp/claude-0/-home-user-venera/196846e9-6aca-59e9-9f50-d0da83d4f028/scratchpad/android/gradlehome
+openjdk version "17.0.21" 2026-10-20
+OpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)
+OpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)
+Tue Nov  3 20:33:21 UTC 2026
+Running Gradle task 'assembleProfile'...                        
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=33687 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':gradle:compileKotlin'.
+> Could not isolate parameters org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@3e2ee6a6 of artifact transform BuildToolsApiClasspathEntrySnapshotTransform
+   > Could not isolate value org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@3e2ee6a6 of type BuildToolsApiClasspathEntrySnapshotTransform.Parameters
+      > Could not resolve all files for configuration ':gradle:kotlinBuildToolsApiClasspath'.
+         > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-impl:2.0.21.
+           Required by:
+               project :gradle
+            > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-impl:2.0.21.
+               > Could not get resource 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-impl/2.0.21/kotlin-build-tools-impl-2.0.21.pom'.
+                  > Could not GET 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-impl/2.0.21/kotlin-build-tools-impl-2.0.21.pom'. Received status code 429 from server: Too Many Requests
+
+* Try:
+> Run the 'artifactTransforms' report task to view details about registered transforms.
+> Review the documentation on Artifact Transforms at https://docs.gradle.org/8.13/userguide/artifact_transforms.html.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 27s
+Running Gradle task 'assembleProfile'...                           87.9s
+[!] Gradle threw an error while downloading artifacts from the network.
+Retrying Gradle Build: #1, wait time: 100ms
+Running Gradle task 'assembleProfile'...                        
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=33687 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':gradle:compileKotlin'.
+> Could not isolate parameters org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@546d5da7 of artifact transform BuildToolsApiClasspathEntrySnapshotTransform
+   > Could not isolate value org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@546d5da7 of type BuildToolsApiClasspathEntrySnapshotTransform.Parameters
+      > Could not resolve all files for configuration ':gradle:kotlinBuildToolsApiClasspath'.
+         > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-impl:2.0.21.
+           Required by:
+               project :gradle
+            > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-impl:2.0.21.
+               > Could not get resource 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-impl/2.0.21/kotlin-build-tools-impl-2.0.21.pom'.
+                  > Could not GET 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-impl/2.0.21/kotlin-build-tools-impl-2.0.21.pom'. Received status code 429 from server: Too Many Requests
+
+* Try:
+> Run the 'artifactTransforms' report task to view details about registered transforms.
+> Review the documentation on Artifact Transforms at https://docs.gradle.org/8.13/userguide/artifact_transforms.html.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 4s
+Running Gradle task 'assembleProfile'...                            5.0s
+[!] Gradle threw an error while downloading artifacts from the network.
+Gradle task assembleProfile failed with exit code 1
+exit=1
+Tue Nov  3 20:34:55 UTC 2026

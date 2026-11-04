@@ -1,0 +1,10 @@
+COMMAND: dart format --output=none --set-exit-if-changed lib/foundation/cache_manager.dart lib/foundation/image_provider/base_image_provider.dart lib/foundation/image_provider/reader_image.dart lib/network/images.dart lib/pages/follow_updates_page.dart lib/pages/reader/images.dart
+Changed lib/foundation/cache_manager.dart
+Changed lib/foundation/image_provider/base_image_provider.dart
+Changed lib/foundation/image_provider/reader_image.dart
+Changed lib/network/images.dart
+Changed lib/pages/follow_updates_page.dart
+Changed lib/pages/reader/images.dart
+Formatted 6 files (6 changed) in 0.05 seconds.
+
+EXIT_CODE:1

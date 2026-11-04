@@ -1,0 +1,12 @@
+COMMAND: flutter build apk --profile --target-platform android-arm64 --split-per-abi --no-pub
+Running Gradle task 'assembleProfile'...                        
+Picked up JAVA_TOOL_OPTIONS: -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=46859 -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=46859 -Dhttp.nonProxyHosts=localhost|127.* -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Djavax.net.ssl.trustStore=/workspace/scratch/4030c9529908/venera_r31_review/toolchain/java-cacerts
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+INFO: Precompiled binaries are disabled
+INFO: Installing Rust toolchain: 1.85.1
+INFO: Building rhttp for aarch64-linux-android
+Running Gradle task 'assembleProfile'...                          122.1s
+✓ Built build/app/outputs/flutter-apk/app-arm64-v8a-profile.apk (26.9MB)
+
+EXIT_CODE: 0
+ELAPSED_SECONDS: 122.674

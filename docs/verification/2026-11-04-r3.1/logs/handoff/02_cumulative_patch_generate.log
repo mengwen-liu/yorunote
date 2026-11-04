@@ -1,0 +1,20 @@
+patchgen HEAD=51de19d66a10c23e76e1948e96c2ff3344224a62 remotes=[]
+--- name-status vs 51de19d66a10c23e76e1948e96c2ff3344224a62 (summary:       7 A       9 M )
+M	lib/components/home_widgets.dart
+M	lib/foundation/cache_manager.dart
+M	lib/foundation/image_provider/base_image_provider.dart
+M	lib/foundation/image_provider/reader_image.dart
+M	lib/network/images.dart
+M	lib/pages/follow_updates_page.dart
+M	lib/pages/home_page.dart
+M	lib/pages/reader/images.dart
+A	test/network/reader_image_cache_path_reuse_test.dart
+A	test/network/reader_image_cache_race_test.dart
+A	test/network/reader_image_cache_test.dart
+A	test/ui/home_page_test.dart
+A	test/ui/home_visual_r2_test.dart
+A	test/ui/home_visual_r3_test.dart
+A	test/ui/home_visual_r4_test.dart
+M	test/ui/home_widgets_test.dart
+--- mode changes: 0
+ 16 files changed, 3926 insertions(+), 628 deletions(-)

@@ -1,0 +1,21 @@
+COMMAND: /workspace/scratch/4030c9529908/venera_r31_review/toolchain/android-sdk/build-tools/36.0.0/apksigner verify --verbose --print-certs /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/build/app/outputs/flutter-apk/app-arm64-v8a-profile.apk
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Venera Test Only, O=Test Only
+Signer #1 certificate SHA-256 digest: fbb1c751962c1b6942c2117749d4f486c4e1013a03fb7605c2a39675b1f921a4
+Signer #1 certificate SHA-1 digest: 5f07550270d0b01385b54d735cbb71d2fea3d455
+Signer #1 certificate MD5 digest: ac99d4c016f5aa95080befb65cb0d475
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: aafc4c1e591117e12bba0fa2f25b2291c6c69cf274898f08fbe11d6ad95b71fe
+Signer #1 public key SHA-1 digest: 98f1eb3de3d6d62c23ce6cd357a62423d1e7224c
+Signer #1 public key MD5 digest: 2dba08e77f2ccb761f6b291a06942dba
+Picked up JAVA_TOOL_OPTIONS: -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=36007 -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=36007 -Dhttp.nonProxyHosts=localhost|127.* -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Djavax.net.ssl.trustStore=/workspace/scratch/4030c9529908/venera_r31_review/toolchain/java-cacerts
+
+EXIT_CODE: 0

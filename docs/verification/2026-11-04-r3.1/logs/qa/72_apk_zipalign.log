@@ -1,0 +1,3 @@
+COMMAND: /workspace/scratch/4030c9529908/venera_r31_review/toolchain/android-sdk/build-tools/36.0.0/zipalign -c -P 16 4 /workspace/scratch/4030c9529908/venera_r31_review/git_baseline/build/app/outputs/flutter-apk/app-arm64-v8a-profile.apk
+
+EXIT_CODE: 0

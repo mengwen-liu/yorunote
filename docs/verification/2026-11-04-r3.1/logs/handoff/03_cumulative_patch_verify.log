@@ -1,0 +1,29 @@
+verify HEAD=51de19d66a10c23e76e1948e96c2ff3344224a62 remotes=[]  ALL_FIXES sha256=d2b455edddb5dba33c04fad0aa9b95e258d048980dcf06cf19ee0edb67feed95
+== 1. base blobs of every file in the patch
+  OK   lib/components/home_widgets.dart base=a567953358668e913936f1aec34ee75146fa87e6 -> 1ca411aeb37d8a88bfca7f5b3afd3a2c22cbeb36
+  OK   lib/foundation/cache_manager.dart base=301637c2cdbc4bff4bdf561408574657a3b759c3 -> 372769d2391f24c1c47b482a6d4049c20caeacad
+  OK   lib/foundation/image_provider/base_image_provider.dart base=47651a78800987e0e8cf7aa4d2619cf6d88cb4b8 -> 3861574b4fac95f167404ba31af6a25814e62ad2
+  OK   lib/foundation/image_provider/reader_image.dart base=ac2a5a6d7f0641e9bc768b225e7575d6c52aee82 -> 59d804cc9c39acc435c777fcc2861857a860e164
+  OK   lib/network/images.dart base=8f311d77d494969d7c321284bd412e51fc6c53db -> 3038c080ad5c4fb9ab1de137976504a59c4a7f0c
+  OK   lib/pages/follow_updates_page.dart base=64e1a59a94b38d30d4f83982756c99d45ad63efe -> 611a6facf59923d3fac40a8c2f1ec77eb6d9f5cf
+  OK   lib/pages/home_page.dart base=ecd06d30a8cf01733b8f431d618e8b14f5c202ca -> 81323da87a2fc85be33bdd5f258ff37296573b16
+  OK   lib/pages/reader/images.dart base=45d1b0d011f8d957863e5407cf75a8ab96754fc2 -> 00d28bbeec1388e758d49c5e462427ffacd518a2
+  new  test/network/reader_image_cache_path_reuse_test.dart (absent in base) -> d1128e72d585765dfd4cb0b34ae27022e0dc8dd5
+  new  test/network/reader_image_cache_race_test.dart (absent in base) -> 4821b5af855e1b5b48e3e949683a1387a7af6cd0
+  new  test/network/reader_image_cache_test.dart (absent in base) -> 27e9fcf79bed32261a499c160aafd74bb3e67a57
+  new  test/ui/home_page_test.dart (absent in base) -> 95d897f78e04339484ec6383dd4853d2c85764f1
+  new  test/ui/home_visual_r2_test.dart (absent in base) -> 5ca6d447d55729315a83c531d4a841522fc006ad
+  new  test/ui/home_visual_r3_test.dart (absent in base) -> 629f473ad21a6ee53c3f4d2ca279b7f146488e9d
+  new  test/ui/home_visual_r4_test.dart (absent in base) -> f9d674ef031d2e3ae7329d4f56f31f48203dc7f2
+  OK   test/ui/home_widgets_test.dart base=13d74332a17b2234f181903f37b519567d0c46c5 -> 8c4bdcb890f670e6af89d5620f2e861395b46ca4
+  files in patch: 16; problems: 0
+== 2. apply
+  apply --check OK
+  applied
+  file set identical to candidate
+  byte mismatches vs final candidate (331 files): 0
+== 3. reverse
+  reverse --check OK
+  reversed
+  working tree clean: identical to 51de19d66a10c23e76e1948e96c2ff3344224a62
+  git diff HEAD empty

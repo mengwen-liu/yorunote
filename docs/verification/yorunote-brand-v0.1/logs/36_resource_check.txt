@@ -1,0 +1,5 @@
+xml ok android/app/src/main/AndroidManifest.xml
+xml ok android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+xml ok android/app/src/main/res/drawable/launch_background.xml
+json ok
+all 20 mipmap refs exist; manifest icon @mipmap/ic_launcher

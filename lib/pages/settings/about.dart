@@ -40,9 +40,15 @@ class _AboutSettingsState extends State<AboutSettings> {
               "V${App.version}",
               style: const TextStyle(fontSize: 16),
             ),
-            Text("Yorunote is a personal fork of Venera, a free and open-source comic reader.".tl),
-            Text("Based on Venera (GPL-3.0). Personal changes are limited to appearance and bug fixes; all other features come from upstream.".tl,
-                style: const TextStyle(fontSize: 12)),
+            Text(
+              "Yorunote is a personal fork of Venera, a free and open-source comic reader."
+                  .tl,
+            ),
+            Text(
+              "Based on Venera (GPL-3.0). Personal changes are limited to appearance and bug fixes; all other features come from upstream."
+                  .tl,
+              style: const TextStyle(fontSize: 12),
+            ),
             const SizedBox(height: 8),
           ],
         ).toSliver(),

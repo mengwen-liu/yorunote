@@ -5,6 +5,9 @@ Yorunote 是基於 Venera 的個人開源 Fork（GPL-3.0）。個人修改僅限
 
 ---
 
+> Upstream historical notice (from the original Venera author; it does not describe the status of Yorunote):
+> 上游歷史聲明（來自 Venera 原作者，並非描述 Yorunote 的維護狀態）：
+
 # Due to my limited time and energy, this project is no longer maintained. Feel free to fork it.
 # 由于本人精力有限, 此项目已停止维护, 欢迎fork
 

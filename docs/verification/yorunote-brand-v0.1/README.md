@@ -1,37 +1,36 @@
-# Yorunote 品牌外觀改版 v0.1 — 名稱修改候選／圖示待導入
+# Yorunote 品牌外觀改版 v0.1 — 驗證索引
 
-**狀態：未完成。** 本工作階段沒有收到任何角色 Logo（PNG／SVG）；`/mnt/attach`、`/mnt/user-data/uploads` 皆為空，也找不到相關檔案。依指令不自行繪製替代角色，也不把參考影片當圖示。因此只完成名稱與文案，圖示導入未做。
+- 第 1 輪（名稱／文案，當時無 Logo、無工具鏈）：`README_round1_history.md`（原文保留）、`logs/00_*`、`10_*`、`20_*`。
+- 第 2 輪（圖示導入與驗證，本檔）：以下。
 
-基準：`59866aa3d70314d5b6b8ccbce8eec559db0d9619`（起始 HEAD 與遠端一致，工作樹乾淨）。
-名稱「Yorunote」為使用者選定；商標／名稱可用性**未查核**，不主張任何權利。
+**名稱與角色圖示僅為工程候選：** 使用者同意以附件作工程候選、背景 #17283B；角色／素材／商標權利**未清查**，不是公開發版授權。
 
-## 已修改的品牌觸點（Android 範圍）
-| 觸點 | 檔案 | 前 → 後 |
+## 第 2 輪結果
+### 來源與資產
+- 原稿：`brand/source/yorunote_logo_source_1254.webp`，1254×1254 RGBA、背景透明（alpha 0..255），SHA-256 `5976edff…7ca1`。對話附件以 WebP 形式到達，原始檔名未知（非 PNG、非向量）；為點陣原稿，不宣稱向量。已實際開圖確認為角色單圖，不是介面截圖。
+- 產生：`python3 -I brand/scripts/make_icons.py <repo_root>`（可重現）。雜湊：`brand/ASSET_SHA256.txt`、`brand/GENERATED_ICONS_SHA256.txt`。
+- 自適應圖示：前景透明，角色寬 64dp 置中（中央 66dp 安全區內，頭像下方兩角的頭髮略出圓外，眼、耳、月亮書頁飾件皆在內）；背景 #17283B 純色；單色層以亮度決定 alpha（暗線條、眼睛、衣領鏤空），實測非整張方塊。未預烘焙圓形遮罩或陰影。
+- 傳統 `ic_launcher.png`（圓角方形底）五密度；`assets/app_icon.png` 1024 方形（About 以圓形裁切）。專案未宣告 `roundIcon`，未改 manifest。
+- 預覽：`brand/previews/icon_preview.png`（圓形、圓角方形、單色、安全圓標示、48／32／24px）。小尺寸下綠髮、藍眼輪廓與深底仍可辨識；24px 時月亮飾件細節消失（限制）。
+- 啟動畫面：既有為純白 `launch_background`，無品牌資產可替換，未改動；Android 12+ 系統啟動畫面使用 launcher 圖示。
+- README：上游「停止維護」聲明已標為上游歷史聲明，原文保留。
+### 驗證（工具：Flutter 3.41.4 rev ff37bef603 / Dart 3.11.1，隔離安裝於 /opt/tc；tarball SHA-256 與官方 releases_linux.json 一致；`logs/30_*`）
+| 項目 | 結果 | 日誌 |
 |---|---|---|
-| Android 桌面顯示名稱 | `android/app/src/main/AndroidManifest.xml` | `venera` → `Yorunote` |
-| Flutter App 標題 | `lib/main.dart` | `venera` → `Yorunote` |
-| About 說明與 Fork 聲明 | `lib/pages/settings/about.dart`、`assets/translation.json`（簡／繁新增 2 句） | 原句 → Yorunote 為 Venera 個人 Fork；個人修改僅限外觀與問題修正，其餘來自上游 |
-| README 開頭 | `README.md` | 新增 Fork 說明，原內容保留 |
-
-## 刻意不動
-Dart 套件名、`package:venera`、MethodChannel／EventChannel（`venera/...`）、`.venera` 副檔名、User-Agent、快取標頭、`com.github.wgh136.venera`（applicationId／namespace）、簽章、資料庫與儲存位置、上游網址（GitHub／Telegram／更新檢查）、LICENSE、`docs/verification/2026-11-04-r3.1/`。
-
-## 圖示與資產：待導入（缺件）
-目前圖示仍為上游原圖：`assets/app_icon.png`（About 頁與 pubspec 資產）、`android/app/src/main/res/mipmap-*/ic_launcher*.png`、`mipmap-anydpi-v26/ic_launcher.xml`。
-需要使用者提供：
-1. 正式角色 Logo 原檔（SVG 優先，或 ≥1024×1024 透明背景 PNG），並確認可用於 GPL 專案發佈的授權／來源。
-2. 若需頭像簡化版：由設計方確認，或授權由我依同一份 Logo 裁切（不重繪角色）。
-3. 背景色確認（Night Mist Blue 的色碼）。
-取得後的製作規格：自適應圖示 108dp 畫布、前景主體置於中央 66dp 安全區；背景層 Night Mist Blue 純色；單色層為單一色剪影（Android 13 主題圖示）；產出 mdpi–xxxhdpi 與 512px 預覽，並附圓形／圓角方形裁切預覽；透明背景與 48/32/24px 小尺寸辨識逐項檢查。
-
-## 其他平台品牌殘留（僅記錄，未驗證、未修改）
-`lib/components/window_frame.dart:132` 標題列文字 `Venera`；`ios/Runner/Info.plist`（Venera／venera）；`macos/Runner/Configs/AppInfo.xcconfig`；`windows/runner/Runner.rc`、`main.cpp`；`linux/CMakeLists.txt`、`linux/my_application.cc`；`debian/*`（.desktop 名稱／圖示）；各平台圖示檔。
-
-## 驗證
-見 `logs/`。**本環境沒有 Flutter／Dart 工具鏈**，故 `pub get`、`analyze`、`test`、格式檢查與 APK 建置**均未執行**，不宣稱通過。已執行：JSON 語法檢查、身分檔雜湊前後比對。Workflow：`analyze.yml` 只在 PR 與 push master 觸發，其餘為手動／release／issue 事件；本分支 push 不觸發 Actions，Commit 仍加 `[skip ci]`。
-
-## 還原
-`git checkout claude/venera-r31-backup-20261104`（未動）；或 `git revert` 本分支 Commit。
-
-## 下一輪需決策
-新 applicationId（供新舊並存）、長期簽章方案、資料遷移方式；Logo 授權與正式檔案；是否同步其他平台名稱。
+| `flutter pub get --enforce-lockfile` | Exit 0；`pubspec.lock`／`pubspec.yaml` 無差異 | 31 |
+| 修改 Dart 檔格式 | `main.dart`、`about.dart` 在基準即未通過格式（Exit 1，與基準相同，未整檔重排）；本輪新增的行與新測試檔經格式器確認無需變動 | 32 |
+| `flutter analyze --no-pub` | Exit 1；8 項 info，0 warning、0 error，與基準記載相同 | 33 |
+| `flutter test --no-pub test/brand` | Exit 0，4 項通過 | 34 |
+| `flutter test --no-pub`（全部） | Exit 0；**277 通過、0 失敗、9 跳過**（含新增 4 項）。9 項跳過為 `reader_image_cache*` 在本機缺原生 HTTP 函式庫時的 `skip: !_hasNativeHttp`；未覆蓋範圍＝這些閱讀器圖片快取測試，與品牌無關，未擴大研究。R3.1 的 282 項為歷史結果，不可直接比較 | 35 |
+| XML／JSON／20 個圖示資源引用 | 通過 | 36 |
+| applicationId／namespace／簽章／workflow | 無變動（`com.github.wgh136.venera`） | git diff |
+### APK：未建置
+本機沒有 Android SDK／NDK／JDK 17 以外的 Android 工具（`ANDROID_HOME` 未設、找不到 sdkmanager）。安裝需接受新的授權條款，依指示停止該步。故無 APK、無 manifest／ABI／簽章／SHA-256 檢查，也未建立測試金鑰。可於具備既有 Android 工具鏈的環境（例如先前 CI 做法：一次性測試金鑰、`flutter build apk --profile --target-platform android-arm64 --split-per-abi --no-pub`）補做。
+### 待使用者實機驗收（S25+／Tab S11）
+桌面圖示（一般、主題單色圖示、不同啟動器遮罩形狀）、名稱 Yorunote、About 頁頭像與文案（簡／繁／英）、深淺色背景下辨識度。均**未實測**。
+### 未完成
+APK 建置與檢查；實機驗收；權利／授權清查；其他平台名稱與圖示；新 applicationId／簽章／遷移。
+### 回復
+```bash
+git revert --no-edit <本輪 Commit SHA>
+```

@@ -7,6 +7,13 @@ This file records traceable development milestones. Candidate commits below are 
 
 ## 尚未發布 / Unreleased
 
+### 受控預覽版發行流程 / Controlled preview-release workflow
+
+- 新增僅限手動觸發的 [Yorunote Preview Release](.github/workflows/yorunote-preview-release.yml) 與[操作文件](docs/releases/PREVIEW_RELEASE_PROCESS.md)：`prepare` 只將已核對的 APK 與 `.sha256` 附加至既有草稿；`publish` 需另填確認字串，且要求 Tag 事先存在並指向 `29b590b`。
+  Added a manual-only workflow and process document: `prepare` only attaches the verified APK and checksum to the existing draft; `publish` needs a confirmation string and a pre-existing tag at `29b590b`.
+- 既有 Build ALL、AltStore 與 App 建置 workflow 未修改；`release: published` 規則仍存在。
+  Existing Build ALL, AltStore and app-build workflows are unchanged; their `release: published` trigger remains.
+
 ### 文件與展示素材 / Documentation and media
 
 - 首頁（[繁體中文](README.md)、[English](README.en.md)）改用角色動畫 [`夜讀月頁精靈_眨眼微笑.gif`](docs/brand/README.md)（512×512、6 影格、494,501 位元組）；素材來源與雜湊見該目錄說明。

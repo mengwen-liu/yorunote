@@ -1,0 +1,385 @@
+# Yorunote Preview Release — 受控預覽版發行流程 / controlled preview-release workflow
+#
+# 只能手動觸發（workflow_dispatch）。不使用 push、release、workflow_run、schedule。
+# Manual trigger only. No push / release / workflow_run / schedule triggers.
+#
+# operation=prepare（預設 / default）：
+#   下載並核對既有 CI artifact，將 APK 與 .sha256 附加到既有 Release 草稿。
+#   絕不公開 Release、絕不建立 Tag。
+#   Verifies the existing CI artifact and attaches APK + .sha256 to the existing
+#   draft. Never publishes, never creates a tag.
+# operation=publish：
+#   須另填確認字串。重新核對附件與 Tag（Tag 必須事先由維護者建立並精確指向
+#   App 來源提交），之後只把既有草稿公開為 prerelease。不建立／移動 Tag。
+#   Requires the confirmation string. Re-verifies assets and the pre-existing tag,
+#   then only flips the existing draft to a published pre-release.
+#
+# 所有寫入只使用本次 job 的 GITHUB_TOKEN；依 GitHub 文件，GITHUB_TOKEN 造成的
+# release 事件不會再建立新的 workflow run（避免連動 Build ALL）。詳見
+# docs/releases/PREVIEW_RELEASE_PROCESS.md。
+name: Yorunote Preview Release
+run-name: "Yorunote Preview Release (${{ inputs.operation }})"
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: "prepare = 只準備草稿附件 / attach assets to draft only; publish = 公開預覽版 / publish pre-release"
+        type: choice
+        required: true
+        default: prepare
+        options:
+          - prepare
+          - publish
+      confirm:
+        description: "publish 專用確認字串 / publish confirmation: PUBLISH v0.1.0-preview.1 AT 29b590b457378c16b19821f139b9bcad7d38f689"
+        type: string
+        required: false
+        default: ""
+
+permissions: {}
+
+concurrency:
+  group: yorunote-preview-release
+  cancel-in-progress: false
+
+env:
+  # 固定常數；不接受外部輸入 / fixed constants, not user inputs
+  EXPECTED_REPO: mengwen-liu/yorunote
+  EXPECTED_REPO_ID: "1421354314"
+  RELEASE_ID: "434819274"
+  TAG_NAME: v0.1.0-preview.1
+  DRAFT_TARGET_BRANCH: codex/yorunote-preview-29b590b
+  APP_SHA: 29b590b457378c16b19821f139b9bcad7d38f689
+  SOURCE_RUN_ID: "41968314599"
+  SOURCE_RUN_HEAD_SHA: 356be4942360501fcc9eab36e45577b34912f525
+  ARTIFACT_ID: "13389067967"
+  ARTIFACT_NAME: yorunote-cover-timeout-arm64-profile-apk
+  ARTIFACT_ZIP_SHA256: 9958057d90b33710c09c921809a8ec1b864af8ce40508b1ce4a7ae4ccceac275
+  APK_NAME: Yorunote_29b590b_cover_timeout_arm64_profile.apk
+  APK_SIZE: "27882063"
+  APK_SHA256: 7ad08033c204a1de62546ca588ea0c050a5ace8ec0d4945d8c7978e156f5057f
+  PUBLISH_CONFIRM: "PUBLISH v0.1.0-preview.1 AT 29b590b457378c16b19821f139b9bcad7d38f689"
+
+jobs:
+  prepare:
+    name: prepare（草稿附件 / draft assets）
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      inputs.operation == 'prepare' &&
+      github.repository_id == 1421354314 &&
+      github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OPERATION: ${{ inputs.operation }}
+    steps:
+      - name: 核對身分與來源 / verify identity and source (read-only)
+        run: |
+          set -euo pipefail
+          W="$RUNNER_TEMP/pr"; mkdir -p "$W"; echo "W=$W" >> "$GITHUB_ENV"
+          j() { python3 -I -c 'import json,sys; d=json.load(sys.stdin); print(eval(sys.argv[1],{"d":d}))' "$1"; }
+          fail() { echo "::error::$*"; exit 1; }
+
+          [ "$OPERATION" = "prepare" ] || fail "operation 不是 prepare"
+          [ "$GITHUB_REPOSITORY" = "$EXPECTED_REPO" ] || fail "repository 不符"
+          [ "$GITHUB_REPOSITORY_ID" = "$EXPECTED_REPO_ID" ] || fail "repository id 不符"
+          [ "$GITHUB_REF" = "refs/heads/master" ] || fail "必須從 master 執行"
+
+          gh api "repos/$EXPECTED_REPO" > "$W/repo.json"
+          [ "$(j 'd["id"]' < "$W/repo.json")" = "$EXPECTED_REPO_ID" ] || fail "API repo id 不符"
+          MASTER=$(gh api "repos/$EXPECTED_REPO/branches/master" --jq .commit.sha)
+          [ "$MASTER" = "$GITHUB_SHA" ] || fail "本次執行的 SHA ($GITHUB_SHA) 不是目前 master ($MASTER)"
+          echo "workflow SHA (master) = $GITHUB_SHA"
+
+          # Release 草稿狀態 / draft state
+          gh api "repos/$EXPECTED_REPO/releases/$RELEASE_ID" > "$W/release.json"
+          python3 -I - "$W/release.json" <<'PY'
+          import json, os, sys
+          d = json.load(open(sys.argv[1]))
+          e = os.environ
+          checks = {
+              "id": (d["id"], int(e["RELEASE_ID"])),
+              "tag_name": (d["tag_name"], e["TAG_NAME"]),
+              "draft": (d["draft"], True),
+              "prerelease": (d["prerelease"], True),
+              "published_at": (d.get("published_at"), None),
+              "target_commitish": (d["target_commitish"], e["DRAFT_TARGET_BRANCH"]),
+          }
+          bad = [f"{k}: got {g!r}, want {w!r}" for k, (g, w) in checks.items() if g != w]
+          for k, (g, _) in checks.items(): print(f"release.{k} = {g!r}")
+          if bad:
+              print("::error::Release 狀態不符 / unexpected release state: " + "; ".join(bad)); sys.exit(1)
+          PY
+          BR=$(gh api "repos/$EXPECTED_REPO/branches/$DRAFT_TARGET_BRANCH" --jq .commit.sha)
+          [ "$BR" = "$APP_SHA" ] || fail "草稿目標分支 head ($BR) 不是 App 來源 $APP_SHA"
+          echo "draft target branch head = $BR"
+
+          # 來源 run 與 artifact / source run and artifact
+          gh api "repos/$EXPECTED_REPO/actions/runs/$SOURCE_RUN_ID" > "$W/run.json"
+          python3 -I - "$W/run.json" <<'PY'
+          import json, os, sys
+          d = json.load(open(sys.argv[1])); e = os.environ
+          want = {"id": int(e["SOURCE_RUN_ID"]), "status": "completed", "conclusion": "success",
+                  "head_sha": e["SOURCE_RUN_HEAD_SHA"], "event": "workflow_dispatch"}
+          bad = [f"{k}: got {d.get(k)!r}" for k, v in want.items() if d.get(k) != v]
+          if d["repository"]["id"] != int(e["EXPECTED_REPO_ID"]): bad.append("run repository id")
+          for k in want: print(f"run.{k} = {d.get(k)!r}")
+          if bad: print("::error::來源 run 不符: " + "; ".join(bad)); sys.exit(1)
+          PY
+          gh api "repos/$EXPECTED_REPO/actions/artifacts/$ARTIFACT_ID" > "$W/artifact.json"
+          python3 -I - "$W/artifact.json" <<'PY'
+          import json, os, sys
+          d = json.load(open(sys.argv[1])); e = os.environ
+          bad = []
+          if d["id"] != int(e["ARTIFACT_ID"]): bad.append("id")
+          if d["name"] != e["ARTIFACT_NAME"]: bad.append(f"name {d['name']!r}")
+          if d["expired"] is not False: bad.append("expired")
+          wr = d.get("workflow_run") or {}
+          if wr.get("id") != int(e["SOURCE_RUN_ID"]): bad.append(f"workflow_run.id {wr.get('id')!r}")
+          if wr.get("repository_id") != int(e["EXPECTED_REPO_ID"]): bad.append("workflow_run.repository_id")
+          if wr.get("head_sha") != e["SOURCE_RUN_HEAD_SHA"]: bad.append("workflow_run.head_sha")
+          if d.get("digest") not in (None, "sha256:" + e["ARTIFACT_ZIP_SHA256"]): bad.append(f"digest {d.get('digest')!r}")
+          print(f"artifact {d['id']} {d['name']} expires_at={d['expires_at']} digest={d.get('digest')}")
+          if bad: print("::error::artifact 不符: " + "; ".join(bad)); sys.exit(1)
+          PY
+
+      - name: 下載並核對 artifact / download and verify artifact (no upload yet)
+        run: |
+          set -euo pipefail
+          fail() { echo "::error::$*"; exit 1; }
+          mkdir -p "$W/dl" "$W/out"
+          # GitHub 回應 302 至儲存空間；curl 跨主機轉址不會帶出 Authorization
+          curl -sS --fail --location --proto '=https' --max-time 300 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -o "$W/dl/artifact.zip" \
+            "https://api.github.com/repos/$EXPECTED_REPO/actions/artifacts/$ARTIFACT_ID/zip"
+          ZIP_SHA=$(sha256sum "$W/dl/artifact.zip" | cut -d' ' -f1)
+          echo "artifact ZIP sha256 = $ZIP_SHA"
+          [ "$ZIP_SHA" = "$ARTIFACT_ZIP_SHA256" ] || fail "artifact ZIP 雜湊不符"
+
+          # 路徑安全檢查後，只取出預期檔名；不執行任何內容
+          python3 -I - "$W/dl/artifact.zip" "$W/out" <<'PY'
+          import os, stat, sys, zipfile
+          zpath, out = sys.argv[1], sys.argv[2]
+          apk = os.environ["APK_NAME"]
+          allowed = {apk, apk + ".sha256", "verification.txt"}
+          with zipfile.ZipFile(zpath) as z:
+              infos = z.infolist()
+              names = [i.filename for i in infos]
+              print("zip entries:", names)
+              for i in infos:
+                  n = i.filename
+                  mode = (i.external_attr >> 16) & 0o170000
+                  if ("/" in n or "\\" in n or n.startswith(".") or ".." in n or i.is_dir()
+                          or mode == stat.S_IFLNK or n not in allowed):
+                      print(f"::error::ZIP 內有非預期項目: {n!r}"); sys.exit(1)
+              if len(names) != len(set(names)) or set(names) != allowed:
+                  print(f"::error::ZIP 檔案集合不符: {sorted(names)}"); sys.exit(1)
+              for n in (apk, apk + ".sha256"):
+                  with z.open(n) as src, open(os.path.join(out, "artifact_" + n), "wb") as dst:
+                      while chunk := src.read(1 << 20):
+                          dst.write(chunk)
+          PY
+          A="$W/out/artifact_$APK_NAME"
+          SIZE=$(stat -c %s "$A"); SHA=$(sha256sum "$A" | cut -d' ' -f1)
+          echo "APK size = $SIZE ; sha256 = $SHA"
+          [ "$SIZE" = "$APK_SIZE" ] || fail "APK 大小不符"
+          [ "$SHA" = "$APK_SHA256" ] || fail "APK SHA-256 不符"
+          mv "$A" "$W/out/$APK_NAME"
+          # 產生標準 sha256sum 格式雜湊檔，並與 artifact 內原檔比對
+          printf '%s  %s\n' "$APK_SHA256" "$APK_NAME" > "$W/out/$APK_NAME.sha256"
+          cmp "$W/out/$APK_NAME.sha256" "$W/out/artifact_$APK_NAME.sha256" \
+            || fail "artifact 內 .sha256 與重新產生的內容不同"
+          rm -f "$W/out/artifact_$APK_NAME.sha256"
+          (cd "$W/out" && sha256sum -c "$APK_NAME.sha256")
+          SUM_SHA=$(sha256sum "$W/out/$APK_NAME.sha256" | cut -d' ' -f1)
+          echo "SUM_SHA=$SUM_SHA" >> "$GITHUB_ENV"
+          echo ".sha256 file: $(stat -c %s "$W/out/$APK_NAME.sha256") bytes, sha256 $SUM_SHA"
+          cat "$W/out/$APK_NAME.sha256"
+
+      - name: 附加到既有草稿（不覆蓋）/ attach to existing draft (no clobber)
+        run: |
+          set -euo pipefail
+          fail() { echo "::error::$*"; exit 1; }
+          # 寫入前再讀一次草稿狀態與既有附件 / re-read right before writing
+          gh api "repos/$EXPECTED_REPO/releases/$RELEASE_ID" > "$W/release2.json"
+          python3 -I - "$W/release2.json" "$W/plan.txt" "$W/out" <<'PY'
+          import hashlib, json, os, sys, urllib.request
+          d = json.load(open(sys.argv[1])); e = os.environ; outdir = sys.argv[3]
+          if not (d["draft"] is True and d["prerelease"] is True and d.get("published_at") is None
+                  and d["tag_name"] == e["TAG_NAME"] and d["id"] == int(e["RELEASE_ID"])):
+              print("::error::寫入前草稿狀態已改變"); sys.exit(1)
+          want = {e["APK_NAME"]: (int(e["APK_SIZE"]), e["APK_SHA256"]),
+                  e["APK_NAME"] + ".sha256": (os.path.getsize(os.path.join(outdir, e["APK_NAME"] + ".sha256")), e["SUM_SHA"])}
+          plan = []
+          for a in d["assets"]:
+              if a["name"] not in want:
+                  print(f"::error::草稿有非預期附件 {a['name']!r}（id {a['id']}）；不處理"); sys.exit(1)
+          for name, (size, sha) in want.items():
+              ex = [a for a in d["assets"] if a["name"] == name]
+              if not ex:
+                  plan.append(f"upload {name}"); continue
+              a = ex[0]
+              req = urllib.request.Request(a["url"], headers={"Accept": "application/octet-stream"})
+              # 轉址到儲存空間時不得帶出 Token / do not forward the token on redirect
+              req.add_unredirected_header("Authorization", "Bearer " + e["GH_TOKEN"])
+              h = hashlib.sha256(); n = 0
+              with urllib.request.urlopen(req, timeout=300) as r:
+                  while chunk := r.read(1 << 20):
+                      h.update(chunk); n += len(chunk)
+              if a["state"] == "uploaded" and a["size"] == size and n == size and h.hexdigest() == sha:
+                  print(f"existing asset {name} (id {a['id']}) matches; skip")
+                  plan.append(f"skip {name}")
+              else:
+                  print(f"::error::既有同名附件 {name} 不符（state={a['state']} size={a['size']} sha={h.hexdigest()}）；禁止覆蓋"); sys.exit(1)
+          open(sys.argv[2], "w").write("\n".join(plan) + "\n")
+          PY
+          cat "$W/plan.txt"
+          upload() {
+            local name="$1" ctype="$2"
+            grep -qxF "upload $name" "$W/plan.txt" || { echo "skip upload $name"; return 0; }
+            local enc; enc=$(python3 -I -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1]))' "$name")
+            curl -sS --fail-with-body --proto '=https' --max-time 600 -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              -H "Content-Type: $ctype" --data-binary "@$W/out/$name" \
+              -o "$W/upload_$name.json" \
+              "https://uploads.github.com/repos/$EXPECTED_REPO/releases/$RELEASE_ID/assets?name=$enc"
+            echo "uploaded $name: id=$(python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1]))["id"])' "$W/upload_$name.json")"
+          }
+          upload "$APK_NAME" "application/vnd.android.package-archive"
+          upload "$APK_NAME.sha256" "text/plain"
+
+      - name: 回讀核對 / read back and verify
+        run: |
+          set -euo pipefail
+          gh api "repos/$EXPECTED_REPO/releases/$RELEASE_ID" > "$W/release3.json"
+          python3 -I - "$W/release3.json" "$W/out" <<'PY'
+          import hashlib, json, os, sys, urllib.request
+          d = json.load(open(sys.argv[1])); e = os.environ; outdir = sys.argv[2]
+          bad = []
+          if d["draft"] is not True: bad.append("draft")
+          if d["prerelease"] is not True: bad.append("prerelease")
+          if d.get("published_at") is not None: bad.append("published_at")
+          if d["tag_name"] != e["TAG_NAME"]: bad.append("tag_name")
+          want = {e["APK_NAME"]: (int(e["APK_SIZE"]), e["APK_SHA256"]),
+                  e["APK_NAME"] + ".sha256": (os.path.getsize(os.path.join(outdir, e["APK_NAME"] + ".sha256")), e["SUM_SHA"])}
+          names = sorted(a["name"] for a in d["assets"])
+          if names != sorted(want): bad.append(f"asset set {names}")
+          for a in d["assets"]:
+              if a["name"] not in want: continue
+              size, sha = want[a["name"]]
+              req = urllib.request.Request(a["url"], headers={"Accept": "application/octet-stream"})
+              # 轉址到儲存空間時不得帶出 Token / do not forward the token on redirect
+              req.add_unredirected_header("Authorization", "Bearer " + e["GH_TOKEN"])
+              h = hashlib.sha256(); n = 0
+              with urllib.request.urlopen(req, timeout=300) as r:
+                  while chunk := r.read(1 << 20):
+                      h.update(chunk); n += len(chunk)
+              ok = a["state"] == "uploaded" and a["size"] == size and n == size and h.hexdigest() == sha
+              print(f"asset id={a['id']} name={a['name']} state={a['state']} size={a['size']} "
+                    f"downloaded={n} sha256={h.hexdigest()} content_type={a['content_type']} -> {'OK' if ok else 'MISMATCH'}")
+              if not ok: bad.append(a["name"])
+          print(f"release draft={d['draft']} prerelease={d['prerelease']} published_at={d.get('published_at')} tag_name={d['tag_name']}")
+          if bad: print("::error::回讀不符: " + "; ".join(bad)); sys.exit(1)
+          PY
+          if gh api "repos/$EXPECTED_REPO/git/ref/tags/$TAG_NAME" >/dev/null 2>&1; then
+            echo "tag $TAG_NAME exists (informational; prepare never creates tags)"
+          else
+            echo "tag $TAG_NAME does not exist (expected before publish)"
+          fi
+          echo "prepare done: release remains a draft; no tag created."
+
+  publish:
+    name: publish（公開預覽版 / publish pre-release）
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      inputs.operation == 'publish' &&
+      inputs.confirm == 'PUBLISH v0.1.0-preview.1 AT 29b590b457378c16b19821f139b9bcad7d38f689' &&
+      github.repository_id == 1421354314 &&
+      github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OPERATION: ${{ inputs.operation }}
+      CONFIRM: ${{ inputs.confirm }}
+    steps:
+      - name: 發布前完整核對 / full pre-publish verification (read-only)
+        run: |
+          set -euo pipefail
+          fail() { echo "::error::$*"; exit 1; }
+          [ "$OPERATION" = "publish" ] || fail "operation 不是 publish"
+          [ "$CONFIRM" = "$PUBLISH_CONFIRM" ] || fail "確認字串不符"
+          [ "$GITHUB_REPOSITORY" = "$EXPECTED_REPO" ] || fail "repository 不符"
+          [ "$GITHUB_REPOSITORY_ID" = "$EXPECTED_REPO_ID" ] || fail "repository id 不符"
+          [ "$GITHUB_REF" = "refs/heads/master" ] || fail "必須從 master 執行"
+          MASTER=$(gh api "repos/$EXPECTED_REPO/branches/master" --jq .commit.sha)
+          [ "$MASTER" = "$GITHUB_SHA" ] || fail "本次執行的 SHA 不是目前 master"
+
+          # Tag 必須已存在且精確指向 App 來源；本流程不建立／移動 Tag
+          REF_JSON=$(gh api "repos/$EXPECTED_REPO/git/ref/tags/$TAG_NAME") || fail "Tag $TAG_NAME 不存在；請先由維護者建立"
+          OBJ_TYPE=$(printf '%s' "$REF_JSON" | python3 -I -c 'import json,sys; print(json.load(sys.stdin)["object"]["type"])')
+          OBJ_SHA=$(printf '%s' "$REF_JSON" | python3 -I -c 'import json,sys; print(json.load(sys.stdin)["object"]["sha"])')
+          if [ "$OBJ_TYPE" = "tag" ]; then
+            TAG_JSON=$(gh api "repos/$EXPECTED_REPO/git/tags/$OBJ_SHA")
+            OBJ_TYPE=$(printf '%s' "$TAG_JSON" | python3 -I -c 'import json,sys; print(json.load(sys.stdin)["object"]["type"])')
+            OBJ_SHA=$(printf '%s' "$TAG_JSON" | python3 -I -c 'import json,sys; print(json.load(sys.stdin)["object"]["sha"])')
+          fi
+          echo "tag $TAG_NAME -> $OBJ_TYPE $OBJ_SHA"
+          [ "$OBJ_TYPE" = "commit" ] && [ "$OBJ_SHA" = "$APP_SHA" ] || fail "Tag 未指向 $APP_SHA"
+
+          gh api "repos/$EXPECTED_REPO/releases/$RELEASE_ID" > "$RUNNER_TEMP/release.json"
+          python3 -I - "$RUNNER_TEMP/release.json" <<'PY'
+          import hashlib, json, os, sys, urllib.request
+          d = json.load(open(sys.argv[1])); e = os.environ
+          bad = []
+          if d["id"] != int(e["RELEASE_ID"]): bad.append("id")
+          if d["draft"] is not True: bad.append("draft (已非草稿)")
+          if d["prerelease"] is not True: bad.append("prerelease")
+          if d["tag_name"] != e["TAG_NAME"]: bad.append("tag_name")
+          sum_body = f"{e['APK_SHA256']}  {e['APK_NAME']}\n".encode()
+          want = {e["APK_NAME"]: (int(e["APK_SIZE"]), e["APK_SHA256"]),
+                  e["APK_NAME"] + ".sha256": (len(sum_body), hashlib.sha256(sum_body).hexdigest())}
+          names = sorted(a["name"] for a in d["assets"])
+          if names != sorted(want): bad.append(f"asset set {names}")
+          for a in d["assets"]:
+              if a["name"] not in want: continue
+              size, sha = want[a["name"]]
+              req = urllib.request.Request(a["url"], headers={"Accept": "application/octet-stream"})
+              # 轉址到儲存空間時不得帶出 Token / do not forward the token on redirect
+              req.add_unredirected_header("Authorization", "Bearer " + e["GH_TOKEN"])
+              h = hashlib.sha256(); n = 0
+              with urllib.request.urlopen(req, timeout=300) as r:
+                  while chunk := r.read(1 << 20):
+                      h.update(chunk); n += len(chunk)
+              ok = a["state"] == "uploaded" and a["size"] == size and n == size and h.hexdigest() == sha
+              print(f"asset id={a['id']} name={a['name']} size={n} sha256={h.hexdigest()} -> {'OK' if ok else 'MISMATCH'}")
+              if not ok: bad.append(a["name"])
+          if bad: print("::error::發布前核對失敗: " + "; ".join(bad)); sys.exit(1)
+          PY
+
+      - name: 公開既有草稿為 prerelease / publish existing draft as pre-release
+        run: |
+          set -euo pipefail
+          [ "$OPERATION" = "publish" ] && [ "$CONFIRM" = "$PUBLISH_CONFIRM" ] || { echo "::error::guard"; exit 1; }
+          # 只改 draft；不帶 tag_name／target_commitish，不改附件；不設為 latest
+          gh api -X PATCH "repos/$EXPECTED_REPO/releases/$RELEASE_ID" \
+            -F draft=false -F prerelease=true -f make_latest=false > "$RUNNER_TEMP/published.json"
+          python3 -I - "$RUNNER_TEMP/published.json" <<'PY'
+          import json, os, sys
+          d = json.load(open(sys.argv[1])); e = os.environ
+          print(f"release id={d['id']} draft={d['draft']} prerelease={d['prerelease']} "
+                f"tag={d['tag_name']} published_at={d['published_at']} url={d['html_url']}")
+          if d["draft"] is not False or d["prerelease"] is not True or d["tag_name"] != e["TAG_NAME"] or len(d["assets"]) != 2:
+              print("::error::發布後狀態不符"); sys.exit(1)
+          PY
+          T=$(gh api "repos/$EXPECTED_REPO/git/ref/tags/$TAG_NAME" --jq '.object.type + " " + .object.sha')
+          echo "tag after publish: $T"

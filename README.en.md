@@ -14,15 +14,19 @@ The reader and comic-source system come from upstream. This repository is a main
 
 ## Downloads and releases
 
-- [GitHub Releases](https://github.com/mengwen-liu/yorunote/releases): no Yorunote release has been published yet. An unpublished Release draft (`draft`, `prerelease`) now carries the APK and `.sha256`, re-verified by the [controlled process](docs/releases/PREVIEW_RELEASE_PROCESS.md). Drafts are visible only to maintainers and no tag exists yet, so it is **not a public download**.
-- [Development history](CHANGELOG.md) distinguishes candidate changes from published releases.
-- [Bilingual notes for the proposed first preview](docs/releases/v0.1.0-preview.1.md): an unpublished working draft.
-- The latest test APK is available from [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599): `Yorunote_29b590b_cover_timeout_arm64_profile.apk`. It is an Android ARM64 **Profile test build**.
-- The artifact expires on **2026-11-12 at 12:47 in Taiwan (UTC+8)**. GitHub sign-in is required. This is a temporary CI download, not a permanent release asset.
+**Current public preview: [v0.1.0-preview.1](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1)** (2026-11-05)
+
+[Download Android ARM64 APK](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-preview.1/Yorunote_29b590b_cover_timeout_arm64_profile.apk) · [SHA-256 checksum](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-preview.1/Yorunote_29b590b_cover_timeout_arm64_profile.apk.sha256) · [All releases](https://github.com/mengwen-liu/yorunote/releases)
+
+- This is an Android `arm64-v8a` **Profile test build**. The internal app version remains 1.6.3 (versionCode 2163), independently of the GitHub preview tag.
+- [Bilingual release notes and known limitations](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1) describe the changes, existing test results, and installation guidance.
+- APK size: 27,882,063 bytes. SHA-256: `7ad08033c204a1de62546ca588ea0c050a5ace8ec0d4945d8c7978e156f5057f`.
+- [Development history](CHANGELOG.md) preserves candidate changes and development records; [Releases](https://github.com/mengwen-liu/yorunote/releases) is the reference for published versions.
+- Original build evidence remains in [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599). Use the Release assets above for downloads.
 
 > **Installation compatibility:** the APK uses a disposable test certificate. It cannot update an installed app with the same package ID and a different signing certificate. Preserve the existing app and its data. A persistent signing and update channel has not been established.
 >
-> **Validation scope:** host tests and static APK checks have completed. Runtime acceptance of this candidate on the S25+ and Tab S11 is still pending.
+> **Validation scope:** this is a public preview, with runtime acceptance on the S25+ and Tab S11 still pending. The 350 passing tests and static APK checks are existing CI results; this publication did not re-run tests or rebuild the APK.
 
 ## Current development state
 

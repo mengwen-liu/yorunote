@@ -14,15 +14,19 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 
 ## 下載與版本
 
-- [版本發行頁面（Releases）](https://github.com/mengwen-liu/yorunote/releases)：目前尚無已發布的 Yorunote 版本。另有一份未公開的 Release 草稿（`draft`、`prerelease`），已附上經[受控流程](docs/releases/PREVIEW_RELEASE_PROCESS.md)重新核對的 APK 與 `.sha256`；草稿只有維護者看得到，尚未建立 Tag，**不是公開下載點**。
-- [開發紀錄](CHANGELOG.md)：區分候選修改與正式發行。
-- [首個預覽版的雙語發行說明工作稿](docs/releases/v0.1.0-preview.1.md)：尚未發布。
-- 最新測試 APK 位於 [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599)，檔名為 `Yorunote_29b590b_cover_timeout_arm64_profile.apk`。目前只提供 Android ARM64 Profile 測試建置。
-- 上述 artifact 的到期時間是 **2026-11-12 12:47（台灣時間，UTC+8）**；下載需登入 GitHub。它不是長期發行下載點。
+**目前公開預覽版：[v0.1.0-preview.1](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1)**（2026-11-05）
+
+[下載 Android ARM64 APK](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-preview.1/Yorunote_29b590b_cover_timeout_arm64_profile.apk) · [SHA-256 校驗檔](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-preview.1/Yorunote_29b590b_cover_timeout_arm64_profile.apk.sha256) · [所有版本](https://github.com/mengwen-liu/yorunote/releases)
+
+- 本版提供 Android `arm64-v8a` **Profile 測試建置**，App 內部版本維持 1.6.3（versionCode 2163）；GitHub 的預覽版標籤與 App 內部版本分開。
+- [雙語發行說明與已知限制](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1)包含本次修改、既有測試結果與安裝注意事項。
+- APK 大小為 27,882,063 位元組，SHA-256 為 `7ad08033c204a1de62546ca588ea0c050a5ace8ec0d4945d8c7978e156f5057f`。
+- [開發紀錄](CHANGELOG.md)保留候選修改與開發歷程；公開版本以 [Releases](https://github.com/mengwen-liu/yorunote/releases) 為準。
+- 原始建置證據保存在 [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599)；日常下載請使用上方 Release 附件。
 
 > **安裝相容性：** 測試 APK 使用一次性測試憑證。若裝置已安裝不同簽章的相同套件 App，無法直接覆蓋安裝。請保留現有 App 與資料；目前尚未建立固定簽章的更新管道。
 >
-> **驗證範圍：** 最新候選已完成主機測試與 CI 的 APK 靜態檢查；S25+／Tab S11 對這份候選的實機驗收仍待完成。
+> **驗證範圍：** 這是已公開的預覽版，尚未完成 S25+／Tab S11 實機驗收。350 項測試與 APK 靜態檢查為既有 CI 結果，本次發布沒有重跑測試或重新建置。
 
 ## 目前開發狀態
 

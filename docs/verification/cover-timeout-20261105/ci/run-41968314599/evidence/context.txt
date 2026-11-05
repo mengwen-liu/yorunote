@@ -1,0 +1,5 @@
+workflow_source_commit=356be4942360501fcc9eab36e45577b34912f525
+workflow_ref=refs/heads/claude/yorunote-cover-timeout-20261105
+run_id=41968314599 attempt=1
+runner_os=Linux arch=X64 image=ubuntu24 20261026.354.1
+documented_standard_runner_storage=14GB (informational only; gates use runtime-measured bytes)

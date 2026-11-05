@@ -1,0 +1,8 @@
+51de19d66a10c23e76e1948e96c2ff3344224a62 refs/heads/claude/ecstatic-hopper-jcj9si
+59866aa3d70314d5b6b8ccbce8eec559db0d9619 refs/heads/claude/venera-r31-backup-20261104
+7b6348a98cb85dd71c826134811fa02fcd302da8 refs/heads/claude/yorunote-arm64-ci-20261104
+2b1925e42bd47edc46d2556f6bc3fcbbfc817416 refs/heads/claude/yorunote-brand-v01-20261104
+42bdf2dc0fd980e1ad7eaf3b2b66b0aa32e00616 refs/heads/claude/yorunote-readme-20261105
+a37f5a9d65bc85590e32556c5d2806760e6b1e1c refs/heads/claude/yorunote-thumbnail-perf-20261105
+6e85d6b00c7a694c337d437e2d939fe81ceb49e7 refs/heads/claude/yorunote-thumbnail-r2-20261105
+42bdf2dc0fd980e1ad7eaf3b2b66b0aa32e00616 refs/heads/master

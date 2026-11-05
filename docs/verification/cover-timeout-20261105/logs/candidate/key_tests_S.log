@@ -1,0 +1,581 @@
+00:00 +0: loading /home/user/venera/test/network/thumbnail_cover_cancel_test.dart
+00:00 +0: /home/user/venera/test/network/thumbnail_cover_cancel_test.dart: (setUpAll)
+00:00 +0: /home/user/venera/test/network/thumbnail_cover_cancel_test.dart: A: a request cancelled before its headers is torn down when they arrive, and only then frees its slot
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:00 +1: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: A: 8 requests that never get headers are ended by the timeout, give their slots back, and a healthy request completes
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:00 +2: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: A: 8 requests that never get headers are ended by the timeout, give their slots back, and a healthy request completes
+00:00 +3: /home/user/venera/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:01 +4: /home/user/venera/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:04 +5: /home/user/venera/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:09 +6: /home/user/venera/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+00:11 +7: /home/user/venera/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+00:14 +8: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:14 +9: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:15 +10: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:15 +11: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:15 +12: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:16 +13: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:16 +14: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:16 +15: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:16 +16: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:16 +17: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:17 +18: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:18 +19: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:19 +20: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:19 +21: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:19 +22: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:19 +23: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:20 +24: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:21 +25: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:21 +26: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:21 +27: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:21 +28: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:21 +28: /home/user/venera/test/network/synthetic_source_test.dart: a broken cover is shown as an error and recovers on retry
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:21 +29: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:21 +30: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:21 +31: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:23 +32: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:23 +33: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:23 +34: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:23 +34: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:25 +35: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:25 +35: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +36: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:26 +36: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken download is not kept in the cache
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +37: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:26 +37: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken local file is reported and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +38: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:26 +38: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider the local cover fallback is used and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:26 +39: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+[31mDioException [unknown]: null
+Error: [RhttpTimeoutException] Request timed out. URL: http://127.0.0.1:38691/t/30-f-retry.png
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+F: attempts=4 elapsed=0:00:15.231404
+00:26 +40: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider the same URL with another source or cid is kept apart
+00:26 +41: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:26 +42: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:26 +43: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:26 +43: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:27 +44: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:27 +44: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:28 +45: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:28 +45: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider a local history cover is shown and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:28 +46: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:29 +47: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:29 +48: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:30 +49: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:30 +50: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:44 +50: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+00:45 +51: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:45 +52: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +53: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +54: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +55: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +56: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +57: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +58: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +59: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +60: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +61: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +62: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:46 +63: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:47 +64: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:47 +65: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:47 +66: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+00:47 +67: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+G: ended 30000 ms after arrival
+00:56 +68: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: (tearDownAll)
+00:56 +68: All tests passed!
+exit 0

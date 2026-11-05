@@ -1,0 +1,1090 @@
+00:00 +0: loading /home/user/venera/test/ui/home_visual_r3_test.dart
+00:00 +0: /home/user/venera/test/ui/home_visual_r3_test.dart: (setUpAll)
+00:00 +0: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 360.0dp
+00:00 +1: /home/user/venera/test/ui/home_page_test.dart: empty history retains history and working search callbacks
+00:00 +2: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 identical synthetic render dark 393.0dp
+00:00 +3: /home/user/venera/test/ui/home_page_test.dart: nonempty history keeps recent comic and history actions
+00:00 +4: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 360.0dp
+00:00 +5: /home/user/venera/test/ui/home_page_test.dart: empty local keeps browse, import and download actions
+00:00 +6: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 identical synthetic render light 393.0dp
+00:01 +7: /home/user/venera/test/ui/home_page_test.dart: nonempty local still displays supplied recent comics
+00:01 +8: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +9: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +10: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +11: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 first screen reading and follow-up hierarchy
+00:01 +12: /home/user/venera/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 360.0dp 2.0x
+00:01 +13: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:01 +14: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.0
+00:01 +15: /home/user/venera/test/ui/home_page_test.dart: empty sections en-US Brightness.dark 393.0dp 1.5x
+00:01 +16: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.5
+00:01 +17: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 1.5
+00:01 +18: /home/user/venera/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 1.0x
+00:01 +19: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 360.0 2.0
+00:01 +20: /home/user/venera/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 1.5x
+00:01 +21: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 1.0
+00:01 +22: /home/user/venera/test/ui/home_page_test.dart: empty sections en-US Brightness.light 360.0dp 2.0x
+00:01 +23: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 1.5
+00:01 +24: /home/user/venera/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 1.0x
+00:01 +25: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 2.0
+00:01 +26: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.dark 393.0 2.0
+00:01 +27: /home/user/venera/test/ui/home_page_test.dart: empty sections en-US Brightness.light 393.0dp 2.0x
+00:01 +28: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 1.0
+00:01 +29: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.0x
+00:01 +30: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 1.5
+00:01 +31: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 1.5x
+00:01 +32: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 360.0 2.0
+00:01 +33: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 360.0dp 2.0x
+00:01 +34: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 393.0 1.0
+00:01 +35: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.0x
+00:01 +36: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 393.0 1.5
+00:01 +37: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 1.5x
+00:01 +38: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths en-US Brightness.light 393.0 2.0
+00:01 +39: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.dark 393.0dp 2.0x
+00:01 +40: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 1.0
+00:01 +41: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 1.0
+00:01 +42: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 1.5x
+00:02 +43: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 1.5
+00:02 +44: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 360.0dp 2.0x
+00:02 +45: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 360.0 2.0
+00:02 +46: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 1.0x
+00:02 +47: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 393.0 1.0
+00:02 +48: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 1.5x
+00:02 +49: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 393.0 1.5
+00:02 +50: /home/user/venera/test/ui/home_page_test.dart: empty sections zh-TW Brightness.light 393.0dp 2.0x
+00:02 +51: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.dark 393.0 2.0
+00:02 +52: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 1.0
+00:02 +53: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 1.5
+00:02 +54: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 360.0 2.0
+00:02 +55: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 1.0
+00:02 +56: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 1.5
+00:02 +57: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 tool paths zh-TW Brightness.light 393.0 2.0
+00:02 +58: /home/user/venera/test/ui/home_visual_r3_test.dart: R3 busy sync shows real status without duplicate retry controls
+00:02 +59: /home/user/venera/test/ui/home_visual_r3_test.dart: (tearDownAll)
+00:02 +59: /home/user/venera/test/ui/home_widgets_test.dart: ReadingProgress.tryCreate rejects missing or invalid totals
+00:02 +60: /home/user/venera/test/ui/home_widgets_test.dart: ReadingProgress.tryCreate rejects missing or invalid page
+00:02 +61: /home/user/venera/test/ui/home_widgets_test.dart: ReadingProgress.tryCreate rejects a page beyond the chapter total
+00:02 +62: /home/user/venera/test/ui/home_widgets_test.dart: ReadingProgress.tryCreate computes a fraction for valid pages
+00:02 +63: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCardData.semanticsLabel joins non-empty parts
+00:02 +64: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCardData.semanticsLabel skips missing and empty parts
+00:02 +65: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCardData.semanticsLabel includes the progress label only with valid progress
+00:02 +66: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +67: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +68: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +69: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +70: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +71: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +72: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +73: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard renders supplied data
+00:03 +74: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard optional lines and progress are hidden when absent
+00:03 +75: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard shows progress only when valid
+00:03 +76: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard missing cover shows the placeholder
+00:03 +77: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard broken cover falls back to the placeholder
+00:03 +78: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard loading cover shows the placeholder
+00:03 +79: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard onTap and onAction are independent
+00:03 +80: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard long action label: no overflow at 2x text
+00:03 +81: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard action needs both label and callback
+00:03 +82: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard card without onTap does not crash on tap
+00:03 +83: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard uses ColorScheme roles (Brightness.dark)
+00:03 +84: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard uses ColorScheme roles (Brightness.light)
+00:03 +85: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 320.0dp wide
+00:03 +86: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 360.0dp wide
+00:03 +87: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.0x text, 600.0dp wide
+00:03 +88: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 320.0dp wide
+00:03 +89: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 360.0dp wide
+00:03 +90: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 1.5x text, 600.0dp wide
+00:03 +91: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 320.0dp wide
+00:04 +92: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 360.0dp wide
+00:04 +93: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard no overflow at 2.0x text, 600.0dp wide
+00:04 +94: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard exposes one labeled button with a tap action
+00:04 +95: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard is not exposed as tappable without onTap
+00:04 +96: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard meets tap target and label guidelines (Brightness.dark)
+00:04 +97: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard meets text contrast guideline (Brightness.dark)
+00:04 +98: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard meets tap target and label guidelines (Brightness.light)
+00:04 +99: /home/user/venera/test/ui/home_widgets_test.dart: RecentComicCard meets text contrast guideline (Brightness.light)
+00:04 +100: /home/user/venera/test/ui/home_widgets_test.dart: CoverImage uses the supplied size
+00:04 +101: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading renders title, count and action
+00:04 +102: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading title is a semantics header
+00:04 +103: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading hides optional parts
+00:04 +104: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading action meets the tap target guideline
+00:04 +105: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading no overflow at 2x text on a narrow width
+00:04 +106: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 240.0dp
+00:04 +107: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 1.0x, 320.0dp
+00:04 +108: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 2.0x, 240.0dp
+00:04 +109: /home/user/venera/test/ui/home_widgets_test.dart: HomeSectionHeading long action label: no overflow at 2.0x, 320.0dp
+00:04 +110: /home/user/venera/test/ui/home_widgets_test.dart: HomeEmptyState renders message and action
+00:04 +111: /home/user/venera/test/ui/home_widgets_test.dart: HomeEmptyState message only has no button
+00:04 +112: /home/user/venera/test/ui/home_widgets_test.dart: HomeEmptyState no overflow at 2x text
+00:04 +113: /home/user/venera/test/ui/home_widgets_test.dart: HomeEmptyState long CTA label: no overflow at 2x text
+00:04 +114: /home/user/venera/test/ui/home_widgets_test.dart: HomeEmptyState action meets the tap target guideline
+00:04 +115: /home/user/venera/test/ui/home_widgets_test.dart: HomeCardPlaceholder has the default footprint
+00:04 +116: /home/user/venera/test/ui/home_widgets_test.dart: HomeCardPlaceholder exposes a loading label when supplied
+00:04 +117: /home/user/venera/test/ui/home_widgets_test.dart: HomeCardPlaceholder is silent without a label
+00:04 +118: /home/user/venera/test/ui/home_visual_r4_test.dart: (setUpAll)
+00:04 +118: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.0 populated=false
+00:05 +119: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:06 +120: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=false
+00:06 +121: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 1.5 populated=false
+00:06 +122: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=true
+00:06 +123: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.0x populated=true
+00:06 +124: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=false
+00:06 +125: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=false
+00:06 +126: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 1.5x populated=true
+00:06 +127: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:06 +128: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 360.0 2.0 populated=true
+00:06 +129: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 360.0dp 2.0x populated=true
+00:06 +130: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=false
+00:07 +131: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.0x populated=false
+00:07 +132: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:07 +133: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:07 +134: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.0 populated=true
+00:07 +135: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 1.5x populated=true
+00:07 +136: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=false
+00:07 +137: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.dark 393.0dp 2.0x populated=false
+00:07 +138: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:07 +139: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:07 +140: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 1.5 populated=true
+00:07 +141: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.0x populated=true
+00:07 +142: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=false
+00:07 +143: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 1.5x populated=false
+00:07 +144: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:07 +145: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:07 +146: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 393.0 2.0 populated=true
+00:07 +147: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 360.0dp 2.0x populated=true
+00:07 +148: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=false
+00:07 +149: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.0x populated=false
+00:08 +150: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:08 +151: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.0 populated=true
+00:08 +152: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.5x populated=false
+00:08 +153: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=false
+00:08 +154: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 en-US Brightness.light 393.0dp 1.5x populated=true
+00:08 +155: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:08 +156: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:08 +157: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 1.5 populated=true
+00:08 +158: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.0x populated=false
+00:08 +159: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=false
+00:08 +160: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=false
+00:08 +161: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 1.5x populated=false
+00:08 +162: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:08 +163: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW dark 600.0 2.0 populated=true
+00:08 +164: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 360.0dp 2.0x populated=false
+00:08 +165: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=false
+00:08 +166: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=false
+00:08 +167: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.0x populated=false
+00:08 +168: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:09 +169: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:09 +170: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.0 populated=true
+00:09 +171: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 1.5x populated=true
+00:09 +172: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=false
+00:09 +173: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.dark 393.0dp 2.0x populated=false
+00:09 +174: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:09 +175: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:09 +176: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 1.5 populated=true
+00:09 +177: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.0x populated=true
+00:09 +178: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +179: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=false
+00:09 +180: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 360.0dp 1.5x populated=true
+00:09 +181: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:09 +182: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:09 +183: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 360.0 2.0 populated=true
+00:09 +184: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.0x populated=false
+00:09 +185: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=false
+00:09 +186: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 1.0x populated=true
+00:09 +187: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:09 +188: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:09 +189: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.0 populated=true
+00:09 +190: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 2.0x populated=false
+00:09 +191: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=false
+00:10 +192: /home/user/venera/test/ui/home_visual_r2_test.dart: R2 zh-TW Brightness.light 393.0dp 2.0x populated=true
+00:10 +193: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 1.5 populated=true
+00:10 +194: /home/user/venera/test/ui/home_visual_r2_test.dart: every R2 entry dispatches its supplied callback
+00:10 +195: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=false
+00:10 +196: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=false
+00:10 +197: /home/user/venera/test/ui/home_visual_r2_test.dart: original follow-up State still receives its global refresh
+00:10 +198: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=true
+00:10 +199: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=true
+00:10 +200: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 393.0 2.0 populated=true
+00:10 +201: /home/user/venera/test/ui/home_visual_r2_test.dart: synthetic visual evidence dark
+00:10 +202: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.0 populated=false
+00:10 +203: /home/user/venera/test/ui/home_visual_r2_test.dart: synthetic visual evidence light
+00:10 +204: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.0 populated=true
+00:10 +205: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.5 populated=false
+00:10 +206: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 1.5 populated=true
+00:10 +207: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 2.0 populated=false
+00:11 +208: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 2.0 populated=true
+00:11 +209: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix zh-TW light 600.0 2.0 populated=true
+00:11 +210: /home/user/venera/test/brand/yorunote_brand_test.dart: 自適應圖示各密度尺寸正確，背景為 #17283B 純色
+00:11 +211: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=false
+00:11 +212: /home/user/venera/test/brand/yorunote_brand_test.dart: 前景透明、主體位於可見區；單色層不是整張不透明方塊
+00:11 +213: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=true
+00:11 +214: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.0 populated=true
+00:11 +215: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=false
+00:11 +216: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 1.5 populated=true
+00:11 +217: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=false
+00:11 +218: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 360.0 2.0 populated=true
+00:12 +219: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: without a CancelToken a full response is read as before
+00:12 +220: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=false
+00:12 +221: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=false
+00:12 +222: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: a broken body still fails (CancelToken: false)
+00:12 +223: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=true
+00:12 +224: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 393.0 1.0 populated=true
+00:12 +225: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancel while waiting for headers: Dio gives up at once, rhttp closes the connection when the headers arrive
+00:12 +226: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancel while waiting for headers: Dio gives up at once, rhttp closes the connection when the headers arrive
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:12 +227: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancel while waiting for headers: Dio gives up at once, rhttp closes the connection when the headers arrive
+00:12 +228: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancel while waiting for headers: Dio gives up at once, rhttp closes the connection when the headers arrive
+00:12 +229: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancel while waiting for headers: Dio gives up at once, rhttp closes the connection when the headers arrive
+00:12 +230: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.0 populated=false
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:12 +231: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancel inside the body closes the connection, no stray error
+00:13 +232: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancel inside the body closes the connection, no stray error
+00:13 +233: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancel inside the body closes the connection, no stray error
+00:13 +234: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US dark 600.0 1.5 populated=true
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:13 +235: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:13 +236: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:13 +237: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:13 +238: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:13 +239: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:13 +240: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:13 +241: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:14 +242: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:14 +243: /home/user/venera/test/network/rhttp_adapter_cancel_test.dart: cancelling right as the headers arrive never aborts the process
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:14 +244: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=false
+00:14 +245: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.0 populated=true
+00:14 +246: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=false
+00:14 +247: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 1.5 populated=true
+00:14 +248: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=false
+00:14 +249: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 393.0 2.0 populated=true
+00:14 +250: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 matrix en-US light 600.0 1.0 populated=false
+00:14 +251: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +252: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +253: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +254: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +255: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +256: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:15 +257: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:16 +258: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:16 +259: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:16 +260: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:16 +261: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:16 +262: /home/user/venera/test/network/reader_image_cache_test.dart: a valid cache hit is shown without requests
+00:16 +263: /home/user/venera/test/ui/home_visual_r4_test.dart: R4 two-column tools fall back and long titles remain semantic
+00:16 +264: /home/user/venera/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +265: /home/user/venera/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +266: /home/user/venera/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +267: /home/user/venera/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +268: /home/user/venera/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +269: /home/user/venera/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:16 +270: /home/user/venera/test/network/reader_image_cache_test.dart: a miss, an expired entry and parallel misses each request once
+00:17 +271: /home/user/venera/test/network/reader_image_cache_test.dart: an undecodable cache entry is invalidated, other entries kept
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:17 +272: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:17 +273: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +274: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +275: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +276: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +277: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +278: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +279: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:17 +280: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an undecodable cache entry
+00:18 +281: /home/user/venera/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+00:18 +281: /home/user/venera/test/network/reader_image_cache_test.dart: an empty cache entry is invalidated, other entries kept
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:18 +282: /home/user/venera/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+00:18 +282: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:18 +282: /home/user/venera/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a direct cache write in the same directory is kept
+PATH_REUSE before the broken file is removed / a direct cache write: same_directory=true same_path=false
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_path_reusePEQKPN/cache/cache/1/5ee981d71a925e0299a2d423f78fcde3-1793852902504761-0' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:119:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:18 +283: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:18 +283: /home/user/venera/test/network/reader_image_cache_path_reuse_test.dart: before the broken file is removed: a new request in the same directory is kept
+PATH_REUSE before the broken file is removed / a new request: same_directory=true same_path=false
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_path_reusePEQKPN/cache/cache/2/a402900ae863f451740551b135174f17-1793852902893756-101' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:119:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:18 +284: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:19 +284: /home/user/venera/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a direct cache write in the same directory is kept
+PATH_REUSE after the broken file is removed / a direct cache write: same_directory=true same_path=false
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:19 +285: /home/user/venera/test/network/reader_image_cache_test.dart: one retry recovers from an empty cache entry
+00:19 +286: /home/user/venera/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a new request in the same directory is kept
+00:19 +286: /home/user/venera/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mPathNotFoundException: Cannot delete file, path = '/tmp/venera_reader_cacheFKKSJU/cache/cache/14/f13d79c225111f349ae509163fa60fc3-1793852903658363-13' (OS Error: No such file or directory, errno = 2)
+#0      _checkForErrorResponse (dart:io/common.dart:58:9)
+#1      _File._delete.<anonymous closure> (dart:io/file_impl.dart:349:9)
+#2      StackZoneSpecification._registerUnaryCallback.<anonymous closure>.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:36)
+#3      StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+#4      StackZoneSpecification._registerUnaryCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:127:24)
+#5      _rootRunUnary (dart:async/zone_root.dart:48:47)
+#6      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+<asynchronous suspension>
+#7      CacheManager.delete (package:venera/foundation/cache_manager.dart:274:7)
+<asynchronous suspension>
+#8      ReaderImageProvider.onInvalidImageData (package:venera/foundation/image_provider/reader_image.dart:161:7)
+<asynchronous suspension>
+#9      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:119:9)
+<asynchronous suspension>
+#10     MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:19 +286: /home/user/venera/test/network/reader_image_cache_path_reuse_test.dart: after the broken file is removed: a new request in the same directory is kept
+PATH_REUSE after the broken file is removed / a new request: same_directory=true same_path=false
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:19 +287: /home/user/venera/test/network/reader_image_cache_test.dart: both resize settings recover with one shared request
+00:20 +288: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: (setUpAll)
+00:20 +288: /home/user/venera/test/network/reader_image_cache_test.dart: other providers keep the default invalid-data handling
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:20 +289: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:20 +290: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:20 +291: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:20 +292: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: at most 8 cover requests run at the same time
+00:21 +293: /home/user/venera/test/network/synthetic_source_test.dart: the source is imported and runs in QuickJS
+00:21 +294: /home/user/venera/test/network/synthetic_source_test.dart: the source is imported and runs in QuickJS
+00:21 +295: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: cancelled loads give their slots back
+00:21 +296: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: cancelled loads give their slots back
+00:21 +297: /home/user/venera/test/network/synthetic_source_test.dart: onThumbnailLoad onResponse decodes an encoded cover
+00:21 +298: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: a shared request survives when one of its loads is cancelled
+00:21 +299: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: a shared request survives when one of its loads is cancelled
+00:22 +300: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: a shared request survives when one of its loads is cancelled
+00:22 +300: /home/user/venera/test/network/synthetic_source_test.dart: a broken cover is shown as an error and recovers on retry
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:22 +301: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: a shared request survives when one of its loads is cancelled
+00:22 +302: /home/user/venera/test/network/synthetic_source_test.dart: paused covers do not block cached covers
+00:22 +303: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:22 +304: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:23 +305: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:23 +306: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:23 +307: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:23 +308: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:25 +309: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:25 +310: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:29 +311: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:33 +312: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+00:35 +313: /home/user/venera/test/network/thumbnail_cover_queue_test.dart: HTTP errors and broken responses release slots, cache nothing
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 403 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 403 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 404 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 404 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+[31m[RhttpUnknownException] error decoding response body
+
+Stack backtrace:
+   0: <unknown>
+   1: <unknown>
+   2: <unknown>
+   3: <unknown>
+   4: <unknown>
+   5: <unknown>
+   6: <unknown>
+   7: <unknown>
+   8: start_thread
+             at ./nptl/pthread_create.c:447:8
+   9: clone3
+             at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+[0m
+00:36 +314: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:36 +315: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:38 +316: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:38 +317: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:38 +318: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:38 +318: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:39 +319: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:39 +319: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:41 +320: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:41 +320: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken download is not kept in the cache
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:41 +321: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:41 +321: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider a broken local file is reported and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:41 +322: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:41 +322: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: CachedImageProvider the local cover fallback is used and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:41 +323: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:41 +324: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:41 +325: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:41 +326: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:41 +326: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an undecodable entry is invalidated alone and a retry recovers
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:42 +327: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:42 +327: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider an empty entry is invalidated alone and a retry recovers
+[31mException: Empty image data
+#0      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:109:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:43 +328: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:43 +328: /home/user/venera/test/network/thumbnail_cover_cache_test.dart: HistoryImageProvider a local history cover is shown and never deleted
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:43 +329: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:43 +330: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:43 +331: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:43 +332: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:44 +332: /home/user/venera/test/network/reader_image_cache_race_test.dart: before delete: a direct cache write keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:44 +333: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:44 +333: /home/user/venera/test/network/reader_image_cache_race_test.dart: delete started: a direct cache write keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:44 +334: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:45 +334: /home/user/venera/test/network/reader_image_cache_race_test.dart: before delete: a new request keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:45 +335: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+00:45 +335: /home/user/venera/test/network/reader_image_cache_race_test.dart: delete started: a new request keeps its valid image
+[31mException: Invalid image data
+#0      _futurize (dart:ui/painting.dart:8570:5)
+#1      ImageDescriptor.encoded (dart:ui/painting.dart:8351:12)
+#2      instantiateImageCodecWithSize (dart:ui/painting.dart:2575:60)
+#3      PaintingBinding.instantiateImageCodecWithSize (package:flutter/src/painting/binding.dart:147:15)
+#4      BaseImageProvider._loadBufferAsync (package:venera/foundation/image_provider/base_image_provider.dart:114:28)
+<asynchronous suspension>
+#5      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1021:3)
+<asynchronous suspension>
+[0m
+00:45 +336: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:46 +337: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:46 +338: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+[31mDioException [unknown]: null
+Error: [RhttpTimeoutException] Request timed out. URL: http://127.0.0.1:45995/t/30-f-retry.png
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+F: attempts=4 elapsed=0:00:15.237629
+00:50 +339: /home/user/venera/test/network/thumbnail_cover_cancel_test.dart: C: queued cancel, error and success return each slot once
+[31mDioException [bad response]: This exception was thrown because the response has a status code of 500 and RequestOptions.validateStatus was configured to throw for this status code.
+The status code of 500 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+01:00 +340: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+01:00 +341: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+01:00 +342: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+01:00 +343: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+01:01 +344: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+01:01 +345: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+01:01 +346: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+01:01 +347: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+01:01 +347: /home/user/venera/test/channel_test.dart: 1-1-3
+push 1
+push 2
+pop 1
+push 3
+pop 2
+push done
+pop 3
+01:01 +348: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+01:01 +349: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: G: with the production setting a silent request ends after about 30 s
+G: ended 30001 ms after arrival
+01:20 +350: /home/user/venera/test/network/thumbnail_cover_timeout_test.dart: (tearDownAll)
+01:20 +350: All tests passed!
+exit 0

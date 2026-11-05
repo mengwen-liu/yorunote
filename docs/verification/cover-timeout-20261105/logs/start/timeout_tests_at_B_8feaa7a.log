@@ -1,0 +1,284 @@
+00:00 +0: loading /opt/cov/base/test/network/thumbnail_cover_timeout_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: A: 8 requests that never get headers are ended by the timeout, give their slots back, and a healthy request completes
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+still open: /t/0-a-stuck-0.png
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.closedByClient.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:97:41)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:141:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:125:7)
+<asynchronous suspension>
+#10     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#11     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:15 +0 -1: A: 8 requests that never get headers are ended by the timeout, give their slots back, and a healthy request completes [E]
+  Test failed. See exception logs above.
+  The test description was: A: 8 requests that never get headers are ended by the timeout, give their slots back, and a healthy request completes
+  
+00:15 +0 -1: B: headers arrived but the body stalls: ended by the timeout, slot returned, nothing cached, and a retry succeeds
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+still open: /t/9-b-stall.png
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.closedByClient.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:97:41)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:170:9)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:160:7)
+<asynchronous suspension>
+#10     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#11     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:30 +0 -2: B: headers arrived but the body stalls: ended by the timeout, slot returned, nothing cached, and a retry succeeds [E]
+  Test failed. See exception logs above.
+  The test description was: B: headers arrived but the body stalls: ended by the timeout, slot returned, nothing cached, and a retry succeeds
+  
+00:30 +0 -2: C: headers arriving around the deadline: every request ends, no crash, each slot returned exactly once (probabilistic ordering probe)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+still open: race offset -60
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.closedByClient.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:97:41)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:209:11)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:196:7)
+<asynchronous suspension>
+#10     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#11     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:46 +0 -3: C: headers arriving around the deadline: every request ends, no crash, each slot returned exactly once (probabilistic ordering probe) [E]
+  Test failed. See exception logs above.
+  The test description was: C: headers arriving around the deadline: every request ends, no crash, each slot returned exactly once (probabilistic ordering probe)
+  
+00:46 +0 -3: D: cancel racing with the timeout: no panic, connection ended, slots back (probabilistic ordering probe)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+still open: RawMode.holdHeaders -80
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.closedByClient.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:97:41)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:250:15)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:247:13)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:115:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:223:7)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+still open: RawMode.holdHeaders -20
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.closedByClient.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:97:41)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:250:15)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:247:13)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:115:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:223:7)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+still open: RawMode.holdHeaders 0
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.closedByClient.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:97:41)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:250:15)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:247:13)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:115:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:223:7)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+still open: RawMode.holdHeaders 20
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.closedByClient.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:97:41)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:250:15)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:247:13)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:115:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:223:7)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+still open: RawMode.holdHeaders 80
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.closedByClient.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:97:41)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:250:15)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:247:13)
+<asynchronous suspension>
+#10     main.ignoringStopErrors (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:115:7)
+<asynchronous suspension>
+#11     main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:223:7)
+<asynchronous suspension>
+#12     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#13     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (5) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:05 +0 -4: D: cancel racing with the timeout: no panic, connection ended, slots back (probabilistic ordering probe) [E]
+  Test failed. See exception logs above.
+  The test description was: D: cancel racing with the timeout: no panic, connection ended, slots back (probabilistic ordering probe)
+  
+02:05 +0 -4: E: normal, shared and cached covers and non-cover requests behave as before
+02:07 +1 -4: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TimeoutException was thrown while running async test code:
+TimeoutException after 0:01:00.000000: Future not completed
+
+When the exception was thrown, this was the stack:
+<asynchronous suspension>
+#1      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:318:23)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:305:7)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+03:07 +1 -5: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits) [E]
+  Test failed. See exception logs above.
+  The test description was: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+  
+03:07 +1 -5: G: with the production setting a silent request ends after about 30 s
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown while running async test code:
+not ended within 50 s
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:352:32)
+<asynchronous suspension>
+#7      main.<anonymous closure>.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:346:9)
+<asynchronous suspension>
+<asynchronous suspension>
+#9      main.<anonymous closure> (file:///opt/cov/base/test/network/thumbnail_cover_timeout_test.dart:338:7)
+<asynchronous suspension>
+#10     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#11     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+03:57 +1 -6: G: with the production setting a silent request ends after about 30 s [E]
+  Test failed. See exception logs above.
+  The test description was: G: with the production setting a silent request ends after about 30 s
+  
+03:57 +1 -6: (tearDownAll)
+03:57 +1 -6: Some tests failed.
+exit 1

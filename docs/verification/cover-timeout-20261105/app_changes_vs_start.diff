@@ -1,0 +1,93 @@
+diff --git a/lib/network/app_dio.dart b/lib/network/app_dio.dart
+index f732ead..5826bc6 100644
+--- a/lib/network/app_dio.dart
++++ b/lib/network/app_dio.dart
+@@ -175,7 +175,24 @@ class AppDio with DioMixin {
+ }
+ 
+ class RHttpAdapter implements HttpClientAdapter {
+-  Future<rhttp.ClientSettings> get settings async {
++  /// [RequestOptions.extra] key that asks for a total timeout (a [Duration])
++  /// on each HTTP attempt of that request.
++  ///
++  /// It is rhttp's `TimeoutSettings.timeout`: in rhttp 0.15.1 it is passed to
++  /// reqwest's client `timeout`, which runs from the start of the attempt
++  /// (DNS, connection, TLS, redirects, request, waiting for the headers) until
++  /// the response body has been read completely. When it expires before the
++  /// headers, rhttp reports a timeout error and the connection is closed by
++  /// Rust itself; after the headers, the body stream fails with an error. It
++  /// does not include queueing, retries made by callers, or the time the
++  /// caller takes to consume the body after it has been received.
++  ///
++  /// Requests without this key keep the old behaviour (no total timeout).
++  static const totalTimeoutKey = 'rhttpTotalTimeout';
++
++  Future<rhttp.ClientSettings> get settings => _buildSettings(null);
++
++  Future<rhttp.ClientSettings> _buildSettings(Duration? totalTimeout) async {
+     var proxy = await getProxy();
+ 
+     return rhttp.ClientSettings(
+@@ -183,10 +200,11 @@ class RHttpAdapter implements HttpClientAdapter {
+           ? const rhttp.ProxySettings.noProxy()
+           : rhttp.ProxySettings.proxy(proxy),
+       redirectSettings: const rhttp.RedirectSettings.limited(5),
+-      timeoutSettings: const rhttp.TimeoutSettings(
+-        connectTimeout: Duration(seconds: 15),
+-        keepAliveTimeout: Duration(seconds: 60),
+-        keepAlivePing: Duration(seconds: 30),
++      timeoutSettings: rhttp.TimeoutSettings(
++        timeout: totalTimeout,
++        connectTimeout: const Duration(seconds: 15),
++        keepAliveTimeout: const Duration(seconds: 60),
++        keepAlivePing: const Duration(seconds: 30),
+       ),
+       throwOnStatusCode: false,
+       dnsSettings: rhttp.DnsSettings.static(overrides: _getOverrides()),
+@@ -263,10 +281,15 @@ class RHttpAdapter implements HttpClientAdapter {
+       );
+     }
+ 
++    final requested = options.extra[totalTimeoutKey];
++    final totalTimeout = requested is Duration && requested > Duration.zero
++        ? requested
++        : null;
++
+     var res = await rhttp.Rhttp.request(
+       method: rhttp.HttpMethod(options.method),
+       url: options.uri.toString(),
+-      settings: await settings,
++      settings: await _buildSettings(totalTimeout),
+       expectBody: rhttp.HttpExpectBody.stream,
+       body: requestStream == null ? null : rhttp.HttpBody.stream(requestStream),
+       cancelToken: cancelToken,
+diff --git a/lib/network/images.dart b/lib/network/images.dart
+index 7451969..a253640 100644
+--- a/lib/network/images.dart
++++ b/lib/network/images.dart
+@@ -107,6 +107,17 @@ abstract class ImageDownloader {
+   /// Disk cache hits and local files never wait for it.
+   static final coverRequestLimiter = RequestLimiter(maxCoverRequests);
+ 
++  /// Total timeout of each HTTP attempt of a cover request (see
++  /// [RHttpAdapter.totalTimeoutKey] for exactly what it covers). It applies to
++  /// the cover image request of [loadCoverThumbnail] only; it is not a limit
++  /// for the whole load (queueing, source lookup and the retries of the image
++  /// provider each come on top of it).
++  static const defaultCoverRequestTimeout = Duration(seconds: 30);
++
++  /// The timeout used for cover requests; tests may shorten it.
++  @visibleForTesting
++  static Duration coverRequestTimeout = defaultCoverRequestTimeout;
++
+   /// Test-only timing probe for cover network loads: called with
+   /// `enqueue` (before waiting for a slot of [coverRequestLimiter]),
+   /// `granted` (slot obtained) and `request` (request handed to Dio), and the
+@@ -314,6 +325,7 @@ abstract class ImageDownloader {
+           headers: Map<String, dynamic>.from(configs['headers']),
+           method: configs['method'] ?? 'GET',
+           responseType: ResponseType.stream,
++          extra: {RHttpAdapter.totalTimeoutKey: coverRequestTimeout},
+         ),
+       );
+ 

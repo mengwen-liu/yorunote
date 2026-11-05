@@ -1,0 +1,8 @@
+info|deprecated_member_use|lib/components/image.dart:115:20
+info|deprecated_member_use|lib/pages/reader/comic_image.dart:116:20
+info|deprecated_member_use|lib/utils/io.dart:410:15
+info|deprecated_member_use|lib/utils/io.dart:410:9
+info|deprecated_member_use|lib/utils/io.dart:418:15
+info|deprecated_member_use|lib/utils/io.dart:418:9
+info|deprecated_member_use|lib/utils/io.dart:423:13
+info|deprecated_member_use|lib/utils/io.dart:423:7

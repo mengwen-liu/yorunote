@@ -1,0 +1,25 @@
+00:00 +0: loading /home/user/venera/test/network/thumbnail_cover_timeout_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: A: 8 requests that never get headers are ended by the timeout, give their slots back, and a healthy request completes
+00:00 +1: B: headers arrived but the body stalls: ended by the timeout, slot returned, nothing cached, and a retry succeeds
+00:01 +2: C: headers arriving around the deadline: every request ends, no crash, each slot returned exactly once (probabilistic ordering probe)
+00:04 +3: D: cancel racing with the timeout: no panic, connection ended, slots back (probabilistic ordering probe)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+Shell: Fail to post message to Dart. (If happen during Flutter hot restart, this may not be a problem.)
+00:09 +4: E: normal, shared and cached covers and non-cover requests behave as before
+00:11 +5: F: the image provider keeps its retries; each attempt gets its own timeout (4 attempts, 2 s + 4 s + 8 s waits)
+[31mDioException [unknown]: null
+Error: [RhttpTimeoutException] Request timed out. URL: http://127.0.0.1:33913/t/30-f-retry.png
+#0      DioMixin.fetch (package:dio/src/dio_mixin.dart:523:7)
+<asynchronous suspension>
+#1      ImageDownloader._fetchCover (package:venera/network/images.dart:341:15)
+<asynchronous suspension>
+#2      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#3      Future.any.onValue (dart:async/future.dart:637:5)
+<asynchronous suspension>
+[0m
+00:26 +6: G: with the production setting a silent request ends after about 30 s
+00:56 +7: (tearDownAll)
+00:56 +7: All tests passed!
+exit 0

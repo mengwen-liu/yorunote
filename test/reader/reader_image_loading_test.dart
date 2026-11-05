@@ -25,9 +25,7 @@ Widget _viewer(
   required bool changed,
 }) {
   return MaterialApp(
-    theme: ThemeData(
-      brightness: changed ? Brightness.dark : Brightness.light,
-    ),
+    theme: ThemeData(brightness: changed ? Brightness.dark : Brightness.light),
     home: MediaQuery(
       data: MediaQueryData(
         size: changed ? const Size(1000, 700) : const Size(900, 600),
@@ -56,14 +54,10 @@ void main() {
     tester,
   ) async {
     final provider = MemoryImage(pagePng(1));
-    await tester.pumpWidget(
-      _viewer(provider, legacy: true, changed: false),
-    );
+    await tester.pumpWidget(_viewer(provider, legacy: true, changed: false));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await _waitForPage(tester);
-    await tester.pumpWidget(
-      _viewer(provider, legacy: true, changed: true),
-    );
+    await tester.pumpWidget(_viewer(provider, legacy: true, changed: true));
     await tester.pump(const Duration(milliseconds: 300));
     expect(_hasPage(tester), isFalse);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -74,14 +68,10 @@ void main() {
     tester,
   ) async {
     final provider = MemoryImage(pagePng(2));
-    await tester.pumpWidget(
-      _viewer(provider, legacy: false, changed: false),
-    );
+    await tester.pumpWidget(_viewer(provider, legacy: false, changed: false));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await _waitForPage(tester);
-    await tester.pumpWidget(
-      _viewer(provider, legacy: false, changed: true),
-    );
+    await tester.pumpWidget(_viewer(provider, legacy: false, changed: true));
     await tester.pump(const Duration(milliseconds: 300));
     expect(_hasPage(tester), isTrue);
     expect(find.byType(CircularProgressIndicator), findsNothing);

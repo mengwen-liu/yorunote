@@ -155,6 +155,8 @@ Future<void> _seed() async {
   _require(_widgets().whereType<MaterialApp>().any(
     (w) => w.title == 'Yorunote' && w.locale?.countryCode == 'TW',
   ), 'App title or Traditional Chinese locale was not applied');
+  _require(_widgets().whereType<Text>().any((w) => w.data == 'Yorunote'),
+      'Custom Windows title bar still lacks the Yorunote name');
   _record('traditional_chinese_home_and_title');
 
   final template = await File(

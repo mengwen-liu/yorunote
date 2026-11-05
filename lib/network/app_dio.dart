@@ -175,7 +175,24 @@ class AppDio with DioMixin {
 }
 
 class RHttpAdapter implements HttpClientAdapter {
-  Future<rhttp.ClientSettings> get settings async {
+  /// [RequestOptions.extra] key that asks for a total timeout (a [Duration])
+  /// on each HTTP attempt of that request.
+  ///
+  /// It is rhttp's `TimeoutSettings.timeout`: in rhttp 0.15.1 it is passed to
+  /// reqwest's client `timeout`, which runs from the start of the attempt
+  /// (DNS, connection, TLS, redirects, request, waiting for the headers) until
+  /// the response body has been read completely. When it expires before the
+  /// headers, rhttp reports a timeout error and the connection is closed by
+  /// Rust itself; after the headers, the body stream fails with an error. It
+  /// does not include queueing, retries made by callers, or the time the
+  /// caller takes to consume the body after it has been received.
+  ///
+  /// Requests without this key keep the old behaviour (no total timeout).
+  static const totalTimeoutKey = 'rhttpTotalTimeout';
+
+  Future<rhttp.ClientSettings> get settings => _buildSettings(null);
+
+  Future<rhttp.ClientSettings> _buildSettings(Duration? totalTimeout) async {
     var proxy = await getProxy();
 
     return rhttp.ClientSettings(
@@ -183,10 +200,11 @@ class RHttpAdapter implements HttpClientAdapter {
           ? const rhttp.ProxySettings.noProxy()
           : rhttp.ProxySettings.proxy(proxy),
       redirectSettings: const rhttp.RedirectSettings.limited(5),
-      timeoutSettings: const rhttp.TimeoutSettings(
-        connectTimeout: Duration(seconds: 15),
-        keepAliveTimeout: Duration(seconds: 60),
-        keepAlivePing: Duration(seconds: 30),
+      timeoutSettings: rhttp.TimeoutSettings(
+        timeout: totalTimeout,
+        connectTimeout: const Duration(seconds: 15),
+        keepAliveTimeout: const Duration(seconds: 60),
+        keepAlivePing: const Duration(seconds: 30),
       ),
       throwOnStatusCode: false,
       dnsSettings: rhttp.DnsSettings.static(overrides: _getOverrides()),
@@ -263,10 +281,15 @@ class RHttpAdapter implements HttpClientAdapter {
       );
     }
 
+    final requested = options.extra[totalTimeoutKey];
+    final totalTimeout = requested is Duration && requested > Duration.zero
+        ? requested
+        : null;
+
     var res = await rhttp.Rhttp.request(
       method: rhttp.HttpMethod(options.method),
       url: options.uri.toString(),
-      settings: await settings,
+      settings: await _buildSettings(totalTimeout),
       expectBody: rhttp.HttpExpectBody.stream,
       body: requestStream == null ? null : rhttp.HttpBody.stream(requestStream),
       cancelToken: cancelToken,

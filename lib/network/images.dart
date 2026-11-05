@@ -107,6 +107,17 @@ abstract class ImageDownloader {
   /// Disk cache hits and local files never wait for it.
   static final coverRequestLimiter = RequestLimiter(maxCoverRequests);
 
+  /// Total timeout of each HTTP attempt of a cover request (see
+  /// [RHttpAdapter.totalTimeoutKey] for exactly what it covers). It applies to
+  /// the cover image request of [loadCoverThumbnail] only; it is not a limit
+  /// for the whole load (queueing, source lookup and the retries of the image
+  /// provider each come on top of it).
+  static const defaultCoverRequestTimeout = Duration(seconds: 30);
+
+  /// The timeout used for cover requests; tests may shorten it.
+  @visibleForTesting
+  static Duration coverRequestTimeout = defaultCoverRequestTimeout;
+
   /// Test-only timing probe for cover network loads: called with
   /// `enqueue` (before waiting for a slot of [coverRequestLimiter]),
   /// `granted` (slot obtained) and `request` (request handed to Dio), and the
@@ -314,6 +325,7 @@ abstract class ImageDownloader {
           headers: Map<String, dynamic>.from(configs['headers']),
           method: configs['method'] ?? 'GET',
           responseType: ResponseType.stream,
+          extra: {RHttpAdapter.totalTimeoutKey: coverRequestTimeout},
         ),
       );
 

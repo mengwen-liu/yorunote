@@ -9,7 +9,6 @@
 // The "race" tests probe orderings with jitter around the deadline; passing
 // them is not a proof that no race exists.
 
-import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show FlutterError;
@@ -32,7 +31,10 @@ const _short = Duration(milliseconds: 400);
 const _bound = Duration(seconds: 15);
 
 /// Sets the cover request timeout for a test; null restores the default.
-void setCoverRequestTimeout(Duration? timeout) {}
+void setCoverRequestTimeout(Duration? timeout) {
+  ImageDownloader.coverRequestTimeout =
+      timeout ?? ImageDownloader.defaultCoverRequestTimeout;
+}
 
 void main() {
   final unused = CoverServer();
@@ -254,6 +256,11 @@ void main() {
             });
           }
         }
+        // Stop errors of cancelled loads are reported a little later; they
+        // must not leak into the next test.
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 300)),
+        );
       });
     },
     skip: !hasNativeHttp,
@@ -264,35 +271,37 @@ void main() {
     'E: normal, shared and cached covers and non-cover requests behave as '
     'before',
     (tester) async {
-      await tester.runAsync(() async {
-        await reset();
-        // Normal request, two consumers share one request.
-        final p = path('e-normal', shade: 40);
-        final results = await Future.wait([loadBytes(p), loadBytes(p)]);
-        expect(results[0], server.images[p]);
-        expect(results[1], server.images[p]);
-        expect(server.count(p), 1);
-        // Cache hit: no request, no slot.
-        expect(await loadBytes(p), server.images[p]);
-        expect(server.count(p), 1);
-        await eventually(() => activeSlots() == 0, 'slots returned');
+      await ignoringStopErrors(() async {
+        await tester.runAsync(() async {
+          await reset();
+          // Normal request, two consumers share one request.
+          final p = path('e-normal', shade: 40);
+          final results = await Future.wait([loadBytes(p), loadBytes(p)]);
+          expect(results[0], server.images[p]);
+          expect(results[1], server.images[p]);
+          expect(server.count(p), 1);
+          // Cache hit: no request, no slot.
+          expect(await loadBytes(p), server.images[p]);
+          expect(server.count(p), 1);
+          await eventually(() => activeSlots() == 0, 'slots returned');
 
-        // A non-cover request (no timeout option) is not ended by the short
-        // cover timeout: it stays open well past it and can still finish.
-        final slow = path('e-noncover', mode: RawMode.holdHeaders, shade: 50);
-        final dio = AppDio(BaseOptions(responseType: ResponseType.stream));
-        final response = dio.request<ResponseBody>(server.url(slow));
-        await server.until(() => server.count(slow) == 1);
-        final h = server.heldFor(slow).single;
-        await Future<void>.delayed(_short * 4);
-        expect(h.isClosedByClient, isFalse);
-        await h.release();
-        final body = await response.timeout(_bound);
-        final bytes = BytesBuilder();
-        await for (final c in body.data!.stream) {
-          bytes.add(c);
-        }
-        expect(bytes.takeBytes(), server.images[slow]);
+          // A non-cover request (no timeout option) is not ended by the short
+          // cover timeout: it stays open well past it and can still finish.
+          final slow = path('e-noncover', mode: RawMode.holdHeaders, shade: 50);
+          final dio = AppDio(BaseOptions(responseType: ResponseType.stream));
+          final response = dio.request<ResponseBody>(server.url(slow));
+          await server.until(() => server.count(slow) == 1);
+          final h = server.heldFor(slow).single;
+          await Future<void>.delayed(_short * 4);
+          expect(h.isClosedByClient, isFalse);
+          await h.release();
+          final body = await response.timeout(_bound);
+          final bytes = BytesBuilder();
+          await for (final c in body.data!.stream) {
+            bytes.add(c);
+          }
+          expect(bytes.takeBytes(), server.images[slow]);
+        });
       });
     },
     skip: !hasNativeHttp,
@@ -302,30 +311,34 @@ void main() {
     'F: the image provider keeps its retries; each attempt gets its own '
     'timeout (4 attempts, 2 s + 4 s + 8 s waits)',
     (tester) async {
-      await tester.runAsync(() async {
-        await reset();
-        setCoverRequestTimeout(const Duration(milliseconds: 300));
-        final p = path('f-retry', mode: RawMode.holdHeaders);
-        final sw = Stopwatch()..start();
-        final r = Resolution(
-          CachedImageProvider(
-            server.url(p),
-            sourceKey: src.key,
-            cid: 'f',
-            fallbackToLocalCover: false,
-          ),
-        );
-        final error = await r.result;
-        r.dispose();
-        sw.stop();
-        expect(error, isNotNull);
-        expect(server.count(p), 4, reason: 'first attempt + 3 retries');
-        expect(sw.elapsed, greaterThan(const Duration(seconds: 14)));
-        expect(sw.elapsed, lessThan(const Duration(seconds: 30)));
-        for (final h in server.heldFor(p)) {
-          expect(h.isClosedByClient, isTrue);
-        }
-        await eventually(() => activeSlots() == 0, 'slot returned');
+      await ignoringStopErrors(() async {
+        await tester.runAsync(() async {
+          await reset();
+          setCoverRequestTimeout(const Duration(milliseconds: 300));
+          final p = path('f-retry', mode: RawMode.holdHeaders);
+          final sw = Stopwatch()..start();
+          final r = Resolution(
+            CachedImageProvider(
+              server.url(p),
+              sourceKey: src.key,
+              cid: 'f',
+              fallbackToLocalCover: false,
+            ),
+          );
+          final error = await r.result;
+          r.dispose();
+          sw.stop();
+          // ignore: avoid_print
+          print('F: attempts=${server.count(p)} elapsed=${sw.elapsed}');
+          expect(error, isNotNull);
+          expect(server.count(p), 4, reason: 'first attempt + 3 retries');
+          expect(sw.elapsed, greaterThan(const Duration(seconds: 14)));
+          expect(sw.elapsed, lessThan(const Duration(seconds: 30)));
+          for (final h in server.heldFor(p)) {
+            expect(h.isClosedByClient, isTrue);
+          }
+          await eventually(() => activeSlots() == 0, 'slot returned');
+        });
       });
     },
     skip: !hasNativeHttp,
@@ -335,27 +348,35 @@ void main() {
   testWidgets(
     'G: with the production setting a silent request ends after about 30 s',
     (tester) async {
-      await tester.runAsync(() async {
-        await reset();
-        setCoverRequestTimeout(null);
-        final p = path('g-prod', mode: RawMode.holdHeaders);
-        final sw = Stopwatch()..start();
-        final f = load(p);
-        await server.until(() => server.count(p) == 1);
-        final started = sw.elapsed;
-        await server
-            .heldFor(p)
-            .single
-            .closedByClient
-            .timeout(
-              const Duration(seconds: 50),
-              onTimeout: () => fail('not ended within 50 s'),
-            );
-        final ended = sw.elapsed - started;
-        expect(await f, isNotNull);
-        expect(ended, greaterThan(const Duration(seconds: 29)));
-        expect(ended, lessThan(const Duration(seconds: 40)));
-        await eventually(() => activeSlots() == 0, 'slot returned');
+      await ignoringStopErrors(() async {
+        await tester.runAsync(() async {
+          await reset();
+          setCoverRequestTimeout(null);
+          expect(
+            ImageDownloader.coverRequestTimeout,
+            const Duration(seconds: 30),
+          );
+          final p = path('g-prod', mode: RawMode.holdHeaders);
+          final sw = Stopwatch()..start();
+          final f = load(p);
+          await server.until(() => server.count(p) == 1);
+          final started = sw.elapsed;
+          await server
+              .heldFor(p)
+              .single
+              .closedByClient
+              .timeout(
+                const Duration(seconds: 50),
+                onTimeout: () => fail('not ended within 50 s'),
+              );
+          final ended = sw.elapsed - started;
+          expect(await f, isNotNull);
+          // ignore: avoid_print
+          print('G: ended ${ended.inMilliseconds} ms after arrival');
+          expect(ended, greaterThan(const Duration(seconds: 29)));
+          expect(ended, lessThan(const Duration(seconds: 40)));
+          await eventually(() => activeSlots() == 0, 'slot returned');
+        });
       });
     },
     skip: !hasNativeHttp,

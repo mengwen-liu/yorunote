@@ -1,5 +1,5 @@
 name: Yorunote Windows Preview
-run-name: Windows x64 preview - fixed source 5934db5e
+run-name: Windows x64 preview - fixed source 5d95b248
 
 on:
   push:
@@ -23,8 +23,8 @@ jobs:
       run:
         shell: pwsh
     env:
-      SOURCE_SHA: '5934db5ef963f05d409fa3182094011d24e8a25b'
-      YORUNOTE_SMOKE_SOURCE: '5934db5ef963f05d409fa3182094011d24e8a25b'
+      SOURCE_SHA: '5d95b24884ee6e07e4fee571a96c7b0534b73c1f'
+      YORUNOTE_SMOKE_SOURCE: '5d95b24884ee6e07e4fee571a96c7b0534b73c1f'
       FLUTTER_SUPPRESS_ANALYTICS: 'true'
       PUB_ENVIRONMENT: github-actions
 
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout fixed application source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: '5934db5ef963f05d409fa3182094011d24e8a25b'
+          ref: '5d95b24884ee6e07e4fee571a96c7b0534b73c1f'
           persist-credentials: false
 
       - name: Verify source and prepare evidence
@@ -111,7 +111,7 @@ jobs:
         run: |
           flutter analyze --no-pub tool/windows/smoke.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'analyze-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Windows acceptance analyzer failed' }
-          dart format --output=show tool/windows/smoke.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-windows-tool.log')
+          dart format --output=none --set-exit-if-changed tool/windows/smoke.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Dart format parsing failed' }
 
       - name: Run existing brand checks on Windows
@@ -139,6 +139,8 @@ jobs:
           @{status=$auth.Status.ToString(); source=$env:SOURCE_SHA} | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'authenticode.json')
 
       - name: Launch actual extracted distribution
+        id: distribution-launch
+        continue-on-error: true
         run: |
           & ./tool/windows/run_smoke.ps1 -Exe $env:YORUNOTE_DISTRIBUTION_EXE -Evidence $env:EVIDENCE -Phase distribution
 
@@ -148,15 +150,24 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Windows acceptance build failed' }
 
       - name: Exercise native source, reading and downloads
+        id: acceptance-seed
+        continue-on-error: true
         run: |
           & ./tool/windows/run_smoke.ps1 -Exe build/windows/x64/runner/Release/yorunote.exe -Evidence $env:EVIDENCE -Phase seed
 
       - name: Restart and verify persisted data and offline reading
+        id: acceptance-restart
+        continue-on-error: true
         run: |
           & ./tool/windows/run_smoke.ps1 -Exe build/windows/x64/runner/Release/yorunote.exe -Evidence $env:EVIDENCE -Phase restart
 
       - name: Verify checkout and final artifact hashes
         run: |
+          if ('${{ steps.distribution-launch.outcome }}' -ne 'success' -or
+              '${{ steps.acceptance-seed.outcome }}' -ne 'success' -or
+              '${{ steps.acceptance-restart.outcome }}' -ne 'success') {
+            throw 'At least one native runtime acceptance phase failed; distribution upload is prohibited.'
+          }
           git diff --exit-code HEAD
           if ($LASTEXITCODE -ne 0) { throw 'Tracked source was changed by the build' }
           $package = Get-Content -Raw (Join-Path $env:EVIDENCE 'package.json') | ConvertFrom-Json

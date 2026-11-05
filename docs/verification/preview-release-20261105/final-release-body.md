@@ -42,10 +42,6 @@ App 來源提交 / Application source commit: [`29b590b457378c16b19821f139b9bcad
 
 **簽章限制：** 這是一次性測試憑證，與先前各輪不同，無法直接覆蓋不同簽章的相同套件 App。請保留既有 App 與資料；固定簽章與長期更新管道尚未建立。
 
-### 發行流程說明
-
-本次發布採用「暫時停用 Build ALL → 發布 → 恢復」的受控流程，避免本次發布啟動多平台建置與 AltStore 更新。既有 `main.yml` 的 `release: published` 觸發規則**並未永久移除**；之後的發布仍須使用相同的受控流程。詳見[發行流程文件](https://github.com/mengwen-liu/yorunote/blob/9a709d27c69482a1e21cafa6ad90d2639248f328/docs/releases/PREVIEW_RELEASE_PROCESS.md)。
-
 ## English
 
 This preview combines Yorunote branding, the home-screen candidate, reader-cache fixes, and cover-request queueing, cancellation, and timeout protection. The reader and source system come from [Venera](https://github.com/venera-app/venera); fork contributions are documented separately.
@@ -74,10 +70,6 @@ Download the attached files and verify them with the `.sha256` file (for example
 The APK is 27,882,063 bytes; its SHA-256 is `7ad08033c204a1de62546ca588ea0c050a5ace8ec0d4945d8c7978e156f5057f`. The internal application version is 1.6.3 (2163), independent of the GitHub preview tag.
 
 **Signing compatibility:** the disposable test certificate differs from previous builds and cannot update an installed app with the same package ID and a different signature. Preserve the existing installation and its data. A persistent signing/update channel has not been established.
-
-### Release process
-
-This release uses a controlled "temporarily disable Build ALL → publish → restore" procedure so that publishing does not start the multi-platform build or the AltStore update. The existing `release: published` trigger in `main.yml` has **not** been removed permanently; future releases must use the same controlled procedure. See the [release process document](https://github.com/mengwen-liu/yorunote/blob/9a709d27c69482a1e21cafa6ad90d2639248f328/docs/releases/PREVIEW_RELEASE_PROCESS.md).
 
 ## 原始碼與授權 / Source and license
 

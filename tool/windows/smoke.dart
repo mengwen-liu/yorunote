@@ -356,7 +356,9 @@ Future<void> _captureFailureState() async {
         images.add('${widget.image!.width}x${widget.image!.height}');
       }
       if (widget is Reader) {
-        readers.add('${widget.cid}:${widget.initialChapter}:${widget.initialPage}');
+        readers.add(
+          '${widget.cid}:${widget.initialChapter}:${widget.initialPage}',
+        );
       }
     }
     final snapshot = {

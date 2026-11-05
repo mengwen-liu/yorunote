@@ -18,6 +18,7 @@ import 'package:venera/main.dart' as production;
 import 'package:venera/network/app_dio.dart';
 import 'package:venera/network/download.dart';
 import 'package:venera/pages/reader/reader.dart';
+import 'package:venera/utils/io.dart' as app_io;
 import 'package:window_manager/window_manager.dart';
 
 import '../synthetic_source/synthetic_server.dart';
@@ -146,6 +147,16 @@ Future<void> _openOffline(LocalComic local) async {
   local.read();
   await _until(_hasPageImage, 'Downloaded comic did not render offline');
   _record('offline_reader_decoded_600x900');
+  await _until(
+    () => HistoryManager().getAll().any(
+      (h) =>
+          h.id == local.id &&
+          h.type == local.comicType &&
+          h.ep >= 1 &&
+          h.page >= 1,
+    ),
+    'Offline reading history was not written to SQLite',
+  );
   await _stage('offline-reader');
   App.rootNavigatorKey.currentState!.pop();
   await _until(
@@ -312,16 +323,63 @@ Future<void> _restart() async {
   _require(local != null, 'Downloaded comic database did not survive restart');
   final pages = await LocalManager().getImages('c09', type, 1);
   _require(pages.length == 5, 'Downloaded chapter did not survive restart');
+  final digests = <String>[];
+  for (var i = 0; i < pages.length; i++) {
+    final bytes = await File(pages[i]).readAsBytes();
+    _require(
+      sha256.convert(bytes) == sha256.convert(pagePng(i + 1)),
+      'Saved page bytes changed after restart',
+    );
+    digests.add(sha256.convert(bytes).toString());
+  }
   _record('restart_restores_settings_source_history_and_download', {
     'history_page': history!.page,
     'downloaded_pages': pages.length,
+    'page_sha256': digests,
+    'offline_history': HistoryManager().find('c09', type)?.toString(),
   });
   // The first process's HTTP server is gone. This reads stored files only.
   await _openOffline(local!);
   await _stage('home-after-restart');
 }
 
-Future<void> main(List<String> args) async {
+Future<void> _captureFailureState() async {
+  try {
+    final texts = <String>[];
+    final images = <String>[];
+    final readers = <String>[];
+    for (final widget in _widgets()) {
+      if (widget is Text && widget.data != null) {
+        texts.add(widget.data!);
+      }
+      if (widget is RawImage && widget.image != null) {
+        images.add('${widget.image!.width}x${widget.image!.height}');
+      }
+      if (widget is Reader) {
+        readers.add('${widget.cid}:${widget.initialChapter}:${widget.initialPage}');
+      }
+    }
+    final snapshot = {
+      'phase': _phase,
+      'io_override_active': IOOverrides.current != null,
+      'readers': readers,
+      'text': texts,
+      'images': images,
+      'app_errors': _appErrors(),
+    };
+    final file = File('${_evidence.path}/$_phase-failure-state.json');
+    await file.writeAsString(jsonEncode(snapshot));
+    await _stage('failure');
+  } catch (error) {
+    stderr.writeln('Failure-state capture unavailable: $error');
+  }
+}
+
+Future<void> main(List<String> args) {
+  return app_io.overrideIO(() => _run(args));
+}
+
+Future<void> _run(List<String> args) async {
   if (!Platform.isWindows || Platform.environment['GITHUB_ACTIONS'] != 'true') {
     stderr.writeln(
       'This acceptance entry point is restricted to disposable Windows CI.',
@@ -336,6 +394,7 @@ Future<void> main(List<String> args) async {
   var code = 1;
   String? failure;
   try {
+    _require(IOOverrides.current != null, 'Application IO zone is required');
     production.main(const []);
     await _until(
       () =>
@@ -376,6 +435,7 @@ Future<void> main(List<String> args) async {
     code = 0;
   } catch (error, stack) {
     failure = '$error\n$stack';
+    await _captureFailureState();
   }
   final report = {
     'phase': _phase,

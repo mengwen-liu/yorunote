@@ -6,7 +6,6 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:venera/foundation/app.dart';
 import 'package:venera/foundation/appdata.dart';
 import 'package:venera/foundation/comic_source/comic_source.dart';
@@ -127,20 +126,6 @@ Future<void> _openOnline(ComicSource source) async {
   await windowManager.focus();
   await _until(_readerHasFocus, 'Reader keyboard focus was not ready');
   await _stage('reader-before-key');
-  HardwareKeyboard.instance.handleKeyEvent(
-    const KeyDownEvent(
-      physicalKey: PhysicalKeyboardKey.arrowRight,
-      logicalKey: LogicalKeyboardKey.arrowRight,
-      timeStamp: Duration(milliseconds: 1),
-    ),
-  );
-  HardwareKeyboard.instance.handleKeyEvent(
-    const KeyUpEvent(
-      physicalKey: PhysicalKeyboardKey.arrowRight,
-      logicalKey: LogicalKeyboardKey.arrowRight,
-      timeStamp: Duration(milliseconds: 2),
-    ),
-  );
   final type = ComicType.fromKey(source.key);
   await _until(
     () => HistoryManager().getAll().any(

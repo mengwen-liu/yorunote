@@ -25,6 +25,30 @@ public static class YorunoteCapture {
     public struct RECT { public int Left, Top, Right, Bottom; }
     [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
     [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr h, IntPtr dc, uint flags);
+    [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr h);
+    [StructLayout(LayoutKind.Explicit, Size=40)]
+    public struct INPUT64 {
+        [FieldOffset(0)] public uint type;
+        [FieldOffset(8)] public ushort virtualKey;
+        [FieldOffset(10)] public ushort scanCode;
+        [FieldOffset(12)] public uint flags;
+        [FieldOffset(16)] public uint time;
+        [FieldOffset(24)] public IntPtr extraInfo;
+    }
+    [DllImport("user32.dll", SetLastError=true)]
+    private static extern uint SendInput(uint count, INPUT64[] inputs, int size);
+    public static uint SendRightArrow(IntPtr target) {
+        if (IntPtr.Size != 8 || GetForegroundWindow() != target) return 0;
+        var inputs = new INPUT64[2];
+        inputs[0].type = 1;
+        inputs[0].virtualKey = 0x27;
+        inputs[0].scanCode = 0x4D;
+        inputs[0].flags = 0x0001;
+        inputs[1] = inputs[0];
+        inputs[1].flags = 0x0003;
+        return SendInput(2, inputs, Marshal.SizeOf(typeof(INPUT64)));
+    }
 }
 '@
 
@@ -113,7 +137,25 @@ try {
                 try { $stage = (Get-Content -LiteralPath $stageFile -Raw | ConvertFrom-Json).stage } catch {}
                 if ($stage -like ($Phase+'-*') -and $stage -match '^(seed|restart)-[a-zA-Z0-9-]+$' -and $seen.Add($stage)) {
                     $capture = Save-AppWindow $process $stage
-                    $captures.Add(@{stage=$stage; capture=$capture})
+                    $nativeKeySent = $false
+                    if ($stage -eq 'seed-reader-before-key') {
+                        $process.Refresh()
+                        $target = $process.MainWindowHandle
+                        if ($target -eq [IntPtr]::Zero) { throw 'Reader window handle missing' }
+                        if ([YorunoteCapture]::GetForegroundWindow() -ne $target) {
+                            [void][YorunoteCapture]::SetForegroundWindow($target)
+                            Start-Sleep -Milliseconds 200
+                        }
+                        if ([YorunoteCapture]::GetForegroundWindow() -ne $target) {
+                            throw 'Refusing keyboard input: foreground window is not the CI app'
+                        }
+                        if ([YorunoteCapture]::SendRightArrow($target) -ne 2) {
+                            throw 'Native right-arrow key injection failed'
+                        }
+                        $nativeKeySent = $true
+                        Write-Host ('Native right-arrow sent to CI app PID ' + $process.Id)
+                    }
+                    $captures.Add(@{stage=$stage; capture=$capture; native_right_arrow_sent=$nativeKeySent})
                     [IO.File]::WriteAllText((Join-Path $evidencePath ('ack-'+$stage+'.json')), ($capture | ConvertTo-Json -Depth 5))
                 }
             }

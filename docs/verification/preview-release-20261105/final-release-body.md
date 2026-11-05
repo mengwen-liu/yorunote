@@ -1,0 +1,88 @@
+# Yorunote v0.1.0-preview.1 — Android 預覽版 / Android preview
+
+> **預覽版（Pre-release）**：Android ARM64 Profile 測試建置，**尚未完成 S25+／Tab S11 實機驗收**，不是穩定版。
+> **Pre-release**: an Android ARM64 Profile test build. **Runtime acceptance on the S25+ and Tab S11 is still pending.** This is not a stable release.
+
+App 來源提交 / Application source commit: [`29b590b457378c16b19821f139b9bcad7d38f689`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689)
+
+## 繁體中文
+
+這份預覽版集合 Yorunote 品牌、首頁候選、閱讀器快取修正，以及封面請求的佇列、取消與逾時保護。閱讀器及漫畫來源機制承襲 [Venera](https://github.com/venera-app/venera)；本分支的調整與上游功能分開記錄。
+
+### 本次內容
+
+- Yorunote 顯示名稱、角色圖示與 About 文案。
+- 壞圖快取恢復、同鍵寫入競態防護及快取路徑重用修正。
+- 快取命中繞過封面網路佇列，最多同時 8 個封面請求，同鍵共用。
+- 取消傳遞及等待期間的快取一致性保護。
+- 封面圖片每次 HTTP 嘗試原生總逾時 30 秒；保留既有重試。
+- 合成漫畫來源與可控網路伺服器，供後續裝置驗收使用。
+
+### 驗證與限制
+
+- 測試與靜態檢查為**既有 CI 結果，本次發行流程沒有重跑**：[CI run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599) 完整測試 350 項、關鍵測試 68 項通過，0 跳過；Analyzer 維持 8 項既有 info，沒有新增 warning 或 error；APK 已完成 CI 靜態檢查。
+- **這份 APK 尚未完成 S25+／Tab S11 實機驗收。**
+- 30 秒不包括排隊、來源查詢與重試等待；4 次嘗試及等待可能合計約 134 秒，另加排隊。慢速大封面若無法在單次 30 秒內讀完，會逾時並進入既有重試。
+- 主機量測曾觀察到冷載整批完成時間約 9% 退步；不能外推手機 FPS 或耗電。
+- 目前只有 Android ARM64 Profile 測試建置；不是 Release-mode 正式建置，也沒有其他平台的 Yorunote 成品。
+
+### 下載與安裝
+
+請下載本頁附件，並以 `.sha256` 檔核對（例如 `sha256sum -c Yorunote_29b590b_cover_timeout_arm64_profile.apk.sha256`）。
+
+| 欄位 | 值 |
+| --- | --- |
+| APK 檔名 | `Yorunote_29b590b_cover_timeout_arm64_profile.apk` |
+| 大小 | 27,882,063 bytes |
+| SHA-256 | `7ad08033c204a1de62546ca588ea0c050a5ace8ec0d4945d8c7978e156f5057f` |
+| App 內部版本 | 1.6.3（versionCode 2163），與 GitHub 預覽版標籤分開 |
+| 套件識別碼 | `com.github.wgh136.venera` |
+| 架構／模式 | `arm64-v8a`／Profile |
+| 憑證 SHA-256 | `de02360d542d99c807a97c1265f20ce387f98020ea4146ba47b70be71374e26f` |
+
+**簽章限制：** 這是一次性測試憑證，與先前各輪不同，無法直接覆蓋不同簽章的相同套件 App。請保留既有 App 與資料；固定簽章與長期更新管道尚未建立。
+
+### 發行流程說明
+
+本次發布採用「暫時停用 Build ALL → 發布 → 恢復」的受控流程，避免本次發布啟動多平台建置與 AltStore 更新。既有 `main.yml` 的 `release: published` 觸發規則**並未永久移除**；之後的發布仍須使用相同的受控流程。詳見[發行流程文件](https://github.com/mengwen-liu/yorunote/blob/9a709d27c69482a1e21cafa6ad90d2639248f328/docs/releases/PREVIEW_RELEASE_PROCESS.md)。
+
+## English
+
+This preview combines Yorunote branding, the home-screen candidate, reader-cache fixes, and cover-request queueing, cancellation, and timeout protection. The reader and source system come from [Venera](https://github.com/venera-app/venera); fork contributions are documented separately.
+
+### Included work
+
+- Yorunote display name, character icons, and About text.
+- Invalid-image cache recovery and protection against concurrent replacement and path reuse.
+- Cached covers bypass the network queue; at most 8 cover requests run concurrently and same-key loads share a request.
+- Cancellation propagation and validation of cache entries written while queueing.
+- A native 30-second total timeout for each cover-image HTTP attempt; existing retries are retained.
+- A synthetic comic source and controllable server for subsequent device acceptance.
+
+### Validation and limitations
+
+- Tests and static checks are **existing CI results; this release process did not re-run them**: [CI run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599) passed 350 full-suite tests and 68 key tests with no skips; analyzer diagnostics match the 8 existing infos with no new warnings or errors; static APK checks completed.
+- **Runtime acceptance of this APK on the S25+ and Tab S11 is pending.**
+- Queueing, source lookup, and retry delays are outside the 30-second timeout. Four attempts plus delays can take about 134 seconds, excluding queueing. Large covers on slow connections may time out and retry.
+- Host measurements previously showed about a 9% cold-batch completion regression; this does not establish device FPS or power impact.
+- Only an Android ARM64 Profile test build is available. This is not a Release-mode production build or a multi-platform release.
+
+### Download and installation
+
+Download the attached files and verify them with the `.sha256` file (for example `sha256sum -c Yorunote_29b590b_cover_timeout_arm64_profile.apk.sha256`).
+
+The APK is 27,882,063 bytes; its SHA-256 is `7ad08033c204a1de62546ca588ea0c050a5ace8ec0d4945d8c7978e156f5057f`. The internal application version is 1.6.3 (2163), independent of the GitHub preview tag.
+
+**Signing compatibility:** the disposable test certificate differs from previous builds and cannot update an installed app with the same package ID and a different signature. Preserve the existing installation and its data. A persistent signing/update channel has not been established.
+
+### Release process
+
+This release uses a controlled "temporarily disable Build ALL → publish → restore" procedure so that publishing does not start the multi-platform build or the AltStore update. The existing `release: published` trigger in `main.yml` has **not** been removed permanently; future releases must use the same controlled procedure. See the [release process document](https://github.com/mengwen-liu/yorunote/blob/9a709d27c69482a1e21cafa6ad90d2639248f328/docs/releases/PREVIEW_RELEASE_PROCESS.md).
+
+## 原始碼與授權 / Source and license
+
+- [固定 App 來源 / Fixed application source](https://github.com/mengwen-liu/yorunote/tree/29b590b457378c16b19821f139b9bcad7d38f689)
+- [驗證報告 / Verification report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md)
+- [合成來源驗收流程 / Synthetic-source acceptance procedure](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md)
+- [上游 Venera / Upstream Venera](https://github.com/venera-app/venera)
+- [GPL-3.0 LICENSE](https://github.com/mengwen-liu/yorunote/blob/29b590b457378c16b19821f139b9bcad7d38f689/LICENSE)

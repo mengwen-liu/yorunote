@@ -14,7 +14,7 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 
 ## 下載與版本
 
-- [版本發行頁面（Releases）](https://github.com/mengwen-liu/yorunote/releases)：目前尚無已發布的 Yorunote 版本。另有一份未公開的 Release 草稿（`draft`、`prerelease`），**目前沒有任何 APK 附件**，不是下載點。
+- [版本發行頁面（Releases）](https://github.com/mengwen-liu/yorunote/releases)：目前尚無已發布的 Yorunote 版本。另有一份未公開的 Release 草稿（`draft`、`prerelease`），已附上經[受控流程](docs/releases/PREVIEW_RELEASE_PROCESS.md)重新核對的 APK 與 `.sha256`；草稿只有維護者看得到，尚未建立 Tag，**不是公開下載點**。
 - [開發紀錄](CHANGELOG.md)：區分候選修改與正式發行。
 - [首個預覽版的雙語發行說明工作稿](docs/releases/v0.1.0-preview.1.md)：尚未發布。
 - 最新測試 APK 位於 [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599)，檔名為 `Yorunote_29b590b_cover_timeout_arm64_profile.apk`。目前只提供 Android ARM64 Profile 測試建置。

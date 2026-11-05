@@ -14,7 +14,7 @@ The reader and comic-source system come from upstream. This repository is a main
 
 ## Downloads and releases
 
-- [GitHub Releases](https://github.com/mengwen-liu/yorunote/releases): no Yorunote release has been published yet. An unpublished Release draft (`draft`, `prerelease`) exists but **has no APK attached** and is not a download.
+- [GitHub Releases](https://github.com/mengwen-liu/yorunote/releases): no Yorunote release has been published yet. An unpublished Release draft (`draft`, `prerelease`) now carries the APK and `.sha256`, re-verified by the [controlled process](docs/releases/PREVIEW_RELEASE_PROCESS.md). Drafts are visible only to maintainers and no tag exists yet, so it is **not a public download**.
 - [Development history](CHANGELOG.md) distinguishes candidate changes from published releases.
 - [Bilingual notes for the proposed first preview](docs/releases/v0.1.0-preview.1.md): an unpublished working draft.
 - The latest test APK is available from [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599): `Yorunote_29b590b_cover_timeout_arm64_profile.apk`. It is an Android ARM64 **Profile test build**.

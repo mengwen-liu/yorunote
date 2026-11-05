@@ -13,6 +13,8 @@ This file records traceable development milestones. Candidate commits below are 
   Added a manual-only workflow and process document: `prepare` only attaches the verified APK and checksum to the existing draft; `publish` needs a confirmation string and a pre-existing tag at `29b590b`.
 - 既有 Build ALL、AltStore 與 App 建置 workflow 未修改；`release: published` 規則仍存在。
   Existing Build ALL, AltStore and app-build workflows are unchanged; their `release: published` trigger remains.
+- [prepare run 41980565581](https://github.com/mengwen-liu/yorunote/actions/runs/41980565581) 已將 APK（附件 ID 712333248，27,882,063 bytes）與 `.sha256`（ID 712333328）附加至草稿，下載回讀 SHA-256 相符；草稿仍未發布、尚未建立 Tag。
+  The prepare run attached the APK (asset 712333248) and checksum (asset 712333328) to the draft and re-verified them; the draft remains unpublished and no tag exists.
 
 ### 文件與展示素材 / Documentation and media
 
@@ -20,8 +22,8 @@ This file records traceable development milestones. Candidate commits below are 
   Both homepages now show the character animation; source and hash are in the media README.
 - 這是純文件與展示素材變更，不含 App 程式、版本、圖示、依賴或 workflow 修改；`master` 仍未整合最新 App 候選。
   Documentation and media only: no app code, version, icons, dependencies or workflows changed; `master` still does not include the latest app candidate.
-- GitHub Release 草稿（ID 434819274）仍為 draft／prerelease、未發布、無附件。
-  The GitHub Release draft (ID 434819274) remains an unpublished draft/pre-release with no assets.
+- 當時 GitHub Release 草稿（ID 434819274）為 draft／prerelease、未發布、無附件（附件狀態見下一項）。
+  At that time the GitHub Release draft (ID 434819274) was an unpublished draft/pre-release with no assets (see below for asset status).
 
 ### v0.1.0-preview.1（發行說明工作稿 / Proposed preview）
 

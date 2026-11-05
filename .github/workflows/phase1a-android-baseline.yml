@@ -1,9 +1,9 @@
 name: Phase1A Android Baseline
-run-name: Yorunote thumbnail-r2 ARM64 Profile APK (fixed commit cee5b03)
+run-name: Yorunote cover-timeout ARM64 Profile APK (fixed commit 29b590b)
 
 # Manual-only (workflow_dispatch). No inputs: the application source commit is
 # fixed below and cannot be changed at dispatch time. This copy of the file is
-# valid ONLY on branch claude/yorunote-thumbnail-r2-20261105 (the job is
+# valid ONLY on branch claude/yorunote-cover-timeout-20261105 (the job is
 # skipped on any other ref). Host tests (with a host librhttp built from the
 # locked rhttp sources and a host flutter_qjs built from the locked
 # flutter_qjs sources) + analyzer diagnostics check + build + static APK
@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: yorunote-thumbnail-r2-ci
+  group: yorunote-cover-timeout-ci
   cancel-in-progress: false
 
 defaults:
@@ -24,21 +24,21 @@ defaults:
     shell: bash   # GitHub expands this to: bash --noprofile --norc -eo pipefail {0}
 
 env:
-  # App/test source commit S2 of the thumbnail-r2 round (not this workflow commit).
-  BASELINE_SHA: cee5b03043152cf96a1f444e1d88be46a44b8c08
-  BASELINE_TREE: be394dabeef2fdac47b64ad82e66b6cc7f59ff3d
+  # App/test source commit S of the cover-timeout round (not this workflow commit).
+  BASELINE_SHA: 29b590b457378c16b19821f139b9bcad7d38f689
+  BASELINE_TREE: 603f9aae1ed61b1460b3f92196586741826c1659
   BASELINE_LOCK_BLOB: c061e4fc0057646a0a5561dbc607114c00e44bfb
   BASELINE_PUBSPEC_BLOB: 489d6acd5fcd2fc5979205db9b877c9e1bf1761b
-  IMAGES_DART_BLOB: 745196915ed1357148256a179e8174b427e9f71d
+  IMAGES_DART_BLOB: a253640b23e06e16d020d56a0dfe842255c64561
   LIMITER_DART_BLOB: e36bd0072a658362c05d516e6dde08153719db76
-  APP_DIO_BLOB: f732ead4d232092f3d2999dffcb65c20a191c427
+  APP_DIO_BLOB: 5826bc6b8eee9ba3f209ec083a3c4a4ee65e80c3
   BASE_PROVIDER_BLOB: 050c0bc37ca0abae7543cd5817b7d770b10fdf9b
-  APK_BASENAME: Yorunote_cee5b03_thumbnail_r2_arm64_profile
+  APK_BASENAME: Yorunote_29b590b_cover_timeout_arm64_profile
   RHTTP_VERSION: '0.15.1'
   RHTTP_CARGO_LOCK_SHA256: 232c3f91d09446ff821cb15f2d86b15934da29e6395e856eb3afd8571eff5eb4
   FLUTTER_QJS_REF: 8feae95df7fb00455df129ad7a0dfec1d0e8d8e4
-  EXPECTED_KEY_TEST_COUNT: '61'
-  EXPECTED_TEST_COUNT: '343'
+  EXPECTED_KEY_TEST_COUNT: '68'
+  EXPECTED_TEST_COUNT: '350'
   FLUTTER_VERSION: '3.41.4'
   FLUTTER_REVISION_PREFIX: ff37bef603
   DART_VERSION: '3.11.1'
@@ -67,7 +67,7 @@ env:
 jobs:
   android-arm64-baseline:
     name: Yorunote Android ARM64 Profile build
-    if: github.repository == 'mengwen-liu/yorunote' && github.ref == 'refs/heads/claude/yorunote-thumbnail-r2-20261105'
+    if: github.repository == 'mengwen-liu/yorunote' && github.ref == 'refs/heads/claude/yorunote-cover-timeout-20261105'
     runs-on: ubuntu-24.04   # ubuntu-22.04 images are in deprecation (see audit report)
     timeout-minutes: 75
     steps:
@@ -129,7 +129,7 @@ jobs:
       - name: Checkout fixed application source (commit S2)
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          ref: cee5b03043152cf96a1f444e1d88be46a44b8c08
+          ref: 29b590b457378c16b19821f139b9bcad7d38f689
           fetch-depth: 1
           fetch-tags: false
           persist-credentials: false
@@ -344,6 +344,7 @@ jobs:
           # run_logged returns flutter's real exit code; a non-zero code fails this step.
           run_logged flutter_test_key "$LOGS/05a_test_key.log" flutter test --no-pub --reporter expanded \
             test/network/thumbnail_cover_cancel_test.dart \
+            test/network/thumbnail_cover_timeout_test.dart \
             test/network/rhttp_adapter_cancel_test.dart \
             test/network/thumbnail_cover_queue_cache_test.dart \
             test/network/synthetic_source_test.dart \
@@ -675,7 +676,7 @@ jobs:
         run: |
           S="$PHASE/sanitized/evidence"
           {
-            echo "## Yorunote thumbnail-r2 ARM64 Profile APK (source commit ${BASELINE_SHA:0:7})"
+            echo "## Yorunote cover-timeout ARM64 Profile APK (source commit ${BASELINE_SHA:0:7})"
             echo "**STATIC CHECKS ONLY. Android runtime acceptance was NOT performed. Disposable test signing key.**"
             echo
             echo '```'
@@ -693,7 +694,7 @@ jobs:
         if: always() && steps.sanitize.outcome == 'success'
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          name: yorunote-thumbnail-r2-diagnostic-logs
+          name: yorunote-cover-timeout-diagnostic-logs
           path: ${{ runner.temp }}/phase1a/sanitized
           retention-days: 7
           if-no-files-found: warn
@@ -703,7 +704,7 @@ jobs:
         if: ${{ !cancelled() && steps.verify.outcome == 'success' && steps.gitcheck.outcome == 'success' }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          name: yorunote-thumbnail-r2-arm64-profile-apk
+          name: yorunote-cover-timeout-arm64-profile-apk
           path: ${{ runner.temp }}/phase1a/apk_out
           retention-days: 7
           if-no-files-found: error

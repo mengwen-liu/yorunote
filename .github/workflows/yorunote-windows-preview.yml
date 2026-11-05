@@ -24,8 +24,6 @@ jobs:
         shell: pwsh
     env:
       SOURCE_SHA: 'c2fdb8fa13435b898ad2f79fb80b11cdadfb4acc'
-      EVIDENCE: '${{ runner.temp }}/yorunote-windows-evidence'
-      DIST: '${{ runner.temp }}/yorunote-windows-dist'
       YORUNOTE_SMOKE_SOURCE: 'c2fdb8fa13435b898ad2f79fb80b11cdadfb4acc'
       FLUTTER_SUPPRESS_ANALYTICS: 'true'
       PUB_ENVIRONMENT: github-actions
@@ -39,6 +37,10 @@ jobs:
 
       - name: Verify source and prepare evidence
         run: |
+          $env:EVIDENCE = Join-Path $env:RUNNER_TEMP 'yorunote-windows-evidence'
+          $env:DIST = Join-Path $env:RUNNER_TEMP 'yorunote-windows-dist'
+          "EVIDENCE=$env:EVIDENCE" >> $env:GITHUB_ENV
+          "DIST=$env:DIST" >> $env:GITHUB_ENV
           New-Item -ItemType Directory -Force -Path $env:EVIDENCE | Out-Null
           $head = (git rev-parse HEAD).Trim()
           if ($LASTEXITCODE -ne 0 -or $head -ne $env:SOURCE_SHA) { throw 'Source SHA mismatch' }

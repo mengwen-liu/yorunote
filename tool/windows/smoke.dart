@@ -49,12 +49,12 @@ void _record(String name, [Map<String, Object?> detail = const {}]) {
 
 Future<void> _stage(String name) async {
   await WidgetsBinding.instance.endOfFrame;
-  final state = File(_evidence.path + '/stage.json');
-  await state.writeAsString(jsonEncode({'stage': _phase + '-' + name}));
-  final ack = File(_evidence.path + '/ack-' + _phase + '-' + name + '.json');
+  final state = File('${_evidence.path}/stage.json');
+  await state.writeAsString(jsonEncode({'stage': '$_phase-$name'}));
+  final ack = File('${_evidence.path}/ack-$_phase-$name.json');
   await _until(
     ack.existsSync,
-    'Windows runner did not acknowledge screenshot checkpoint: ' + name,
+    'Windows runner did not acknowledge screenshot checkpoint: $name',
     timeout: const Duration(seconds: 30),
   );
 }
@@ -167,7 +167,7 @@ Future<void> _seed() async {
   var stopped = false;
   try {
     final response = await AppDio().get<String>(
-      server.baseUrl + '/source.js',
+      '${server.baseUrl}/source.js',
       options: Options(responseType: ResponseType.plain),
     );
     _require(response.statusCode == 200, 'Source download failed');
@@ -217,7 +217,7 @@ Future<void> _seed() async {
     final type = ComicType.fromKey(source.key);
     await _until(
       () {
-        if (task.isError) throw StateError('Download failed: ' + task.message);
+        if (task.isError) throw StateError('Download failed: ${task.message}');
         return LocalManager().find('c09', type) != null &&
             !LocalManager().isDownloading('c09', type);
       },
@@ -315,10 +315,10 @@ Future<void> main(List<String> args) async {
     } else {
       await _restart();
     }
-    _require(_flutterErrors.isEmpty, 'Unhandled Flutter errors: ' + _flutterErrors.join('; '));
+    _require(_flutterErrors.isEmpty, 'Unhandled Flutter errors: ${_flutterErrors.join('; ')}');
     code = 0;
   } catch (error, stack) {
-    failure = error.toString() + '\n' + stack.toString();
+    failure = '$error\n$stack';
   }
   final report = {
     'phase': _phase,
@@ -329,9 +329,8 @@ Future<void> main(List<String> args) async {
     'failure': failure,
     'scope': 'Instrumented Windows CI executable using the real app and native plugins; not the distributed entry point.',
   };
-  await File(_evidence.path + '/smoke-' + _phase + '.json').writeAsString(
-    const JsonEncoder.withIndent('  ').convert(report) + '\n',
-  );
+  final json = const JsonEncoder.withIndent('  ').convert(report);
+  await File('${_evidence.path}/smoke-$_phase.json').writeAsString('$json\n');
   if (failure != null) stderr.writeln(failure);
   await Future<void>.delayed(const Duration(milliseconds: 500));
   exit(code);

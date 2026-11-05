@@ -16,11 +16,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api repos/mengwen-liu/yorunote/actions/artifacts/13439963201/zip > evidence.zip
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13442369189/zip > evidence.zip
           python3 - <<'PY'
           import base64, hashlib, pathlib, zipfile
           data = pathlib.Path("evidence.zip").read_bytes()
-          assert hashlib.sha256(data).hexdigest() == "04c0e45416fc44057c22bf1424fecad04f4fa337a1122fe493e936af2579a1c0"
+          assert hashlib.sha256(data).hexdigest() == "849c58edb8e1862075250b4ddc36f4555a746db85432fd09686554578cde1035"
           with zipfile.ZipFile("evidence.zip") as archive:
               print("FILES", archive.namelist())
               for name in archive.namelist():
@@ -31,7 +31,7 @@ jobs:
                       print("BEGIN_TEXT", p.name, "BYTES", len(raw))
                       print(raw.decode("utf-8-sig", errors="replace")[:20000])
                       print("END_TEXT", p.name)
-                  if p.name in {"distribution-home.png", "seed-home-zh-TW.png"}:
+                  if p.name in {"seed-reader-page2.png", "seed-offline-reader.png", "seed-home-en-US-dark.png"}:
                       encoded = base64.b64encode(archive.read(name)).decode("ascii")
                       print("BEGIN_IMAGE_BASE64", p.name)
                       for i in range(0, len(encoded), 512):

@@ -2,37 +2,41 @@
 
 [繁體中文首頁](README.md) · [English](README.en.md) · [GitHub Releases](https://github.com/mengwen-liu/yorunote/releases)
 
-本檔保存可追溯的開發里程碑。下列候選提交尚未合併至 master，也不代表已發布的版本。
-This file records traceable development milestones. Candidate commits below are not merged into master and are not published releases.
+本檔分開記錄已發布的預覽版、文件更新與歷史開發里程碑。App 修改是否已發布、是否已合併至 master，以及是否完成實機驗收，分別記錄。
+This file distinguishes public previews, documentation updates, and development milestones. Publication, integration into master, and device acceptance are separate states.
 
-## 尚未發布 / Unreleased
+## v0.1.0-preview.1 — 2026-11-05
 
-### 受控預覽版發行流程 / Controlled preview-release workflow
+- **已公開的 Android 預覽版**：[發行頁面](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1) · [儲存庫內雙語發行說明](docs/releases/v0.1.0-preview.1.md)。公開時間為 2026-11-05 20:57:32（Asia/Taipei），Release ID 434819274。
+  **Public Android preview**: see the release page and bilingual notes above. Published at 2026-11-05 20:57:32 Asia/Taipei; release ID 434819274.
+- Tag `v0.1.0-preview.1` 指向 App 來源 `29b590b457378c16b19821f139b9bcad7d38f689`；APK 內部版本維持 1.6.3（versionCode 2163）。`master` 尚未整合此 App 來源。
+  The tag pins the application source at that commit; the APK remains version 1.6.3 (2163). That application code is not yet integrated into master.
+- 沿用原始 ARM64 Profile APK 與 `.sha256` 附件，未重新建置；本版包含品牌、部分首頁呈現、閱讀器快取修正，以及封面佇列、取消與 30 秒逾時保護。
+  The original ARM64 Profile APK and checksum were retained without rebuilding. Included work covers branding, selected home-screen presentation, reader-cache fixes, and cover queueing, cancellation, and 30-second timeout protection.
+- 實際採用維護者網頁發布：暫停 Build ALL、從固定來源建立 Tag 並公開既有草稿、核對後恢復啟用。發布前後 Actions 均為 7 筆，沒有新增 Build ALL／AltStore 執行；[發行紀錄與核對限制](docs/releases/PREVIEW_RELEASE_PROCESS.md)。
+  Publication used the maintainer web interface with Build ALL paused and then restored. The Actions count stayed at 7 with no new Build ALL or AltStore runs; verification limits are recorded in the process document.
+- 350 項完整測試及 68 項關鍵測試為既有 CI 結果，本次發布沒有重跑。仍為一次性測試簽章，S25+／Tab S11 對此 APK 的實機驗收待補。
+  The 350 full-suite and 68 key-test passes are existing CI results, not new publication-time tests. The APK retains disposable signing; device acceptance of this APK on the S25+ and Tab S11 is pending.
 
-- 新增僅限手動觸發的 [Yorunote Preview Release](.github/workflows/yorunote-preview-release.yml) 與[操作文件](docs/releases/PREVIEW_RELEASE_PROCESS.md)：`prepare` 只將已核對的 APK 與 `.sha256` 附加至既有草稿；`publish` 需另填確認字串，且要求 Tag 事先存在並指向 `29b590b`。
-  Added a manual-only workflow and process document: `prepare` only attaches the verified APK and checksum to the existing draft; `publish` needs a confirmation string and a pre-existing tag at `29b590b`.
-- 既有 Build ALL、AltStore 與 App 建置 workflow 未修改；`release: published` 規則仍存在。
-  Existing Build ALL, AltStore and app-build workflows are unchanged; their `release: published` trigger remains.
-- [prepare run 41980565581](https://github.com/mengwen-liu/yorunote/actions/runs/41980565581) 已將 APK（附件 ID 712333248，27,882,063 bytes）與 `.sha256`（ID 712333328）附加至草稿，下載回讀 SHA-256 相符；草稿仍未發布、尚未建立 Tag。
-  The prepare run attached the APK (asset 712333248) and checksum (asset 712333328) to the draft and re-verified them; the draft remains unpublished and no tag exists.
+## 文件與發行準備 / Documentation and release preparation
 
-### 文件與展示素材 / Documentation and media
+### 文件同步與首頁整理 / Documentation and homepage update
 
-- 首頁（[繁體中文](README.md)、[English](README.en.md)）改用角色動畫 [`夜讀月頁精靈_眨眼微笑.gif`](docs/brand/README.md)（512×512、6 影格、494,501 位元組）；素材來源與雜湊見該目錄說明。
-  Both homepages now show the character animation; source and hash are in the media README.
-- 這是純文件與展示素材變更，不含 App 程式、版本、圖示、依賴或 workflow 修改；`master` 仍未整合最新 App 候選。
-  Documentation and media only: no app code, version, icons, dependencies or workflows changed; `master` still does not include the latest app candidate.
-- 當時 GitHub Release 草稿（ID 434819274）為 draft／prerelease、未發布、無附件（附件狀態見下一項）。
-  At that time the GitHub Release draft (ID 434819274) was an unpublished draft/pre-release with no assets (see below for asset status).
+- 同步中英文首頁、公開版發行說明、版本紀錄與實際發行流程；首頁加入版本導覽，區分上游功能、本分支成果與尚未接入首頁的元件。
+  Synchronised the two homepages, release notes, version history, and actual publication process. Homepage navigation highlights the preview and distinguishes upstream features, fork work, and components not yet integrated into the home screen.
+- 本次只更新文件與首頁資訊，不變更 App、workflow、依賴、授權、既有 Tag 或 Release 附件；沒有重新執行 App 測試或建置。
+  This update changes documentation and homepage information only; no application, workflow, dependency, license, existing tag, or release-asset changes, and no application tests or builds were re-run.
 
-### v0.1.0-preview.1（發行說明工作稿 / Proposed preview）
+### 首次發行準備（歷史）/ First-release preparation (historical)
 
-- 說明：[雙語發行說明](docs/releases/v0.1.0-preview.1.md)。
-- 目標 App 來源 / Intended application source: [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689)。
-- GitHub 預覽版標籤與 APK 內部版本分開：APK 仍為 1.6.3（versionCode 2163）。
-  The proposed GitHub preview label does not change the APK's internal version, which remains 1.6.3 (2163).
-- 尚無已發布的 Yorunote Release；不得將此工作稿當成正式發行紀錄。
-  No Yorunote release has been published; this draft is not a release announcement.
+- [Yorunote Preview Release](.github/workflows/yorunote-preview-release.yml) 是固定在此版本來源與附件的單次流程。[prepare run 41980565581](https://github.com/mengwen-liu/yorunote/actions/runs/41980565581) 曾將 APK（712333248）與 `.sha256`（712333328）附加到當時的草稿，並下載回讀、重算雜湊相符。
+  The dedicated workflow is pinned to this version's source and assets. Its prepare run attached and re-hashed both files while the release was still a draft.
+- workflow 的 `publish` job 未曾執行；不得把本版網頁發布成功當成該 job 已驗證可用。權限限制與後續操作原則見[發行流程文件](docs/releases/PREVIEW_RELEASE_PROCESS.md)。
+  The workflow publish job was never executed. Successful web publication does not validate that job; see the process document for its permission limitations.
+- 首頁角色動畫為 [`夜讀月頁精靈_眨眼微笑.gif`](docs/brand/README.md)（512×512、6 影格、494,501 位元組），來源與雜湊保存在品牌文件。動畫導入屬文件與展示素材，不代表修改 APK 的圖示或版本。
+  The homepage animation is documented with its source and hash in the brand notes. Importing that media did not change the APK's icon or version.
+- 發行準備期間的草稿、無附件或未建立 Tag 等描述只適用於當時；目前版本狀態以本檔最上方的公開預覽版紀錄為準。
+  Earlier draft, missing-asset, and missing-tag descriptions apply only to their preparation stage. The public-preview entry above records the current publication state.
 
 ## 2026-11-05：封面請求逾時 / Cover-request timeout
 

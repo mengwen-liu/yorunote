@@ -8,6 +8,8 @@
 
 <p align="center"><a href="README.md">繁體中文</a> · <strong>English</strong></p>
 
+<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1 · Android preview</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
+
 Yorunote is a personal open-source fork of [Venera](https://github.com/venera-app/venera). Work in this fork covers branding, interface maintenance, image-cache fixes, cover loading, and traceable engineering evidence.
 
 The reader and comic-source system come from upstream. This repository is a maintenance project, not a claim to have created the entire application from scratch.
@@ -30,14 +32,17 @@ The reader and comic-source system come from upstream. This repository is a main
 
 ## Current development state
 
-`master` has not integrated the branding, home-screen, or cache candidates. The latest candidate is on [`claude/yorunote-cover-timeout-20261105`](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105). Cloning `master` alone does not provide that application code.
+The public preview's application source is pinned by [tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1) at commit `29b590b`. `master` contains the project homepages and release documentation, but has not integrated that application code. Use the tag to obtain the source matching the APK; the [candidate branch and complete evidence](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105) retain the development history.
 
-| Candidate area | Implemented work | Evidence |
+| Area | Work included in the preview | Evidence |
 | --- | --- | --- |
 | Branding | Yorunote display name, Android adaptive/themed icons, About text | [Brand verification](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/yorunote-brand-v0.1/README.md) |
+| Home presentation | Search entry, section heading, and history/local-comic cover shelves | [Integrated home-screen source](https://github.com/mengwen-liu/yorunote/blob/29b590b457378c16b19821f139b9bcad7d38f689/lib/pages/home_page.dart) |
 | Reader cache | Invalid-image recovery, protection against concurrent replacement, unique cache paths | [R3.1 evidence](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/2026-11-04-r3.1/README.md) |
 | Cover loading | Cache hits bypass the queue; 8 network slots; same-key sharing; cancellation propagation | [Thumbnail R2 report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/README.md) |
 | Cover timeout | A native 30-second total timeout for each cover-image HTTP attempt | [Timeout report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) |
+
+The home screen uses the search entry, section heading, and cover card. The recent-reading card and reading-progress components are not yet integrated into this home screen.
 
 The application source is [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689). CI records (the existing run 41968314599; not re-run for this documentation update) **350 passing tests with no skips** and the same 8 existing analyzer infos, with no new warnings or errors. This does not establish Android runtime acceptance.
 
@@ -52,7 +57,7 @@ The 30-second timeout excludes queueing, source lookups, and retry delays. Four 
 
 ## Building and testing
 
-Check out the intended candidate source and read its verification report. The validated toolchain is Flutter 3.41.4, Dart 3.11.1, JDK 17, Rust 1.85.1, Android SDK 36, and NDK 28.0.13004108.
+To reproduce the public preview, check out the tagged application source above and read its verification report. The validated toolchain is Flutter 3.41.4, Dart 3.11.1, JDK 17, Rust 1.85.1, Android SDK 36, and NDK 28.0.13004108.
 
 The Android build configuration also needs a local `android/key.properties` file and signing key; neither belongs in Git. Host HTTP/JavaScript integration tests need the corresponding native rhttp and QuickJS libraries. See the [latest verification report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) for conditions and commands.
 
@@ -62,6 +67,8 @@ The Android build configuration also needs a local `android/key.properties` file
 - [Headless mode](doc/headless_doc.md) — original upstream documentation
 - [Synthetic source and device acceptance](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md)
 - [Development history](CHANGELOG.md)
+- [Release notes for this version](docs/releases/v0.1.0-preview.1.md)
+- [Publication record and maintainer procedure](docs/releases/PREVIEW_RELEASE_PROCESS.md)
 - [繁體中文](README.md)
 
 ## Upstream, license, and acknowledgments

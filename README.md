@@ -8,6 +8,8 @@
 
 <p align="center"><strong>繁體中文</strong> · <a href="README.en.md">English</a></p>
 
+<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1｜Android 預覽版</a> · <a href="#下載與版本">下載</a> · <a href="CHANGELOG.md">版本紀錄</a> · <a href="#功能與個人貢獻">維護成果</a></p>
+
 Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個人分支，持續整理外觀、修正圖片快取與封面載入問題，並保存可追溯的測試紀錄。
 
 本專案承襲上游閱讀器與漫畫來源機制；本分支的貢獻是維護、介面調整及問題修正，並非從零開發整套 App。
@@ -30,14 +32,17 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 
 ## 目前開發狀態
 
-`master` 尚未整合品牌、首頁與快取修正。最新候選位於 [`claude/yorunote-cover-timeout-20261105`](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105)。只複製 `master` 不會取得最新 App 候選程式碼。
+公開預覽版的 App 原始碼固定在 [Tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1)，對應提交 `29b590b`。`master` 已有專案首頁與發行文件，尚未整合這份 App 程式；需要取得與 APK 相同的來源時，請使用上述 Tag。[候選分支與完整驗證紀錄](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105)另外保存開發歷程。
 
-| 候選內容 | 已完成的修改 | 證據 |
+| 領域 | 預覽版包含的修改 | 證據 |
 | --- | --- | --- |
 | 名稱與角色圖示 | Yorunote 顯示名稱、Android 自適應及單色圖示、About 文案 | [品牌驗證紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/yorunote-brand-v0.1/README.md) |
+| 首頁呈現 | 搜尋入口、區塊標題，以及歷史／本機漫畫封面列 | [已接入的首頁程式](https://github.com/mengwen-liu/yorunote/blob/29b590b457378c16b19821f139b9bcad7d38f689/lib/pages/home_page.dart) |
 | 閱讀器快取修正 | 壞圖恢復、同鍵寫入競態防護、避免快取路徑重用 | [R3.1 保存紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/2026-11-04-r3.1/README.md) |
 | 封面載入 | 快取命中繞過佇列、最多 8 個網路請求、同鍵合併、取消傳遞 | [封面載入 R2 紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/README.md) |
 | 封面逾時 | 每次封面圖片 HTTP 嘗試原生總逾時 30 秒 | [逾時驗證紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) |
+
+本版首頁已接入搜尋入口、區塊標題與封面卡；最近閱讀卡片與閱讀進度元件尚未接入這個首頁。
 
 最新 App 來源為 [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689)。CI 記錄（既有 run 41968314599 的結果，本次文件更新未重新執行）為 **350 項測試通過、0 跳過**；分析結果維持 8 項既有 info，沒有新增 warning 或 error。這些結果不等於已完成 Android 實機驗收。
 
@@ -52,7 +57,7 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 
 ## 建置與測試
 
-先切換到要建置的候選來源，閱讀對應驗證紀錄。既有驗證工具鏈為 Flutter 3.41.4、Dart 3.11.1、JDK 17、Rust 1.85.1、Android SDK 36 與 NDK 28.0.13004108。
+要重現已發布預覽版，請先取得上述 Tag 的 App 來源，閱讀對應驗證紀錄。既有驗證工具鏈為 Flutter 3.41.4、Dart 3.11.1、JDK 17、Rust 1.85.1、Android SDK 36 與 NDK 28.0.13004108。
 
 建置還需要依專案設定準備本機 `android/key.properties` 與簽章金鑰；兩者不得提交。主機 HTTP／JavaScript 整合測試需要對應的 rhttp 與 QuickJS 原生函式庫。完整測試條件與建置命令見[最新驗證報告](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md)。
 
@@ -62,6 +67,8 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 - [Headless 模式](doc/headless_doc.md)（上游原始文件）
 - [合成網路來源與裝置驗收](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md)
 - [開發與版本紀錄](CHANGELOG.md)
+- [本版發行說明](docs/releases/v0.1.0-preview.1.md)
+- [發行紀錄與維護者操作原則](docs/releases/PREVIEW_RELEASE_PROCESS.md)
 - [English documentation](README.en.md)
 
 ## 上游、授權與致謝

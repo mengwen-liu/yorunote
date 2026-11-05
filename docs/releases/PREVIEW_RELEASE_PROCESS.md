@@ -2,89 +2,107 @@
 
 適用版本 / Applies to: `v0.1.0-preview.1`（Release ID `434819274`）
 
-Workflow：[`.github/workflows/yorunote-preview-release.yml`](../../.github/workflows/yorunote-preview-release.yml)
-（名稱 / name: **Yorunote Preview Release**）
+[公開預覽版 / Public preview](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1) · [雙語發行說明 / Bilingual notes](v0.1.0-preview.1.md) · [版本紀錄 / Version history](../../CHANGELOG.md)
+
+## 已確認的發行現況 / Confirmed publication state
+
+| 項目 / Item | 狀態 / State |
+| --- | --- |
+| Release | 已公開預覽版 / published pre-release：`draft=false`、`prerelease=true`；未設為 Latest / not marked latest |
+| 公開時間 / Published | `2026-11-05T12:57:32Z`；台灣時間 / Asia/Taipei：2026-11-05 20:57:32 |
+| Tag / App source | `v0.1.0-preview.1` → `29b590b457378c16b19821f139b9bcad7d38f689` |
+| 附件 / Assets | 原 APK `712333248` 與 `.sha256` `712333328` 沿用 / original assets retained |
+| `prepare` | [run 41980565581](https://github.com/mengwen-liu/yorunote/actions/runs/41980565581) 已成功；當時下載回讀並重算附件雜湊 / succeeded and re-hashed both assets before publication |
+| workflow `publish` | 未執行、未驗證 / never executed or validated；本版實際透過維護者網頁發布 / actual publication used the maintainer web interface |
+| Build ALL | 發布前啟用 → 暫停 → 發布後恢復啟用 / active → paused → restored to active |
+| Actions | 發布前後均為 7 筆；沒有新增 Build ALL／AltStore 執行 / remained at 7; no new Build ALL or AltStore runs |
 
 ## 繁體中文
 
-### 目的
+### 本版實際採用的步驟
 
-既有的 `main.yml`（名稱「Build ALL」）設有 `release: published` 觸發規則；Build ALL 完成後，`update_alt_store.yml` 又以 `workflow_run: workflows: ["Build ALL"]` 連動。若以一般方式公開 Release，可能啟動多平台建置與 AltStore 更新。
+1. 回讀儲存庫、既有草稿與附件；確認固定來源分支 `codex/yorunote-preview-29b590b` 仍指向上述 App 提交，沒有進行中或排隊的建置。
+2. 記錄 Build ALL 原為啟用，暫停並從網頁確認已停用。
+3. 更新雙語本文，保留既有兩個附件與預覽版標記。GitHub 網頁在發布時從固定目標建立 Tag，並公開原有 Release 434819274，沒有建立第二份 Release。
+4. 從 GitHub API 回讀 Tag 精確指向 App 來源、公開狀態、本文、附件 ID／大小／GitHub SHA-256 記錄，並在發布後分次核對 Actions 清單。
+5. 確認沒有新增 Build ALL／AltStore 執行後，恢復 Build ALL 啟用並回讀成功訊息。App、workflow 檔與簽章均未修改，也未重新建置。
 
-本流程改由專用 workflow 使用**該次 job 自動產生的 `GITHUB_TOKEN`** 寫入 Release。依 GitHub 官方文件，`GITHUB_TOKEN` 觸發的事件（`workflow_dispatch`、`repository_dispatch` 除外）不會再建立新的 workflow run，因此可避免 Release 事件連動 Build ALL。
+### 已核對與尚待補齊
 
-**重要限制：**
+- `prepare` 的下載後雜湊核對是既有 run 的結果。公開發布後，瀏覽器下載校驗檔遭 `ERR_BLOCKED_BY_CLIENT` 阻擋，本機命令執行環境亦無法啟動，因此**公開後的獨立重新下載與重算雜湊未完成**；沒有繞過封鎖。附件 ID、大小與 GitHub 提供的 digest 均與原值相同。
+- 公開預覽版與 ARM64 Profile 測試建置是不同層面的名稱；本次沒有轉成 Flutter Release 模式，也沒有新增固定簽章。
+- 350 項完整測試、68 項關鍵測試與 APK 靜態檢查是[原建置 run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599) 的結果。本次發布及文件同步未重跑；最新 APK 的 S25+／Tab S11 實機驗收仍待補。
+- 本版未設為 Latest。發布當次首頁右側僅列出 Tag；README 已提供明確的預覽版版本、下載與校驗檔入口。
 
-- 這**不是**永久取消 Build ALL 的 `release: published` 規則；`main.yml` 與 `update_alt_store.yml` 均未修改。
-- 直接在 GitHub 網頁按「Publish release」，或改用 PAT／其他使用者憑證發布，**仍可能啟動 Build ALL**（再連動 AltStore 更新）。
-- Release 事件使用 Tag 所指提交中的 workflow 定義；`29b590b` 中的 `main.yml` 仍含 `release: published`。所以「master 已加入新流程」或「提交訊息含 `[skip ci]`」都不能證明 Release 事件不會觸發（`[skip ci]` 只作用於 `push` 與 `pull_request`）。
-- 在真正執行 publish 並回讀 Actions 紀錄之前，只能說**機制已準備**，不能說已實測無連動。
+### 既有 workflow 的用途與權限限制
 
-### 兩種操作
+[Yorunote Preview Release](../../.github/workflows/yorunote-preview-release.yml) 的 Release ID、App SHA、來源 run、artifact 與雜湊固定在本版。它保留為發行準備的紀錄；本版已公開，**不要為文件同步或下一版發行重新執行這個單次流程**。
 
-| 操作 | 觸發方式 | 會做的事 | 絕不會做的事 |
-| --- | --- | --- | --- |
-| `prepare`（預設） | Actions → Yorunote Preview Release → Run workflow，分支 `master`，operation 選 `prepare` | 核對儲存庫、草稿狀態、來源 run 41968314599 與 artifact 13389067967；下載 ZIP 並核對 ZIP 雜湊；安全解壓；核對 APK 大小與 SHA-256；產生 `.sha256`；附加至既有草稿；回讀並下載重算雜湊 | 公開 Release、建立／移動 Tag、覆蓋或刪除附件、建立另一份 Release |
-| `publish` | 同上，operation 選 `publish`，並在 confirm 欄位輸入 `PUBLISH v0.1.0-preview.1 AT 29b590b457378c16b19821f139b9bcad7d38f689` | 重新核對兩個附件（下載重算）、Release ID、prerelease 狀態；確認 Tag 已存在且解析後指向 `29b590b…`；只將既有草稿公開為 prerelease，`make_latest=false` | 建立／移動／覆寫 Tag、變更附件、建立新版 Release、設為 latest |
+- `prepare` 已成功，證據如上。`publish` job 從未執行；不能由網頁發布成功推論該 job 可用。
+- [GitHub 的事件規則](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)限制 `GITHUB_TOKEN` 造成的 Release 事件連鎖觸發，但這不等於該 Token 具有發布所需的權限。
+- [Update a release](https://docs.github.com/en/rest/releases/releases#update-a-release) 另規定：若解析後目標提交相對預設分支改動 workflow，呼叫者須具 workflow 修改權限；內建 `GITHUB_TOKEN` 不能取得該授權。本專案未實際嘗試 workflow `publish`，沒有此操作回傳 403／404 的實測結果。
 
-固定常數（Release ID、Tag、App 來源 SHA、來源 run、artifact、雜湊）寫在 workflow 內，不接受任何儲存庫、URL、腳本或提交作為輸入。workflow 不 checkout 任何程式碼，也不執行 artifact 內的內容。權限只有 `actions: read`、`contents: write`；不使用 PAT、`ACTION_GITHUB_TOKEN` 或其他 Secrets。
+### 下一版發行前
 
-### 公開前的步驟（須維護者明確同意）
+這是下一次操作的原則，不代表已建立通用發版自動化。
 
-1. 確認 `prepare` 已成功，草稿附件為下列兩個檔案且雜湊相符。
-2. 由維護者以一般、已授權的使用者工具建立 **lightweight 或 annotated** Tag `v0.1.0-preview.1`，精確指向 `29b590b457378c16b19821f139b9bcad7d38f689`，並回讀確認。
-   注意：只推送 Tag 不會建立 Release 事件；`main.yml` 沒有 `push: tags` 觸發。
-3. 執行 `publish`（含確認字串）。workflow 若發現 Tag 缺少或指錯位置會直接停止。
-4. 回讀 Release（`draft=false`、`prerelease=true`），並檢查 Actions 列表中沒有新增 Build ALL 或 Update AltStore Source 的 run。
+1. 先確認下一版授權範圍、App 來源、版本、簽章與附件；既有 Tag 不移動、不覆寫。本版 App 仍未整合進 master，不能直接把 master 當成下一個 App 來源。
+2. 檢查目標提交的 workflow 觸發規則與有無進行中的 Build ALL／AltStore 執行。既有 `main.yml` 的 `release: published` 與 AltStore 連動仍在；本次只是暫停後恢復，沒有永久移除。
+3. 需要暫停時，先記錄原狀態、確認停用成功，再發布。原本已停用者保持停用；中途失敗也須恢復本次改動過的狀態。停用不會取消既有 run，詳見[官方說明](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows?tool=webui)。
+4. 發布前核對來源與附件，發布後回讀實際 Tag、Release、下載內容與 Actions；未執行的檢查明確記錄。遇到權限或瀏覽器封鎖時停止相依操作，不更換憑證或繞過限制。
+5. 同步中英文 README、CHANGELOG 與該版發行說明；區分 App 來源、建置 workflow 提交及文件提交。通用 Android 發版流程、固定簽章與實機驗收屬後續工作。
 
-### 復原方式
+### 文件復原
 
-- 本流程與文件的提交可以 `git revert` 撤回，不影響 App 原始碼。
-- 草稿附件可由維護者在 Release 編輯頁手動刪除；workflow 本身不提供刪除或覆蓋功能。
+本次文件提交可用 `git revert` 撤回。這不會撤銷既有公開 Release、移動 Tag、刪除附件或恢復儲存庫簡介；這些項目須分別處理。歷史驗證目錄保留原文。
 
 ## English
 
-### Purpose
+### What actually ran for this version
 
-The existing `main.yml` ("Build ALL") is triggered by `release: published`, and `update_alt_store.yml` follows it via `workflow_run: workflows: ["Build ALL"]`. Publishing a release normally can therefore start the multi-platform build and the AltStore update.
+1. Read back the repository, existing draft, and assets. The fixed source branch `codex/yorunote-preview-29b590b` still pointed at the application commit above, and no build was running or queued.
+2. Record that Build ALL was active, disable it, and confirm the disabled state in the web interface.
+3. Update the bilingual notes while retaining both assets and the pre-release flag. GitHub created the tag from the fixed target during publication and published the existing release 434819274; no second release was created.
+4. Use GitHub API readbacks to verify the tag target, public state, body, asset IDs, sizes, and GitHub digests. Check the Actions list more than once after publication.
+5. With no new Build ALL or AltStore runs, re-enable Build ALL and confirm success. Application code, workflow files, and signing were unchanged; nothing was rebuilt.
 
-This process writes to the release only through a dedicated workflow using the job's **automatically generated `GITHUB_TOKEN`**. GitHub documents that events triggered by `GITHUB_TOKEN` (except `workflow_dispatch` and `repository_dispatch`) do not create new workflow runs, which avoids chaining into Build ALL.
+### Verification scope
 
-**Limitations:**
+- The prepare run's successful download-and-hash checks are historical CI evidence. After publication, Chrome blocked the checksum download with `ERR_BLOCKED_BY_CLIENT`, and local command execution was unavailable. **An independent post-publication download and hash calculation was not completed.** The block was not bypassed; asset IDs, sizes, and GitHub digests remained unchanged.
+- Publishing a GitHub pre-release did not convert the ARM64 Profile APK into a Flutter Release-mode build or establish persistent signing.
+- The 350 full-suite tests, 68 key tests, and static APK checks belong to [build run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599). Neither publication nor this documentation update re-ran them. Device acceptance of this APK on the S25+ and Tab S11 remains pending.
+- This preview was not marked latest. At publication time the native homepage sidebar listed the tag; both READMEs provide explicit preview-version and download links.
 
-- This does **not** permanently remove the `release: published` trigger; `main.yml` and `update_alt_store.yml` are unchanged.
-- Clicking "Publish release" in the GitHub web UI, or publishing with a PAT or other user credential, **can still start Build ALL** (and then the AltStore update).
-- A release event uses the workflow definitions in the tagged commit; `main.yml` at `29b590b` still contains `release: published`. Neither the new workflow on master nor `[skip ci]` (which only applies to `push` and `pull_request`) proves that release events will not trigger.
-- Until `publish` has actually run and the Actions history has been checked, the mechanism is only **prepared**, not verified in practice.
+### Existing workflow and permissions
 
-### Operations
+The [Yorunote Preview Release workflow](../../.github/workflows/yorunote-preview-release.yml) pins this version's release, source, run, artifact, and hashes. It is a record of the one-time preparation, **not a workflow to re-run for documentation updates or the next release**.
 
-- `prepare` (default): verifies the repository, draft state, source run 41968314599 and artifact 13389067967; downloads the ZIP and checks its hash; extracts it safely; checks APK size and SHA-256; generates the `.sha256`; attaches both to the existing draft; reads them back and re-hashes the downloads. It never publishes, never creates or moves a tag, never overwrites or deletes assets.
-- `publish`: requires the confirmation string `PUBLISH v0.1.0-preview.1 AT 29b590b457378c16b19821f139b9bcad7d38f689`. It re-verifies both assets, the release ID and pre-release state, requires the tag to already exist and resolve to `29b590b…`, then only flips the existing draft to a published pre-release with `make_latest=false`. It never creates, moves or overwrites tags, never changes assets, never creates a new release.
+- `prepare` succeeded. The workflow's `publish` job never ran; successful web publication does not validate it.
+- GitHub's [token-event behavior](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow) prevents a token-originated release event from recursively starting workflows. Permission to publish is a separate requirement.
+- Under [Update a release](https://docs.github.com/en/rest/releases/releases#update-a-release), a target with workflow changes relative to the default branch requires workflow-write authorization, unavailable to the built-in `GITHUB_TOKEN`. This repository did not attempt that publish job, so no 403/404 from that operation was observed.
 
-All identifiers are constants in the workflow; no repository, URL, script or commit is accepted as input. The workflow checks out no code and executes nothing from the artifact. Permissions are limited to `actions: read` and `contents: write`; no PAT, `ACTION_GITHUB_TOKEN` or other secret is used.
+### Before the next release
 
-### Before publication (requires explicit maintainer approval)
+This is guidance for the next operation, not a claim that reusable release automation already exists.
 
-1. Confirm that `prepare` succeeded and the two draft assets match the hashes below.
-2. The maintainer creates the tag `v0.1.0-preview.1` at exactly `29b590b457378c16b19821f139b9bcad7d38f689` with normal, authorized user tools and reads it back. Pushing a tag alone does not create a release event; `main.yml` has no `push: tags` trigger.
-3. Run `publish` with the confirmation string. It stops if the tag is missing or points elsewhere.
-4. Read back the release (`draft=false`, `prerelease=true`) and check that no new Build ALL or Update AltStore Source run appeared.
+1. Confirm the authorized scope, application source, version, signing, and assets. Never move or overwrite an existing tag. The published application code is not yet integrated into master.
+2. Inspect the workflows at the target commit and any active or queued Build ALL or AltStore runs. The release-published trigger and AltStore linkage remain; the temporary pause did not remove them.
+3. If a pause is needed, record and verify it before publishing. Preserve workflows that were already disabled, and restore only state changed by this operation, including on failure. [Disabling a workflow](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows?tool=webui) does not cancel existing runs.
+4. Verify source and assets before publication; read back the resulting tag, release, downloaded contents, and Actions afterward. Record missing checks explicitly. Stop affected work on permission or browser blocks rather than changing credentials or bypassing restrictions.
+5. Synchronise both READMEs, CHANGELOG, and version-specific notes. Keep application, build-workflow, and documentation commits distinct. Reusable Android release automation, persistent signing, and device acceptance are follow-up work.
 
-### Rollback
+### Documentation rollback
 
-- The workflow and documentation commits can be reverted with `git revert`; application source is not affected.
-- Draft assets can be removed manually by the maintainer on the release edit page; the workflow provides no delete or overwrite operation.
+Revert the documentation commit with `git revert` if needed. This does not unpublish the release, move its tag, delete assets, or restore repository metadata. Those are separate operations. Historical verification files remain unchanged.
 
-## 固定值 / Fixed values
+## 固定來源與附件 / Fixed source and assets
 
 | 項目 / Item | 值 / Value |
 | --- | --- |
-| App 來源 / Application source | `29b590b457378c16b19821f139b9bcad7d38f689` |
-| 原建置 workflow 提交 / Build-workflow commit (run 41968314599) | `356be4942360501fcc9eab36e45577b34912f525` |
-| Artifact | `yorunote-cover-timeout-arm64-profile-apk`（ID 13389067967） |
-| Artifact ZIP SHA-256 | `9958057d90b33710c09c921809a8ec1b864af8ce40508b1ce4a7ae4ccceac275` |
-| APK | `Yorunote_29b590b_cover_timeout_arm64_profile.apk` |
-| APK 大小 / size | 27,882,063 bytes |
+| App | `29b590b457378c16b19821f139b9bcad7d38f689` |
+| 原建置 workflow / Original build-workflow commit | `356be4942360501fcc9eab36e45577b34912f525`；run `41968314599` |
+| 原 artifact / Original artifact | `13389067967`；ZIP SHA-256 `9958057d90b33710c09c921809a8ec1b864af8ce40508b1ce4a7ae4ccceac275` |
+| APK | `Yorunote_29b590b_cover_timeout_arm64_profile.apk`；27,882,063 bytes；asset `712333248` |
 | APK SHA-256 | `7ad08033c204a1de62546ca588ea0c050a5ace8ec0d4945d8c7978e156f5057f` |
-| 雜湊檔 / Checksum file | `Yorunote_29b590b_cover_timeout_arm64_profile.apk.sha256`（`sha256sum` 格式 / format） |
+| Checksum | `Yorunote_29b590b_cover_timeout_arm64_profile.apk.sha256`；115 bytes；asset `712333328` |
+| Checksum file SHA-256 | `e7c72a4a1e9f379829bfe5e1e9dc98b726852e9dcb6a73bea9c35f736936d52a` |

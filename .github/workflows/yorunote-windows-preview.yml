@@ -1,5 +1,5 @@
 name: Yorunote Windows Preview
-run-name: Windows x64 preview - fixed source 944162b5
+run-name: Windows x64 preview - fixed source 71485c7d
 
 on:
   push:
@@ -23,8 +23,8 @@ jobs:
       run:
         shell: pwsh
     env:
-      SOURCE_SHA: '944162b55ba424f13104ba402aa5682d648a9fdb'
-      YORUNOTE_SMOKE_SOURCE: '944162b55ba424f13104ba402aa5682d648a9fdb'
+      SOURCE_SHA: '71485c7de8799e30c9e1b5797ad83fba65668d51'
+      YORUNOTE_SMOKE_SOURCE: '71485c7de8799e30c9e1b5797ad83fba65668d51'
       FLUTTER_SUPPRESS_ANALYTICS: 'true'
       PUB_ENVIRONMENT: github-actions
 
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout fixed application source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: '944162b55ba424f13104ba402aa5682d648a9fdb'
+          ref: '71485c7de8799e30c9e1b5797ad83fba65668d51'
           persist-credentials: false
 
       - name: Verify source and prepare evidence
@@ -118,11 +118,11 @@ jobs:
 
       - name: Analyze Windows acceptance entry point
         run: |
-          flutter analyze --no-pub tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'analyze-windows-tool.log')
+          flutter analyze --no-pub tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart lib/components/reader_image_loading.dart test/reader/reader_image_loading_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'analyze-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Windows acceptance analyzer failed' }
           dart format --output=show tool/windows/smoke.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-preview-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Dart formatter parsing failed' }
-          dart format --output=none --set-exit-if-changed tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-windows-tool.log')
+          dart format --output=none --set-exit-if-changed tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart lib/components/reader_image_loading.dart test/reader/reader_image_loading_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Dart format parsing failed' }
 
       - name: Reproduce fresh-profile failure on the previous source
@@ -157,7 +157,7 @@ jobs:
 
       - name: Run brand and fresh-profile regression checks
         run: |
-          flutter test --no-pub --reporter expanded test/brand/yorunote_brand_test.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'brand-tests.log')
+          flutter test --no-pub --reporter expanded test/brand/yorunote_brand_test.dart test/foundation/favorites_follow_updates_test.dart test/reader/reader_image_loading_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'brand-tests.log')
           if ($LASTEXITCODE -ne 0) { throw 'Brand tests failed' }
 
       - name: Build distributable Windows Release

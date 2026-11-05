@@ -1,7 +1,7 @@
 # Yorunote
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/mengwen-liu/yorunote/29b590b457378c16b19821f139b9bcad7d38f689/assets/app_icon.png" width="160" alt="Yorunote 角色頭像 / Yorunote character portrait">
+  <img src="docs/brand/%E5%A4%9C%E8%AE%80%E6%9C%88%E9%A0%81%E7%B2%BE%E9%9D%88_%E7%9C%A8%E7%9C%BC%E5%BE%AE%E7%AC%91.gif" width="170" alt="Animated Yorunote character: a green-haired, blue-eyed moon-and-book elf blinking and smiling / Yorunote 角色動畫：綠髮藍眼的月亮書頁精靈眨眼微笑">
 </p>
 
 <p align="center"><strong>A reading-focused Flutter comic reader<br>以閱讀為中心的 Flutter 漫畫閱讀器</strong></p>
@@ -14,7 +14,7 @@ The reader and comic-source system come from upstream. This repository is a main
 
 ## Downloads and releases
 
-- [GitHub Releases](https://github.com/mengwen-liu/yorunote/releases): no Yorunote release has been published yet.
+- [GitHub Releases](https://github.com/mengwen-liu/yorunote/releases): no Yorunote release has been published yet. An unpublished Release draft (`draft`, `prerelease`) exists but **has no APK attached** and is not a download.
 - [Development history](CHANGELOG.md) distinguishes candidate changes from published releases.
 - [Bilingual notes for the proposed first preview](docs/releases/v0.1.0-preview.1.md): an unpublished working draft.
 - The latest test APK is available from [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599): `Yorunote_29b590b_cover_timeout_arm64_profile.apk`. It is an Android ARM64 **Profile test build**.
@@ -35,7 +35,7 @@ The reader and comic-source system come from upstream. This repository is a main
 | Cover loading | Cache hits bypass the queue; 8 network slots; same-key sharing; cancellation propagation | [Thumbnail R2 report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/README.md) |
 | Cover timeout | A native 30-second total timeout for each cover-image HTTP attempt | [Timeout report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) |
 
-The application source is [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689). CI records **350 passing tests with no skips** and the same 8 existing analyzer infos, with no new warnings or errors. This does not establish Android runtime acceptance.
+The application source is [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689). CI records (the existing run 41968314599; not re-run for this documentation update) **350 passing tests with no skips** and the same 8 existing analyzer infos, with no new warnings or errors. This does not establish Android runtime acceptance.
 
 The 30-second timeout excludes queueing, source lookups, and retry delays. Four attempts plus the existing 2/4/8-second delays can take about 134 seconds, excluding queueing.
 

@@ -7,6 +7,15 @@ This file records traceable development milestones. Candidate commits below are 
 
 ## 尚未發布 / Unreleased
 
+### 文件與展示素材 / Documentation and media
+
+- 首頁（[繁體中文](README.md)、[English](README.en.md)）改用角色動畫 [`夜讀月頁精靈_眨眼微笑.gif`](docs/brand/README.md)（512×512、6 影格、494,501 位元組）；素材來源與雜湊見該目錄說明。
+  Both homepages now show the character animation; source and hash are in the media README.
+- 這是純文件與展示素材變更，不含 App 程式、版本、圖示、依賴或 workflow 修改；`master` 仍未整合最新 App 候選。
+  Documentation and media only: no app code, version, icons, dependencies or workflows changed; `master` still does not include the latest app candidate.
+- GitHub Release 草稿（ID 434819274）仍為 draft／prerelease、未發布、無附件。
+  The GitHub Release draft (ID 434819274) remains an unpublished draft/pre-release with no assets.
+
 ### v0.1.0-preview.1（發行說明工作稿 / Proposed preview）
 
 - 說明：[雙語發行說明](docs/releases/v0.1.0-preview.1.md)。

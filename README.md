@@ -1,7 +1,7 @@
 # Yorunote
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/mengwen-liu/yorunote/29b590b457378c16b19821f139b9bcad7d38f689/assets/app_icon.png" width="160" alt="Yorunote 角色頭像 / Yorunote character portrait">
+  <img src="docs/brand/%E5%A4%9C%E8%AE%80%E6%9C%88%E9%A0%81%E7%B2%BE%E9%9D%88_%E7%9C%A8%E7%9C%BC%E5%BE%AE%E7%AC%91.gif" width="170" alt="Yorunote 角色動畫：綠髮藍眼的月亮書頁精靈眨眼微笑 / Animated Yorunote character: a green-haired, blue-eyed moon-and-book elf blinking and smiling">
 </p>
 
 <p align="center"><strong>以閱讀為中心的 Flutter 漫畫閱讀器<br>A reading-focused Flutter comic reader</strong></p>
@@ -14,7 +14,7 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 
 ## 下載與版本
 
-- [版本發行頁面（Releases）](https://github.com/mengwen-liu/yorunote/releases)：目前尚無已發布的 Yorunote 版本。
+- [版本發行頁面（Releases）](https://github.com/mengwen-liu/yorunote/releases)：目前尚無已發布的 Yorunote 版本。另有一份未公開的 Release 草稿（`draft`、`prerelease`），**目前沒有任何 APK 附件**，不是下載點。
 - [開發紀錄](CHANGELOG.md)：區分候選修改與正式發行。
 - [首個預覽版的雙語發行說明工作稿](docs/releases/v0.1.0-preview.1.md)：尚未發布。
 - 最新測試 APK 位於 [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599)，檔名為 `Yorunote_29b590b_cover_timeout_arm64_profile.apk`。目前只提供 Android ARM64 Profile 測試建置。
@@ -35,7 +35,7 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 | 封面載入 | 快取命中繞過佇列、最多 8 個網路請求、同鍵合併、取消傳遞 | [封面載入 R2 紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/README.md) |
 | 封面逾時 | 每次封面圖片 HTTP 嘗試原生總逾時 30 秒 | [逾時驗證紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) |
 
-最新 App 來源為 [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689)。CI 記錄為 **350 項測試通過、0 跳過**；分析結果維持 8 項既有 info，沒有新增 warning 或 error。這些結果不等於已完成 Android 實機驗收。
+最新 App 來源為 [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689)。CI 記錄（既有 run 41968314599 的結果，本次文件更新未重新執行）為 **350 項測試通過、0 跳過**；分析結果維持 8 項既有 info，沒有新增 warning 或 error。這些結果不等於已完成 Android 實機驗收。
 
 封面逾時的 30 秒不包含排隊、來源資料查詢或重試等待。既有 4 次嘗試與 2／4／8 秒等待可能合計約 134 秒，另加排隊時間。
 

@@ -1,5 +1,5 @@
 name: Yorunote Windows Preview
-run-name: Windows x64 preview - fixed source c2fdb8fa
+run-name: Windows x64 preview - fixed source 1b72ff18
 
 on:
   push:
@@ -23,8 +23,8 @@ jobs:
       run:
         shell: pwsh
     env:
-      SOURCE_SHA: 'c2fdb8fa13435b898ad2f79fb80b11cdadfb4acc'
-      YORUNOTE_SMOKE_SOURCE: 'c2fdb8fa13435b898ad2f79fb80b11cdadfb4acc'
+      SOURCE_SHA: '1b72ff18bb65d43a8ffe919837f13a919fd85ffa'
+      YORUNOTE_SMOKE_SOURCE: '1b72ff18bb65d43a8ffe919837f13a919fd85ffa'
       FLUTTER_SUPPRESS_ANALYTICS: 'true'
       PUB_ENVIRONMENT: github-actions
 
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout fixed application source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: 'c2fdb8fa13435b898ad2f79fb80b11cdadfb4acc'
+          ref: '1b72ff18bb65d43a8ffe919837f13a919fd85ffa'
           persist-credentials: false
 
       - name: Verify source and prepare evidence
@@ -86,6 +86,8 @@ jobs:
 
       - name: Check SDK and Windows native toolchain
         run: |
+          flutter --version | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'flutter-bootstrap.log')
+          if ($LASTEXITCODE -ne 0) { throw 'Flutter bootstrap failed' }
           flutter --version --machine | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'flutter-version.json')
           if ($LASTEXITCODE -ne 0) { throw 'Flutter version check failed' }
           $sdk = Get-Content -Raw (Join-Path $env:EVIDENCE 'flutter-version.json') | ConvertFrom-Json

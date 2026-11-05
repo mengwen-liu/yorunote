@@ -16,22 +16,22 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api repos/mengwen-liu/yorunote/actions/artifacts/13442369189/zip > evidence.zip
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13443617577/zip > evidence.zip
           python3 - <<'PY'
           import base64, hashlib, pathlib, zipfile
           data = pathlib.Path("evidence.zip").read_bytes()
-          assert hashlib.sha256(data).hexdigest() == "849c58edb8e1862075250b4ddc36f4555a746db85432fd09686554578cde1035"
+          assert hashlib.sha256(data).hexdigest() == "2a04e673c2de590d1fee761bfbc2c37ecfcf07340366d5e48f9a4ac442143f75"
           with zipfile.ZipFile("evidence.zip") as archive:
               print("FILES", archive.namelist())
               for name in archive.namelist():
                   p = pathlib.PurePosixPath(name)
                   assert not p.is_absolute() and ".." not in p.parts
-                  if p.name in {"distribution-stdout.log", "distribution-stderr.log", "source.json", "authenticode.json", "smoke-seed.json", "smoke-restart.json", "process-distribution.json", "package.json"}:
+                  if p.name in {"distribution-stdout.log", "distribution-stderr.log", "source.json", "authenticode.json", "smoke-seed.json", "smoke-restart.json", "process-distribution.json", "package.json", "restart-failure-state.json", "seed-failure-state.json"}:
                       raw = archive.read(name)
                       print("BEGIN_TEXT", p.name, "BYTES", len(raw))
                       print(raw.decode("utf-8-sig", errors="replace")[:20000])
                       print("END_TEXT", p.name)
-                  if p.name in {"seed-reader-page2.png", "seed-offline-reader.png", "seed-home-en-US-dark.png"}:
+                  if p.name in {"restart-failure.png", "seed-offline-reader.png"}:
                       encoded = base64.b64encode(archive.read(name)).decode("ascii")
                       print("BEGIN_IMAGE_BASE64", p.name)
                       for i in range(0, len(encoded), 512):

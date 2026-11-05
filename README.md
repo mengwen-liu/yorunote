@@ -1,64 +1,70 @@
 # Yorunote
 
-Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源 Flutter 漫畫閱讀器個人 Fork，用於閱讀本機與網路來源的漫畫。
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mengwen-liu/yorunote/29b590b457378c16b19821f139b9bcad7d38f689/assets/app_icon.png" width="160" alt="Yorunote 角色頭像 / Yorunote character portrait">
+</p>
 
-本儲存庫並非從零開發的原創 App。功能主要承襲上游，本 Fork 的調整限於外觀、維護與問題修正。
+<p align="center"><strong>以閱讀為中心的 Flutter 漫畫閱讀器<br>A reading-focused Flutter comic reader</strong></p>
 
-## 上游與授權
+<p align="center"><strong>繁體中文</strong> · <a href="README.en.md">English</a></p>
 
-- 上游專案：<https://github.com/venera-app/venera>
-- 授權：沿用上游的 GPL-3.0，全文見 [LICENSE](LICENSE)。
-- 著作權聲明與第三方授權檔均保持原樣。
-- Android 套件名稱（`com.github.wgh136.venera`）等上游識別資訊目前尚未更動。
+Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個人分支，持續整理外觀、修正圖片快取與封面載入問題，並保存可追溯的測試紀錄。
+
+本專案承襲上游閱讀器與漫畫來源機制；本分支的貢獻是維護、介面調整及問題修正，並非從零開發整套 App。
+
+## 下載與版本
+
+- [版本發行頁面（Releases）](https://github.com/mengwen-liu/yorunote/releases)：目前尚無已發布的 Yorunote 版本。
+- [開發紀錄](CHANGELOG.md)：區分候選修改與正式發行。
+- [首個預覽版的雙語發行說明工作稿](docs/releases/v0.1.0-preview.1.md)：尚未發布。
+- 最新測試 APK 位於 [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599)，檔名為 `Yorunote_29b590b_cover_timeout_arm64_profile.apk`。目前只提供 Android ARM64 Profile 測試建置。
+- 上述 artifact 的到期時間是 **2026-11-12 12:47（台灣時間，UTC+8）**；下載需登入 GitHub。它不是長期發行下載點。
+
+> **安裝相容性：** 測試 APK 使用一次性測試憑證。若裝置已安裝不同簽章的相同套件 App，無法直接覆蓋安裝。請保留現有 App 與資料；目前尚未建立固定簽章的更新管道。
+>
+> **驗證範圍：** 最新候選已完成主機測試與 CI 的 APK 靜態檢查；S25+／Tab S11 對這份候選的實機驗收仍待完成。
+
+## 目前開發狀態
+
+`master` 尚未整合品牌、首頁與快取修正。最新候選位於 [`claude/yorunote-cover-timeout-20261105`](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105)。只複製 `master` 不會取得最新 App 候選程式碼。
+
+| 候選內容 | 已完成的修改 | 證據 |
+| --- | --- | --- |
+| 名稱與角色圖示 | Yorunote 顯示名稱、Android 自適應及單色圖示、About 文案 | [品牌驗證紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/yorunote-brand-v0.1/README.md) |
+| 閱讀器快取修正 | 壞圖恢復、同鍵寫入競態防護、避免快取路徑重用 | [R3.1 保存紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/2026-11-04-r3.1/README.md) |
+| 封面載入 | 快取命中繞過佇列、最多 8 個網路請求、同鍵合併、取消傳遞 | [封面載入 R2 紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/README.md) |
+| 封面逾時 | 每次封面圖片 HTTP 嘗試原生總逾時 30 秒 | [逾時驗證紀錄](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) |
+
+最新 App 來源為 [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689)。CI 記錄為 **350 項測試通過、0 跳過**；分析結果維持 8 項既有 info，沒有新增 warning 或 error。這些結果不等於已完成 Android 實機驗收。
+
+封面逾時的 30 秒不包含排隊、來源資料查詢或重試等待。既有 4 次嘗試與 2／4／8 秒等待可能合計約 134 秒，另加排隊時間。
+
+## 功能與個人貢獻
 
 | 類別 | 內容 |
 | --- | --- |
-| 承襲上游 | 下方功能摘要、漫畫來源機制與 Headless 模式 |
-| 本 Fork | 外觀（名稱、圖示、首頁與 About 文案）調整、維護、閱讀器圖片快取問題修正 |
+| 承襲上游 | 本機與網路漫畫閱讀、JavaScript 漫畫來源、收藏、下載，以及來源支援的留言與標籤等功能 |
+| 本分支維護 | 品牌與首頁調整、閱讀器圖片快取修正、封面請求佇列與取消、原生逾時保護、測試及工程紀錄 |
 
-## 目前狀態
+## 建置與測試
 
-`master` 目前尚未整合品牌與快取修正，內容仍是上游程式加上 CI 設定。相關成果在各自分支，**尚未合併至 master**：
+先切換到要建置的候選來源，閱讀對應驗證紀錄。既有驗證工具鏈為 Flutter 3.41.4、Dart 3.11.1、JDK 17、Rust 1.85.1、Android SDK 36 與 NDK 28.0.13004108。
 
-| 分支 | 內容 |
-| --- | --- |
-| [`claude/venera-r31-backup-20261104`](https://github.com/mengwen-liu/yorunote/tree/claude/venera-r31-backup-20261104) | 首頁、閱讀器圖片快取修正的候選來源與驗證保存 |
-| [`claude/yorunote-brand-v01-20261104`](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-brand-v01-20261104) | 在上述候選上加入 Yorunote 名稱、About 文案與圖示 |
-| [`claude/yorunote-arm64-ci-20261104`](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-arm64-ci-20261104) | 上列品牌分支加上 ARM64 測試建置的 CI 設定與證據 |
-
-驗證紀錄（位於 `claude/yorunote-arm64-ci-20261104`）：
-
-- [R3.1 驗證保存](https://github.com/mengwen-liu/yorunote/blob/claude/yorunote-arm64-ci-20261104/docs/verification/2026-11-04-r3.1/README.md)
-- [品牌 v0.1 驗證索引](https://github.com/mengwen-liu/yorunote/blob/claude/yorunote-arm64-ci-20261104/docs/verification/yorunote-brand-v0.1/README.md)
-- [ARM64 CI 結果](https://github.com/mengwen-liu/yorunote/blob/claude/yorunote-arm64-ci-20261104/docs/verification/yorunote-brand-v0.1/apk-build/CI_RESULT.md)
-
-## 建置與測試用 APK
-
-- 目前沒有正式發行版，也沒有 Yorunote 的發行管道。上游的 Release、AUR、F-Droid 等版本不是 Yorunote。
-- 複製 `master` 不會得到品牌候選版；需切換到上列分支。
-- 測試用 APK 來自 [Actions run 41845996537](https://github.com/mengwen-liu/yorunote/actions/runs/41845996537)（手動觸發，建置來源 `a789d2a`），其限制如下：
-  - artifact 登入 GitHub 後才能下載，保留至 2026-11-11 到期，過期後須重新建置。
-  - 僅 `arm64-v8a`，使用一次性測試金鑰簽章；若裝置上已有不同簽章的同套件名稱 App，無法直接覆蓋安裝。
-  - 僅完成靜態檢查，尚未做 Android 實機驗收。
-- 自行建置：
-  1. 安裝 [Flutter](https://docs.flutter.dev/get-started/install) 與 [Rust](https://rustup.rs/)。CI 工作流使用 Flutter 3.41.4、Rust 1.85.1。
-  2. 切換到想建置的分支後，執行 `flutter build apk` 等指令。
-
-## 功能（承襲上游）
-
-- 閱讀本機漫畫
-- 使用 JavaScript 建立漫畫來源
-- 閱讀網路來源的漫畫
-- 管理收藏
-- 下載漫畫
-- 若來源支援，可檢視留言、標籤等資訊，並登入後留言、評分等
+建置還需要依專案設定準備本機 `android/key.properties` 與簽章金鑰；兩者不得提交。主機 HTTP／JavaScript 整合測試需要對應的 rhttp 與 QuickJS 原生函式庫。完整測試條件與建置命令見[最新驗證報告](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md)。
 
 ## 文件
 
-- [建立漫畫來源](doc/comic_source.md)
-- [Headless 模式](doc/headless_doc.md)
+- [建立漫畫來源](doc/comic_source.md)（上游原始文件）
+- [Headless 模式](doc/headless_doc.md)（上游原始文件）
+- [合成網路來源與裝置驗收](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md)
+- [開發與版本紀錄](CHANGELOG.md)
+- [English documentation](README.en.md)
 
-## 致謝
+## 上游、授權與致謝
 
-- 上游 [Venera](https://github.com/venera-app/venera) 及其貢獻者。
-- 標籤中文翻譯來自 [EhTagTranslation](https://github.com/EhTagTranslation/Database)。
+- 上游：[Venera](https://github.com/venera-app/venera)。
+- 程式授權：沿用 **GPL-3.0**，全文見 [LICENSE](LICENSE)；著作權與第三方授權聲明保留。
+- Android 套件識別碼目前仍為 `com.github.wgh136.venera`。
+- 標籤翻譯資料：[EhTagTranslation](https://github.com/EhTagTranslation/Database)。
+- 維護過程使用 AI 協助；個人貢獻以實際提交、測試與驗證紀錄為依據。
+- 新增首頁與發行說明採台灣繁體中文，並提供英文對照。上游原始文件、授權與歷史證據保留其原文。

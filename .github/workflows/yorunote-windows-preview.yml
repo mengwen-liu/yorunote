@@ -65,8 +65,8 @@ jobs:
           $nativeCode = [regex]::Match($driverText, "(?s)Add-Type @'\r?\n(.*?)\r?\n'@").Groups[1].Value
           if (-not $nativeCode) { throw 'Native input declarations were not found' }
           Add-Type -TypeDefinition $nativeCode
-          $inputType = [YorunoteCapture+INPUT64]
-          if ([Runtime.InteropServices.Marshal]::SizeOf($inputType) -ne 40) {
+          $inputValue = [YorunoteCapture+INPUT64]::new()
+          if ([Runtime.InteropServices.Marshal]::SizeOf($inputValue) -ne 40) {
             throw 'Unexpected Windows x64 INPUT structure size'
           }
           Write-Host 'Native input declarations compile; INPUT64 size is 40 bytes.'

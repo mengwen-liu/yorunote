@@ -1,5 +1,5 @@
 name: Yorunote Windows Preview
-run-name: Windows x64 preview - fixed source 5d95b248
+run-name: Windows x64 preview - fixed source 684a4c63
 
 on:
   push:
@@ -23,8 +23,8 @@ jobs:
       run:
         shell: pwsh
     env:
-      SOURCE_SHA: '5d95b24884ee6e07e4fee571a96c7b0534b73c1f'
-      YORUNOTE_SMOKE_SOURCE: '5d95b24884ee6e07e4fee571a96c7b0534b73c1f'
+      SOURCE_SHA: '684a4c63d4e8f123043c34968b24e0c705b04f2d'
+      YORUNOTE_SMOKE_SOURCE: '684a4c63d4e8f123043c34968b24e0c705b04f2d'
       FLUTTER_SUPPRESS_ANALYTICS: 'true'
       PUB_ENVIRONMENT: github-actions
 
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout fixed application source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: '5d95b24884ee6e07e4fee571a96c7b0534b73c1f'
+          ref: '684a4c63d4e8f123043c34968b24e0c705b04f2d'
           persist-credentials: false
 
       - name: Verify source and prepare evidence
@@ -109,14 +109,44 @@ jobs:
 
       - name: Analyze Windows acceptance entry point
         run: |
-          flutter analyze --no-pub tool/windows/smoke.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'analyze-windows-tool.log')
+          flutter analyze --no-pub tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'analyze-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Windows acceptance analyzer failed' }
-          dart format --output=none --set-exit-if-changed tool/windows/smoke.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-windows-tool.log')
+          dart format --output=none --set-exit-if-changed tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Dart format parsing failed' }
 
-      - name: Run existing brand checks on Windows
+      - name: Reproduce fresh-profile failure on the previous source
         run: |
-          flutter test --no-pub --reporter expanded test/brand/yorunote_brand_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'brand-tests.log')
+          $baselineSha = '5d95b24884ee6e07e4fee571a96c7b0534b73c1f'
+          $baseline = Join-Path $env:RUNNER_TEMP 'yorunote-favorites-baseline'
+          if (Test-Path -LiteralPath $baseline) { throw 'Baseline directory already exists' }
+          git fetch --no-tags --depth=1 origin $baselineSha
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot read fixed baseline commit' }
+          git worktree add --detach $baseline $baselineSha
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot create baseline worktree' }
+          $testFile = 'test/foundation/favorites_follow_updates_test.dart'
+          New-Item -ItemType Directory -Force -Path (Join-Path $baseline 'test/foundation') | Out-Null
+          Copy-Item -LiteralPath (Join-Path $PWD $testFile) -Destination (Join-Path $baseline $testFile)
+          Push-Location $baseline
+          try {
+            if ((git rev-parse HEAD).Trim() -ne $baselineSha) { throw 'Baseline SHA mismatch' }
+            flutter pub get --enforce-lockfile | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'baseline-pub-get.log')
+            if ($LASTEXITCODE -ne 0) { throw 'Baseline pub get failed' }
+            flutter test --no-pub --reporter expanded $testFile | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'baseline-favorites-test.log')
+            $baselineExit = $LASTEXITCODE
+          } finally { Pop-Location }
+          $baselineText = Get-Content -Raw (Join-Path $env:EVIDENCE 'baseline-favorites-test.log')
+          if ($baselineExit -eq 0 -or $baselineText -notmatch 'Null.*String') {
+            throw 'Baseline did not reproduce the expected null-folder failure'
+          }
+          @{
+            source=$baselineSha; test=$testFile; exit_code=$baselineExit
+            expected_failure_detected=$true
+          } | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'baseline-regression.json')
+          exit 0
+
+      - name: Run brand and fresh-profile regression checks
+        run: |
+          flutter test --no-pub --reporter expanded test/brand/yorunote_brand_test.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'brand-tests.log')
           if ($LASTEXITCODE -ne 0) { throw 'Brand tests failed' }
 
       - name: Build distributable Windows Release

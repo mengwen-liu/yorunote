@@ -1,40 +1,40 @@
 name: Yorunote Windows Diagnostics
+run-name: Reader loading dependency regression - 0254b07f
 on:
   push:
     branches: ['codex/yorunote-windows-preview-20261106']
     paths: ['.github/workflows/yorunote-windows-diagnostics.yml']
 permissions:
-  actions: read
   contents: read
 jobs:
-  read-evidence:
-    if: github.repository_id == '1421354314'
+  reader-regression:
+    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-preview-20261106'
     runs-on: ubuntu-22.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
-      - name: Read existing startup evidence without rebuilding
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: '0254b07f664e77661c092478ce3a8a2201e39bf8'
+          persist-credentials: false
+      - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e
+        with:
+          flutter-version: '3.41.4'
+          channel: stable
+          cache: true
+      - name: Resolve the unchanged lockfile
+        run: flutter pub get --enforce-lockfile
+      - name: Check real image loading on dependency changes
         run: |
-          gh api repos/mengwen-liu/yorunote/actions/artifacts/13443617577/zip > evidence.zip
+          flutter analyze --no-pub lib/components/reader_image_loading.dart test/reader/reader_image_loading_test.dart
+          flutter test --no-pub --reporter expanded test/reader/reader_image_loading_test.dart
+      - name: Read exact formatter output
+        if: always()
+        run: |
           python3 - <<'PY'
-          import base64, hashlib, pathlib, zipfile
-          data = pathlib.Path("evidence.zip").read_bytes()
-          assert hashlib.sha256(data).hexdigest() == "2a04e673c2de590d1fee761bfbc2c37ecfcf07340366d5e48f9a4ac442143f75"
-          with zipfile.ZipFile("evidence.zip") as archive:
-              print("FILES", archive.namelist())
-              for name in archive.namelist():
-                  p = pathlib.PurePosixPath(name)
-                  assert not p.is_absolute() and ".." not in p.parts
-                  if p.name in {"distribution-stdout.log", "distribution-stderr.log", "source.json", "authenticode.json", "smoke-seed.json", "smoke-restart.json", "process-distribution.json", "package.json", "restart-failure-state.json", "seed-failure-state.json"}:
-                      raw = archive.read(name)
-                      print("BEGIN_TEXT", p.name, "BYTES", len(raw))
-                      print(raw.decode("utf-8-sig", errors="replace")[:20000])
-                      print("END_TEXT", p.name)
-                  if p.name in {"restart-failure.png", "seed-offline-reader.png"}:
-                      encoded = base64.b64encode(archive.read(name)).decode("ascii")
-                      print("BEGIN_IMAGE_BASE64", p.name)
-                      for i in range(0, len(encoded), 512):
-                          print("IMAGE_CHUNK " + p.name + " " + encoded[i:i + 512])
-                      print("END_IMAGE_BASE64", p.name)
+          import subprocess
+          for path in ['lib/components/reader_image_loading.dart', 'test/reader/reader_image_loading_test.dart']:
+              text = subprocess.check_output(['dart','format','--output=show',path],text=True)
+              print('BEGIN_FORMATTED '+path, flush=True)
+              print(text, flush=True)
+              print('END_FORMATTED '+path, flush=True)
           PY

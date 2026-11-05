@@ -14,6 +14,7 @@ import 'package:venera/foundation/comic_type.dart';
 import 'package:venera/foundation/history.dart';
 import 'package:venera/foundation/image_provider/cached_image.dart';
 import 'package:venera/foundation/local.dart';
+import 'package:venera/foundation/log.dart';
 import 'package:venera/main.dart' as production;
 import 'package:venera/network/app_dio.dart';
 import 'package:venera/network/download.dart';
@@ -75,6 +76,15 @@ bool _hasPageImage() => _widgets().whereType<RawImage>().any(
   (w) => w.image?.width == 600 && w.image?.height == 900,
 );
 
+bool _readerHasFocus() => _widgets().whereType<KeyboardListener>().any(
+  (w) => w.autofocus && w.focusNode.hasFocus,
+);
+
+List<String> _appErrors() => Log.logs
+    .where((item) => item.level == LogLevel.error)
+    .map((item) => item.toString())
+    .toList();
+
 Future<void> _decodeCover(ComicSource source, String id) async {
   final result = await source.loadComicInfo!(id);
   _require(!result.error, 'Cannot load synthetic cover information');
@@ -114,6 +124,9 @@ Future<void> _openOnline(ComicSource source) async {
   );
   await _until(_hasPageImage, 'Reader did not render the synthetic page');
   _record('online_reader_decoded_600x900');
+  await windowManager.focus();
+  await _until(_readerHasFocus, 'Reader keyboard focus was not ready');
+  await _stage('reader-before-key');
   HardwareKeyboard.instance.handleKeyEvent(
     const KeyDownEvent(
       physicalKey: PhysicalKeyboardKey.arrowRight,
@@ -130,7 +143,9 @@ Future<void> _openOnline(ComicSource source) async {
   );
   final type = ComicType.fromKey(source.key);
   await _until(
-    () => HistoryManager().find('c03', type)?.page == 2,
+    () => HistoryManager().getAll().any(
+      (h) => h.id == 'c03' && h.type == type && h.page == 2,
+    ),
     'Right-arrow key did not persist reading page 2',
   );
   _record('keyboard_turn_and_sqlite_history_page_2');
@@ -369,6 +384,10 @@ Future<void> main(List<String> args) async {
       _flutterErrors.isEmpty,
       'Unhandled Flutter errors: ${_flutterErrors.join('; ')}',
     );
+    _require(
+      _appErrors().isEmpty,
+      'Native app errors: ${_appErrors().join('; ')}',
+    );
     code = 0;
   } catch (error, stack) {
     failure = '$error\n$stack';
@@ -379,6 +398,7 @@ Future<void> main(List<String> args) async {
     'source': Platform.environment['YORUNOTE_SMOKE_SOURCE'],
     'checks': _checks,
     'flutter_errors': _flutterErrors,
+    'app_errors': _appErrors(),
     'failure': failure,
     'scope':
         'Instrumented Windows CI executable using the real app and native plugins; not the distributed entry point.',

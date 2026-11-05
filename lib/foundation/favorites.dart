@@ -1230,7 +1230,8 @@ class LocalFavoritesManager with ChangeNotifier {
 
   void markAsRead(String id, ComicType type) {
     var folder = appdata.settings['followUpdatesFolder'];
-    if (!existsFolder(folder)) {
+    // A fresh profile has no follow-updates folder.
+    if (folder is! String || !existsFolder(folder)) {
       return;
     }
     _db.execute("""

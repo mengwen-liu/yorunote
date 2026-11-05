@@ -86,7 +86,7 @@ $seen = [Collections.Generic.HashSet[string]]::new()
 $captures = [Collections.Generic.List[object]]::new()
 $process = $null
 try {
-    $process = Start-Process -FilePath $exePath -WorkingDirectory (Get-Location).Path -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $evidencePath ($Phase+'-stdout.log')) -RedirectStandardError (Join-Path $evidencePath ($Phase+'-stderr.log'))
+    $process = Start-Process -FilePath $exePath -WorkingDirectory (Get-Location).Path -WindowStyle Normal -PassThru -RedirectStandardOutput (Join-Path $evidencePath ($Phase+'-stdout.log')) -RedirectStandardError (Join-Path $evidencePath ($Phase+'-stderr.log'))
     $deadline = [DateTime]::UtcNow.AddSeconds(240)
     $windowSince = $null
     $distributionVerified = $false
@@ -111,7 +111,7 @@ try {
             if (Test-Path -LiteralPath $stageFile) {
                 $stage = $null
                 try { $stage = (Get-Content -LiteralPath $stageFile -Raw | ConvertFrom-Json).stage } catch {}
-                if ($stage -match '^(seed|restart)-[a-zA-Z0-9-]+$' -and $seen.Add($stage)) {
+                if ($stage -like ($Phase+'-*') -and $stage -match '^(seed|restart)-[a-zA-Z0-9-]+$' -and $seen.Add($stage)) {
                     $capture = Save-AppWindow $process $stage
                     $captures.Add(@{stage=$stage; capture=$capture})
                     [IO.File]::WriteAllText((Join-Path $evidencePath ('ack-'+$stage+'.json')), ($capture | ConvertTo-Json -Depth 5))
@@ -140,6 +140,15 @@ try {
     }
     [IO.File]::WriteAllText((Join-Path $evidencePath ('process-'+$Phase+'.json')), ($summary | ConvertTo-Json -Depth 7))
     $summary | ConvertTo-Json -Depth 7
+} catch {
+    foreach ($stream in @('stdout','stderr')) {
+        $log = Join-Path $evidencePath ($Phase+'-'+$stream+'.log')
+        if (Test-Path -LiteralPath $log) {
+            Write-Host ('--- App '+$Phase+' '+$stream+' ---')
+            Get-Content -LiteralPath $log -Tail 80 | Write-Host
+        }
+    }
+    throw
 } finally {
     if ($null -ne $process -and -not $process.HasExited) {
         [void]$process.CloseMainWindow()

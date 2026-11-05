@@ -65,6 +65,7 @@ List<Widget> _widgets() {
     result.add(element.widget);
     element.visitChildren(visit);
   }
+
   final root = WidgetsBinding.instance.rootElement;
   if (root != null) visit(root);
   return result;
@@ -94,31 +95,39 @@ Future<void> _decodeCover(ComicSource source, String id) async {
   stream.addListener(listener);
   try {
     final image = await done.future.timeout(const Duration(seconds: 30));
-    _require(image.image.width == 240 && image.image.height == 320,
-        'Decoded cover has wrong dimensions');
+    _require(
+      image.image.width == 240 && image.image.height == 320,
+      'Decoded cover has wrong dimensions',
+    );
   } finally {
     stream.removeListener(listener);
   }
 }
 
 Future<void> _openOnline(ComicSource source) async {
-  unawaited(App.rootNavigatorKey.currentState!.push<void>(
-    MaterialPageRoute<void>(
-      builder: (_) => ReaderWithLoading(id: 'c03', sourceKey: source.key),
+  unawaited(
+    App.rootNavigatorKey.currentState!.push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) => ReaderWithLoading(id: 'c03', sourceKey: source.key),
+      ),
     ),
-  ));
+  );
   await _until(_hasPageImage, 'Reader did not render the synthetic page');
   _record('online_reader_decoded_600x900');
-  HardwareKeyboard.instance.handleKeyEvent(const KeyDownEvent(
-    physicalKey: PhysicalKeyboardKey.arrowRight,
-    logicalKey: LogicalKeyboardKey.arrowRight,
-    timeStamp: Duration(milliseconds: 1),
-  ));
-  HardwareKeyboard.instance.handleKeyEvent(const KeyUpEvent(
-    physicalKey: PhysicalKeyboardKey.arrowRight,
-    logicalKey: LogicalKeyboardKey.arrowRight,
-    timeStamp: Duration(milliseconds: 2),
-  ));
+  HardwareKeyboard.instance.handleKeyEvent(
+    const KeyDownEvent(
+      physicalKey: PhysicalKeyboardKey.arrowRight,
+      logicalKey: LogicalKeyboardKey.arrowRight,
+      timeStamp: Duration(milliseconds: 1),
+    ),
+  );
+  HardwareKeyboard.instance.handleKeyEvent(
+    const KeyUpEvent(
+      physicalKey: PhysicalKeyboardKey.arrowRight,
+      logicalKey: LogicalKeyboardKey.arrowRight,
+      timeStamp: Duration(milliseconds: 2),
+    ),
+  );
   final type = ComicType.fromKey(source.key);
   await _until(
     () => HistoryManager().find('c03', type)?.page == 2,
@@ -152,11 +161,16 @@ Future<void> _seed() async {
   appdata.settings['enableClockAndBatteryInfoInReader'] = false;
   App.forceRebuild();
   await _stage('home-zh-TW');
-  _require(_widgets().whereType<MaterialApp>().any(
-    (w) => w.title == 'Yorunote' && w.locale?.countryCode == 'TW',
-  ), 'App title or Traditional Chinese locale was not applied');
-  _require(_widgets().whereType<Text>().any((w) => w.data == 'Yorunote'),
-      'Custom Windows title bar still lacks the Yorunote name');
+  _require(
+    _widgets().whereType<MaterialApp>().any(
+      (w) => w.title == 'Yorunote' && w.locale?.countryCode == 'TW',
+    ),
+    'App title or Traditional Chinese locale was not applied',
+  );
+  _require(
+    _widgets().whereType<Text>().any((w) => w.data == 'Yorunote'),
+    'Custom Windows title bar still lacks the Yorunote name',
+  );
   _record('traditional_chinese_home_and_title');
 
   final template = await File(
@@ -172,13 +186,18 @@ Future<void> _seed() async {
     );
     _require(response.statusCode == 200, 'Source download failed');
     final source = await ComicSourceParser().createAndParse(
-      response.data!, 'yorunote_windows_acceptance.js',
+      response.data!,
+      'yorunote_windows_acceptance.js',
     );
     ComicSourceManager().add(source);
     final page = await source.explorePages.single.loadPage!(1);
-    _require(!page.error && page.data.length == 20,
-        'QuickJS synthetic source did not return 20 comics');
-    _record('native_http_and_quickjs_source', {'comic_count': page.data.length});
+    _require(
+      !page.error && page.data.length == 20,
+      'QuickJS synthetic source did not return 20 comics',
+    );
+    _record('native_http_and_quickjs_source', {
+      'comic_count': page.data.length,
+    });
 
     // The encoded c37 cover only decodes after the JS onResponse callback.
     final coverStream = CachedImageProvider(
@@ -187,31 +206,38 @@ Future<void> _seed() async {
       cid: xorComicId,
     ).resolve(ImageConfiguration.empty);
     final decoded = Completer<void>();
-    final listener = ImageStreamListener((image, synchronousCall) {
-      if (!decoded.isCompleted) {
-        if (image.image.width == 240 && image.image.height == 320) {
-          decoded.complete();
-        } else {
-          decoded.completeError(StateError('Wrong decoded XOR cover size'));
+    final listener = ImageStreamListener(
+      (image, synchronousCall) {
+        if (!decoded.isCompleted) {
+          if (image.image.width == 240 && image.image.height == 320) {
+            decoded.complete();
+          } else {
+            decoded.completeError(StateError('Wrong decoded XOR cover size'));
+          }
         }
-      }
-    }, onError: (Object e, StackTrace? s) {
-      if (!decoded.isCompleted) decoded.completeError(e, s);
-    });
+      },
+      onError: (Object e, StackTrace? s) {
+        if (!decoded.isCompleted) decoded.completeError(e, s);
+      },
+    );
     coverStream.addListener(listener);
     try {
       await decoded.future.timeout(const Duration(seconds: 30));
     } finally {
       coverStream.removeListener(listener);
     }
-    _require(server.count('/img/cover/c37.png') > 0,
-        'XOR cover was not requested over real HTTP');
+    _require(
+      server.count('/img/cover/c37.png') > 0,
+      'XOR cover was not requested over real HTTP',
+    );
     _record('quickjs_onResponse_and_native_image_decode');
 
     await _decodeCover(source, 'c03');
     await _openOnline(source);
     final task = ImagesDownloadTask(
-      source: source, comicId: 'c09', chapters: const ['1'],
+      source: source,
+      comicId: 'c09',
+      chapters: const ['1'],
     );
     LocalManager().addTask(task);
     final type = ComicType.fromKey(source.key);
@@ -231,12 +257,15 @@ Future<void> _seed() async {
     for (var i = 0; i < pages.length; i++) {
       final path = pages[i].substring('file://'.length);
       final data = await File(path).readAsBytes();
-      _require(sha256.convert(data) == sha256.convert(pagePng(i + 1)),
-          'Downloaded page bytes differ from synthetic fixture');
+      _require(
+        sha256.convert(data) == sha256.convert(pagePng(i + 1)),
+        'Downloaded page bytes differ from synthetic fixture',
+      );
       digests.add(sha256.convert(data).toString());
     }
     _record('real_download_and_page_bytes', {
-      'pages': pages.length, 'sha256': digests,
+      'pages': pages.length,
+      'sha256': digests,
     });
     await server.stop();
     stopped = true;
@@ -249,9 +278,12 @@ Future<void> _seed() async {
     await appdata.saveData(false);
     App.forceRebuild();
     await _stage('home-en-US-dark');
-    _require(_widgets().whereType<MaterialApp>().any(
-      (w) => w.locale?.languageCode == 'en' && w.themeMode == ThemeMode.dark,
-    ), 'English or dark mode was not applied');
+    _require(
+      _widgets().whereType<MaterialApp>().any(
+        (w) => w.locale?.languageCode == 'en' && w.themeMode == ThemeMode.dark,
+      ),
+      'English or dark mode was not applied',
+    );
     _record('english_dark_home_and_settings_saved');
   } finally {
     if (!stopped) await server.stop();
@@ -259,10 +291,18 @@ Future<void> _seed() async {
 }
 
 Future<void> _restart() async {
-  _require(appdata.settings['language'] == 'en-US', 'Locale did not survive restart');
-  _require(appdata.settings['theme_mode'] == 'dark', 'Theme did not survive restart');
-  _require(appdata.searchHistory.contains('YORUNOTE_WINDOWS_ACCEPTANCE'),
-      'Saved search history did not survive restart');
+  _require(
+    appdata.settings['language'] == 'en-US',
+    'Locale did not survive restart',
+  );
+  _require(
+    appdata.settings['theme_mode'] == 'dark',
+    'Theme did not survive restart',
+  );
+  _require(
+    appdata.searchHistory.contains('YORUNOTE_WINDOWS_ACCEPTANCE'),
+    'Saved search history did not survive restart',
+  );
   final source = ComicSource.find('yorunote_synthetic');
   _require(source != null, 'JS source was not restored from disk');
   final type = ComicType.fromKey(source!.key);
@@ -273,7 +313,8 @@ Future<void> _restart() async {
   final pages = await LocalManager().getImages('c09', type, 1);
   _require(pages.length == 5, 'Downloaded chapter did not survive restart');
   _record('restart_restores_settings_source_history_and_download', {
-    'history_page': history!.page, 'downloaded_pages': pages.length,
+    'history_page': history!.page,
+    'downloaded_pages': pages.length,
   });
   // The first process's HTTP server is gone. This reads stored files only.
   await _openOffline(local!);
@@ -282,7 +323,9 @@ Future<void> _restart() async {
 
 Future<void> main(List<String> args) async {
   if (!Platform.isWindows || Platform.environment['GITHUB_ACTIONS'] != 'true') {
-    stderr.writeln('This acceptance entry point is restricted to disposable Windows CI.');
+    stderr.writeln(
+      'This acceptance entry point is restricted to disposable Windows CI.',
+    );
     exit(64);
   }
   final root = Platform.environment['YORUNOTE_SMOKE_EVIDENCE'];
@@ -295,7 +338,9 @@ Future<void> main(List<String> args) async {
   try {
     production.main(const []);
     await _until(
-      () => App.isInitialized && HistoryManager().isInitialized &&
+      () =>
+          App.isInitialized &&
+          HistoryManager().isInitialized &&
           App.rootNavigatorKey.currentState != null,
       'Real Windows app initialization did not complete',
       timeout: const Duration(seconds: 90),
@@ -305,8 +350,13 @@ Future<void> main(List<String> args) async {
       if (!details.silent) _flutterErrors.add(details.exceptionAsString());
       previousHandler?.call(details);
     };
-    _require(App.dataPath.toLowerCase().replaceAll(String.fromCharCode(92), '/').contains('/mengwen-liu/yorunote'),
-        'Windows application data is not isolated under the Yorunote identity');
+    _require(
+      App.dataPath
+          .toLowerCase()
+          .replaceAll(String.fromCharCode(92), '/')
+          .contains('/mengwen-liu/yorunote'),
+      'Windows application data is not isolated under the Yorunote identity',
+    );
     await windowManager.setSize(const Size(1000, 700));
     await windowManager.center();
     _record('real_app_initialized_with_isolated_windows_identity');
@@ -315,7 +365,10 @@ Future<void> main(List<String> args) async {
     } else {
       await _restart();
     }
-    _require(_flutterErrors.isEmpty, 'Unhandled Flutter errors: ${_flutterErrors.join('; ')}');
+    _require(
+      _flutterErrors.isEmpty,
+      'Unhandled Flutter errors: ${_flutterErrors.join('; ')}',
+    );
     code = 0;
   } catch (error, stack) {
     failure = '$error\n$stack';
@@ -327,7 +380,8 @@ Future<void> main(List<String> args) async {
     'checks': _checks,
     'flutter_errors': _flutterErrors,
     'failure': failure,
-    'scope': 'Instrumented Windows CI executable using the real app and native plugins; not the distributed entry point.',
+    'scope':
+        'Instrumented Windows CI executable using the real app and native plugins; not the distributed entry point.',
   };
   final json = const JsonEncoder.withIndent('  ').convert(report);
   await File('${_evidence.path}/smoke-$_phase.json').writeAsString('$json\n');

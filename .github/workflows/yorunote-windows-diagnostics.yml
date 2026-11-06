@@ -1,40 +1,67 @@
-name: Yorunote Windows Diagnostics
-run-name: Reader loading dependency regression - 0254b07f
+name: Yorunote Windows Mascot Checks
+run-name: Check title mascot - d63a6539
 on:
   push:
-    branches: ['codex/yorunote-windows-preview-20261106']
+    branches: ['codex/yorunote-windows-mascot-20261106']
     paths: ['.github/workflows/yorunote-windows-diagnostics.yml']
 permissions:
   contents: read
 jobs:
-  reader-regression:
-    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-preview-20261106'
+  check-mascot:
+    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-mascot-20261106'
     runs-on: ubuntu-22.04
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: '0254b07f664e77661c092478ce3a8a2201e39bf8'
+          ref: 'd63a65399ded00468058f3f10140c7f55b01b566'
           persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
       - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e
         with:
           flutter-version: '3.41.4'
           channel: stable
           cache: true
-      - name: Resolve the unchanged lockfile
-        run: flutter pub get --enforce-lockfile
-      - name: Check real image loading on dependency changes
+      - name: Check original GIF bytes and unchanged dependency declarations
         run: |
-          flutter analyze --no-pub lib/components/reader_image_loading.dart test/reader/reader_image_loading_test.dart
-          flutter test --no-pub --reporter expanded test/reader/reader_image_loading_test.dart
-      - name: Read exact formatter output
+          python -m pip install --disable-pip-version-check --no-deps -r windows/requirements-build.txt
+          python - <<'PY'
+          import hashlib, pathlib, subprocess
+          from PIL import Image
+          path = pathlib.Path("assets/brand/yorunote_mascot.gif")
+          assert hashlib.sha256(path.read_bytes()).hexdigest() == "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb"
+          image = Image.open(path)
+          assert image.format == "GIF" and image.size == (512,512) and image.n_frames == 6
+          assert image.info["loop"] == 0
+          original = subprocess.check_output(["git","show","71485c7de8799e30c9e1b5797ad83fba65668d51:pubspec.yaml"],text=True)
+          current = pathlib.Path("pubspec.yaml").read_text()
+          entry = "    - assets/brand/yorunote_mascot.gif"+chr(10)
+          assert current.count(entry) == 1 and current.replace(entry,"") == original
+          assert subprocess.check_output(["git","rev-parse","HEAD:pubspec.lock"],text=True) == subprocess.check_output(["git","rev-parse","71485c7de8799e30c9e1b5797ad83fba65668d51:pubspec.lock"],text=True)
+          print("Original GIF verified: 512x512, 6 frames; dependencies and lockfile unchanged.")
+          PY
+      - name: Resolve dependencies and test the actual GIF component
+        run: |
+          flutter pub get --enforce-lockfile
+          flutter analyze --no-pub lib/components/windows_title_brand.dart test/brand/windows_title_brand_test.dart tool/windows/smoke.dart
+          flutter test --no-pub --reporter expanded test/brand/windows_title_brand_test.dart
+      - name: Read exact Dart formatter output
         if: always()
         run: |
-          python3 - <<'PY'
+          python - <<'PY'
           import subprocess
-          for path in ['lib/components/reader_image_loading.dart', 'test/reader/reader_image_loading_test.dart']:
-              text = subprocess.check_output(['dart','format','--output=show',path],text=True)
-              print('BEGIN_FORMATTED '+path, flush=True)
-              print(text, flush=True)
-              print('END_FORMATTED '+path, flush=True)
+          for path in ["lib/components/windows_title_brand.dart","test/brand/windows_title_brand_test.dart","tool/windows/smoke.dart","lib/components/window_frame.dart"]:
+              content = subprocess.check_output(["dart","format","--output=show",path],text=True)
+              if path.endswith("window_frame.dart"):
+                  start = content.index("                            child: App.isWindows")
+                  end = content.index("                        if (kDebugMode)",start)
+                  print("BEGIN_FRAME_BLOCK")
+                  print(content[start:end],end="")
+                  print("END_FRAME_BLOCK")
+              else:
+                  print("BEGIN_FORMATTED "+path)
+                  print(content,end="")
+                  print("END_FORMATTED "+path)
           PY

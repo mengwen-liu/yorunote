@@ -49,10 +49,17 @@ void _record(String name, [Map<String, Object?> detail = const {}]) {
   _checks.add({'check': name, 'passed': true, ...detail});
 }
 
-Future<void> _stage(String name) async {
+Future<void> _stage(String name, {Offset? pointerTarget}) async {
   await WidgetsBinding.instance.endOfFrame;
   final state = File('${_evidence.path}/stage.json');
-  await state.writeAsString(jsonEncode({'stage': '$_phase-$name'}));
+  final ratio = WidgetsBinding.instance.platformDispatcher.views.single.devicePixelRatio;
+  await state.writeAsString(jsonEncode({
+    'stage': '$_phase-$name',
+    if (pointerTarget != null) 'pointer_px': {
+      'x': (pointerTarget.dx * ratio).round(),
+      'y': (pointerTarget.dy * ratio).round(),
+    },
+  }));
   final ack = File('${_evidence.path}/ack-$_phase-$name.json');
   await _until(
     ack.existsSync,
@@ -122,6 +129,64 @@ Future<void> _checkAnimatedBrand() async {
     timeout: const Duration(seconds: 5),
   );
   _record('windows_title_mascot_gif_decoded_and_animated');
+}
+
+RenderBox _brandBox() {
+  RenderBox? result;
+  void visit(Element element) {
+    if (element.widget is WindowsTitleBrand) {
+      result = element.findRenderObject()! as RenderBox;
+      return;
+    }
+    element.visitChildren(visit);
+  }
+  final root = WidgetsBinding.instance.rootElement;
+  if (root != null) visit(root);
+  _require(result != null, 'Actual Windows caption is missing');
+  return result!;
+}
+
+bool _titleTooltipVisible() => _widgets().whereType<RichText>().any(
+  (widget) => widget.text.toPlainText() == 'Yorunote',
+);
+
+Future<void> _checkTitleHover() async {
+  await windowManager.focus();
+  await _until(
+    () => _brandUsesGif() && _brandFrame()?.image != null,
+    'Caption GIF is unavailable before native pointer input',
+  );
+  final box = _brandBox();
+  final target = box.localToGlobal(box.size.center(Offset.zero));
+  await _stage('title-hover-enter', pointerTarget: target);
+  await _until(
+    _titleTooltipVisible,
+    'Native mouse hover did not display the caption tooltip',
+    timeout: const Duration(seconds: 5),
+  );
+  await _stage('title-hover-visible');
+  final view = WidgetsBinding.instance.platformDispatcher.views.single;
+  final center = view.physicalSize / view.devicePixelRatio / 2;
+  await _stage('title-hover-leave', pointerTarget: Offset(center.width, center.height));
+  await _until(
+    () => !_titleTooltipVisible(),
+    'Caption tooltip did not close after native pointer exit',
+    timeout: const Duration(seconds: 5),
+  );
+  final first = _brandFrame()?.image;
+  _require(first != null, 'Caption image disappeared after hover');
+  await _until(
+    () => _brandFrame()?.image != null && !identical(first, _brandFrame()!.image),
+    'Caption animation stopped after hover',
+    timeout: const Duration(seconds: 5),
+  );
+  _require(_flutterErrors.isEmpty, 'Flutter error during actual caption hover');
+  _require(_appErrors().isEmpty, 'App error during actual caption hover');
+  _record('windows_title_native_hover_shows_tooltip_without_overlay_error', {
+    'native_pointer': true,
+    'tooltip_visible_then_dismissed': true,
+    'gif_continues_after_hover': true,
+  });
 }
 
 List<String> _appErrors() => Log.logs
@@ -228,6 +293,7 @@ Future<void> _seed() async {
   );
   _record('traditional_chinese_home_and_title');
   await _checkAnimatedBrand();
+  await _checkTitleHover();
 
   final template = await File(
     'tool/synthetic_source/yorunote_synthetic_source.js',
@@ -386,6 +452,7 @@ Future<void> _restart() async {
   // The first process's HTTP server is gone. This reads stored files only.
   await _openOffline(local!);
   await _stage('home-after-restart');
+  await _checkTitleHover();
 }
 
 Future<void> _captureFailureState() async {

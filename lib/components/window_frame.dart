@@ -174,6 +174,11 @@ class _WindowFrameState extends State<WindowFrame> {
       body = VirtualWindowFrame(child: body);
     }
 
+    if (App.isWindows) {
+      // The caption is outside Navigator and needs its own ancestor Overlay.
+      body = Overlay.wrap(child: body);
+    }
+
     return WindowFrameController._create(
       isWindowFrameHidden: isWindowFrameHidden,
       setWindowFrame: setWindowFrame,

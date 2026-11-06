@@ -27,6 +27,23 @@ public static class YorunoteCapture {
     [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr h, IntPtr dc, uint flags);
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr h);
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINT { public int X, Y; }
+    [DllImport("user32.dll")] public static extern bool GetClientRect(IntPtr h, out RECT r);
+    [DllImport("user32.dll")] public static extern bool ClientToScreen(IntPtr h, ref POINT p);
+    [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
+    [DllImport("user32.dll")] public static extern bool GetCursorPos(out POINT p);
+    [DllImport("user32.dll")] public static extern uint GetDpiForWindow(IntPtr h);
+    public static bool MoveClientPointer(IntPtr target, int x, int y) {
+        if (target == IntPtr.Zero || GetForegroundWindow() != target) return false;
+        RECT bounds;
+        if (!GetClientRect(target, out bounds) || x < 0 || y < 0 ||
+            x >= bounds.Right || y >= bounds.Bottom) return false;
+        POINT point = new POINT { X=x, Y=y };
+        if (!ClientToScreen(target, ref point) || !SetCursorPos(point.X, point.Y)) return false;
+        POINT actual;
+        return GetCursorPos(out actual) && actual.X == point.X && actual.Y == point.Y;
+    }
     [StructLayout(LayoutKind.Explicit, Size=40)]
     public struct INPUT64 {
         [FieldOffset(0)] public uint type;
@@ -51,6 +68,20 @@ public static class YorunoteCapture {
     }
 }
 '@
+
+function Set-AppForeground([Diagnostics.Process]$Process) {
+    $Process.Refresh()
+    $target = $Process.MainWindowHandle
+    if ($target -eq [IntPtr]::Zero) { throw 'CI window handle missing' }
+    if ([YorunoteCapture]::GetForegroundWindow() -ne $target) {
+        [void][YorunoteCapture]::SetForegroundWindow($target)
+        Start-Sleep -Milliseconds 200
+    }
+    if ([YorunoteCapture]::GetForegroundWindow() -ne $target) {
+        throw 'Refusing native input: foreground window is not the CI app'
+    }
+    return $target
+}
 
 function Save-AppWindow([Diagnostics.Process]$Process, [string]$Name) {
     $Process.Refresh()
@@ -122,6 +153,19 @@ try {
                 if ($null -eq $windowSince) { $windowSince = [DateTime]::UtcNow }
                 if (([DateTime]::UtcNow - $windowSince).TotalSeconds -ge 10) {
                     if (-not $process.Responding) { throw 'Distributed executable is not responding.' }
+                    $target = Set-AppForeground $process
+                    $ratio = [YorunoteCapture]::GetDpiForWindow($target) / 96.0
+                    if (-not [YorunoteCapture]::MoveClientPointer($target, [int](36*$ratio), [int](18*$ratio))) {
+                        throw 'Cannot hover the actual distributed caption'
+                    }
+                    Start-Sleep -Milliseconds 1200
+                    $hoverCapture = Save-AppWindow $process 'distribution-title-hover'
+                    if (-not $hoverCapture.captured) { throw 'Distributed caption capture failed' }
+                    $captures.Add(@{stage='distribution-title-hover'; capture=$hoverCapture; native_mouse_hover=$true})
+                    if (-not [YorunoteCapture]::MoveClientPointer($target, [int](300*$ratio), [int](200*$ratio))) {
+                        throw 'Cannot move pointer away from distributed caption'
+                    }
+                    Start-Sleep -Milliseconds 500
                     $capture = Save-AppWindow $process 'distribution-home'
                     $captures.Add($capture)
                     if (-not $process.CloseMainWindow()) { throw 'Cannot close distributed application normally.' }
@@ -134,8 +178,17 @@ try {
             $stageFile = Join-Path $evidencePath 'stage.json'
             if (Test-Path -LiteralPath $stageFile) {
                 $stage = $null
-                try { $stage = (Get-Content -LiteralPath $stageFile -Raw | ConvertFrom-Json).stage } catch {}
+                try { $stageData = Get-Content -LiteralPath $stageFile -Raw | ConvertFrom-Json; $stage = $stageData.stage } catch {}
                 if ($stage -like ($Phase+'-*') -and $stage -match '^(seed|restart)-[a-zA-Z0-9-]+$' -and $seen.Add($stage)) {
+                    $nativeMouseMoved = $false
+                    if ($stageData.PSObject.Properties.Name -contains 'pointer_px') {
+                        $target = Set-AppForeground $process
+                        if (-not [YorunoteCapture]::MoveClientPointer($target, [int]$stageData.pointer_px.x, [int]$stageData.pointer_px.y)) {
+                            throw 'Native pointer target is outside the CI app or input failed'
+                        }
+                        $nativeMouseMoved = $true
+                        Start-Sleep -Milliseconds 200
+                    }
                     $capture = Save-AppWindow $process $stage
                     $nativeKeySent = $false
                     if ($stage -eq 'seed-reader-before-key') {
@@ -155,7 +208,7 @@ try {
                         $nativeKeySent = $true
                         Write-Host ('Native right-arrow sent to CI app PID ' + $process.Id)
                     }
-                    $captures.Add(@{stage=$stage; capture=$capture; native_right_arrow_sent=$nativeKeySent})
+                    $captures.Add(@{stage=$stage; capture=$capture; native_right_arrow_sent=$nativeKeySent; native_mouse_moved=$nativeMouseMoved})
                     [IO.File]::WriteAllText((Join-Path $evidencePath ('ack-'+$stage+'.json')), ($capture | ConvertTo-Json -Depth 5))
                 }
             }

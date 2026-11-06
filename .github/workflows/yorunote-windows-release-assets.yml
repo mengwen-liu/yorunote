@@ -1,0 +1,106 @@
+name: Yorunote Windows Release Assets
+run-name: Attach verified Windows bundle to draft 436235827
+on:
+  push:
+    branches: ['codex/yorunote-windows-preview-20261106']
+    paths: ['.github/workflows/yorunote-windows-release-assets.yml']
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: yorunote-windows-release-assets
+  cancel-in-progress: false
+jobs:
+  prepare-only:
+    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-preview-20261106'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 8
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Validate the fixed successful build and existing draft
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api repos/mengwen-liu/yorunote/actions/runs/42091194413 > source-run.json
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13445514362 > artifact.json
+          gh api repos/mengwen-liu/yorunote/git/ref/heads/codex/yorunote-windows-71485c7d > source-ref.json
+          gh api repos/mengwen-liu/yorunote/releases/436235827 > release-before.json
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13445514362/zip > source-artifact.zip
+          python3 - <<'PY'
+          import hashlib, io, json, pathlib, zipfile
+          def read(path):
+              return json.loads(pathlib.Path(path).read_text())
+          run = read("source-run.json")
+          artifact = read("artifact.json")
+          release = read("release-before.json")
+          source = "71485c7de8799e30c9e1b5797ad83fba65668d51"
+          workflow = "d11ec7f24f37f3c39c1c332448807fb3c6ca1ecd"
+          assert run["id"] == 42091194413 and run["status"] == "completed" and run["conclusion"] == "success"
+          assert run["head_sha"] == workflow and run["repository"]["id"] == 1421354314
+          assert artifact["id"] == 13445514362 and not artifact["expired"]
+          expected_artifact = "7e44b7d97d6219c6e3cf95acda2b4003186676c1e1adb5aca6c3974bcd10df60"
+          assert artifact["digest"] == "sha256:"+expected_artifact
+          assert artifact["workflow_run"]["id"] == run["id"]
+          assert read("source-ref.json")["object"]["sha"] == source
+          assert release["id"] == 436235827 and release["draft"] is True and release["prerelease"] is True
+          assert release["published_at"] is None and release["tag_name"] == "v0.1.0-windows-preview.1"
+          assert release["target_commitish"] == "codex/yorunote-windows-71485c7d"
+          assert release["assets"] == [], "Refuse to overwrite any existing asset"
+          raw = pathlib.Path("source-artifact.zip").read_bytes()
+          assert hashlib.sha256(raw).hexdigest() == expected_artifact
+          name = "Yorunote_windows_x64_71485c7d_preview.zip"
+          expected = "5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5"
+          with zipfile.ZipFile(io.BytesIO(raw)) as outer:
+              assert outer.namelist().count(name) == 1
+              assert set(outer.namelist()) == {name, name+".sha256"}
+              assert outer.testzip() is None
+              product = outer.read(name)
+              checksum = outer.read(name+".sha256")
+          assert len(product) == 21528589 and hashlib.sha256(product).hexdigest() == expected
+          assert checksum == (expected+"  "+name+chr(10)).encode()
+          with zipfile.ZipFile(io.BytesIO(product)) as package:
+              assert package.testzip() is None
+              info = json.loads(package.read("Yorunote/BUILD_INFO.json"))
+              assert info["source_commit"] == source
+          pathlib.Path(name).write_bytes(product)
+          pathlib.Path(name+".sha256").write_bytes(checksum)
+          print("Verified existing draft, fixed source, successful build, artifact digest and both exact attachment bytes.")
+          PY
+      - name: Attach the two verified files without publishing
+        shell: bash
+        run: |
+          set -euo pipefail
+          file='Yorunote_windows_x64_71485c7d_preview.zip'
+          gh api --method POST -H 'Content-Type: application/zip' --input "$file" "https://uploads.github.com/repos/mengwen-liu/yorunote/releases/436235827/assets?name=$file" > uploaded-zip.json
+          gh api --method POST -H 'Content-Type: text/plain' --input "$file.sha256" "https://uploads.github.com/repos/mengwen-liu/yorunote/releases/436235827/assets?name=$file.sha256" > uploaded-sha256.json
+      - name: Download both attachments and confirm the release remains a draft
+        shell: bash
+        run: |
+          set -euo pipefail
+          zip_id=$(python3 -c 'import json; print(json.load(open("uploaded-zip.json"))["id"])')
+          sha_id=$(python3 -c 'import json; print(json.load(open("uploaded-sha256.json"))["id"])')
+          gh api -H 'Accept: application/octet-stream' "repos/mengwen-liu/yorunote/releases/assets/$zip_id" > readback.zip
+          gh api -H 'Accept: application/octet-stream' "repos/mengwen-liu/yorunote/releases/assets/$sha_id" > readback.sha256
+          gh api repos/mengwen-liu/yorunote/releases/436235827 > release-after.json
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          name = "Yorunote_windows_x64_71485c7d_preview.zip"
+          assert pathlib.Path("readback.zip").read_bytes() == pathlib.Path(name).read_bytes()
+          assert pathlib.Path("readback.sha256").read_bytes() == pathlib.Path(name+".sha256").read_bytes()
+          release = json.loads(pathlib.Path("release-after.json").read_text())
+          assert release["draft"] is True and release["prerelease"] is True and release["published_at"] is None
+          assert release["tag_name"] == "v0.1.0-windows-preview.1"
+          assert {a["name"] for a in release["assets"]} == {name,name+".sha256"}
+          result = {
+              "release_id":release["id"],"draft":release["draft"],"prerelease":release["prerelease"],
+              "published_at":release["published_at"],"tag_name":release["tag_name"],
+              "assets":[{"id":a["id"],"name":a["name"],"size":a["size"],"digest":a.get("digest")} for a in release["assets"]],
+              "zip_sha256":hashlib.sha256(pathlib.Path("readback.zip").read_bytes()).hexdigest(),
+              "checksum_sha256":hashlib.sha256(pathlib.Path("readback.sha256").read_bytes()).hexdigest(),
+              "readback_exact_bytes":True
+          }
+          print("BEGIN_PREPARE_JSON")
+          print(json.dumps(result,indent=2))
+          print("END_PREPARE_JSON")
+          PY

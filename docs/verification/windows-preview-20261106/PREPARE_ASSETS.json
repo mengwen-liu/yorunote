@@ -1,0 +1,24 @@
+{
+  "release_id": 436235827,
+  "draft": true,
+  "prerelease": true,
+  "published_at": null,
+  "tag_name": "v0.1.0-windows-preview.1",
+  "assets": [
+    {
+      "id": 716378213,
+      "name": "Yorunote_windows_x64_71485c7d_preview.zip",
+      "size": 21528589,
+      "digest": "sha256:5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5"
+    },
+    {
+      "id": 716378298,
+      "name": "Yorunote_windows_x64_71485c7d_preview.zip.sha256",
+      "size": 108,
+      "digest": "sha256:e327ff0f86f073a9897d20833291e95423c8c90b652a540cbc383e695bd698fb"
+    }
+  ],
+  "zip_sha256": "5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5",
+  "checksum_sha256": "e327ff0f86f073a9897d20833291e95423c8c90b652a540cbc383e695bd698fb",
+  "readback_exact_bytes": true
+}

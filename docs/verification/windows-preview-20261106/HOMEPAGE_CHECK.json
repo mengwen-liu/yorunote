@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "path": "CHANGELOG.md",
+      "status": "modified"
+    },
+    {
+      "path": "README.en.md",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/releases/v0.1.0-windows-preview.1.md",
+      "status": "added"
+    }
+  ],
+  "ahead_by": 1,
+  "behind_by": 0,
+  "relative_links_checked": 30,
+  "base_master": "54a72f10b070d4009d642df013c447f235fbf26f"
+}

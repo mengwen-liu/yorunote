@@ -10,8 +10,9 @@
 - [下載後重新核對 run 42183056556](https://github.com/mengwen-liu/yorunote/actions/runs/42183056556)：成功，重新取得原始 artifact。
 - ZIP：`Yorunote_windows_x64_71485c7d_preview.zip`，21,528,589 bytes。
 - SHA-256：`5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5`。
+- 日常下載使用上述公開 Release 的 ZIP 與 .sha256；以下 Actions artifact 為有保留期限的備援證據。
 - [下載 Windows ZIP 與 .sha256 的 Actions artifact](https://github.com/mengwen-liu/yorunote/actions/runs/42091194413/artifacts/13445514362)，保留至 2026-11-20 03:26（Asia/Taipei）。
-- Windows 公開 Release 尚未在撰寫此紀錄時發布；發布結果另見後續 PUBLICATION.json。
+- [Windows 公開預覽版](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1)已於 2026-11-06 16:02:29（Asia/Taipei）發布；Tag 精確指向上述來源。公開附件與流程回讀見 [PUBLICATION.json](PUBLICATION.json)。
 
 ## 實作範圍
 
@@ -76,8 +77,22 @@ rhttp 0.15.1、flutter_rust_bridge 2.11.1、flutter_qjs 鎖定提交、sqlite3�
 
 Windows workflow 僅在指定 Windows 分支自己的 workflow 檔變更時觸發，並固定 checkout 上述 App SHA；不呼叫 Build ALL。workflow_dispatch 若要從 GitHub 一般手動入口使用，仍需先讓檔案存在於預設分支，這次沒有為此合併 App。
 
-本輪未修改 Notion、Secrets、既有 Android Release、既有 Tag 或上游授權。公開前的 Build ALL 暫停及恢復、Tag 與附件回讀另記，不把預備流程當成已發布。
+本輪未修改 Notion、Secrets、既有 Android Release、既有 Tag 或上游授權。維護者介面已暫停 Build ALL、從固定來源建立新 Windows Tag 並公開草稿，再恢復原本的 active 狀態；Build ALL 與 AltStore 的執行總數均為 0。既有 main.yml 的 release: published 規則沒有永久移除。
+
+[附件流程 run 42184470095](https://github.com/mengwen-liu/yorunote/actions/runs/42184470095)只上傳既有草稿附件並回讀位元組，未執行發布。[公開下載回讀 run 42185249520](https://github.com/mengwen-liu/yorunote/actions/runs/42185249520)使用未帶授權標頭的 curl 下載兩個公開附件，重算大小與雜湊，核對 Tag、Build ALL 已恢復及沒有連動執行。
+
+中英文首頁、CHANGELOG 與 Windows 發行說明以文件提交 4f93856d7d4bc2262a1f6d8e5da9f9060365e654 非強制快轉至 master。相對原 master 54a72f10b070d4009d642df013c447f235fbf26f 只改四份文件，30 個相對連結通過存在性檢查；遠端內容一致，瀏覽器確認 Windows 下載區。master 的 App、workflow 與依賴未因此改動。
+
+使用者電腦的命令執行環境在啟動前受 sandbox provisioning 拒絕；沒有在使用者電腦啟動 App、安裝 SDK、變更 ACL 或安全設定。實際原生操作結果來自 Windows CI，兩者分開。
 
 ## 回復
 
 Windows 分支可直接不採用。已建立的提交可逐一 git revert，不需 force push 或刪除分支。使用者原有 Venera 資料未改動；本報告不指示刪除資料以排障。
+
+## 發布畫面
+
+[公開發行頁畫面](release-published.png) · [首頁 Windows 下載區](homepage-windows.png)
+
+首頁顯示的是明確標示為預覽版的 README 入口；沒有把 prerelease 改成穩定版或 Latest 來改變 GitHub 側欄的顯示。
+
+首頁文件如需回復，可 git revert 4f93856d7d4bc2262a1f6d8e5da9f9060365e654；此指令僅供說明，未執行。已公開的 Tag 與附件不自動刪除或改指向。

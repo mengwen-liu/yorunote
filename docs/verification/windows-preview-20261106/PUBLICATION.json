@@ -1,0 +1,78 @@
+{
+  "release_id": 436235827,
+  "url": "https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1",
+  "published_at": "2026-11-06T08:02:29Z",
+  "draft": false,
+  "prerelease": true,
+  "tag": "refs/tags/v0.1.0-windows-preview.1",
+  "source_commit": "71485c7de8799e30c9e1b5797ad83fba65668d51",
+  "zip": "Yorunote_windows_x64_71485c7d_preview.zip",
+  "zip_bytes": 21528589,
+  "zip_sha256": "5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5",
+  "checksum_sha256": "e327ff0f86f073a9897d20833291e95423c8c90b652a540cbc383e695bd698fb",
+  "public_downloads_without_authorization_header_verified": true,
+  "build_all_restored_state": "active",
+  "build_all_total_runs": 0,
+  "altstore_total_runs": 0,
+  "assets": [
+    {
+      "id": 716378213,
+      "name": "Yorunote_windows_x64_71485c7d_preview.zip",
+      "size": 21528589,
+      "digest": "sha256:5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5",
+      "url": "https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.1/Yorunote_windows_x64_71485c7d_preview.zip"
+    },
+    {
+      "id": 716378298,
+      "name": "Yorunote_windows_x64_71485c7d_preview.zip.sha256",
+      "size": 108,
+      "digest": "sha256:e327ff0f86f073a9897d20833291e95423c8c90b652a540cbc383e695bd698fb",
+      "url": "https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.1/Yorunote_windows_x64_71485c7d_preview.zip.sha256"
+    }
+  ],
+  "verification_run_id": 42185249520,
+  "prepare_run_id": 42184470095,
+  "prepare_assets_readback": {
+    "release_id": 436235827,
+    "draft": true,
+    "prerelease": true,
+    "published_at": null,
+    "tag_name": "v0.1.0-windows-preview.1",
+    "assets": [
+      {
+        "id": 716378213,
+        "name": "Yorunote_windows_x64_71485c7d_preview.zip",
+        "size": 21528589,
+        "digest": "sha256:5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5"
+      },
+      {
+        "id": 716378298,
+        "name": "Yorunote_windows_x64_71485c7d_preview.zip.sha256",
+        "size": 108,
+        "digest": "sha256:e327ff0f86f073a9897d20833291e95423c8c90b652a540cbc383e695bd698fb"
+      }
+    ],
+    "zip_sha256": "5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5",
+    "checksum_sha256": "e327ff0f86f073a9897d20833291e95423c8c90b652a540cbc383e695bd698fb",
+    "readback_exact_bytes": true
+  },
+  "build_all_original_state": "active",
+  "build_all_disabled_via_maintainer_ui_before_publication": true,
+  "build_all_restored_via_maintainer_ui_after_publication": true,
+  "publication_method": "Maintainer browser interface; existing verified assets retained; no GITHUB_TOKEN publish attempted",
+  "homepage_commit": "4f93856d7d4bc2262a1f6d8e5da9f9060365e654",
+  "homepage_previous_master": "54a72f10b070d4009d642df013c447f235fbf26f",
+  "homepage_only_changed_paths": [
+    "README.md",
+    "README.en.md",
+    "CHANGELOG.md",
+    "docs/releases/v0.1.0-windows-preview.1.md"
+  ],
+  "homepage_readback_matches": true,
+  "homepage_browser_rendering_checked": true,
+  "actions_total_before_publish": 24,
+  "actions_total_after_publish_and_public_download_verification": 25,
+  "additional_run": "42185249520: read-only public download verification; no Build ALL or AltStore run",
+  "notion_modified": false,
+  "windows_app_merged_into_master": false
+}

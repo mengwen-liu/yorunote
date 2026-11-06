@@ -1,0 +1,84 @@
+name: Yorunote Windows Overlay Regression
+run-name: Reproduce real caption Overlay failure and verify targeted fix
+
+on:
+  push:
+    branches: ['codex/yorunote-windows-overlay-fix-20261106']
+    paths: ['.github/workflows/yorunote-windows-overlay-probe.yml']
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yorunote-windows-overlay-regression
+  cancel-in-progress: false
+
+jobs:
+  windows-regression:
+    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-overlay-fix-20261106'
+    runs-on: windows-2022
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: '373a9cb504b56b688d34ca1393f0a5a1bdd6799e'
+          persist-credentials: false
+      - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e
+        with:
+          flutter-version: '3.41.4'
+          channel: stable
+          architecture: x64
+          cache: true
+      - name: Resolve fixed SDK and dependencies
+        run: |
+          flutter --version
+          if ($LASTEXITCODE -ne 0) { throw 'SDK bootstrap failed' }
+          flutter pub get --enforce-lockfile
+          if ($LASTEXITCODE -ne 0) { throw 'Locked pub get failed' }
+          $env:EVIDENCE = Join-Path $env:RUNNER_TEMP 'overlay-regression'
+          "EVIDENCE=$env:EVIDENCE" >> $env:GITHUB_ENV
+          New-Item -ItemType Directory -Force -Path $env:EVIDENCE | Out-Null
+      - name: Reproduce missing Overlay on unchanged application
+        run: |
+          flutter test --no-pub --reporter expanded test/brand/windows_window_frame_overlay_test.dart 2>&1 | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'baseline.log')
+          $code = $LASTEXITCODE
+          $log = Get-Content -Raw -LiteralPath (Join-Path $env:EVIDENCE 'baseline.log')
+          if ($code -eq 0 -or $log -notmatch 'No Overlay widget found') { throw 'The actual Overlay failure was not reproduced' }
+          @{source='373a9cb504b56b688d34ca1393f0a5a1bdd6799e'; exit_code=$code; expected_missing_overlay=$true} | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'baseline.json')
+          exit 0
+      - name: Apply minimal fix only to disposable checkout
+        run: |
+          @'
+          import pathlib
+          p=pathlib.Path("lib/components/window_frame.dart")
+          text=p.read_text()
+          old="    return WindowFrameController._create("
+          assert text.count(old)==1
+          fix="    if (App.isWindows) {\n      // The caption is outside Navigator and needs its own ancestor Overlay.\n      body = Overlay.wrap(child: body);\n    }\n\n"
+          p.write_text(text.replace(old,fix+old))
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { throw 'Patch anchor mismatch' }
+          dart format test/brand/windows_window_frame_overlay_test.dart
+          if ($LASTEXITCODE -ne 0) { throw 'Test formatter failed' }
+          @'
+          import base64,pathlib
+          print("FORMATTED_TEST_BASE64="+base64.b64encode(pathlib.Path("test/brand/windows_window_frame_overlay_test.dart").read_bytes()).decode())
+          '@ | python -
+      - name: Run real caption and previous Windows regressions
+        run: |
+          flutter test --no-pub --reporter expanded test/brand/windows_window_frame_overlay_test.dart test/brand/windows_title_brand_test.dart test/brand/yorunote_brand_test.dart test/foundation/favorites_follow_updates_test.dart test/reader/reader_image_loading_test.dart 2>&1 | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'candidate.log')
+          if ($LASTEXITCODE -ne 0) { throw 'Candidate regression failed' }
+          flutter analyze --no-pub test/brand/windows_window_frame_overlay_test.dart
+          if ($LASTEXITCODE -ne 0) { throw 'New test analyzer failed' }
+      - name: Upload probe evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: yorunote-windows-overlay-regression
+          path: '${{ runner.temp }}/overlay-regression/'
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,200 @@
+{
+  "source_commit": "07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b",
+  "build_run": 42229100772,
+  "workflow_commit": "ef9996a249b4b815b4688aa99576abd9d7899f3f",
+  "zip": "Yorunote_windows_x64_07406c9f_preview.zip",
+  "zip_bytes": 22015039,
+  "zip_sha256": "cf7d5a616af30867349bb9136a491188d7a28a12e0d4778f9a2a1c74e6257ed3",
+  "checksum_sha256": "7bcc0289795cec5ba9c634f3d06255273e52f4a2c71c8576470f7ce4a926a9e8",
+  "product_artifact": {
+    "id": 13510450166,
+    "digest": "a8da90ac2a1d0a65b84455a493ce0f5d4b13785e533f5cb10fb612660e80bbba",
+    "bytes": 21979244
+  },
+  "evidence_artifact": {
+    "id": 13510120270,
+    "digest": "425313f01b86c3982f1df9ee8501297ee83bbbc85672316cb76921a4f8182798",
+    "bytes": 343343
+  },
+  "manifest_files_checked": 54,
+  "total_zip_entries": 55,
+  "native_amd64_files": 21,
+  "gif_sha256": "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb",
+  "gif_frames": 6,
+  "gif_durations_ms": [
+    220,
+    220,
+    220,
+    220,
+    220,
+    220
+  ],
+  "gif_loop": 0,
+  "focused_tests": 13,
+  "native_seed_checks": 11,
+  "native_restart_checks": 4,
+  "native_animation_check": true,
+  "native_hover_checks": 2,
+  "distribution_native_hover": true,
+  "independently_downloaded_again": true,
+  "signature": {
+    "source": "07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b",
+    "status": "NotSigned"
+  },
+  "source_text_line_endings": {
+    "data/flutter_assets/assets/init.js": {
+      "packed_bytes": 40031,
+      "source_bytes": 38512,
+      "raw_bytes_equal": false,
+      "only_line_endings_differ": true
+    },
+    "README.md": {
+      "packed_bytes": 2420,
+      "source_bytes": 2382,
+      "raw_bytes_equal": false,
+      "only_line_endings_differ": true
+    },
+    "README.en.md": {
+      "packed_bytes": 2516,
+      "source_bytes": 2478,
+      "raw_bytes_equal": false,
+      "only_line_endings_differ": true
+    },
+    "LICENSE": {
+      "packed_bytes": 35823,
+      "source_bytes": 35149,
+      "raw_bytes_equal": false,
+      "only_line_endings_differ": true
+    }
+  },
+  "verification_run": 42231651219,
+  "verification_workflow_commit": "e1326cda21cc4211bf21783cfa7e0a74c2bb2667",
+  "visual_review": {
+    "performed": true,
+    "images": [
+      "title-hover-light.png",
+      "title-hover-dark.png",
+      "distribution-title-hover.png"
+    ],
+    "scope": "Actual Windows CI screenshots with synthetic fixtures only"
+  },
+  "native_reports": {
+    "seed": {
+      "phase": "seed",
+      "passed": true,
+      "source": "07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b",
+      "checks": [
+        {
+          "check": "real_app_initialized_with_isolated_windows_identity",
+          "passed": true
+        },
+        {
+          "check": "traditional_chinese_home_and_title",
+          "passed": true
+        },
+        {
+          "check": "windows_title_mascot_gif_decoded_and_animated",
+          "passed": true
+        },
+        {
+          "check": "windows_title_native_hover_shows_tooltip_without_overlay_error",
+          "passed": true,
+          "native_pointer": true,
+          "tooltip_visible_then_dismissed": true,
+          "gif_continues_after_hover": true
+        },
+        {
+          "check": "native_http_and_quickjs_source",
+          "passed": true,
+          "comic_count": 20
+        },
+        {
+          "check": "quickjs_onResponse_and_native_image_decode",
+          "passed": true
+        },
+        {
+          "check": "online_reader_decoded_600x900",
+          "passed": true
+        },
+        {
+          "check": "keyboard_turn_and_sqlite_history_page_2",
+          "passed": true
+        },
+        {
+          "check": "real_download_and_page_bytes",
+          "passed": true,
+          "pages": 5,
+          "sha256": [
+            "02cf70134648453a4d0e5cb0f8b42bd9730764eaa78ecbb6d903396506b96774",
+            "cef0538e35facc2136a92f811d572544e5cb80eb6d90589a3ed33e4081a3833a",
+            "e0f2ff618579bc02f222cbffe6993b7e96483b9d86d6c53ff1bfb7814761c6f4",
+            "bbe2f453ff3cfd4aa4ebc2220a0fe6a2f3d703437e111a11795b6448674180bf",
+            "3e21a5e20017aaaf488c00511f2119817491295d69bbac3295a8e2943ce9b537"
+          ]
+        },
+        {
+          "check": "offline_reader_decoded_600x900",
+          "passed": true
+        },
+        {
+          "check": "english_dark_home_and_settings_saved",
+          "passed": true
+        }
+      ],
+      "flutter_errors": [],
+      "app_errors": [],
+      "failure": null,
+      "scope": "Instrumented Windows CI executable using the real app and native plugins; not the distributed entry point."
+    },
+    "restart": {
+      "phase": "restart",
+      "passed": true,
+      "source": "07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b",
+      "checks": [
+        {
+          "check": "real_app_initialized_with_isolated_windows_identity",
+          "passed": true
+        },
+        {
+          "check": "restart_restores_settings_source_history_and_download",
+          "passed": true,
+          "history_page": 2,
+          "downloaded_pages": 5,
+          "page_sha256": [
+            "02cf70134648453a4d0e5cb0f8b42bd9730764eaa78ecbb6d903396506b96774",
+            "cef0538e35facc2136a92f811d572544e5cb80eb6d90589a3ed33e4081a3833a",
+            "e0f2ff618579bc02f222cbffe6993b7e96483b9d86d6c53ff1bfb7814761c6f4",
+            "bbe2f453ff3cfd4aa4ebc2220a0fe6a2f3d703437e111a11795b6448674180bf",
+            "3e21a5e20017aaaf488c00511f2119817491295d69bbac3295a8e2943ce9b537"
+          ],
+          "offline_history": "History{type: Instance of 'ComicType', time: 2026-11-06 14:09:28.463, title: 合成漫畫 c09, subtitle: 合成資料, cover: cover.png, ep: 1, page: 1, id: c09}"
+        },
+        {
+          "check": "offline_reader_decoded_600x900",
+          "passed": true
+        },
+        {
+          "check": "windows_title_native_hover_shows_tooltip_without_overlay_error",
+          "passed": true,
+          "native_pointer": true,
+          "tooltip_visible_then_dismissed": true,
+          "gif_continues_after_hover": true
+        }
+      ],
+      "flutter_errors": [],
+      "app_errors": [],
+      "failure": null,
+      "scope": "Instrumented Windows CI executable using the real app and native plugins; not the distributed entry point."
+    }
+  },
+  "final_remote_readback": {
+    "at": "2026-11-06T14:13:22Z",
+    "master": "f551750db68617a0be2d66f116e263d73af52fe7",
+    "changed_existing_branches": [],
+    "actions_total": 37,
+    "build_all_runs": 0,
+    "altstore_runs": 0,
+    "new_release_published": false,
+    "notion_written": false
+  }
+}

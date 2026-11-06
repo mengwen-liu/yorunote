@@ -36,3 +36,11 @@
 本輪僅處理發行、附件及文件；沒有再次執行 App 測試、安裝工具鏈或更動使用者電腦上的 App／資料。未寫入 Notion、Secrets 或長期簽章；沒有第二位審查者的獨立程式審查。
 
 本版的上游閱讀器與漫畫來源架構仍歸屬 Venera，本 Fork 貢獻為品牌、維護與修正，保留 GPL-3.0 及第三方著作權聲明。公開 Tag 與舊附件不自動刪除或改指向；如需回退，仍可下載 Windows .1。首頁文件可用 git revert 回復，不需要 force push。
+
+## 首頁同步結果
+
+中英文 README、CHANGELOG 與新版雙語發行說明，已由 `4f93856d7d4bc2262a1f6d8e5da9f9060365e654` 非強制快轉至文件提交 `f551750db68617a0be2d66f116e263d73af52fe7`。相對起始 master 只有這四份文件變更，App、workflow、依賴及 LICENSE 未改；35 個相對連結皆有目標。
+
+GitHub 網頁實際確認繁中首頁與英文 README 的 Windows .2 入口及 ZIP 下載網址。[首頁實際畫面](homepage-preview2.png) · [同步核對紀錄](HOMEPAGE_SYNC_2.json)。
+
+文件提交含 [skip ci]；沒有為文件更新重新跑 App 測試或建置。若需撤回首頁變更，可使用 `git revert f551750db68617a0be2d66f116e263d73af52fe7`；此指令未執行，且不會刪除公開 Release 或 Tag。

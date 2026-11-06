@@ -1,0 +1,26 @@
+{
+  "relative_links_checked": 35,
+  "missing": 0,
+  "changed_files": [
+    "README.md",
+    "README.en.md",
+    "CHANGELOG.md",
+    "docs/releases/v0.1.0-windows-preview.2.md"
+  ],
+  "application_changed": false,
+  "workflow_changed": false,
+  "dependencies_changed": false,
+  "license_changed": false,
+  "master_before": "4f93856d7d4bc2262a1f6d8e5da9f9060365e654",
+  "docs_commit": "f551750db68617a0be2d66f116e263d73af52fe7",
+  "master_after": "f551750db68617a0be2d66f116e263d73af52fe7",
+  "master_update": "non-force fast-forward",
+  "ui_traditional_chinese_windows_entry_verified": true,
+  "ui_english_windows_entry_verified": true,
+  "public_windows_tag": "v0.1.0-windows-preview.2",
+  "public_windows_source": "6df02c0fda1978319355a51fc2c75f7d66ea6d7f",
+  "public_release_id": 436440069,
+  "notion_modified": false,
+  "application_tests_rerun_for_document_update": false,
+  "application_rebuilt_for_document_update": false
+}

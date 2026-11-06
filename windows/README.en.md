@@ -16,6 +16,10 @@ https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
 Embedded web login may also require Microsoft Edge WebView2 Runtime:
 https://developer.microsoft.com/en-us/microsoft-edge/webview2/
 
+## Title-bar character mark
+
+The Windows custom title bar uses a 28×28 animated character in a centred 72-wide brand area. The tooltip and accessible name remain Yorunote; dragging and window controls keep their existing behavior. When the window becomes inactive or reduced motion is requested, the static character icon is displayed instead.
+
 ## Data and existing Venera installations
 
 Settings, reading history, SQLite databases and downloaded comics use the Windows application-data directory. Extract-and-run distribution does not mean all user data stays beside the executable.

@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:venera/components/windows_title_brand.dart';
 import 'package:venera/foundation/app.dart';
 import 'package:venera/foundation/appdata.dart';
 import 'package:venera/foundation/comic_source/comic_source.dart';
@@ -79,6 +80,49 @@ bool _hasPageImage() => _widgets().whereType<RawImage>().any(
 bool _readerHasFocus() => _widgets().whereType<KeyboardListener>().any(
   (w) => w.autofocus && w.focusNode.hasFocus,
 );
+
+RawImage? _brandFrame() {
+  RawImage? result;
+  void imageVisitor(Element element) {
+    if (element.widget is RawImage) result = element.widget as RawImage;
+    element.visitChildren(imageVisitor);
+  }
+
+  void visit(Element element) {
+    if (element.widget is WindowsTitleBrand) {
+      element.visitChildren(imageVisitor);
+      return;
+    }
+    element.visitChildren(visit);
+  }
+
+  final root = WidgetsBinding.instance.rootElement;
+  if (root != null) visit(root);
+  return result;
+}
+
+bool _brandUsesGif() => _widgets().whereType<Image>().any((widget) {
+  ImageProvider provider = widget.image;
+  if (provider is ResizeImage) provider = provider.imageProvider;
+  return provider is AssetImage &&
+      provider.assetName == WindowsTitleBrand.animatedAsset;
+});
+
+Future<void> _checkAnimatedBrand() async {
+  await windowManager.focus();
+  await _until(
+    () => _brandUsesGif() && _brandFrame()?.image != null,
+    'Windows title GIF did not load in the active window',
+  );
+  final first = _brandFrame()!.image;
+  await _until(
+    () => _brandFrame()?.image != null &&
+        !identical(first, _brandFrame()!.image),
+    'Windows title GIF did not advance frames',
+    timeout: const Duration(seconds: 5),
+  );
+  _record('windows_title_mascot_gif_decoded_and_animated');
+}
 
 List<String> _appErrors() => Log.logs
     .where((item) => item.level == LogLevel.error)
@@ -179,10 +223,11 @@ Future<void> _seed() async {
     'App title or Traditional Chinese locale was not applied',
   );
   _require(
-    _widgets().whereType<Text>().any((w) => w.data == 'Yorunote'),
-    'Custom Windows title bar still lacks the Yorunote name',
+    _widgets().whereType<Tooltip>().any((w) => w.message == 'Yorunote'),
+    'Windows title logo lacks the Yorunote tooltip',
   );
   _record('traditional_chinese_home_and_title');
+  await _checkAnimatedBrand();
 
   final template = await File(
     'tool/synthetic_source/yorunote_synthetic_source.js',

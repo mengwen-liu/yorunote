@@ -16,6 +16,10 @@ https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
 使用內嵌網頁登入時，也可能需要 Microsoft Edge WebView2 Runtime：
 https://developer.microsoft.com/en-us/microsoft-edge/webview2/
 
+## 左上角角色 Logo
+
+Windows 自訂標題列以 28×28 的精靈角色動畫取代小字，圖示置中於左側 72 寬的品牌區。滑鼠提示與無障礙名稱保留 Yorunote，視窗拖曳區及系統按鈕維持原操作。視窗失焦或系統要求減少動畫時，改為靜態角色圖。
+
 ## 資料與既有 Venera
 
 程式使用 Windows 應用程式資料位置保存設定、歷史紀錄、SQLite 資料庫及下載內容；ZIP 解壓執行不代表資料都存放在解壓資料夾。

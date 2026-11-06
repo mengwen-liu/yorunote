@@ -1,90 +1,62 @@
-name: Yorunote Windows Caption Fix Release Assets
-run-name: Attach verified Windows caption fix ZIP to preview 3 draft
+name: Yorunote Windows Caption Fix Public Verification
+run-name: Verify public Windows caption fix preview 3
 on:
   push:
     branches: ['codex/yorunote-windows-overlay-fix-20261106']
     paths: ['.github/workflows/yorunote-windows-diagnostics.yml']
 permissions:
   actions: read
-  contents: write
+  contents: read
 jobs:
-  attach-to-existing-draft:
+  verify-public:
     if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-overlay-fix-20261106'
     runs-on: ubuntu-22.04
-    timeout-minutes: 8
+    timeout-minutes: 5
     steps:
-      - name: Verify and attach only the existing ZIP and checksum
+      - name: Verify public ZIP, checksum, tag and restored workflow
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          gh api repos/mengwen-liu/yorunote/actions/runs/42229100772 > build.json
-          gh api repos/mengwen-liu/yorunote/actions/artifacts/13510450166 > artifact.json
-          gh api repos/mengwen-liu/yorunote/releases/436759456 > release-before.json
-          gh api repos/mengwen-liu/yorunote/git/ref/heads/codex/yorunote-windows-07406c9f > source-ref.json
-          gh api repos/mengwen-liu/yorunote/actions/artifacts/13510450166/zip > artifact.zip
+          gh api repos/mengwen-liu/yorunote/releases/436759456 > release.json
+          gh api repos/mengwen-liu/yorunote/git/ref/tags/v0.1.0-windows-preview.3 > tag.json
+          gh api repos/mengwen-liu/yorunote/actions/workflows/386674685 > build-all.json
+          gh api 'repos/mengwen-liu/yorunote/actions/workflows/main.yml/runs?per_page=1' > build-all-runs.json
+          gh api 'repos/mengwen-liu/yorunote/actions/workflows/update_alt_store.yml/runs?per_page=1' > altstore-runs.json
+          curl --fail --location --silent --show-error --retry 0 --proto '=https' -o public.zip 'https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.3/Yorunote_windows_x64_07406c9f_preview.zip'
+          curl --fail --location --silent --show-error --retry 0 --proto '=https' -o public.sha256 'https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.3/Yorunote_windows_x64_07406c9f_preview.zip.sha256'
           python3 - <<'PY'
-          import hashlib,io,json,pathlib,stat,zipfile
+          import hashlib,io,json,pathlib,struct,zipfile
           def read(name): return json.loads(pathlib.Path(name).read_text())
-          def digest(data): return hashlib.sha256(data).hexdigest()
           source="07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b"
-          name="Yorunote_windows_x64_07406c9f_preview.zip"
-          expected="cf7d5a616af30867349bb9136a491188d7a28a12e0d4778f9a2a1c74e6257ed3"
-          run=read("build.json");meta=read("artifact.json");release=read("release-before.json")
-          assert run["id"]==42229100772 and run["status"]=="completed" and run["conclusion"]=="success"
-          assert run["head_sha"]=="ef9996a249b4b815b4688aa99576abd9d7899f3f"
-          assert meta["id"]==13510450166 and meta["workflow_run"]["id"]==run["id"] and not meta["expired"]
-          assert meta["digest"]=="sha256:a8da90ac2a1d0a65b84455a493ce0f5d4b13785e533f5cb10fb612660e80bbba"
-          assert release["id"]==436759456 and release["tag_name"]=="v0.1.0-windows-preview.3"
-          assert release["draft"] and release["prerelease"] and release["published_at"] is None
-          assert release["target_commitish"]=="codex/yorunote-windows-07406c9f" and not release["assets"]
-          assert source in release["body"] and expected in release["body"]
-          assert read("source-ref.json")["object"]=={"sha":source,"type":"commit","url":"https://api.github.com/repos/mengwen-liu/yorunote/git/commits/"+source}
-          raw=pathlib.Path("artifact.zip").read_bytes()
-          assert len(raw)==21979244 and digest(raw)==meta["digest"][7:]
-          with zipfile.ZipFile(io.BytesIO(raw)) as artifact:
-              names=artifact.namelist()
-              assert len(names)==2 and set(names)=={name,name+".sha256"}
-              assert artifact.testzip() is None
-              for item in artifact.infolist():
-                  p=pathlib.PurePosixPath(item.filename)
-                  assert not p.is_absolute() and ".." not in p.parts and "\\" not in item.filename
-                  assert not stat.S_ISLNK(item.external_attr >> 16)
-              product=artifact.read(name);checksum=artifact.read(name+".sha256")
-              assert len(product)==22015039 and digest(product)==expected
-              assert checksum==(expected+"  "+name+"\n").encode("ascii")
-              assert digest(checksum)=="7bcc0289795cec5ba9c634f3d06255273e52f4a2c71c8576470f7ce4a926a9e8"
-              with zipfile.ZipFile(io.BytesIO(product)) as bundle:
-                  assert bundle.testzip() is None
-                  assert json.loads(bundle.read("Yorunote/BUILD_INFO.json"))["source_commit"]==source
-                  assert digest(bundle.read("Yorunote/data/flutter_assets/assets/brand/yorunote_mascot.gif"))=="4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb"
-              out=pathlib.Path("upload");out.mkdir()
-              (out/name).write_bytes(product);(out/(name+".sha256")).write_bytes(checksum)
-          print("All source, draft, original artifact, product ZIP, checksum and GIF checks passed before upload.")
-          PY
-          gh release upload v0.1.0-windows-preview.3 upload/Yorunote_windows_x64_07406c9f_preview.zip upload/Yorunote_windows_x64_07406c9f_preview.zip.sha256 --repo mengwen-liu/yorunote
-          gh api repos/mengwen-liu/yorunote/releases/436759456 > release-after.json
-          python3 - <<'PY'
-          import hashlib,json,pathlib,subprocess
-          release=json.loads(pathlib.Path("release-after.json").read_text())
-          name="Yorunote_windows_x64_07406c9f_preview.zip"
-          checks={name:(22015039,"cf7d5a616af30867349bb9136a491188d7a28a12e0d4778f9a2a1c74e6257ed3"),name+".sha256":(108,"7bcc0289795cec5ba9c634f3d06255273e52f4a2c71c8576470f7ce4a926a9e8")}
-          assert release["draft"] and release["prerelease"] and release["published_at"] is None
-          assert len(release["assets"])==2 and {a["name"] for a in release["assets"]}==set(checks)
-          assets=[]
-          for asset in release["assets"]:
-              size,expected=checks[asset["name"]]
-              target=pathlib.Path("readback-"+str(asset["id"]))
-              with target.open("wb") as f:
-                  subprocess.run(["gh","api","-H","Accept: application/octet-stream","repos/mengwen-liu/yorunote/releases/assets/"+str(asset["id"])],stdout=f,check=True)
-              data=target.read_bytes();actual=hashlib.sha256(data).hexdigest()
-              assert asset["size"]==size and len(data)==size and actual==expected
-              assert asset["digest"]=="sha256:"+expected
-              assets.append({"id":asset["id"],"name":asset["name"],"size":size,"sha256":actual,"url":asset["browser_download_url"]})
-          result={"release_id":release["id"],"tag":release["tag_name"],"draft":release["draft"],"prerelease":release["prerelease"],"published_at":release["published_at"],"target":release["target_commitish"],"source_commit":"07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b","source_run":42229100772,"artifact_id":13510450166,"artifact_sha256":"a8da90ac2a1d0a65b84455a493ce0f5d4b13785e533f5cb10fb612660e80bbba","assets":assets,"downloaded_after_attachment":True}
-          print("BEGIN_ATTACH_JSON")
+          filename="Yorunote_windows_x64_07406c9f_preview.zip"
+          release=read("release.json");tag=read("tag.json")
+          assert release["id"]==436759456 and release["draft"] is False and release["prerelease"] is True
+          assert release["tag_name"]=="v0.1.0-windows-preview.3" and release["published_at"]=="2026-11-06T16:59:20Z"
+          assert tag["object"]["type"]=="commit" and tag["object"]["sha"]==source
+          assert {a["id"] for a in release["assets"]}=={717856788,717856792}
+          raw=pathlib.Path("public.zip").read_bytes()
+          digest=hashlib.sha256(raw).hexdigest()
+          assert len(raw)==22015039 and digest=="cf7d5a616af30867349bb9136a491188d7a28a12e0d4778f9a2a1c74e6257ed3"
+          checksum=pathlib.Path("public.sha256").read_bytes()
+          assert checksum==(digest+"  "+filename+chr(10)).encode()
+          assert hashlib.sha256(checksum).hexdigest()=="7bcc0289795cec5ba9c634f3d06255273e52f4a2c71c8576470f7ce4a926a9e8"
+          with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+              assert archive.testzip() is None
+              assert json.loads(archive.read("Yorunote/BUILD_INFO.json"))["source_commit"]==source
+              lines=archive.read("Yorunote/SHA256SUMS.txt").decode().splitlines()
+              assert len(lines)==54
+              for line in lines:
+                  expected,path=line.split("  ",1)
+                  assert hashlib.sha256(archive.read("Yorunote/"+path)).hexdigest()==expected
+              assert hashlib.sha256(archive.read("Yorunote/data/flutter_assets/assets/brand/yorunote_mascot.gif")).hexdigest()=="4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb"
+          assert read("build-all.json")["state"]=="active"
+          assert read("build-all-runs.json")["total_count"]==0
+          assert read("altstore-runs.json")["total_count"]==0
+          result={"release_id":436759456,"url":release["html_url"],"published_at":release["published_at"],"draft":release["draft"],"prerelease":release["prerelease"],"tag":tag["ref"],"source_commit":source,"zip":filename,"zip_bytes":len(raw),"zip_sha256":digest,"checksum_sha256":hashlib.sha256(checksum).hexdigest(),"manifest_files_verified":len(lines),"gif_sha256":"4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb","public_downloads_without_authorization_header_verified":True,"build_all_restored_state":read("build-all.json")["state"],"build_all_total_runs":read("build-all-runs.json")["total_count"],"altstore_total_runs":read("altstore-runs.json")["total_count"],"assets":[{"id":a["id"],"name":a["name"],"size":a["size"],"digest":a["digest"],"url":a["browser_download_url"]} for a in release["assets"]]}
+          print("BEGIN_PUBLICATION_JSON")
           print(json.dumps(result,indent=2))
-          print("END_ATTACH_JSON")
+          print("END_PUBLICATION_JSON")
           PY
           

@@ -1,5 +1,5 @@
 name: Yorunote Windows Mascot Checks
-run-name: Check title mascot - d63a6539
+run-name: Check title mascot - a9fbae52
 on:
   push:
     branches: ['codex/yorunote-windows-mascot-20261106']
@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: 'd63a65399ded00468058f3f10140c7f55b01b566'
+          ref: 'a9fbae524918a679e007d62fdee94c89e6eb2c4f'
           persist-credentials: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
@@ -26,6 +26,7 @@ jobs:
           cache: true
       - name: Check original GIF bytes and unchanged dependency declarations
         run: |
+          git fetch --no-tags --depth=1 origin 71485c7de8799e30c9e1b5797ad83fba65668d51
           python -m pip install --disable-pip-version-check --no-deps -r windows/requirements-build.txt
           python - <<'PY'
           import hashlib, pathlib, subprocess

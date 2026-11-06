@@ -8,7 +8,7 @@
 
 <p align="center"><a href="README.md">繁體中文</a> · <strong>English</strong></p>
 
-<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1 · Android</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1">v0.1.0-windows-preview.1 · Windows x64</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
+<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1 · Android</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.2">v0.1.0-windows-preview.2 · Windows x64</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
 
 Yorunote is a personal open-source fork of [Venera](https://github.com/venera-app/venera). Work in this fork covers branding, interface maintenance, image-cache fixes, cover loading, and traceable engineering evidence.
 
@@ -32,13 +32,14 @@ The reader and comic-source system come from upstream. This repository is a main
 
 ### Windows x64 preview
 
-**[v0.1.0-windows-preview.1](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1)** (2026-11-06)
+**[v0.1.0-windows-preview.2](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.2)** (2026-11-06)
 
-[Download Windows x64 ZIP](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.1/Yorunote_windows_x64_71485c7d_preview.zip) · [SHA-256 checksum](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.1/Yorunote_windows_x64_71485c7d_preview.zip.sha256) · [Bilingual release notes](docs/releases/v0.1.0-windows-preview.1.md)
+[Download Windows x64 ZIP](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.2/Yorunote_windows_x64_6df02c0f_preview.zip) · [SHA-256 checksum](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.2/Yorunote_windows_x64_6df02c0f_preview.zip.sha256) · [Bilingual release notes](docs/releases/v0.1.0-windows-preview.2.md)
 
-- App source is fixed at `71485c7d`, built in **Release mode**. Extract the complete ZIP and run `Yorunote/yorunote.exe`; keep every DLL and the `data` directory together.
-- ZIP: 21,528,589 bytes. SHA-256: `5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5`.
-- [Windows CI evidence](https://github.com/mengwen-liu/yorunote/blob/codex/yorunote-windows-preview-20261106/docs/verification/windows-preview-20261106/README.md): 7 focused tests and native checks for HTTP, JavaScript sources, reading and keyboard input, downloads, SQLite and offline reading after restart.
+- App source is fixed at `6df02c0f`, built in **Release mode**. Extract the complete ZIP and run `Yorunote/yorunote.exe`; keep every DLL and the `data` directory together.
+- The upper-left title mark is the existing 28×28 animated elf. An inactive window or a reduced-motion request shows the static icon; the data directory and window controls retain their behavior.
+- ZIP: 22,013,335 bytes. SHA-256: `33338805489e5f4068b83ed2d37a22ed374c4189646b460f0c880d0e735a0bb1`.
+- [Windows CI evidence](https://github.com/mengwen-liu/yorunote/blob/05228479a11a93c17b0812ebe03f7ea1ed5d6112/docs/verification/windows-mascot-20261106/PUBLIC_RELEASE_2.md): 10 focused tests and native checks for HTTP, JavaScript sources, reading and keyboard input, downloads, SQLite and offline reading after restart.
 - The build is not Authenticode-signed and has no installer. Its separate `mengwen-liu / Yorunote` application-data directory does not migrate existing Venera data.
 - User-device validation, WebView2 login, all third-party sources, DPI, multiple monitors and Windows ARM64 are not fully covered. This remains a preview.
 
@@ -46,7 +47,7 @@ The reader and comic-source system come from upstream. This repository is a main
 
 The Android preview's application source is pinned by [tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1) at commit `29b590b`. `master` contains the project homepages and release documentation, but has not integrated that application code. Use the tag to obtain the source matching the APK; the [candidate branch and complete evidence](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105) retain the development history.
 
-Windows source is separately pinned by [tag `v0.1.0-windows-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-windows-preview.1) at `71485c7d`. Source commits, build modes and validation records are distinct for the two platforms; neither application snapshot has been merged into `master`.
+Windows source is separately pinned by [tag `v0.1.0-windows-preview.2`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-windows-preview.2) at `6df02c0f`. Source commits, build modes and validation records are distinct for the two platforms; neither application snapshot has been merged into `master`.
 
 | Area | Work included in the preview | Evidence |
 | --- | --- | --- |
@@ -75,7 +76,7 @@ To reproduce the Android preview, check out the Android tag above and read its v
 
 The Android build configuration also needs a local `android/key.properties` file and signing key; neither belongs in Git. Host HTTP/JavaScript integration tests need the corresponding native rhttp and QuickJS libraries. See the [latest verification report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) for conditions and commands.
 
-Windows builds use the [dedicated fixed-source workflow](https://github.com/mengwen-liu/yorunote/blob/d11ec7f24f37f3c39c1c332448807fb3c6ca1ecd/.github/workflows/yorunote-windows-preview.yml) without Build ALL. Running the ZIP does not require installing Flutter or the Android SDK. See the [Windows report](https://github.com/mengwen-liu/yorunote/blob/codex/yorunote-windows-preview-20261106/docs/verification/windows-preview-20261106/README.md) for exact build and runtime coverage.
+Windows builds use the [dedicated fixed-source workflow](https://github.com/mengwen-liu/yorunote/blob/4eedee2d2a4293f41156512caab9ed63a0a1544a/.github/workflows/yorunote-windows-preview.yml) without Build ALL. Running the ZIP does not require installing Flutter or the Android SDK. See the [Windows report](https://github.com/mengwen-liu/yorunote/blob/05228479a11a93c17b0812ebe03f7ea1ed5d6112/docs/verification/windows-mascot-20261106/PUBLIC_RELEASE_2.md) for exact build and runtime coverage.
 
 ## Documentation
 
@@ -84,8 +85,8 @@ Windows builds use the [dedicated fixed-source workflow](https://github.com/meng
 - [Synthetic source and device acceptance](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md)
 - [Development history](CHANGELOG.md)
 - [Android release notes](docs/releases/v0.1.0-preview.1.md)
-- [Bilingual Windows release notes](docs/releases/v0.1.0-windows-preview.1.md)
-- [Windows English instructions](https://github.com/mengwen-liu/yorunote/blob/v0.1.0-windows-preview.1/windows/README.en.md)
+- [Bilingual Windows release notes](docs/releases/v0.1.0-windows-preview.2.md)
+- [Windows English instructions](https://github.com/mengwen-liu/yorunote/blob/v0.1.0-windows-preview.2/windows/README.en.md)
 - [Publication record and maintainer procedure](docs/releases/PREVIEW_RELEASE_PROCESS.md)
 - [繁體中文](README.md)
 

@@ -5,6 +5,19 @@
 本檔分開記錄已發布的預覽版、文件更新與歷史開發里程碑。App 修改是否已發布、是否已合併至 master，以及是否完成實機驗收，分別記錄。
 This file distinguishes public previews, documentation updates, and development milestones. Publication, integration into master, and device acceptance are separate states.
 
+## v0.1.0-windows-preview.2 — 2026-11-06
+
+- **已公開的 Windows 精靈動畫預覽版**：[發行頁](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.2) · [雙語說明](docs/releases/v0.1.0-windows-preview.2.md)。Release ID 436440069，2026-11-06 19:58:41（Asia/Taipei）公開。
+  **Public Windows animated-title preview**; release ID 436440069, published at 2026-11-06 19:58:41 Asia/Taipei.
+- Tag 固定 App 來源 `6df02c0fda1978319355a51fc2c75f7d66ea6d7f`。左上角改為既有 28×28 精靈動畫，失焦或減少動畫時使用靜態圖；保留原資料目錄及視窗操作。
+  The tag pins the animated title mark; inactive/reduced-motion states use the static icon, retaining the existing data directory and window controls.
+- 沿用 [Windows CI 42202302352](https://github.com/mengwen-liu/yorunote/actions/runs/42202302352) 的 ZIP：22,013,335 bytes，10 項品牌／回歸測試與首次程序 10 項、重啟 3 項指定檢查通過。[下載後驗證 42204532603](https://github.com/mengwen-liu/yorunote/actions/runs/42204532603)核對產品、GIF 及檔案清單。本次發布沒有重新建置或重跑完整測試。
+  Reuses the verified ZIP: 10 focused tests and 10 initial/3 restart checks passed. Separate download verification covered the package, GIF and manifest. Publication did not rebuild or rerun the full test suite.
+- 發行時暫停 Build ALL，公開後恢復原狀態；公開下載與是否連動的核對見[發布紀錄](https://github.com/mengwen-liu/yorunote/blob/05228479a11a93c17b0812ebe03f7ea1ed5d6112/docs/verification/windows-mascot-20261106/PUBLIC_RELEASE_2.md)。既有 Windows .1 與 Android Release 保留，App 程式未合併至 master。
+  Build ALL was paused and restored for publication. The publication record documents public download and linked-workflow checks; existing releases remain available and application code is not merged into master.
+- 本版仍為未經 Authenticode 簽章的預覽版，使用者電腦驗收待補；先前對 Windows .1 的回報不套用到新版。
+  This unsigned preview still needs user-device acceptance; the earlier report for .1 does not validate this new build.
+
 ## v0.1.0-windows-preview.1 — 2026-11-06
 
 - **已公開的 Windows x64 預覽版**：[發行頁面](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1) · [雙語說明](docs/releases/v0.1.0-windows-preview.1.md)。Release ID 436235827，2026-11-06 16:02:29（Asia/Taipei）公開。

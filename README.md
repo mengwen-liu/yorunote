@@ -8,7 +8,7 @@
 
 <p align="center"><strong>繁體中文</strong> · <a href="README.en.md">English</a></p>
 
-<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1｜Android</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1">v0.1.0-windows-preview.1｜Windows x64</a> · <a href="#下載與版本">下載</a> · <a href="CHANGELOG.md">版本紀錄</a> · <a href="#功能與個人貢獻">維護成果</a></p>
+<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1｜Android</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.2">v0.1.0-windows-preview.2｜Windows x64</a> · <a href="#下載與版本">下載</a> · <a href="CHANGELOG.md">版本紀錄</a> · <a href="#功能與個人貢獻">維護成果</a></p>
 
 Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個人分支，持續整理外觀、修正圖片快取與封面載入問題，並保存可追溯的測試紀錄。
 
@@ -32,13 +32,14 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 
 ### Windows x64 預覽版
 
-**[v0.1.0-windows-preview.1](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1)**（2026-11-06）
+**[v0.1.0-windows-preview.2](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.2)**（2026-11-06）
 
-[下載 Windows x64 ZIP](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.1/Yorunote_windows_x64_71485c7d_preview.zip) · [SHA-256 校驗檔](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.1/Yorunote_windows_x64_71485c7d_preview.zip.sha256) · [雙語發行說明](docs/releases/v0.1.0-windows-preview.1.md)
+[下載 Windows x64 ZIP](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.2/Yorunote_windows_x64_6df02c0f_preview.zip) · [SHA-256 校驗檔](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.2/Yorunote_windows_x64_6df02c0f_preview.zip.sha256) · [雙語發行說明](docs/releases/v0.1.0-windows-preview.2.md)
 
-- 固定 App 來源 `71485c7d`，採 **Release 模式**建置；整份解壓縮後執行 `Yorunote/yorunote.exe`，保留所有 DLL 與 `data` 資料夾。
-- ZIP 為 21,528,589 位元組；SHA-256：`5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5`。
-- [Windows CI 與驗證報告](https://github.com/mengwen-liu/yorunote/blob/codex/yorunote-windows-preview-20261106/docs/verification/windows-preview-20261106/README.md)：7 項品牌／回歸測試，以及原生網路、JavaScript 來源、閱讀翻頁、下載、SQLite 與重啟離線閱讀指定檢查通過。
+- 固定 App 來源 `6df02c0f`，採 **Release 模式**建置；整份解壓縮後執行 `Yorunote/yorunote.exe`，保留所有 DLL 與 `data` 資料夾。
+- 左上角改為 28×28 精靈眨眼動畫；失焦或要求減少動畫時顯示靜態圖，視窗操作及資料目錄沿用原行為。
+- ZIP 為 22,013,335 位元組；SHA-256：`33338805489e5f4068b83ed2d37a22ed374c4189646b460f0c880d0e735a0bb1`。
+- [Windows CI 與驗證報告](https://github.com/mengwen-liu/yorunote/blob/05228479a11a93c17b0812ebe03f7ea1ed5d6112/docs/verification/windows-mascot-20261106/PUBLIC_RELEASE_2.md)：10 項品牌／回歸測試，以及原生網路、JavaScript 來源、閱讀翻頁、下載、SQLite 與重啟離線閱讀指定檢查通過。
 - 未經 Windows 程式碼簽章，沒有安裝程式；資料存於獨立的 `mengwen-liu / Yorunote` 應用程式資料目錄，不自動遷移舊 Venera 資料。
 - 使用者電腦、WebView2 登入、全部第三方來源、DPI、多螢幕與 Windows ARM64 尚未完整驗證；本版仍為預覽版。
 
@@ -46,7 +47,7 @@ Yorunote 是基於 [Venera](https://github.com/venera-app/venera) 的開源個�
 
 Android 公開預覽版的 App 原始碼固定在 [Tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1)，對應提交 `29b590b`。`master` 已有專案首頁與發行文件，尚未整合這份 App 程式；需要取得與 APK 相同的來源時，請使用上述 Tag。[候選分支與完整驗證紀錄](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105)另外保存開發歷程。
 
-Windows App 原始碼另固定在 [Tag `v0.1.0-windows-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-windows-preview.1)，對應 `71485c7d`；兩個平台的來源、建置模式及驗證紀錄分開。`master` 尚未整合這兩份 App 來源。
+Windows App 原始碼另固定在 [Tag `v0.1.0-windows-preview.2`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-windows-preview.2)，對應 `6df02c0f`；兩個平台的來源、建置模式及驗證紀錄分開。`master` 尚未整合這兩份 App 來源。
 
 | 領域 | 預覽版包含的修改 | 證據 |
 | --- | --- | --- |
@@ -75,7 +76,7 @@ Android 預覽版 App 來源為 [`29b590b`](https://github.com/mengwen-liu/yorun
 
 建置還需要依專案設定準備本機 `android/key.properties` 與簽章金鑰；兩者不得提交。主機 HTTP／JavaScript 整合測試需要對應的 rhttp 與 QuickJS 原生函式庫。完整測試條件與建置命令見[最新驗證報告](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md)。
 
-Windows 建置使用 [固定來源的獨立 workflow](https://github.com/mengwen-liu/yorunote/blob/d11ec7f24f37f3c39c1c332448807fb3c6ca1ecd/.github/workflows/yorunote-windows-preview.yml)，不呼叫 Build ALL；執行 ZIP 不需要自行安裝 Flutter 或 Android SDK。建置與操作驗證的範圍見 [Windows 報告](https://github.com/mengwen-liu/yorunote/blob/codex/yorunote-windows-preview-20261106/docs/verification/windows-preview-20261106/README.md)。
+Windows 建置使用 [固定來源的獨立 workflow](https://github.com/mengwen-liu/yorunote/blob/4eedee2d2a4293f41156512caab9ed63a0a1544a/.github/workflows/yorunote-windows-preview.yml)，不呼叫 Build ALL；執行 ZIP 不需要自行安裝 Flutter 或 Android SDK。建置與操作驗證的範圍見 [Windows 報告](https://github.com/mengwen-liu/yorunote/blob/05228479a11a93c17b0812ebe03f7ea1ed5d6112/docs/verification/windows-mascot-20261106/PUBLIC_RELEASE_2.md)。
 
 ## 文件
 
@@ -84,8 +85,8 @@ Windows 建置使用 [固定來源的獨立 workflow](https://github.com/mengwen
 - [合成網路來源與裝置驗收](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md)
 - [開發與版本紀錄](CHANGELOG.md)
 - [Android 發行說明](docs/releases/v0.1.0-preview.1.md)
-- [Windows 雙語發行說明](docs/releases/v0.1.0-windows-preview.1.md)
-- [Windows 繁中使用說明](https://github.com/mengwen-liu/yorunote/blob/v0.1.0-windows-preview.1/windows/README.md)
+- [Windows 雙語發行說明](docs/releases/v0.1.0-windows-preview.2.md)
+- [Windows 繁中使用說明](https://github.com/mengwen-liu/yorunote/blob/v0.1.0-windows-preview.2/windows/README.md)
 - [發行紀錄與維護者操作原則](docs/releases/PREVIEW_RELEASE_PROCESS.md)
 - [English documentation](README.en.md)
 

@@ -52,17 +52,19 @@ class _WindowsTitleBrandState extends State<WindowsTitleBrand>
           width: 72,
           height: 36,
           child: Center(
-            child: Image.asset(
-              animate
-                  ? WindowsTitleBrand.animatedAsset
-                  : WindowsTitleBrand.staticAsset,
-              width: 28,
-              height: 28,
-              fit: BoxFit.contain,
-              cacheWidth: decodeSize,
-              cacheHeight: decodeSize,
-              gaplessPlayback: true,
-              excludeFromSemantics: true,
+            child: RepaintBoundary(
+              child: Image.asset(
+                animate
+                    ? WindowsTitleBrand.animatedAsset
+                    : WindowsTitleBrand.staticAsset,
+                width: 28,
+                height: 28,
+                fit: BoxFit.contain,
+                cacheWidth: decodeSize,
+                cacheHeight: decodeSize,
+                gaplessPlayback: true,
+                excludeFromSemantics: true,
+              ),
             ),
           ),
         ),

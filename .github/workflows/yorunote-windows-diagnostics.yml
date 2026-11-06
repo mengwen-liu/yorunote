@@ -123,10 +123,18 @@ jobs:
           for frame in range(6):
               image.seek(frame);durations.append(image.info["duration"])
           assert durations==[220]*6
-          for path in ["assets/app_icon.png","assets/init.js"]:
-              assert archive.read("Yorunote/data/flutter_assets/"+path)==pathlib.Path(path).read_bytes()
+          assert archive.read("Yorunote/data/flutter_assets/assets/app_icon.png")==pathlib.Path("assets/app_icon.png").read_bytes()
+          text_endings={}
+          def compare_text(package_path, source_path):
+              packed=archive.read("Yorunote/"+package_path)
+              original=pathlib.Path(source_path).read_bytes()
+              normal=lambda data: data.replace(b"\r\n",b"\n")
+              text_endings[package_path]={"packed_bytes":len(packed),"source_bytes":len(original),"raw_bytes_equal":packed==original,"only_line_endings_differ":packed!=original and normal(packed)==normal(original)}
+              print("TEXT_SOURCE_COMPARISON",package_path,json.dumps(text_endings[package_path]))
+              assert normal(packed)==normal(original), ("Source text content mismatch",package_path)
+          compare_text("data/flutter_assets/assets/init.js","assets/init.js")
           for package_path,source_path in [("README.md","windows/README.md"),("README.en.md","windows/README.en.md"),("LICENSE","LICENSE")]:
-              assert archive.read("Yorunote/"+package_path)==pathlib.Path(source_path).read_bytes()
+              compare_text(package_path,source_path)
           seed=json.loads(ev("smoke-seed.json"))
           restart=json.loads(ev("smoke-restart.json"))
           for report,count in [(seed,10),(restart,3)]:
@@ -138,7 +146,7 @@ jobs:
           assert "+10: All tests passed!" in tests
           asset_report=json.loads(ev("mascot-asset.json"))
           assert asset_report["sha256"]==GIF_SHA
-          result={"source_commit":SOURCE,"build_run":BUILD_RUN,"workflow_commit":build["head_sha"],"zip":name,"zip_bytes":len(raw),"zip_sha256":product_hash,"checksum_sha256":digest(checksum),"product_artifact":product_meta,"evidence_artifact":evidence_meta,"manifest_files_checked":len(declared),"total_zip_entries":len(names),"native_amd64_files":len(native),"gif_sha256":digest(gif),"gif_frames":6,"gif_durations_ms":durations,"gif_loop":0,"focused_tests":10,"native_seed_checks":10,"native_restart_checks":3,"native_animation_check":True,"independently_downloaded_again":True,"signature":json.loads(ev("authenticode.json"))}
+          result={"source_commit":SOURCE,"build_run":BUILD_RUN,"workflow_commit":build["head_sha"],"zip":name,"zip_bytes":len(raw),"zip_sha256":product_hash,"checksum_sha256":digest(checksum),"product_artifact":product_meta,"evidence_artifact":evidence_meta,"manifest_files_checked":len(declared),"total_zip_entries":len(names),"native_amd64_files":len(native),"gif_sha256":digest(gif),"gif_frames":6,"gif_durations_ms":durations,"gif_loop":0,"focused_tests":10,"native_seed_checks":10,"native_restart_checks":3,"native_animation_check":True,"independently_downloaded_again":True,"signature":json.loads(ev("authenticode.json")),"source_text_line_endings":text_endings}
           print("BEGIN_VERIFICATION_JSON")
           print(json.dumps(result,indent=2))
           print("END_VERIFICATION_JSON")

@@ -1,9 +1,9 @@
-name: Yorunote Windows Preview
-run-name: Windows x64 preview - fixed source 944162b5
+name: Yorunote Windows Caption Fix Preview
+run-name: Windows caption Overlay fix - fixed source 07406c9f
 
 on:
   push:
-    branches: ['codex/yorunote-windows-preview-20261106']
+    branches: ['codex/yorunote-windows-overlay-fix-20261106']
     paths: ['.github/workflows/yorunote-windows-preview.yml']
   workflow_dispatch: {}
 
@@ -11,20 +11,20 @@ permissions:
   contents: read
 
 concurrency:
-  group: yorunote-windows-preview
+  group: yorunote-windows-caption-fix-preview
   cancel-in-progress: false
 
 jobs:
   windows-x64:
-    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-preview-20261106'
+    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-overlay-fix-20261106'
     runs-on: windows-2022
     timeout-minutes: 55
     defaults:
       run:
         shell: pwsh
     env:
-      SOURCE_SHA: '944162b55ba424f13104ba402aa5682d648a9fdb'
-      YORUNOTE_SMOKE_SOURCE: '944162b55ba424f13104ba402aa5682d648a9fdb'
+      SOURCE_SHA: '07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b'
+      YORUNOTE_SMOKE_SOURCE: '07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b'
       FLUTTER_SUPPRESS_ANALYTICS: 'true'
       PUB_ENVIRONMENT: github-actions
 
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout fixed application source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: '944162b55ba424f13104ba402aa5682d648a9fdb'
+          ref: '07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b'
           persist-credentials: false
 
       - name: Verify source and prepare evidence
@@ -85,6 +85,38 @@ jobs:
           python windows/make_icon.py --evidence $env:EVIDENCE
           if ($LASTEXITCODE -ne 0) { throw 'Windows icon checks failed' }
 
+
+      - name: Verify original mascot animation and asset-only pubspec change
+        run: |
+          git fetch --no-tags --depth=1 origin 71485c7de8799e30c9e1b5797ad83fba65668d51
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot read fixed logo comparison source' }
+          @'
+          import hashlib, json, pathlib, subprocess
+          from PIL import Image
+          base = "71485c7de8799e30c9e1b5797ad83fba65668d51"
+          path = pathlib.Path("assets/brand/yorunote_mascot.gif")
+          actual = hashlib.sha256(path.read_bytes()).hexdigest()
+          assert actual == "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb"
+          image = Image.open(path)
+          assert image.format == "GIF" and image.size == (512,512) and image.n_frames == 6
+          assert image.info["loop"] == 0
+          durations = []
+          for i in range(image.n_frames):
+              image.seek(i)
+              durations.append(image.info["duration"])
+          assert durations == [220]*6
+          original = subprocess.check_output(["git","show",base+":pubspec.yaml"],text=True)
+          current = pathlib.Path("pubspec.yaml").read_text()
+          entry = "    - assets/brand/yorunote_mascot.gif"+chr(10)
+          assert current.count(entry) == 1 and current.replace(entry,"") == original
+          assert subprocess.check_output(["git","rev-parse","HEAD:pubspec.lock"],text=True) == subprocess.check_output(["git","rev-parse",base+":pubspec.lock"],text=True)
+          report = {"sha256":actual,"bytes":path.stat().st_size,"size":list(image.size),"frames":image.n_frames,"durations_ms":durations,"loop":0,"dependency_declarations_unchanged":True,"lockfile_unchanged":True}
+          import os
+          pathlib.Path(os.environ["EVIDENCE"],"mascot-asset.json").write_text(json.dumps(report,indent=2)+"\n")
+          print(json.dumps(report))
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { throw 'Original mascot verification failed' }
+
       - name: Set up fixed Flutter SDK
         uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e # v2.21.0
         with:
@@ -118,11 +150,11 @@ jobs:
 
       - name: Analyze Windows acceptance entry point
         run: |
-          flutter analyze --no-pub tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'analyze-windows-tool.log')
+          flutter analyze --no-pub lib/components/windows_title_brand.dart test/brand/windows_window_frame_overlay_test.dart test/brand/windows_title_brand_test.dart tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart lib/components/reader_image_loading.dart test/reader/reader_image_loading_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'analyze-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Windows acceptance analyzer failed' }
           dart format --output=show tool/windows/smoke.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-preview-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Dart formatter parsing failed' }
-          dart format --output=none --set-exit-if-changed tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-windows-tool.log')
+          dart format --output=none --set-exit-if-changed lib/components/windows_title_brand.dart test/brand/windows_window_frame_overlay_test.dart test/brand/windows_title_brand_test.dart tool/windows/smoke.dart test/foundation/favorites_follow_updates_test.dart lib/components/reader_image_loading.dart test/reader/reader_image_loading_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'format-windows-tool.log')
           if ($LASTEXITCODE -ne 0) { throw 'Dart format parsing failed' }
 
       - name: Reproduce fresh-profile failure on the previous source
@@ -157,7 +189,7 @@ jobs:
 
       - name: Run brand and fresh-profile regression checks
         run: |
-          flutter test --no-pub --reporter expanded test/brand/yorunote_brand_test.dart test/foundation/favorites_follow_updates_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'brand-tests.log')
+          flutter test --no-pub --reporter expanded test/brand/windows_window_frame_overlay_test.dart test/brand/windows_title_brand_test.dart test/brand/yorunote_brand_test.dart test/foundation/favorites_follow_updates_test.dart test/reader/reader_image_loading_test.dart | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'brand-tests.log')
           if ($LASTEXITCODE -ne 0) { throw 'Brand tests failed' }
 
       - name: Build distributable Windows Release
@@ -169,6 +201,20 @@ jobs:
         run: |
           python windows/build.py --bundle build/windows/x64/runner/Release --source-sha $env:SOURCE_SHA --output $env:DIST --evidence $env:EVIDENCE
           if ($LASTEXITCODE -ne 0) { throw 'ZIP packaging verification failed' }
+
+          @'
+          import hashlib,json,os,pathlib,zipfile
+          archives=list(pathlib.Path(os.environ["DIST"]).glob("*.zip"))
+          assert len(archives)==1
+          with zipfile.ZipFile(archives[0]) as archive:
+              matches=[n for n in archive.namelist() if n.endswith("/data/flutter_assets/assets/brand/yorunote_mascot.gif")]
+              assert len(matches)==1, matches
+              digest=hashlib.sha256(archive.read(matches[0])).hexdigest()
+              assert digest=="4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb"
+              print("Packaged original animated GIF:", matches[0], digest)
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { throw 'Packaged mascot mismatch' }
+
           $archives = @(Get-ChildItem -LiteralPath $env:DIST -Filter '*.zip' -File)
           if ($archives.Count -ne 1) { throw 'Expected one distribution ZIP' }
           $extract = Join-Path $env:RUNNER_TEMP 'yorunote-distribution-extracted'
@@ -221,6 +267,22 @@ jobs:
             $report = Get-Content -Raw (Join-Path $env:EVIDENCE ('smoke-'+$phase+'.json')) | ConvertFrom-Json
             if (-not $report.passed -or $report.source -ne $env:SOURCE_SHA) { throw 'Acceptance report mismatch' }
           }
+          $seed = Get-Content -Raw (Join-Path $env:EVIDENCE 'smoke-seed.json') | ConvertFrom-Json
+          $restart = Get-Content -Raw (Join-Path $env:EVIDENCE 'smoke-restart.json') | ConvertFrom-Json
+          if (@($seed.checks).Count -ne 11 -or @($restart.checks).Count -ne 4) { throw 'Unexpected native acceptance coverage' }
+          $mascot = @($seed.checks | Where-Object { $_.check -eq 'windows_title_mascot_gif_decoded_and_animated' -and $_.passed })
+          if ($mascot.Count -ne 1) { throw 'Native GIF playback was not verified' }
+          foreach ($report in @($seed, $restart)) {
+            $hover = @($report.checks | Where-Object {
+              $_.check -eq 'windows_title_native_hover_shows_tooltip_without_overlay_error' -and $_.passed -and
+              $_.native_pointer -and $_.tooltip_visible_then_dismissed -and $_.gif_continues_after_hover
+            })
+            if ($hover.Count -ne 1) { throw 'Native caption hover was not verified' }
+            if (@($report.flutter_errors).Count -ne 0 -or @($report.app_errors).Count -ne 0) { throw 'Native errors were recorded' }
+          }
+          $testLog = Get-Content -Raw (Join-Path $env:EVIDENCE 'brand-tests.log')
+          if ($testLog -notmatch '\+13: All tests passed' -or $testLog -match '\~[1-9]') { throw 'Expected all 13 focused tests, with no skips' }
+
           "Source: $env:SOURCE_SHA" >> $env:GITHUB_STEP_SUMMARY
           "ZIP: $($package.zip)" >> $env:GITHUB_STEP_SUMMARY
           "SHA-256: $hash" >> $env:GITHUB_STEP_SUMMARY
@@ -229,7 +291,7 @@ jobs:
       - name: Upload verified Windows ZIP and checksum
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: yorunote-windows-x64-preview
+          name: yorunote-windows-x64-caption-fix-candidate
           path: '${{ runner.temp }}/yorunote-windows-dist/*'
           if-no-files-found: error
           retention-days: 14
@@ -238,7 +300,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: yorunote-windows-x64-evidence
+          name: yorunote-windows-x64-caption-fix-evidence
           path: '${{ runner.temp }}/yorunote-windows-evidence/'
           if-no-files-found: warn
           retention-days: 14

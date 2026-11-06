@@ -5,6 +5,21 @@
 本檔分開記錄已發布的預覽版、文件更新與歷史開發里程碑。App 修改是否已發布、是否已合併至 master，以及是否完成實機驗收，分別記錄。
 This file distinguishes public previews, documentation updates, and development milestones. Publication, integration into master, and device acceptance are separate states.
 
+## v0.1.0-windows-preview.3 — 2026-11-07
+
+- **已公開的 Windows 標題列修正版**：[發行頁](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.3) · [雙語說明](docs/releases/v0.1.0-windows-preview.3.md)。Release ID 436759456，2026-11-07 00:59:20（Asia/Taipei）公開。
+  **Public Windows caption fix**; release ID 436759456, published at 2026-11-07 00:59:20 Asia/Taipei.
+- Tag 固定來源 `07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b`。修正 `No Overlay widget found.`，保留原精靈 GIF、提示、視窗操作與資料目錄。
+  Pins the caption Overlay fix while retaining the original GIF, tooltip, controls and data directory.
+- 使用者已[確認精靈動畫與滑鼠提示正常](https://github.com/mengwen-liu/yorunote/blob/2d0d5375f5e4f53f96f3558ad10278a7762c8797/docs/verification/windows-overlay-fix-20261106/OWNER_ACCEPTANCE.md)，分類為 **OWNER_REPORTED**，只涵蓋這兩項 UI 行為。
+  The user confirmed animation and tooltip behavior only; this does not establish full device acceptance.
+- 沿用 [CI 42229100772](https://github.com/mengwen-liu/yorunote/actions/runs/42229100772) 原成品：13 項指定測試、首次程序 11 項與重啟 4 項指定檢查通過；本次發行沒有重新建置或重跑完整測試。
+  Reuses the existing verified ZIP without rebuilding or rerunning the full suite.
+- ZIP 為 22,015,039 bytes，SHA-256 `cf7d5a616af30867349bb9136a491188d7a28a12e0d4778f9a2a1c74e6257ed3`。[公開下載核對](https://github.com/mengwen-liu/yorunote/blob/3490fed98e698c2aa87eb9956d0d3da4a45679db/docs/verification/windows-overlay-fix-20261106/PUBLIC_RELEASE_3.md)確認附件、檔案清單、GIF 及 Tag 一致；Build ALL 恢復 active，Build ALL／AltStore 皆無新增執行。
+  Public downloads, manifest, GIF and tag were verified, with Build ALL restored and no linked runs.
+- 同步中英文首頁與本發行說明，未把 App 程式合併至 master；既有 Release 附件保留。仍未經 Authenticode 簽章，完整裝置驗收與主線整合另行處理。
+  Documentation sync does not merge application code into master or replace earlier assets; this remains an unsigned preview.
+
 ## v0.1.0-windows-preview.2 — 2026-11-06
 
 - **已公開的 Windows 精靈動畫預覽版**：[發行頁](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.2) · [雙語說明](docs/releases/v0.1.0-windows-preview.2.md)。Release ID 436440069，2026-11-06 19:58:41（Asia/Taipei）公開。

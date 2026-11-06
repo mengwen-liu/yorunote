@@ -53,7 +53,9 @@ class _WindowsTitleBrandState extends State<WindowsTitleBrand>
           height: 36,
           child: Center(
             child: Image.asset(
-              animate ? WindowsTitleBrand.animatedAsset : WindowsTitleBrand.staticAsset,
+              animate
+                  ? WindowsTitleBrand.animatedAsset
+                  : WindowsTitleBrand.staticAsset,
               width: 28,
               height: 28,
               fit: BoxFit.contain,

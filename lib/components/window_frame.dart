@@ -137,17 +137,18 @@ class _WindowFrameState extends State<WindowFrame> {
                                     ],
                                   )
                                 : Text(
-                              'Venera',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: (useDarkTheme ||
-                                        context.brightness == Brightness.dark)
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                            )
-                                .toAlign(Alignment.centerLeft)
-                                .paddingLeft(4 + (App.isMacOS ? 25 : 0)),
+                                    'Venera',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: (useDarkTheme ||
+                                              context.brightness ==
+                                                  Brightness.dark)
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  )
+                                    .toAlign(Alignment.centerLeft)
+                                    .paddingLeft(4 + (App.isMacOS ? 25 : 0)),
                           ),
                         ),
                         if (kDebugMode)

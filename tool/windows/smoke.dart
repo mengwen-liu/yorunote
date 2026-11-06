@@ -116,8 +116,8 @@ Future<void> _checkAnimatedBrand() async {
   );
   final first = _brandFrame()!.image;
   await _until(
-    () => _brandFrame()?.image != null &&
-        !identical(first, _brandFrame()!.image),
+    () =>
+        _brandFrame()?.image != null && !identical(first, _brandFrame()!.image),
     'Windows title GIF did not advance frames',
     timeout: const Duration(seconds: 5),
   );

@@ -5,6 +5,19 @@
 本檔分開記錄已發布的預覽版、文件更新與歷史開發里程碑。App 修改是否已發布、是否已合併至 master，以及是否完成實機驗收，分別記錄。
 This file distinguishes public previews, documentation updates, and development milestones. Publication, integration into master, and device acceptance are separate states.
 
+## v0.1.0-windows-preview.1 — 2026-11-06
+
+- **已公開的 Windows x64 預覽版**：[發行頁面](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1) · [雙語說明](docs/releases/v0.1.0-windows-preview.1.md)。Release ID 436235827，2026-11-06 16:02:29（Asia/Taipei）公開。
+  **Public Windows x64 preview**; release ID 436235827, published at 2026-11-06 16:02:29 Asia/Taipei.
+- Tag 精確指向 `71485c7de8799e30c9e1b5797ad83fba65668d51`，ZIP 為 Release 模式、21,528,589 bytes；[Windows CI](https://github.com/mengwen-liu/yorunote/actions/runs/42091194413) 與[另行下載核對](https://github.com/mengwen-liu/yorunote/actions/runs/42183056556)通過。
+  The tag pins the exact Release-mode ZIP source; build, native runtime checks and separate artifact verification passed.
+- 導入 Windows 品牌、七尺寸圖示、ZIP 與雙語使用說明；修正新資料目錄閱讀空值與圖片載入狀態重設問題。7 項指定測試通過，未重跑歷史 350 項測試。
+  Added Windows branding, seven icon sizes, ZIP packaging and bilingual instructions; fixed fresh-profile and loaded-image state regressions. Seven focused tests passed; the historical full suite was not rerun.
+- 採維護者網頁發布，Build ALL 暫停後恢復；App、workflow 與完整證據保存在 Windows 分支，這次首頁同步不把 App 程式碼合併至 master。
+  Published through the maintainer interface with Build ALL paused and restored. Windows code/workflows/evidence remain on their branch; the homepage update does not merge application code into master.
+- 尚無 Authenticode 簽章及使用者電腦驗收；WebView2、全部第三方來源、DPI、多螢幕與 Windows ARM64 仍有驗證限制。
+  No Authenticode signing or user-device validation; embedded web login, all real sources, DPI, multiple monitors and ARM64 remain outside full coverage.
+
 ## v0.1.0-preview.1 — 2026-11-05
 
 - **已公開的 Android 預覽版**：[發行頁面](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1) · [儲存庫內雙語發行說明](docs/releases/v0.1.0-preview.1.md)。公開時間為 2026-11-05 20:57:32（Asia/Taipei），Release ID 434819274。

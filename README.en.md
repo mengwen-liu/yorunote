@@ -8,7 +8,7 @@
 
 <p align="center"><a href="README.md">繁體中文</a> · <strong>English</strong></p>
 
-<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1 · Android preview</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
+<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1 · Android</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1">v0.1.0-windows-preview.1 · Windows x64</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
 
 Yorunote is a personal open-source fork of [Venera](https://github.com/venera-app/venera). Work in this fork covers branding, interface maintenance, image-cache fixes, cover loading, and traceable engineering evidence.
 
@@ -16,7 +16,7 @@ The reader and comic-source system come from upstream. This repository is a main
 
 ## Downloads and releases
 
-**Current public preview: [v0.1.0-preview.1](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1)** (2026-11-05)
+**Android public preview: [v0.1.0-preview.1](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1)** (2026-11-05)
 
 [Download Android ARM64 APK](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-preview.1/Yorunote_29b590b_cover_timeout_arm64_profile.apk) · [SHA-256 checksum](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-preview.1/Yorunote_29b590b_cover_timeout_arm64_profile.apk.sha256) · [All releases](https://github.com/mengwen-liu/yorunote/releases)
 
@@ -30,9 +30,23 @@ The reader and comic-source system come from upstream. This repository is a main
 >
 > **Validation scope:** this is a public preview, with runtime acceptance on the S25+ and Tab S11 still pending. The 350 passing tests and static APK checks are existing CI results; this publication did not re-run tests or rebuild the APK.
 
+### Windows x64 preview
+
+**[v0.1.0-windows-preview.1](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.1)** (2026-11-06)
+
+[Download Windows x64 ZIP](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.1/Yorunote_windows_x64_71485c7d_preview.zip) · [SHA-256 checksum](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.1/Yorunote_windows_x64_71485c7d_preview.zip.sha256) · [Bilingual release notes](docs/releases/v0.1.0-windows-preview.1.md)
+
+- App source is fixed at `71485c7d`, built in **Release mode**. Extract the complete ZIP and run `Yorunote/yorunote.exe`; keep every DLL and the `data` directory together.
+- ZIP: 21,528,589 bytes. SHA-256: `5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5`.
+- [Windows CI evidence](https://github.com/mengwen-liu/yorunote/blob/codex/yorunote-windows-preview-20261106/docs/verification/windows-preview-20261106/README.md): 7 focused tests and native checks for HTTP, JavaScript sources, reading and keyboard input, downloads, SQLite and offline reading after restart.
+- The build is not Authenticode-signed and has no installer. Its separate `mengwen-liu / Yorunote` application-data directory does not migrate existing Venera data.
+- User-device validation, WebView2 login, all third-party sources, DPI, multiple monitors and Windows ARM64 are not fully covered. This remains a preview.
+
 ## Current development state
 
-The public preview's application source is pinned by [tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1) at commit `29b590b`. `master` contains the project homepages and release documentation, but has not integrated that application code. Use the tag to obtain the source matching the APK; the [candidate branch and complete evidence](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105) retain the development history.
+The Android preview's application source is pinned by [tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1) at commit `29b590b`. `master` contains the project homepages and release documentation, but has not integrated that application code. Use the tag to obtain the source matching the APK; the [candidate branch and complete evidence](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105) retain the development history.
+
+Windows source is separately pinned by [tag `v0.1.0-windows-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-windows-preview.1) at `71485c7d`. Source commits, build modes and validation records are distinct for the two platforms; neither application snapshot has been merged into `master`.
 
 | Area | Work included in the preview | Evidence |
 | --- | --- | --- |
@@ -44,7 +58,7 @@ The public preview's application source is pinned by [tag `v0.1.0-preview.1`](ht
 
 The home screen uses the search entry, section heading, and cover card. The recent-reading card and reading-progress components are not yet integrated into this home screen.
 
-The application source is [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689). CI records (the existing run 41968314599; not re-run for this documentation update) **350 passing tests with no skips** and the same 8 existing analyzer infos, with no new warnings or errors. This does not establish Android runtime acceptance.
+The Android application source is [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689). CI records (the existing run 41968314599; not re-run for this documentation update) **350 passing tests with no skips** and the same 8 existing analyzer infos, with no new warnings or errors. This does not establish Android runtime acceptance.
 
 The 30-second timeout excludes queueing, source lookups, and retry delays. Four attempts plus the existing 2/4/8-second delays can take about 134 seconds, excluding queueing.
 
@@ -57,9 +71,11 @@ The 30-second timeout excludes queueing, source lookups, and retry delays. Four 
 
 ## Building and testing
 
-To reproduce the public preview, check out the tagged application source above and read its verification report. The validated toolchain is Flutter 3.41.4, Dart 3.11.1, JDK 17, Rust 1.85.1, Android SDK 36, and NDK 28.0.13004108.
+To reproduce the Android preview, check out the Android tag above and read its verification report. The validated toolchain is Flutter 3.41.4, Dart 3.11.1, JDK 17, Rust 1.85.1, Android SDK 36, and NDK 28.0.13004108.
 
 The Android build configuration also needs a local `android/key.properties` file and signing key; neither belongs in Git. Host HTTP/JavaScript integration tests need the corresponding native rhttp and QuickJS libraries. See the [latest verification report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) for conditions and commands.
+
+Windows builds use the [dedicated fixed-source workflow](https://github.com/mengwen-liu/yorunote/blob/d11ec7f24f37f3c39c1c332448807fb3c6ca1ecd/.github/workflows/yorunote-windows-preview.yml) without Build ALL. Running the ZIP does not require installing Flutter or the Android SDK. See the [Windows report](https://github.com/mengwen-liu/yorunote/blob/codex/yorunote-windows-preview-20261106/docs/verification/windows-preview-20261106/README.md) for exact build and runtime coverage.
 
 ## Documentation
 
@@ -67,7 +83,9 @@ The Android build configuration also needs a local `android/key.properties` file
 - [Headless mode](doc/headless_doc.md) — original upstream documentation
 - [Synthetic source and device acceptance](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md)
 - [Development history](CHANGELOG.md)
-- [Release notes for this version](docs/releases/v0.1.0-preview.1.md)
+- [Android release notes](docs/releases/v0.1.0-preview.1.md)
+- [Bilingual Windows release notes](docs/releases/v0.1.0-windows-preview.1.md)
+- [Windows English instructions](https://github.com/mengwen-liu/yorunote/blob/v0.1.0-windows-preview.1/windows/README.en.md)
 - [Publication record and maintainer procedure](docs/releases/PREVIEW_RELEASE_PROCESS.md)
 - [繁體中文](README.md)
 

@@ -60,8 +60,9 @@ Future<void> _loaded(WidgetTester tester) async {
   );
   for (var i = 0; i < 100; i++) {
     if (image.evaluate().isNotEmpty &&
-        tester.widget<RawImage>(image).image != null)
+        tester.widget<RawImage>(image).image != null) {
       return;
+    }
     await tester.runAsync(
       () => Future<void>.delayed(const Duration(milliseconds: 10)),
     );

@@ -52,14 +52,18 @@ void _record(String name, [Map<String, Object?> detail = const {}]) {
 Future<void> _stage(String name, {Offset? pointerTarget}) async {
   await WidgetsBinding.instance.endOfFrame;
   final state = File('${_evidence.path}/stage.json');
-  final ratio = WidgetsBinding.instance.platformDispatcher.views.single.devicePixelRatio;
-  await state.writeAsString(jsonEncode({
-    'stage': '$_phase-$name',
-    if (pointerTarget != null) 'pointer_px': {
-      'x': (pointerTarget.dx * ratio).round(),
-      'y': (pointerTarget.dy * ratio).round(),
-    },
-  }));
+  final ratio =
+      WidgetsBinding.instance.platformDispatcher.views.single.devicePixelRatio;
+  await state.writeAsString(
+    jsonEncode({
+      'stage': '$_phase-$name',
+      if (pointerTarget != null)
+        'pointer_px': {
+          'x': (pointerTarget.dx * ratio).round(),
+          'y': (pointerTarget.dy * ratio).round(),
+        },
+    }),
+  );
   final ack = File('${_evidence.path}/ack-$_phase-$name.json');
   await _until(
     ack.existsSync,
@@ -140,6 +144,7 @@ RenderBox _brandBox() {
     }
     element.visitChildren(visit);
   }
+
   final root = WidgetsBinding.instance.rootElement;
   if (root != null) visit(root);
   _require(result != null, 'Actual Windows caption is missing');
@@ -167,7 +172,10 @@ Future<void> _checkTitleHover() async {
   await _stage('title-hover-visible');
   final view = WidgetsBinding.instance.platformDispatcher.views.single;
   final center = view.physicalSize / view.devicePixelRatio / 2;
-  await _stage('title-hover-leave', pointerTarget: Offset(center.width, center.height));
+  await _stage(
+    'title-hover-leave',
+    pointerTarget: Offset(center.width, center.height),
+  );
   await _until(
     () => !_titleTooltipVisible(),
     'Caption tooltip did not close after native pointer exit',
@@ -176,7 +184,8 @@ Future<void> _checkTitleHover() async {
   final first = _brandFrame()?.image;
   _require(first != null, 'Caption image disappeared after hover');
   await _until(
-    () => _brandFrame()?.image != null && !identical(first, _brandFrame()!.image),
+    () =>
+        _brandFrame()?.image != null && !identical(first, _brandFrame()!.image),
     'Caption animation stopped after hover',
     timeout: const Duration(seconds: 5),
   );

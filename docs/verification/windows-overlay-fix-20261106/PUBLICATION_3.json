@@ -1,0 +1,47 @@
+{
+  "release_id": 436759456,
+  "url": "https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.3",
+  "published_at": "2026-11-06T16:59:20Z",
+  "draft": false,
+  "prerelease": true,
+  "tag": "refs/tags/v0.1.0-windows-preview.3",
+  "source_commit": "07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b",
+  "zip": "Yorunote_windows_x64_07406c9f_preview.zip",
+  "zip_bytes": 22015039,
+  "zip_sha256": "cf7d5a616af30867349bb9136a491188d7a28a12e0d4778f9a2a1c74e6257ed3",
+  "checksum_sha256": "7bcc0289795cec5ba9c634f3d06255273e52f4a2c71c8576470f7ce4a926a9e8",
+  "manifest_files_verified": 54,
+  "gif_sha256": "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb",
+  "public_downloads_without_authorization_header_verified": true,
+  "build_all_restored_state": "active",
+  "build_all_total_runs": 0,
+  "altstore_total_runs": 0,
+  "assets": [
+    {
+      "id": 717856788,
+      "name": "Yorunote_windows_x64_07406c9f_preview.zip",
+      "size": 22015039,
+      "digest": "sha256:cf7d5a616af30867349bb9136a491188d7a28a12e0d4778f9a2a1c74e6257ed3",
+      "url": "https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.3/Yorunote_windows_x64_07406c9f_preview.zip"
+    },
+    {
+      "id": 717856792,
+      "name": "Yorunote_windows_x64_07406c9f_preview.zip.sha256",
+      "size": 108,
+      "digest": "sha256:7bcc0289795cec5ba9c634f3d06255273e52f4a2c71c8576470f7ce4a926a9e8",
+      "url": "https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.3/Yorunote_windows_x64_07406c9f_preview.zip.sha256"
+    }
+  ],
+  "public_verification_run": 42257714216,
+  "public_verification_workflow": "d07b972984afc3a426acca9f44f7e2ef9f8cd411",
+  "owner_confirmation_record": "https://github.com/mengwen-liu/yorunote/blob/2d0d5375f5e4f53f96f3558ad10278a7762c8797/docs/verification/windows-overlay-fix-20261106/OWNER_ACCEPTANCE.md",
+  "owner_confirmed_behaviors": [
+    "elf animation",
+    "mouse tooltip"
+  ],
+  "owner_report_date": "2026-11-07",
+  "owner_device_hash_read": false,
+  "build_all_original_state": "active",
+  "build_all_pause_observed": true,
+  "build_all_restoration_observed": true
+}

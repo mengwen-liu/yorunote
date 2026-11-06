@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: '373a9cb504b56b688d34ca1393f0a5a1bdd6799e'
+          ref: 'a5a23007bea206b8eaa8c5bbc6679bacf8aabe1a'
           persist-credentials: false
       - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e
         with:
@@ -42,37 +42,51 @@ jobs:
           $env:EVIDENCE = Join-Path $env:RUNNER_TEMP 'overlay-regression'
           "EVIDENCE=$env:EVIDENCE" >> $env:GITHUB_ENV
           New-Item -ItemType Directory -Force -Path $env:EVIDENCE | Out-Null
-      - name: Reproduce missing Overlay on unchanged application
+      - name: Reproduce missing Overlay with the final test on the old application
         run: |
-          flutter test --no-pub --reporter expanded test/brand/windows_window_frame_overlay_test.dart 2>&1 | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'baseline.log')
-          $code = $LASTEXITCODE
+          $baseline = Join-Path $env:RUNNER_TEMP 'overlay-baseline'
+          git fetch --no-tags --depth=1 origin 6df02c0fda1978319355a51fc2c75f7d66ea6d7f
+          if ($LASTEXITCODE -ne 0) { throw 'Baseline fetch failed' }
+          git worktree add --detach $baseline 6df02c0fda1978319355a51fc2c75f7d66ea6d7f
+          if ($LASTEXITCODE -ne 0) { throw 'Baseline worktree failed' }
+          Copy-Item -LiteralPath test/brand/windows_window_frame_overlay_test.dart -Destination (Join-Path $baseline 'test/brand/windows_window_frame_overlay_test.dart')
+          Push-Location $baseline
+          try {
+            flutter pub get --enforce-lockfile
+            if ($LASTEXITCODE -ne 0) { throw 'Baseline pub get failed' }
+            flutter test --no-pub --reporter expanded test/brand/windows_window_frame_overlay_test.dart 2>&1 | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'baseline.log')
+            $code = $LASTEXITCODE
+          } finally { Pop-Location }
           $log = Get-Content -Raw -LiteralPath (Join-Path $env:EVIDENCE 'baseline.log')
           if ($code -eq 0 -or $log -notmatch 'No Overlay widget found') { throw 'The actual Overlay failure was not reproduced' }
-          @{source='373a9cb504b56b688d34ca1393f0a5a1bdd6799e'; exit_code=$code; expected_missing_overlay=$true} | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'baseline.json')
+          @{source='6df02c0fda1978319355a51fc2c75f7d66ea6d7f'; exit_code=$code; expected_missing_overlay=$true} | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'baseline.json')
           exit 0
-      - name: Apply minimal fix only to disposable checkout
+      - name: Format validation tools and check native pointer declarations
         run: |
-          @'
-          import pathlib
-          p=pathlib.Path("lib/components/window_frame.dart")
-          text=p.read_text()
-          old="    return WindowFrameController._create("
-          assert text.count(old)==1
-          fix="    if (App.isWindows) {\n      // The caption is outside Navigator and needs its own ancestor Overlay.\n      body = Overlay.wrap(child: body);\n    }\n\n"
-          p.write_text(text.replace(old,fix+old))
-          '@ | python -
-          if ($LASTEXITCODE -ne 0) { throw 'Patch anchor mismatch' }
-          dart format test/brand/windows_window_frame_overlay_test.dart
-          if ($LASTEXITCODE -ne 0) { throw 'Test formatter failed' }
+          dart format test/brand/windows_window_frame_overlay_test.dart tool/windows/smoke.dart
+          if ($LASTEXITCODE -ne 0) { throw 'Formatter failed' }
           @'
           import base64,pathlib
-          print("FORMATTED_TEST_BASE64="+base64.b64encode(pathlib.Path("test/brand/windows_window_frame_overlay_test.dart").read_bytes()).decode())
+          for p in ["test/brand/windows_window_frame_overlay_test.dart","tool/windows/smoke.dart"]:
+              print("FORMATTED_FILE "+p+" "+base64.b64encode(pathlib.Path(p).read_bytes()).decode())
           '@ | python -
+          $parseTokens = $null
+          $parseErrors = $null
+          [void][System.Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD 'tool/windows/run_smoke.ps1'),
+            [ref]$parseTokens, [ref]$parseErrors)
+          if ($parseErrors.Count) { $parseErrors | Format-List; throw 'PowerShell syntax check failed' }
+          $driverText = Get-Content -Raw -LiteralPath 'tool/windows/run_smoke.ps1'
+          $nativeCode = [regex]::Match($driverText, "(?s)Add-Type @'\r?\n(.*?)\r?\n'@").Groups[1].Value
+          if (-not $nativeCode) { throw 'Native input declarations missing' }
+          Add-Type -TypeDefinition $nativeCode
+          $inputValue = [YorunoteCapture+INPUT64]::new()
+          if ([Runtime.InteropServices.Marshal]::SizeOf($inputValue) -ne 40) { throw 'INPUT64 size mismatch' }
       - name: Run real caption and previous Windows regressions
         run: |
           flutter test --no-pub --reporter expanded test/brand/windows_window_frame_overlay_test.dart test/brand/windows_title_brand_test.dart test/brand/yorunote_brand_test.dart test/foundation/favorites_follow_updates_test.dart test/reader/reader_image_loading_test.dart 2>&1 | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'candidate.log')
           if ($LASTEXITCODE -ne 0) { throw 'Candidate regression failed' }
-          flutter analyze --no-pub test/brand/windows_window_frame_overlay_test.dart
+          flutter analyze --no-pub test/brand/windows_window_frame_overlay_test.dart tool/windows/smoke.dart
           if ($LASTEXITCODE -ne 0) { throw 'New test analyzer failed' }
       - name: Upload probe evidence
         if: always()

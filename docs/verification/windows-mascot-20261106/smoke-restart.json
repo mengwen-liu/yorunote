@@ -1,0 +1,33 @@
+{
+  "phase": "restart",
+  "passed": true,
+  "source": "6df02c0fda1978319355a51fc2c75f7d66ea6d7f",
+  "checks": [
+    {
+      "check": "real_app_initialized_with_isolated_windows_identity",
+      "passed": true
+    },
+    {
+      "check": "restart_restores_settings_source_history_and_download",
+      "passed": true,
+      "history_page": 2,
+      "downloaded_pages": 5,
+      "page_sha256": [
+        "02cf70134648453a4d0e5cb0f8b42bd9730764eaa78ecbb6d903396506b96774",
+        "cef0538e35facc2136a92f811d572544e5cb80eb6d90589a3ed33e4081a3833a",
+        "e0f2ff618579bc02f222cbffe6993b7e96483b9d86d6c53ff1bfb7814761c6f4",
+        "bbe2f453ff3cfd4aa4ebc2220a0fe6a2f3d703437e111a11795b6448674180bf",
+        "3e21a5e20017aaaf488c00511f2119817491295d69bbac3295a8e2943ce9b537"
+      ],
+      "offline_history": "History{type: Instance of 'ComicType', time: 2026-11-06 10:36:39.293, title: 合成漫畫 c09, subtitle: 合成資料, cover: cover.png, ep: 1, page: 1, id: c09}"
+    },
+    {
+      "check": "offline_reader_decoded_600x900",
+      "passed": true
+    }
+  ],
+  "flutter_errors": [],
+  "app_errors": [],
+  "failure": null,
+  "scope": "Instrumented Windows CI executable using the real app and native plugins; not the distributed entry point."
+}

@@ -1,0 +1,20 @@
+{
+  "sha256": "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb",
+  "bytes": 494501,
+  "size": [
+    512,
+    512
+  ],
+  "frames": 6,
+  "durations_ms": [
+    220,
+    220,
+    220,
+    220,
+    220,
+    220
+  ],
+  "loop": 0,
+  "dependency_declarations_unchanged": true,
+  "lockfile_unchanged": true
+}

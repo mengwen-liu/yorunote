@@ -1,0 +1,71 @@
+{
+  "source_commit": "6df02c0fda1978319355a51fc2c75f7d66ea6d7f",
+  "build_run": 42202302352,
+  "workflow_commit": "4eedee2d2a4293f41156512caab9ed63a0a1544a",
+  "zip": "Yorunote_windows_x64_6df02c0f_preview.zip",
+  "zip_bytes": 22013335,
+  "zip_sha256": "33338805489e5f4068b83ed2d37a22ed374c4189646b460f0c880d0e735a0bb1",
+  "checksum_sha256": "f1c335fb2d9cfa13c287317bfe6dbf25de13627bee88696153217a46aae8ab20",
+  "product_artifact": {
+    "id": 13494594716,
+    "digest": "1e0428b0c9b66f8024372cd61451df1aeba4aa3dadc6be7cc505199f365f15a9",
+    "bytes": 21975128
+  },
+  "evidence_artifact": {
+    "id": 13495941382,
+    "digest": "45cdfe09f83dd1420a06bd3c10c3bbf40af15836123f91c454f513ca78b6f824",
+    "bytes": 245005
+  },
+  "manifest_files_checked": 54,
+  "total_zip_entries": 55,
+  "native_amd64_files": 21,
+  "gif_sha256": "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb",
+  "gif_frames": 6,
+  "gif_durations_ms": [
+    220,
+    220,
+    220,
+    220,
+    220,
+    220
+  ],
+  "gif_loop": 0,
+  "focused_tests": 10,
+  "native_seed_checks": 10,
+  "native_restart_checks": 3,
+  "native_animation_check": true,
+  "independently_downloaded_again": true,
+  "signature": {
+    "source": "6df02c0fda1978319355a51fc2c75f7d66ea6d7f",
+    "status": "NotSigned"
+  },
+  "source_text_line_endings": {
+    "data/flutter_assets/assets/init.js": {
+      "packed_bytes": 40031,
+      "source_bytes": 38512,
+      "raw_bytes_equal": false,
+      "only_line_endings_differ": true
+    },
+    "README.md": {
+      "packed_bytes": 2420,
+      "source_bytes": 2382,
+      "raw_bytes_equal": false,
+      "only_line_endings_differ": true
+    },
+    "README.en.md": {
+      "packed_bytes": 2516,
+      "source_bytes": 2478,
+      "raw_bytes_equal": false,
+      "only_line_endings_differ": true
+    },
+    "LICENSE": {
+      "packed_bytes": 35823,
+      "source_bytes": 35149,
+      "raw_bytes_equal": false,
+      "only_line_endings_differ": true
+    }
+  },
+  "verification_run": 42204532603,
+  "verification_workflow_commit": "a0d7a5269157ecf14fb6c4026b3fdcd1f1b8da4d",
+  "settled_screenshot_run": 42204854987
+}

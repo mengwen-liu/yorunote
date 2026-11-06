@@ -1,0 +1,37 @@
+{
+  "release_id": 436440069,
+  "url": "https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.2",
+  "published_at": "2026-11-06T11:58:41Z",
+  "draft": false,
+  "prerelease": true,
+  "tag": "refs/tags/v0.1.0-windows-preview.2",
+  "source_commit": "6df02c0fda1978319355a51fc2c75f7d66ea6d7f",
+  "zip": "Yorunote_windows_x64_6df02c0f_preview.zip",
+  "zip_bytes": 22013335,
+  "zip_sha256": "33338805489e5f4068b83ed2d37a22ed374c4189646b460f0c880d0e735a0bb1",
+  "checksum_sha256": "f1c335fb2d9cfa13c287317bfe6dbf25de13627bee88696153217a46aae8ab20",
+  "manifest_files_verified": 54,
+  "gif_sha256": "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb",
+  "public_downloads_without_authorization_header_verified": true,
+  "build_all_restored_state": "active",
+  "build_all_total_runs": 0,
+  "altstore_total_runs": 0,
+  "assets": [
+    {
+      "id": 717004172,
+      "name": "Yorunote_windows_x64_6df02c0f_preview.zip",
+      "size": 22013335,
+      "digest": "sha256:33338805489e5f4068b83ed2d37a22ed374c4189646b460f0c880d0e735a0bb1",
+      "url": "https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.2/Yorunote_windows_x64_6df02c0f_preview.zip"
+    },
+    {
+      "id": 717004170,
+      "name": "Yorunote_windows_x64_6df02c0f_preview.zip.sha256",
+      "size": 108,
+      "digest": "sha256:f1c335fb2d9cfa13c287317bfe6dbf25de13627bee88696153217a46aae8ab20",
+      "url": "https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.2/Yorunote_windows_x64_6df02c0f_preview.zip.sha256"
+    }
+  ],
+  "workflow_commit": "1934e1b16f9fa7664f5c097205a173ae5dde3354",
+  "run": 42214592162
+}

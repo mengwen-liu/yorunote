@@ -1,0 +1,31 @@
+{
+  "release_id": 436440069,
+  "tag": "v0.1.0-windows-preview.2",
+  "draft": true,
+  "prerelease": true,
+  "published_at": null,
+  "target": "codex/yorunote-windows-6df02c0f",
+  "source_commit": "6df02c0fda1978319355a51fc2c75f7d66ea6d7f",
+  "source_run": 42202302352,
+  "artifact_id": 13494594716,
+  "artifact_sha256": "1e0428b0c9b66f8024372cd61451df1aeba4aa3dadc6be7cc505199f365f15a9",
+  "assets": [
+    {
+      "id": 717004172,
+      "name": "Yorunote_windows_x64_6df02c0f_preview.zip",
+      "size": 22013335,
+      "sha256": "33338805489e5f4068b83ed2d37a22ed374c4189646b460f0c880d0e735a0bb1",
+      "url": "https://github.com/mengwen-liu/yorunote/releases/download/untagged-cf52e6a01409f6b21e54/Yorunote_windows_x64_6df02c0f_preview.zip"
+    },
+    {
+      "id": 717004170,
+      "name": "Yorunote_windows_x64_6df02c0f_preview.zip.sha256",
+      "size": 108,
+      "sha256": "f1c335fb2d9cfa13c287317bfe6dbf25de13627bee88696153217a46aae8ab20",
+      "url": "https://github.com/mengwen-liu/yorunote/releases/download/untagged-cf52e6a01409f6b21e54/Yorunote_windows_x64_6df02c0f_preview.zip.sha256"
+    }
+  ],
+  "downloaded_after_attachment": true,
+  "workflow_commit": "61ce049ab04e54ae40942dcb612fc9116c7bf0eb",
+  "run": 42213462355
+}

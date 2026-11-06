@@ -1,0 +1,26 @@
+{
+  "source_commit": "71485c7de8799e30c9e1b5797ad83fba65668d51",
+  "zip": "Yorunote_windows_x64_71485c7d_preview.zip",
+  "zip_bytes": 21528589,
+  "zip_sha256": "5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5",
+  "checksum_sha256": "e327ff0f86f073a9897d20833291e95423c8c90b652a540cbc383e695bd698fb",
+  "artifact_digest": "7e44b7d97d6219c6e3cf95acda2b4003186676c1e1adb5aca6c3974bcd10df60",
+  "evidence_digest": "42db519f6cfc6bb01fdfe50d13d3e63948cb4c06e6dbf2e5706f56b556598a47",
+  "packaged_files_verified": 53,
+  "pe_amd64_count": 21,
+  "embedded_icon_sizes_pixel_verified": [
+    16,
+    24,
+    32,
+    48,
+    64,
+    128,
+    256
+  ],
+  "runtime_checks_per_phase": {
+    "seed": 9,
+    "restart": 3
+  },
+  "native_keyboard_input_verified": true,
+  "actual_distribution_exit_code": 0
+}

@@ -1,68 +1,185 @@
-name: Yorunote Windows Mascot Checks
-run-name: Check title mascot - a9fbae52
+name: Yorunote Windows Caption Fix Artifact Verification
+run-name: Independently verify downloaded caption fix - 07406c9f
 on:
   push:
-    branches: ['codex/yorunote-windows-mascot-20261106']
+    branches: ['codex/yorunote-windows-overlay-fix-20261106']
     paths: ['.github/workflows/yorunote-windows-diagnostics.yml']
 permissions:
+  actions: read
   contents: read
 jobs:
-  check-mascot:
-    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-mascot-20261106'
+  verify-candidate:
+    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-overlay-fix-20261106'
     runs-on: ubuntu-22.04
-    timeout-minutes: 12
+    timeout-minutes: 8
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Checkout fixed mascot source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: 'a9fbae524918a679e007d62fdee94c89e6eb2c4f'
+          ref: '07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b'
           persist-credentials: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
-      - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e
-        with:
-          flutter-version: '3.41.4'
-          channel: stable
-          cache: true
-      - name: Check original GIF bytes and unchanged dependency declarations
+      - name: Download original build and evidence artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git fetch --no-tags --depth=1 origin 71485c7de8799e30c9e1b5797ad83fba65668d51
+          set -euo pipefail
+          gh api repos/mengwen-liu/yorunote/actions/runs/42229100772 > build-run.json
+          gh api repos/mengwen-liu/yorunote/actions/runs/42229100772/jobs > build-jobs.json
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13510450166 > distribution-metadata.json
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13510120270 > evidence-metadata.json
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13510450166/zip > distribution-artifact.zip
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13510120270/zip > evidence-artifact.zip
+      - name: Recheck package bytes, native reports and title animation
+        run: |
+          set -euo pipefail
           python -m pip install --disable-pip-version-check --no-deps -r windows/requirements-build.txt
           python - <<'PY'
-          import hashlib, pathlib, subprocess
+          import base64, hashlib, io, json, pathlib, stat, struct, zipfile
           from PIL import Image
-          path = pathlib.Path("assets/brand/yorunote_mascot.gif")
-          assert hashlib.sha256(path.read_bytes()).hexdigest() == "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb"
-          image = Image.open(path)
-          assert image.format == "GIF" and image.size == (512,512) and image.n_frames == 6
-          assert image.info["loop"] == 0
-          original = subprocess.check_output(["git","show","71485c7de8799e30c9e1b5797ad83fba65668d51:pubspec.yaml"],text=True)
-          current = pathlib.Path("pubspec.yaml").read_text()
-          entry = "    - assets/brand/yorunote_mascot.gif"+chr(10)
-          assert current.count(entry) == 1 and current.replace(entry,"") == original
-          assert subprocess.check_output(["git","rev-parse","HEAD:pubspec.lock"],text=True) == subprocess.check_output(["git","rev-parse","71485c7de8799e30c9e1b5797ad83fba65668d51:pubspec.lock"],text=True)
-          print("Original GIF verified: 512x512, 6 frames; dependencies and lockfile unchanged.")
-          PY
-      - name: Resolve dependencies and test the actual GIF component
-        run: |
-          flutter pub get --enforce-lockfile
-          flutter analyze --no-pub lib/components/windows_title_brand.dart test/brand/windows_title_brand_test.dart tool/windows/smoke.dart
-          flutter test --no-pub --reporter expanded test/brand/windows_title_brand_test.dart
-      - name: Read exact Dart formatter output
-        if: always()
-        run: |
-          python - <<'PY'
-          import subprocess
-          for path in ["lib/components/windows_title_brand.dart","test/brand/windows_title_brand_test.dart","tool/windows/smoke.dart","lib/components/window_frame.dart"]:
-              content = subprocess.check_output(["dart","format","--output=show",path],text=True)
-              if path.endswith("window_frame.dart"):
-                  start = content.index("                            child: App.isWindows")
-                  end = content.index("                        if (kDebugMode)",start)
-                  print("BEGIN_FRAME_BLOCK")
-                  print(content[start:end],end="")
-                  print("END_FRAME_BLOCK")
-              else:
-                  print("BEGIN_FORMATTED "+path)
-                  print(content,end="")
-                  print("END_FORMATTED "+path)
+          SOURCE = "07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b"
+          BUILD_RUN = 42229100772
+          GIF_SHA = "4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb"
+          def digest(data): return hashlib.sha256(data).hexdigest()
+          def read_json(name): return json.loads(pathlib.Path(name).read_text())
+          def open_artifact(filename, metadata_file):
+              data=pathlib.Path(filename).read_bytes()
+              meta=read_json(metadata_file)
+              assert digest(data) == meta["digest"].removeprefix("sha256:")
+              archive=zipfile.ZipFile(io.BytesIO(data))
+              names=archive.namelist()
+              assert len(names)==len(set(names))
+              for item in archive.infolist():
+                  path=pathlib.PurePosixPath(item.filename)
+                  assert not path.is_absolute() and ".." not in path.parts and "\\" not in item.filename
+                  assert not stat.S_ISLNK(item.external_attr >> 16)
+              assert archive.testzip() is None
+              return archive, {"id":meta["id"],"digest":digest(data),"bytes":len(data)}
+          build=read_json("build-run.json")
+          jobs=read_json("build-jobs.json")["jobs"]
+          assert build["id"]==BUILD_RUN and build["head_sha"]=="ef9996a249b4b815b4688aa99576abd9d7899f3f"
+          assert build["status"]=="completed" and build["conclusion"]=="success"
+          assert len(jobs)==1 and jobs[0]["conclusion"]=="success"
+          assert all(step["conclusion"]=="success" for step in jobs[0]["steps"] if step["name"] in [
+              "Launch actual extracted distribution",
+              "Exercise native source, reading and downloads",
+              "Restart and verify persisted data and offline reading",
+              "Verify checkout and final artifact hashes",
+          ])
+          product_art,product_meta=open_artifact("distribution-artifact.zip","distribution-metadata.json")
+          evidence,evidence_meta=open_artifact("evidence-artifact.zip","evidence-metadata.json")
+          def ev(name):
+              matches=[n for n in evidence.namelist() if pathlib.PurePosixPath(n).name == name]
+              assert len(matches)==1,(name,matches)
+              return evidence.read(matches[0])
+          package=json.loads(ev("package.json"))
+          name="Yorunote_windows_x64_"+SOURCE[:8]+"_preview.zip"
+          assert set(product_art.namelist())=={name,name+".sha256"}
+          raw=product_art.read(name)
+          product_hash=digest(raw)
+          checksum=product_art.read(name+".sha256")
+          assert checksum==(product_hash+"  "+name+"\n").encode("ascii")
+          assert package["zip_sha256"]==product_hash and package["zip_bytes"]==len(raw)
+          archive=zipfile.ZipFile(io.BytesIO(raw))
+          assert archive.testzip() is None
+          names=archive.namelist()
+          assert len(names)==len(set(names))
+          for item in archive.infolist():
+              p=pathlib.PurePosixPath(item.filename)
+              assert not p.is_absolute() and ".." not in p.parts and "\\" not in item.filename
+              assert p.parts[0]=="Yorunote" and not stat.S_ISLNK(item.external_attr>>16)
+          sums=archive.read("Yorunote/SHA256SUMS.txt").decode().splitlines()
+          declared={}
+          for line in sums:
+              value,path=line.split("  ",1)
+              assert path not in declared
+              declared[path]=value
+          assert {"Yorunote/"+p for p in declared}|{"Yorunote/SHA256SUMS.txt"}==set(names)
+          for path,expected in declared.items():
+              assert digest(archive.read("Yorunote/"+path))==expected,path
+          info=json.loads(archive.read("Yorunote/BUILD_INFO.json"))
+          assert info["source_commit"]==SOURCE and package["source_commit"]==SOURCE
+          assert info["configuration"]=="Release" and info["platform"]=="windows-x64"
+          native=[]
+          for path in names:
+              if path.endswith((".exe",".dll")):
+                  data=archive.read(path)
+                  assert data[:2]==b"MZ"
+                  offset=struct.unpack_from("<I",data,0x3c)[0]
+                  assert data[offset:offset+4]==b"PE\0\0"
+                  assert struct.unpack_from("<H",data,offset+4)[0]==0x8664
+                  native.append(path)
+          for item in info["native_libraries"]:
+              assert digest(archive.read("Yorunote/"+item["name"]))==item["sha256"]
+          asset="Yorunote/data/flutter_assets/assets/brand/yorunote_mascot.gif"
+          gif=archive.read(asset)
+          assert digest(gif)==GIF_SHA
+          assert gif==pathlib.Path("assets/brand/yorunote_mascot.gif").read_bytes()
+          image=Image.open(io.BytesIO(gif))
+          assert image.size==(512,512) and image.n_frames==6 and image.info["loop"]==0
+          durations=[]
+          for frame in range(6):
+              image.seek(frame);durations.append(image.info["duration"])
+          assert durations==[220]*6
+          assert archive.read("Yorunote/data/flutter_assets/assets/app_icon.png")==pathlib.Path("assets/app_icon.png").read_bytes()
+          text_endings={}
+          def compare_text(package_path, source_path):
+              packed=archive.read("Yorunote/"+package_path)
+              original=pathlib.Path(source_path).read_bytes()
+              normal=lambda data: data.replace(b"\r\n",b"\n")
+              text_endings[package_path]={"packed_bytes":len(packed),"source_bytes":len(original),"raw_bytes_equal":packed==original,"only_line_endings_differ":packed!=original and normal(packed)==normal(original)}
+              print("TEXT_SOURCE_COMPARISON",package_path,json.dumps(text_endings[package_path]))
+              assert normal(packed)==normal(original), ("Source text content mismatch",package_path)
+          compare_text("data/flutter_assets/assets/init.js","assets/init.js")
+          for package_path,source_path in [("README.md","windows/README.md"),("README.en.md","windows/README.en.md"),("LICENSE","LICENSE")]:
+              compare_text(package_path,source_path)
+          seed=json.loads(ev("smoke-seed.json"))
+          restart=json.loads(ev("smoke-restart.json"))
+          for report,count in [(seed,11),(restart,4)]:
+              assert report["passed"] and report["source"]==SOURCE and len(report["checks"])==count
+              assert not report["flutter_errors"] and not report["app_errors"] and report["failure"] is None
+              assert all(check["passed"] for check in report["checks"])
+          assert any(x["check"]=="windows_title_mascot_gif_decoded_and_animated" for x in seed["checks"])
+          for report in [seed,restart]:
+              matches=[c for c in report["checks"] if c["check"]=="windows_title_native_hover_shows_tooltip_without_overlay_error"]
+              assert len(matches)==1 and matches[0]["native_pointer"] and matches[0]["tooltip_visible_then_dismissed"] and matches[0]["gif_continues_after_hover"]
+          for phase in ["seed","restart"]:
+              process=json.loads(ev("process-"+phase+".json"))
+              assert process["exit_code"]==0
+              moves=[c for c in process["captures"] if c.get("native_mouse_moved")]
+              assert {c["stage"] for c in moves}=={phase+"-title-hover-enter",phase+"-title-hover-leave"}
+          distribution=json.loads(ev("process-distribution.json"))
+          assert distribution["exit_code"]==0
+          assert any(c.get("native_mouse_hover") and c["capture"]["captured"] for c in distribution["captures"])
+
+          tests=ev("brand-tests.log").decode("utf-8-sig",errors="replace")
+          assert "+13: All tests passed!" in tests
+          asset_report=json.loads(ev("mascot-asset.json"))
+          assert asset_report["sha256"]==GIF_SHA
+          result={"source_commit":SOURCE,"build_run":BUILD_RUN,"workflow_commit":build["head_sha"],"zip":name,"zip_bytes":len(raw),"zip_sha256":product_hash,"checksum_sha256":digest(checksum),"product_artifact":product_meta,"evidence_artifact":evidence_meta,"manifest_files_checked":len(declared),"total_zip_entries":len(names),"native_amd64_files":len(native),"gif_sha256":digest(gif),"gif_frames":6,"gif_durations_ms":durations,"gif_loop":0,"focused_tests":13,"native_seed_checks":11,"native_restart_checks":4,"native_animation_check":True,"native_hover_checks":2,"distribution_native_hover":True,"independently_downloaded_again":True,"signature":json.loads(ev("authenticode.json")),"source_text_line_endings":text_endings}
+          print("BEGIN_VERIFICATION_JSON")
+          print(json.dumps(result,indent=2))
+          print("END_VERIFICATION_JSON")
+          for label,data in [("SEED_REPORT",ev("smoke-seed.json")),("RESTART_REPORT",ev("smoke-restart.json")),("ASSET_REPORT",ev("mascot-asset.json"))]:
+              print("BEGIN_"+label)
+              print(data.decode("utf-8-sig"))
+              print("END_"+label)
+          for label,needle in [("LIGHT","seed-title-hover-visible"),("DARK","restart-title-hover-visible"),("DISTRIBUTION_HOVER","distribution-title-hover")]:
+              matches=[n for n in evidence.namelist() if n.endswith(".png") and needle in n]
+              assert len(matches)==1,(needle,matches)
+              data=evidence.read(matches[0])
+              im=Image.open(io.BytesIO(data))
+              assert im.width>=800 and im.height>=600
+              print("BEGIN_"+label+"_PNG")
+              print(base64.b64encode(data).decode())
+              print("END_"+label+"_PNG")
+              crop=im.crop((0,0,min(260,im.width),min(110,im.height)))
+              out=io.BytesIO();crop.save(out,format="PNG")
+              print("BEGIN_"+label+"_CROP_PNG")
+              print(base64.b64encode(out.getvalue()).decode())
+              print("END_"+label+"_CROP_PNG")
+          print("All download, metadata, package, GIF and native acceptance checks passed.")
+          
           PY

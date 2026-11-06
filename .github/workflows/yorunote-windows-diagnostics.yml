@@ -1,40 +1,177 @@
 name: Yorunote Windows Diagnostics
-run-name: Reader loading dependency regression - 0254b07f
+run-name: Verify downloaded Windows ZIP - 71485c7d
 on:
   push:
     branches: ['codex/yorunote-windows-preview-20261106']
     paths: ['.github/workflows/yorunote-windows-diagnostics.yml']
 permissions:
+  actions: read
   contents: read
 jobs:
-  reader-regression:
-    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/codex/yorunote-windows-preview-20261106'
+  verify-downloaded:
+    if: github.repository_id == '1421354314'
     runs-on: ubuntu-22.04
-    timeout-minutes: 12
+    timeout-minutes: 6
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
-          ref: '0254b07f664e77661c092478ce3a8a2201e39bf8'
-          persist-credentials: false
-      - uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e
-        with:
-          flutter-version: '3.41.4'
-          channel: stable
-          cache: true
-      - name: Resolve the unchanged lockfile
-        run: flutter pub get --enforce-lockfile
-      - name: Check real image loading on dependency changes
+          python-version: '3.12'
+      - name: Read existing artifacts without rebuilding or publishing
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          flutter analyze --no-pub lib/components/reader_image_loading.dart test/reader/reader_image_loading_test.dart
-          flutter test --no-pub --reporter expanded test/reader/reader_image_loading_test.dart
-      - name: Read exact formatter output
-        if: always()
-        run: |
-          python3 - <<'PY'
-          import subprocess
-          for path in ['lib/components/reader_image_loading.dart', 'test/reader/reader_image_loading_test.dart']:
-              text = subprocess.check_output(['dart','format','--output=show',path],text=True)
-              print('BEGIN_FORMATTED '+path, flush=True)
-              print(text, flush=True)
-              print('END_FORMATTED '+path, flush=True)
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13447220416/zip > evidence.zip
+          gh api repos/mengwen-liu/yorunote/actions/artifacts/13445514362/zip > distribution.zip
+          python -m pip install --disable-pip-version-check --no-deps Pillow==13.0.0
+          python - <<'PY'
+          import base64, hashlib, io, json, pathlib, re, struct, zipfile
+          from PIL import Image
+          SOURCE = "71485c7de8799e30c9e1b5797ad83fba65668d51"
+          def sha(data):
+              return hashlib.sha256(data).hexdigest()
+          def safe_zip(data):
+              z = zipfile.ZipFile(io.BytesIO(data))
+              assert len(z.namelist()) == len(set(z.namelist()))
+              assert sum(x.file_size for x in z.infolist()) < 1024**3
+              for name in z.namelist():
+                  p = pathlib.PurePosixPath(name)
+                  assert not p.is_absolute() and ".." not in p.parts
+                  assert chr(92) not in name and not re.match(r"^[A-Za-z]:", name)
+              assert z.testzip() is None
+              return z
+          evidence_bytes = pathlib.Path("evidence.zip").read_bytes()
+          artifact_bytes = pathlib.Path("distribution.zip").read_bytes()
+          assert sha(evidence_bytes) == "42db519f6cfc6bb01fdfe50d13d3e63948cb4c06e6dbf2e5706f56b556598a47"
+          assert sha(artifact_bytes) == "7e44b7d97d6219c6e3cf95acda2b4003186676c1e1adb5aca6c3974bcd10df60"
+          with safe_zip(evidence_bytes) as ev, safe_zip(artifact_bytes) as outer:
+              names = {pathlib.PurePosixPath(n).name:n for n in ev.namelist()}
+              def report(name):
+                  return json.loads(ev.read(names[name]).decode("utf-8-sig"))
+              assert report("source.json")["source"] == SOURCE
+              package = report("package.json")
+              assert package["source_commit"] == SOURCE
+              filename = "Yorunote_windows_x64_" + SOURCE[:8] + "_preview.zip"
+              assert set(outer.namelist()) == {filename, filename+".sha256"}
+              data = outer.read(filename)
+              digest = sha(data)
+              assert len(data) == package["zip_bytes"] == 21528589
+              assert digest == package["zip_sha256"] == "5bc2853adb6b303ef42ee9f070ac5bae9a6c9f5849f5b3fdc4e125dcbe9edac5"
+              assert outer.read(filename+".sha256") == (digest+"  "+filename+chr(10)).encode()
+              with safe_zip(data) as product:
+                  assert all(n.startswith("Yorunote/") for n in product.namelist())
+                  info = json.loads(product.read("Yorunote/BUILD_INFO.json"))
+                  assert info["source_commit"] == SOURCE
+                  checked = set()
+                  for line in product.read("Yorunote/SHA256SUMS.txt").decode().splitlines():
+                      expected, name = line.split("  ",1)
+                      assert name not in checked and re.fullmatch("[0-9a-f]{64}",expected)
+                      assert sha(product.read("Yorunote/"+name)) == expected
+                      checked.add(name)
+                  assert {"Yorunote/"+n for n in checked}|{"Yorunote/SHA256SUMS.txt"} == set(product.namelist())
+                  pe_count = 0
+                  for name in product.namelist():
+                      if name.lower().endswith((".exe",".dll")):
+                          raw = product.read(name)
+                          assert raw[:2] == b"MZ"
+                          offset = struct.unpack_from("<I",raw,0x3c)[0]
+                          assert raw[offset:offset+4] == bytes([80,69,0,0])
+                          assert struct.unpack_from("<H",raw,offset+4)[0] == 0x8664
+                          pe_count += 1
+                  assert pe_count == 21 == len(info["native_libraries"])
+                  png = product.read("Yorunote/data/flutter_assets/assets/app_icon.png")
+                  assert sha(png) == "4f40bc600941faf39a27974c39da8fad276dd7fd655f51a831cfcafe4f03341d"
+                  exe = product.read("Yorunote/yorunote.exe")
+                  pe = struct.unpack_from("<I",exe,0x3c)[0]
+                  count = struct.unpack_from("<H",exe,pe+6)[0]
+                  opt_size = struct.unpack_from("<H",exe,pe+20)[0]
+                  opt = pe+24
+                  assert struct.unpack_from("<H",exe,opt)[0] == 0x20b
+                  resource_rva = struct.unpack_from("<I",exe,opt+112+16)[0]
+                  table = opt+opt_size
+                  def offset_for(rva):
+                      for i in range(count):
+                          vs, va, size, at = struct.unpack_from("<IIII",exe,table+40*i+8)
+                          if va <= rva < va+max(vs,size):
+                              return at+rva-va
+                      raise AssertionError("Unmapped resource RVA")
+                  root = offset_for(resource_rva)
+                  def entries(relative):
+                      at = root+relative
+                      n1,n2 = struct.unpack_from("<HH",exe,at+12)
+                      result = {}
+                      for i in range(n1+n2):
+                          name,target = struct.unpack_from("<II",exe,at+16+8*i)
+                          if not name & 0x80000000:
+                              result[name] = target
+                      return result
+                  types = entries(0)
+                  def leaves(kind):
+                      result = {}
+                      assert types[kind] & 0x80000000
+                      for name, folder in entries(types[kind]&0x7fffffff).items():
+                          assert folder & 0x80000000
+                          lang = entries(folder&0x7fffffff)
+                          leaf = next(iter(lang.values()))
+                          assert not leaf & 0x80000000
+                          rva,size = struct.unpack_from("<II",exe,root+leaf)
+                          at = offset_for(rva)
+                          result[name] = exe[at:at+size]
+                      return result
+                  icons = leaves(3)
+                  group = next(iter(leaves(14).values()))
+                  reserved,kind,n = struct.unpack_from("<HHH",group)
+                  assert (reserved,kind,n) == (0,1,7)
+                  head = bytearray(struct.pack("<HHH",0,1,n))
+                  payload = bytearray()
+                  at = 6+16*n
+                  for i in range(n):
+                      w,h,c,z,planes,bits,size,icon_id = struct.unpack_from("<BBBBHHIH",group,6+14*i)
+                      blob = icons[icon_id]
+                      assert len(blob) == size
+                      head.extend(struct.pack("<BBBBHHII",w,h,c,z,planes,bits,size,at))
+                      payload.extend(blob)
+                      at += size
+                  ico = Image.open(io.BytesIO(bytes(head+payload)))
+                  sizes = {(n,n) for n in [16,24,32,48,64,128,256]}
+                  assert ico.ico.sizes() == sizes
+                  canonical = Image.open(io.BytesIO(png)).convert("RGBA")
+                  for size in sizes:
+                      actual = ico.ico.getimage(size).convert("RGBA")
+                      expected = canonical.resize(size,Image.Resampling.LANCZOS)
+                      assert actual.tobytes() == expected.tobytes(), ("Icon pixel mismatch",size)
+              phases = {}
+              for phase in ["seed","restart"]:
+                  r = report("smoke-"+phase+".json")
+                  assert r["source"] == SOURCE and r["passed"] is True and r["failure"] is None
+                  assert not r["flutter_errors"] and not r["app_errors"]
+                  assert all(c["passed"] is True for c in r["checks"])
+                  assert report("process-"+phase+".json")["exit_code"] == 0
+                  phases[phase] = len(r["checks"])
+              assert report("process-distribution.json")["exit_code"] == 0
+              assert any(c.get("native_right_arrow_sent") is True for c in report("process-seed.json")["captures"])
+              result = {
+                  "source_commit":SOURCE,"zip":filename,"zip_bytes":len(data),"zip_sha256":digest,
+                  "checksum_sha256":sha(outer.read(filename+".sha256")),
+                  "artifact_digest":sha(artifact_bytes),"evidence_digest":sha(evidence_bytes),
+                  "packaged_files_verified":len(checked),"pe_amd64_count":pe_count,
+                  "embedded_icon_sizes_pixel_verified":sorted(n for n,_ in sizes),
+                  "runtime_checks_per_phase":phases,"native_keyboard_input_verified":True,
+                  "actual_distribution_exit_code":0
+              }
+              print("BEGIN_VERIFICATION_JSON")
+              print(json.dumps(result,indent=2))
+              print("END_VERIFICATION_JSON")
+              for name in ["source.json","package.json","smoke-seed.json","smoke-restart.json","process-distribution.json","process-seed.json","process-restart.json","baseline-regression.json","authenticode.json","icon.json"]:
+                  if name in names:
+                      print("BEGIN_TEXT "+name)
+                      print(ev.read(names[name]).decode("utf-8-sig"))
+                      print("END_TEXT "+name)
+              for name in ["distribution-home.png","seed-home-zh-TW.png","seed-home-en-US-dark.png","seed-reader-page2.png","restart-offline-reader.png"]:
+                  if name in names:
+                      encoded = base64.b64encode(ev.read(names[name])).decode()
+                      print("BEGIN_IMAGE_BASE64 "+name)
+                      for i in range(0,len(encoded),512):
+                          print("IMAGE_CHUNK "+name+" "+encoded[i:i+512])
+                      print("END_IMAGE_BASE64 "+name)
+          
           PY

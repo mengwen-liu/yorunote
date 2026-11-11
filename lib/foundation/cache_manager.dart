@@ -89,6 +89,9 @@ class CacheManager {
   /// Get the singleton instance of CacheManager.
   factory CacheManager() => instance ??= CacheManager._create();
 
+  /// Number of files written in this run, see [writeCache].
+  int _writeCount = 0;
+
   /// set cache size limit in MB
   void setLimitSize(int size) {
     _limitSize = size * 1024 * 1024;
@@ -101,7 +104,12 @@ class CacheManager {
     this.dir++;
     this.dir %= 100;
     var dir = this.dir;
-    var name = md5.convert(key.codeUnits).toString();
+    // Every write gets a new file name, so that a deletion of an older entry
+    // can never remove a newer file or index row of the same key. Existing
+    // entries keep their names, which are read from the database.
+    var name =
+        '${md5.convert(key.codeUnits)}'
+        '-${DateTime.now().microsecondsSinceEpoch}-${_writeCount++}';
     var file = File('$cachePath/$dir/$name');
     await file.create(recursive: true);
     await file.writeAsBytes(data);
@@ -242,7 +250,10 @@ class CacheManager {
   }
 
   /// Delete cache by key.
-  Future<void> delete(String key) async {
+  ///
+  /// If [onlyIfStoredIn] is given, the cache is deleted only if it is still
+  /// stored in that file.
+  Future<void> delete(String key, {File? onlyIfStoredIn}) async {
     var res = _db.select('''
       SELECT * FROM cache
       WHERE key = ?
@@ -254,15 +265,19 @@ class CacheManager {
     var dir = row[1] as String;
     var name = row[2] as String;
     var file = File('$cachePath/$dir/$name');
+    if (onlyIfStoredIn != null && onlyIfStoredIn.path != file.path) {
+      return;
+    }
     var fileSize = 0;
     if (await file.exists()) {
       fileSize = await file.length();
       await file.delete();
     }
+    // Keep a newer entry written for the same key in the meantime.
     _db.execute('''
       DELETE FROM cache
-      WHERE key = ?
-    ''', [key]);
+      WHERE key = ? AND dir = ? AND name = ?
+    ''', [key, dir, name]);
     if (_currentSize != null) {
       _currentSize = _currentSize! - fileSize;
     }

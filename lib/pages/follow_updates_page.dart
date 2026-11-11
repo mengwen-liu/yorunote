@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:venera/components/components.dart';
+import 'package:venera/components/home_widgets.dart';
 import 'package:venera/foundation/app.dart';
 import 'package:venera/foundation/appdata.dart';
 import 'package:venera/foundation/favorites.dart';
@@ -54,59 +55,18 @@ class _FollowUpdatesWidgetState
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outlineVariant,
-            width: 0.6,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8),
-          onTap: () {
-            context.to(() => FollowUpdatesPage());
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 56,
-                child: Row(
-                  children: [
-                    Center(
-                      child: Text('Follow Updates'.tl, style: ts.s18),
-                    ),
-                    const Spacer(),
-                    const Icon(Icons.arrow_right),
-                  ],
-                ),
-              ).paddingHorizontal(16),
-              if (_count > 0)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                  margin: const EdgeInsets.only(bottom: 16, left: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                  ),
-                  child: Text(
-                    '@c updates'.tlParams({
-                      'c': _count,
-                    }),
-                    style: ts.s16,
-                  ),
-                ),
-            ],
-          ),
-        ),
+      child: HomeFollowUpdatesRow(
+        configured: folder != null,
+        count: _count,
+        title: 'Follow Updates'.tl,
+        status: folder == null
+            ? 'Choose a folder to follow updates.'.tl
+            : '@c updates'.tlParams({'c': _count}),
+        actionLabel: 'View'.tl,
+        onView: () => context.to(() => FollowUpdatesPage()),
       ),
     );
   }
-
   @override
   Object? get key => 'FollowUpdatesWidget';
 }

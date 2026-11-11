@@ -52,7 +52,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_APP_ICON            ICON                    "resources\\app_icon.ico"
+IDI_APP_ICON            ICON                    "resources\\yorunote.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.github.wgh136" "\0"
-            VALUE "FileDescription", "venera" "\0"
+            VALUE "CompanyName", "mengwen-liu" "\0"
+            VALUE "FileDescription", "Yorunote comic reader" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "venera" "\0"
+            VALUE "InternalName", "yorunote" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.github.wgh136. All rights reserved." "\0"
-            VALUE "OriginalFilename", "venera.exe" "\0"
-            VALUE "ProductName", "venera" "\0"
+            VALUE "OriginalFilename", "yorunote.exe" "\0"
+            VALUE "ProductName", "Yorunote" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

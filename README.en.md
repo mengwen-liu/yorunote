@@ -8,7 +8,7 @@
 
 <p align="center"><a href="README.md">繁體中文</a> · <strong>English</strong></p>
 
-<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1 · Android</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.3">v0.1.0-windows-preview.3 · Windows x64</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
+<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1 · Android</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0">v0.1.0 · Windows x64</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
 
 Yorunote is a personal open-source fork of [Venera](https://github.com/venera-app/venera). Work in this fork covers branding, interface maintenance, image-cache fixes, cover loading, and traceable engineering evidence.
 
@@ -30,25 +30,21 @@ The reader and comic-source system come from upstream. This repository is a main
 >
 > **Validation scope:** this is a public preview, with runtime acceptance on the S25+ and Tab S11 still pending. The 350 passing tests and static APK checks are existing CI results; this publication did not re-run tests or rebuild the APK.
 
-### Windows x64 preview
+### Windows x64 release
 
-**[v0.1.0-windows-preview.3](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.3)** (2026-11-07)
+**[v0.1.0](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0)**
 
-[Download Windows x64 ZIP](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.3/Yorunote_windows_x64_07406c9f_preview.zip) · [SHA-256 checksum](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-windows-preview.3/Yorunote_windows_x64_07406c9f_preview.zip.sha256) · [Bilingual release notes](docs/releases/v0.1.0-windows-preview.3.md)
+[Download Windows x64 ZIP](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0/Yorunote-0.1.0-windows-x64.zip) · [SHA-256 checksum](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0/Yorunote-0.1.0-windows-x64.zip.sha256) · [Build and verification](https://github.com/mengwen-liu/yorunote/actions/runs/43090132160)
 
-- App source is fixed at `07406c9f`, built in **Release mode**. Extract the complete ZIP and run `Yorunote/yorunote.exe`; keep every DLL and the `data` directory together.
-- Fixes `No Overlay widget found.` in the upper-left caption while retaining the 28×28 animated elf and tooltip. Inactive/reduced-motion states use the static image.
-- ZIP: 22,015,039 bytes. SHA-256: `cf7d5a616af30867349bb9136a491188d7a28a12e0d4778f9a2a1c74e6257ed3`.
-- [Windows CI and publication verification](https://github.com/mengwen-liu/yorunote/blob/3490fed98e698c2aa87eb9956d0d3da4a45679db/docs/verification/windows-overlay-fix-20261106/PUBLIC_RELEASE_3.md): 13 focused tests, 11 initial-process and 4 restart checks passed; separate downloads verified the ZIP, checksum and complete file manifest.
-- On 2026-11-07, the user [confirmed elf animation and tooltip behavior](https://github.com/mengwen-liu/yorunote/blob/2d0d5375f5e4f53f96f3558ad10278a7762c8797/docs/verification/windows-overlay-fix-20261106/OWNER_ACCEPTANCE.md). This is a user-reported check of those two UI behaviors, not complete device acceptance.
-- The unsigned build has no installer. Its separate `mengwen-liu / Yorunote` data directory does not automatically migrate existing Venera data.
-- WebView2 login, all third-party sources, all DPI settings, multiple monitors and Windows ARM64 are not fully covered. This remains a preview.
+- Extract the full ZIP and run `Yorunote/yorunote.exe`. Keep every DLL and the `data` directory together.
+- Windows x64 CI checked the EXE version, ZIP hashes, title bar, synthetic-source reading, downloads and offline reading after restart.
+- The ZIP is unsigned and runs without an installer.
 
 ## Current development state
 
-The Android preview's application source is pinned by [tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1) at commit `29b590b`. `master` contains the project homepages and release documentation, but has not integrated that application code. Use the tag to obtain the source matching the APK; the [candidate branch and complete evidence](https://github.com/mengwen-liu/yorunote/tree/claude/yorunote-cover-timeout-20261105) retain the development history.
+The Android preview APK source is pinned by [tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1) at commit `29b590b`. [Development and validation record](https://github.com/mengwen-liu/yorunote/commit/f003a708ca99a5c45f140ee554b4500ab5be8d49).
 
-Windows source is separately pinned by [tag `v0.1.0-windows-preview.3`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-windows-preview.3) at `07406c9f`. Source commits, build modes and validation records are distinct for the two platforms; neither application snapshot has been merged into `master`.
+The Windows application is integrated into `master`. [Tag `v0.1.0`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0) pins the release source at commit `7aa1ca09`.
 
 | Area | Work included in the preview | Evidence |
 | --- | --- | --- |

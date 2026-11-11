@@ -5,6 +5,12 @@
 本檔分開記錄已發布的預覽版、文件更新與歷史開發里程碑。App 修改是否已發布、是否已合併至 master，以及是否完成實機驗收，分別記錄。
 This file distinguishes public previews, documentation updates, and development milestones. Publication, integration into master, and device acceptance are separate states.
 
+## v0.1.0 — 2026-11-12
+
+- **Windows x64 首個正式版 / First Windows x64 release** · [發行頁 / Release](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0) · [Windows CI](https://github.com/mengwen-liu/yorunote/actions/runs/43090132160)。
+- 整合 .3 的 App 與回歸測試至主線。Tag 固定來源 `7aa1ca093b497d2efb3cc0ae32287197cbddd8e7`，Windows ZIP 與 EXE 版本為 0.1.0。Android ARM64 保留原預覽發行。
+- Integrates the .3 application and regression tests into the main branch. The tag pins `7aa1ca093b497d2efb3cc0ae32287197cbddd8e7` and the Windows ZIP and EXE use version 0.1.0. The Android ARM64 preview remains available.
+
 ## v0.1.0-windows-preview.3 — 2026-11-07
 
 - **已公開的 Windows 標題列修正版**：[發行頁](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-windows-preview.3) · [雙語說明](docs/releases/v0.1.0-windows-preview.3.md)。Release ID 436759456，2026-11-07 00:59:20（Asia/Taipei）公開。

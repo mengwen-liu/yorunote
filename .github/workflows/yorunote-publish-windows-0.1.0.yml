@@ -1,0 +1,143 @@
+name: Yorunote Windows 0.1.0 Publication
+run-name: Publish validated Windows x64 0.1.0
+on:
+  push:
+    branches: ['ci/windows-0.1.0']
+    paths: ['.github/workflows/yorunote-publish-windows-0.1.0.yml']
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: yorunote-publish-windows-0.1.0
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/ci/windows-0.1.0'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: mengwen-liu/yorunote
+      SOURCE: '7aa1ca093b497d2efb3cc0ae32287197cbddd8e7'
+      BUILD_WORKFLOW_SHA: '401ba7d84fbf976b5dfbec76dae23084d176280d'
+      RUN_ID: '43090132160'
+      TAG: v0.1.0
+      ZIP: Yorunote-0.1.0-windows-x64.zip
+      EXPECTED_SHA256: '7d07f01901402d5ebbc714477b551bfeecb38e00372793fb30eea7d3fa997106'
+    steps:
+      - name: Download and verify the successful build
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/$GH_REPO/actions/runs/$RUN_ID" > run.json
+          jq -e --arg head "$BUILD_WORKFLOW_SHA" \
+            '.conclusion == "success" and .head_sha == $head and .head_branch == "ci/windows-0.1.0" and .path == ".github/workflows/yorunote-windows-0.1.0.yml"' run.json >/dev/null
+          ancestry=$(gh api "repos/$GH_REPO/compare/$SOURCE...master" --jq .status)
+          [[ "$ancestry" == "ahead" || "$ancestry" == "identical" ]]
+          gh run download "$RUN_ID" --name yorunote-windows-x64-0.1.0-candidate --dir package
+          gh run download "$RUN_ID" --name yorunote-windows-x64-0.1.0-evidence --dir evidence
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import zipfile
+
+          source = os.environ["SOURCE"]
+          filename = os.environ["ZIP"]
+          expected = os.environ["EXPECTED_SHA256"]
+          package = pathlib.Path("package")
+          archive = package / filename
+          checksum = package / (filename + ".sha256")
+          assert {p.name for p in package.iterdir()} == {archive.name, checksum.name}
+          assert hashlib.sha256(archive.read_bytes()).hexdigest() == expected
+          assert checksum.read_bytes() == (expected + "  " + filename + "\n").encode("ascii")
+
+          evidence = pathlib.Path("evidence")
+          metadata = json.loads((evidence / "package.json").read_bytes())
+          resource = json.loads((evidence / "exe-version.json").read_bytes())
+          assert metadata["source_commit"] == resource["source"] == source
+          assert metadata["zip"] == filename and metadata["zip_sha256"] == expected
+          assert metadata["zip_bytes"] == archive.stat().st_size
+          assert metadata["version"] == resource["file_version"] == resource["product_version"] == "0.1.0"
+          for phase, count in (("seed", 11), ("restart", 4)):
+              smoke = json.loads((evidence / ("smoke-" + phase + ".json")).read_bytes())
+              assert smoke["passed"] is True and smoke["source"] == source
+              assert len(smoke["checks"]) == count
+
+          prefix = "Yorunote/"
+          with zipfile.ZipFile(archive) as bundle:
+              assert bundle.testzip() is None
+              files = bundle.namelist()
+              assert len(files) == len(set(files))
+              assert all(n.startswith(prefix) and ".." not in pathlib.PurePosixPath(n).parts for n in files)
+              manifest = prefix + "SHA256SUMS.txt"
+              checks = dict(line.split("  ", 1)[::-1] for line in bundle.read(manifest).decode().splitlines())
+              assert set(files) == {prefix + name for name in checks} | {manifest}
+              for name, digest in checks.items():
+                  assert hashlib.sha256(bundle.read(prefix + name)).hexdigest() == digest, name
+              build = json.loads(bundle.read(prefix + "BUILD_INFO.json"))
+              assert build["source_commit"] == source and build["version"] == "0.1.0"
+              assert build["platform"] == "windows-x64"
+              assert checks["yorunote.exe"] == resource["exe_sha256"]
+          print("Verified archive, manifest, build source, EXE version and native acceptance evidence:", expected)
+          PY
+
+      - name: Verify draft attachment bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! gh api "repos/$GH_REPO/git/ref/tags/$TAG" > tag.json; then
+            gh api --method POST "repos/$GH_REPO/git/refs" -f ref="refs/tags/$TAG" -f sha="$SOURCE" > tag.json
+          fi
+          jq -e --arg sha "$SOURCE" '.object.type == "commit" and .object.sha == $sha' tag.json >/dev/null
+          cat > notes.md <<'NOTES'
+          ## 繁體中文
+          
+          Yorunote 首個正式發行版提供 **Windows x64（64 位元）** 免安裝 ZIP。程式整合自 Windows 預覽版 .3，保留左上角精靈動畫與滑鼠提示，並沿用原有閱讀、下載與資料儲存行為。Windows 的程式版本為 0.1.0。
+          
+          1. 下載 `Yorunote-0.1.0-windows-x64.zip`，可用同名 `.sha256` 校驗檔比對。
+          2. 完整解壓縮後執行 `Yorunote/yorunote.exe`，保留隨附 DLL 與 `data` 資料夾。
+          
+          Windows x64 CI 已從解壓後的發行 ZIP 啟動程式，並驗證標題列。相同來源另建的驗收程式通過合成漫畫閱讀、下載與重啟後離線讀取；13 項指定回歸測試通過。Windows 10 實機回報適用於 .3 預覽版。這份 ZIP 採 Release 模式建置，尚未做 Windows 程式碼簽章。Android ARM64 仍透過 [Android 預覽版](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1) 提供。
+          
+          ## English
+          
+          Yorunote's first regular release ships a **Windows x64 (64-bit)** extract-and-run ZIP. It integrates the Windows preview.3 app, including the animated title-bar character and hover tooltip. The Windows executable reports version 0.1.0.
+          
+          1. Download `Yorunote-0.1.0-windows-x64.zip` and verify it against the matching `.sha256` file.
+          2. Extract the full ZIP, keep the included DLLs and `data` folder in place, and run `Yorunote/yorunote.exe`.
+          
+          Windows x64 CI launched the extracted distribution and checked its title bar. A separate smoke executable built from the same source passed synthetic-source reading, downloads, restart and offline reading. All 13 focused regression tests passed. The Windows 10 user report applies to the .3 preview. The release ZIP is unsigned. Android ARM64 remains available as a [preview](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1).
+          
+          [Source commit](https://github.com/mengwen-liu/yorunote/commit/7aa1ca093b497d2efb3cc0ae32287197cbddd8e7) · [Windows CI evidence](https://github.com/mengwen-liu/yorunote/actions/runs/43090132160) · [Upstream Venera](https://github.com/venera-app/venera) · [GPL-3.0](https://github.com/mengwen-liu/yorunote/blob/7aa1ca093b497d2efb3cc0ae32287197cbddd8e7/LICENSE)
+          NOTES
+          if ! gh release view "$TAG" --json isDraft > release.json; then
+            gh release create "$TAG" --verify-tag --target "$SOURCE" --draft --title 'Yorunote v0.1.0（Windows x64）' \
+              --notes-file notes.md "package/$ZIP" "package/$ZIP.sha256"
+          fi
+          gh release view "$TAG" --json isDraft,isPrerelease,assets > release.json
+          jq -e --arg zip "$ZIP" '.isDraft and (.isPrerelease | not) and ([.assets[].name] | sort) == ([$zip, ($zip + ".sha256")] | sort)' release.json >/dev/null
+          mkdir redownload
+          gh release download "$TAG" --pattern "$ZIP" --pattern "$ZIP.sha256" --dir redownload
+          cmp "package/$ZIP" "redownload/$ZIP"
+          cmp "package/$ZIP.sha256" "redownload/$ZIP.sha256"
+
+      - name: Publish and verify unauthenticated download
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release edit "$TAG" --draft=false --prerelease=false --latest
+          gh release view "$TAG" --json isDraft,isPrerelease,url > release.json
+          jq -e '(.isDraft | not) and (.isPrerelease | not)' release.json >/dev/null
+          mkdir public-download
+          for name in "$ZIP" "$ZIP.sha256"; do
+            curl --fail --silent --show-error --location --retry 4 --retry-all-errors \
+              --output "public-download/$name" "https://github.com/$GH_REPO/releases/download/$TAG/$name"
+            cmp "package/$name" "public-download/$name"
+          done
+          echo "Release: https://github.com/$GH_REPO/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
+          echo "ZIP SHA-256: $EXPECTED_SHA256" >> "$GITHUB_STEP_SUMMARY"

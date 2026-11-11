@@ -1,4 +1,4 @@
-import 'dart:async' show Future, StreamController, scheduleMicrotask;
+import 'dart:async' show Completer, Future, StreamController, scheduleMicrotask;
 import 'dart:convert';
 import 'dart:math';
 import 'dart:ui' as ui show Codec;
@@ -59,19 +59,25 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
 
       bool stop = false;
 
+      // Completes when the image is no longer needed (see [loadCancellable]).
+      final stopped = Completer<void>();
+
       chunkEvents.onCancel = () {
         stop = true;
+        if (!stopped.isCompleted) {
+          stopped.complete();
+        }
       };
 
       Uint8List? data;
 
       while (data == null && !stop) {
         try {
-          data = await load(chunkEvents, () {
+          data = await loadCancellable(chunkEvents, () {
             if (stop) {
               throw const _ImageLoadingStopException();
             }
-          });
+          }, stopped.future);
         } on _ImageLoadingStopException {
           rethrow;
         } catch (e) {
@@ -99,6 +105,7 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
       }
 
       if (data!.isEmpty) {
+        await onInvalidImageData(data);
         throw Exception("Empty image data");
       }
 
@@ -109,7 +116,7 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
           getTargetSize: enableResize ? _getTargetSize : null,
         );
       } catch (e) {
-        await CacheManager().delete(this.key);
+        await onInvalidImageData(data);
         if (data.length < 2 * 1024) {
           // data is too short, it's likely that the data is text, not image
           try {
@@ -140,7 +147,32 @@ abstract class BaseImageProvider<T extends BaseImageProvider<T>>
     void Function() checkStop,
   );
 
+  /// Same as [load], with [stopped] completing as soon as the image is no
+  /// longer needed, so that a provider can abort work that does not produce
+  /// events (e.g. a request waiting for headers) instead of waiting for the
+  /// next [checkStop] call.
+  ///
+  /// The default implementation ignores [stopped] and calls [load].
+  @protected
+  Future<Uint8List> loadCancellable(
+    StreamController<ImageChunkEvent> chunkEvents,
+    void Function() checkStop,
+    Future<void> stopped,
+  ) => load(chunkEvents, checkStop);
+
   String get key;
+
+  /// Called before the error is reported when the loaded [data] is empty or
+  /// cannot be decoded.
+  ///
+  /// By default, the disk cache entry stored under [key] is deleted when the
+  /// data cannot be decoded, and nothing is done for empty data.
+  @protected
+  Future<void> onInvalidImageData(Uint8List data) async {
+    if (data.isNotEmpty) {
+      await CacheManager().delete(key);
+    }
+  }
 
   @override
   bool operator ==(Object other) {

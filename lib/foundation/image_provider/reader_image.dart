@@ -1,8 +1,11 @@
 import 'dart:async' show Future;
+import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_qjs/flutter_qjs.dart';
+import 'package:venera/foundation/cache_manager.dart';
 import 'package:venera/foundation/js_engine.dart';
+import 'package:venera/foundation/log.dart';
 import 'package:venera/network/images.dart';
 import 'package:venera/utils/io.dart';
 import 'base_image_provider.dart';
@@ -38,8 +41,13 @@ class ReaderImageProvider
         throw "Error: File not found.";
       }
     } else {
-      await for (var event
-        in ImageDownloader.loadComicImage(imageKey, sourceKey, cid, eid)) {
+      await for (var event in ImageDownloader.loadComicImage(
+        imageKey,
+        sourceKey,
+        cid,
+        eid,
+        stopOnCacheHit: true,
+      )) {
         checkStop();
         chunkEvents.add(ImageChunkEvent(
           cumulativeBytesLoaded: event.currentBytes,
@@ -123,4 +131,54 @@ class ReaderImageProvider
 
   @override
   String get key => "$imageKey@$sourceKey@$cid@$eid@$enableResize";
+
+  /// Deletes the disk cache entry of this image only if the cached bytes
+  /// themselves are empty or cannot be decoded, so that a manual retry
+  /// downloads the image again.
+  ///
+  /// [data] may differ from the cached bytes because of custom image
+  /// processing, and the entry may be replaced by another request at any
+  /// time, so only the checked entry is deleted.
+  @override
+  Future<void> onInvalidImageData(Uint8List data) async {
+    if (imageKey.startsWith('file://')) {
+      return;
+    }
+    final cacheKey = ImageDownloader.comicImageCacheKey(
+      imageKey,
+      sourceKey,
+      cid,
+      eid,
+    );
+    try {
+      final file = await CacheManager().findCache(cacheKey);
+      if (file == null) {
+        return;
+      }
+      if (await _canDecode(await file.readAsBytes())) {
+        return;
+      }
+      await CacheManager().delete(cacheKey, onlyIfStoredIn: file);
+    } catch (e, s) {
+      Log.error("Image Loading", e, s);
+    }
+  }
+
+  static Future<bool> _canDecode(Uint8List data) async {
+    if (data.isEmpty) {
+      return false;
+    }
+    try {
+      final codec = await ui.instantiateImageCodec(data);
+      try {
+        final frame = await codec.getNextFrame();
+        frame.image.dispose();
+      } finally {
+        codec.dispose();
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

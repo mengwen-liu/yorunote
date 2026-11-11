@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:venera/components/components.dart';
+import 'package:venera/components/home_widgets.dart';
 import 'package:venera/foundation/app.dart';
 import 'package:venera/foundation/comic_source/comic_source.dart';
 import 'package:venera/foundation/consts.dart';
@@ -9,6 +9,7 @@ import 'package:venera/foundation/favorites.dart';
 import 'package:venera/foundation/history.dart';
 import 'package:venera/foundation/local.dart';
 import 'package:venera/foundation/log.dart';
+import 'package:venera/foundation/ui_tokens.dart';
 import 'package:venera/pages/comic_details_page/comic_page.dart';
 import 'package:venera/pages/comic_source_page.dart';
 import 'package:venera/pages/downloading_page.dart';
@@ -32,17 +33,111 @@ class HomePage extends StatelessWidget {
       slivers: [
         SliverPadding(padding: EdgeInsets.only(top: context.padding.top)),
         const _SearchBar(),
-        const _SyncDataWidget(),
         const _History(),
-        const _Local(),
         const FollowUpdatesWidget(),
-        const _ComicSourceWidget(),
-        const ImageFavorites(),
+        const ImageFavorites(leadingTool: _ComicSourceWidget()),
+        const _Local(),
+        const _SyncDataWidget(),
         SliverPadding(padding: EdgeInsets.only(top: context.padding.bottom)),
       ],
     );
     return context.width > changePoint ? widget.paddingHorizontal(8) : widget;
   }
+}
+
+/// Home presentation only; storage and navigation stay in the caller.
+class HomeHistorySection extends StatelessWidget {
+  const HomeHistorySection({
+    super.key,
+    required this.count,
+    required this.onViewAll,
+    required this.onSearch,
+    this.recentComics,
+  });
+  final int count;
+  final VoidCallback onViewAll, onSearch;
+  final Widget? recentComics;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(
+      UiSpace.s6,
+      UiSpace.s4,
+      UiSpace.s6,
+      UiSpace.s3,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HomeSectionHeading(
+          title: 'History'.tl,
+          emphasized: true,
+          actionLabel: 'View more'.tl,
+          onAction: onViewAll,
+        ),
+        Text(
+          '${'History'.tl} · $count',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: UiSpace.s3),
+        if (recentComics != null)
+          recentComics!
+        else
+          HomeEmptyState(
+            icon: Icons.auto_stories_outlined,
+            message: '${'History'.tl}: 0',
+            actionLabel: 'Search'.tl,
+            onAction: onSearch,
+          ),
+      ],
+    ),
+  );
+}
+
+class HomeLocalSection extends StatelessWidget {
+  const HomeLocalSection({
+    super.key,
+    required this.count,
+    required this.onOpen,
+    required this.onImport,
+    this.recentComics,
+    this.downloadingAction,
+  });
+  final int count;
+  final VoidCallback onOpen, onImport;
+  final Widget? recentComics, downloadingAction;
+  @override
+  Widget build(BuildContext context) => HomeToolRow(
+    title: 'Local'.tl,
+    icon: Icons.folder_outlined,
+    count: count,
+    actionLabel: 'View'.tl,
+    onAction: onOpen,
+    additionalActions: [
+      FilledButton(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Theme.of(context).colorScheme.primary,
+        ),
+        onPressed: onImport,
+        child: Text('Import Comics'.tl),
+      ),
+    ],
+    children: [
+      if (recentComics != null) ...[
+        const SizedBox(height: UiSpace.s2),
+        recentComics!,
+      ],
+      Wrap(
+        spacing: UiSpace.s2,
+        runSpacing: UiSpace.s2,
+        alignment: WrapAlignment.end,
+        children: [if (downloadingAction != null) downloadingAction!],
+      ),
+    ],
+  );
 }
 
 class _SearchBar extends StatelessWidget {
@@ -51,32 +146,37 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        height: App.isMobile ? 52 : 46,
-        width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Material(
-          color: context.colorScheme.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(32),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(32),
-            onTap: () {
-              context.to(() => const SearchPage());
-            },
-            child: Row(
-              children: [
-                const SizedBox(width: 16),
-                const Icon(Icons.search),
-                const SizedBox(width: 8),
-                Text('Search'.tl, style: ts.s16),
-                const Spacer(),
-              ],
-            ),
-          ),
-        ),
+      child: HomeSearchEntry(
+        label: 'Search'.tl,
+        onTap: () => context.to(() => const SearchPage()),
       ),
     );
   }
+}
+
+/// Source names are informational labels; only the explicit management entry
+/// navigates. Count and available updates are supplied by the existing caller.
+class HomeSourceSection extends StatelessWidget {
+  const HomeSourceSection({
+    super.key,
+    required this.names,
+    required this.onManage,
+    this.availableUpdates = 0,
+  });
+  final List<String> names;
+  final VoidCallback onManage;
+  final int availableUpdates;
+  @override
+  Widget build(BuildContext context) => HomeLibraryTool(
+    title: 'Comic Source'.tl,
+    icon: Icons.hub_outlined,
+    count: names.length,
+    actionLabel: 'Manage'.tl,
+    onAction: onManage,
+    detail: availableUpdates > 0
+        ? '@c updates'.tlParams({'c': availableUpdates})
+        : null,
+  );
 }
 
 class _SyncDataWidget extends StatefulWidget {
@@ -124,97 +224,25 @@ class _SyncDataWidgetState extends State<_SyncDataWidget>
 
   @override
   Widget build(BuildContext context) {
-    Widget child;
     if (!DataSync().isEnabled) {
-      child = const SliverPadding(padding: EdgeInsets.zero);
-    } else if (DataSync().isUploading || DataSync().isDownloading) {
-      child = SliverToBoxAdapter(
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: ListTile(
-            leading: const Icon(Icons.sync),
-            title: Text('Syncing Data'.tl),
-            trailing: const CircularProgressIndicator(strokeWidth: 2)
-                .fixWidth(18)
-                .fixHeight(18),
-          ),
-        ),
-      );
-    } else {
-      child = SliverToBoxAdapter(
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).colorScheme.outlineVariant,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: ListTile(
-            leading: const Icon(Icons.sync),
-            title: Text('Sync Data'.tl),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (DataSync().lastError != null)
-                  InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () {
-                      showDialogMessage(
-                        App.rootContext,
-                        "Error".tl,
-                        DataSync().lastError!,
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: context.colorScheme.errorContainer,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 4),
-                          Text('Error'.tl, style: ts.s12),
-                        ],
-                      ),
-                    ),
-                  ).paddingRight(4),
-                IconButton(
-                  icon: const Icon(Icons.cloud_upload_outlined),
-                  onPressed: () async {
-                    DataSync().uploadData();
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.cloud_download_outlined),
-                  onPressed: () async {
-                    DataSync().downloadData();
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+      return const SliverPadding(padding: EdgeInsets.zero);
     }
-    return SliverAnimatedPaintExtent(
-      duration: const Duration(milliseconds: 200),
-      child: child,
+    final busy = DataSync().isUploading || DataSync().isDownloading;
+    return SliverToBoxAdapter(
+      child: HomeSyncSection(
+        title: (busy ? 'Syncing Data' : 'Sync Data').tl,
+        busy: busy,
+        uploadLabel: 'Upload'.tl,
+        downloadLabel: 'Download'.tl,
+        onUpload: () => DataSync().uploadData(),
+        onDownload: () => DataSync().downloadData(),
+        errorLabel: DataSync().lastError == null ? null : 'Error'.tl,
+        onError: () => showDialogMessage(
+          App.rootContext,
+          'Error'.tl,
+          DataSync().lastError!,
+        ),
+      ),
     );
   }
 }
@@ -256,74 +284,43 @@ class _HistoryState extends State<_History> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outlineVariant,
-            width: 0.6,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8),
-          onTap: () {
-            context.to(() => const HistoryPage());
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: 56,
-                child: Row(
-                  children: [
-                    Center(
-                      child: Text('History'.tl, style: ts.s18),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(count.toString(), style: ts.s12),
-                    ),
-                    const Spacer(),
-                    const Icon(Icons.arrow_right),
-                  ],
-                ),
-              ).paddingHorizontal(16),
-              if (history.isNotEmpty)
-                SizedBox(
-                  height: 136,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: history.length,
-                    itemBuilder: (context, index) {
-                      final heroID = history[index].id.hashCode;
-                      return SimpleComicTile(
+      child: HomeHistorySection(
+        count: count,
+        onViewAll: () => context.to(() => const HistoryPage()),
+        onSearch: () => context.to(() => const SearchPage()),
+        recentComics: history.isEmpty
+            ? null
+            : SizedBox(
+                height: HomeCoverCard.shelfHeight(context),
+                child: ListView.separated(
+                  key: const PageStorageKey('home-history-shelf'),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: history.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: UiSpace.s4),
+                  itemBuilder: (context, index) {
+                    final heroID = history[index].id.hashCode;
+                    return HomeCoverCard(
+                      title: history[index].title,
+                      cover: SimpleComicTile(
                         comic: history[index],
                         heroID: heroID,
-                        onTap: () {
-                          context.to(
-                            () => ComicPage(
-                              id: history[index].id,
-                              sourceKey: history[index].type.sourceKey,
-                              cover: history[index].cover,
-                              title: history[index].title,
-                              heroID: heroID,
-                            ),
-                          );
-                        },
-                      ).paddingHorizontal(8).paddingVertical(2);
-                    },
-                  ),
-                ).paddingHorizontal(8).paddingBottom(16),
-            ],
-          ),
-        ),
+                      ),
+                      onTap: () {
+                        context.to(
+                          () => ComicPage(
+                            id: history[index].id,
+                            sourceKey: history[index].type.sourceKey,
+                            cover: history[index].cover,
+                            title: history[index].title,
+                            heroID: heroID,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
       ),
     );
   }
@@ -364,103 +361,65 @@ class _LocalState extends State<_Local> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outlineVariant,
-            width: 0.6,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8),
-          onTap: () {
-            context.to(() => const LocalComicsPage());
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: 56,
-                child: Row(
-                  children: [
-                    Center(
-                      child: Text('Local'.tl, style: ts.s18),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(count.toString(), style: ts.s12),
-                    ),
-                    const Spacer(),
-                    const Icon(Icons.arrow_right),
-                  ],
-                ),
-              ).paddingHorizontal(16),
-              if (local.isNotEmpty)
-                SizedBox(
-                  height: 136,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: local.length,
-                    itemBuilder: (context, index) {
-                      final heroID = local[index].id.hashCode;
-                      return SimpleComicTile(
+      child: HomeLocalSection(
+        count: count,
+        onOpen: () => context.to(() => const LocalComicsPage()),
+        onImport: import,
+        recentComics: local.isEmpty
+            ? null
+            : SizedBox(
+                height: HomeCoverCard.shelfHeight(context),
+                child: ListView.separated(
+                  key: const PageStorageKey('home-local-shelf'),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: local.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: UiSpace.s4),
+                  itemBuilder: (context, index) {
+                    final heroID = local[index].id.hashCode;
+                    return HomeCoverCard(
+                      title: local[index].title,
+                      cover: SimpleComicTile(
                         comic: local[index],
                         heroID: heroID,
-                        onTap: () {
-                          context.to(
-                            () => ComicPage(
-                              id: local[index].id,
-                              sourceKey: local[index].sourceKey,
-                              cover: local[index].cover,
-                              title: local[index].title,
-                              heroID: heroID,
-                            ),
-                          );
-                        },
-                      ).paddingHorizontal(8).paddingVertical(2);
-                    },
-                  ),
-                ).paddingHorizontal(8),
-              Row(
-                children: [
-                  if (LocalManager().downloadingTasks.isNotEmpty)
-                    Button.outlined(
-                      child: Row(
-                        children: [
-                          if (LocalManager().downloadingTasks.first.isPaused)
-                            const Icon(Icons.pause_circle_outline, size: 18)
-                          else
-                            const _AnimatedDownloadingIcon(),
-                          const SizedBox(width: 8),
-                          Text("@a Tasks".tlParams({
-                            'a': LocalManager().downloadingTasks.length,
-                          })),
-                        ],
                       ),
-                      onPressed: () {
-                        showPopUpWidget(context, const DownloadingPage());
+                      onTap: () {
+                        context.to(
+                          () => ComicPage(
+                            id: local[index].id,
+                            sourceKey: local[index].sourceKey,
+                            cover: local[index].cover,
+                            title: local[index].title,
+                            heroID: heroID,
+                          ),
+                        );
                       },
+                    );
+                  },
+                ),
+              ),
+        downloadingAction: LocalManager().downloadingTasks.isEmpty
+            ? null
+            : Button.outlined(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (LocalManager().downloadingTasks.first.isPaused)
+                      const Icon(Icons.pause_circle_outline, size: 18)
+                    else
+                      const _AnimatedDownloadingIcon(),
+                    const SizedBox(width: UiSpace.s2),
+                    Text(
+                      '@a Tasks'.tlParams({
+                        'a': LocalManager().downloadingTasks.length,
+                      }),
                     ),
-                  const Spacer(),
-                  Button.filled(
-                    onPressed: import,
-                    child: Text("Import".tl),
-                  ),
-                ],
-              ).paddingHorizontal(16).paddingVertical(8),
-            ],
-          ),
-        ),
+                  ],
+                ),
+                onPressed: () {
+                  showPopUpWidget(context, const DownloadingPage());
+                },
+              ),
       ),
     );
   }
@@ -532,9 +491,7 @@ class _ImportComicsWidgetState extends State<_ImportComicsWidget> {
           ? SizedBox(
               width: 600,
               height: height,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             )
           : RadioGroup<int>(
               groupValue: type,
@@ -577,19 +534,20 @@ class _ImportComicsWidgetState extends State<_ImportComicsWidget> {
                       type != 3 &&
                       type != 5)
                     CheckboxListTile(
-                        enabled: true,
-                        title: Text("Copy to app local path".tl),
-                        value: copyToLocalFolder,
-                        onChanged: (v) {
-                          setState(() {
-                            copyToLocalFolder = !copyToLocalFolder;
-                          });
-                        }).paddingHorizontal(8),
+                      enabled: true,
+                      title: Text("Copy to app local path".tl),
+                      value: copyToLocalFolder,
+                      onChanged: (v) {
+                        setState(() {
+                          copyToLocalFolder = !copyToLocalFolder;
+                        });
+                      },
+                    ).paddingHorizontal(8),
                   const SizedBox(height: 8),
                   Text(info).paddingHorizontal(24),
                 ],
               ),
-          ),
+            ),
       actions: [
         Button.text(
           child: Row(
@@ -605,14 +563,15 @@ class _ImportComicsWidgetState extends State<_ImportComicsWidget> {
           ),
           onPressed: () {
             launchUrlString(
-                "https://github.com/venera-app/venera/blob/master/doc/import_comic.md");
+              "https://github.com/venera-app/venera/blob/master/doc/import_comic.md",
+            );
           },
         ).fixWidth(90).paddingRight(8),
         Button.filled(
           isLoading: loading,
           onPressed: selectAndImport,
           child: Text("Select".tl),
-        )
+        ),
       ],
     );
   }
@@ -624,7 +583,9 @@ class _ImportComicsWidgetState extends State<_ImportComicsWidget> {
       loading = true;
     });
     var importer = ImportComic(
-        selectedFolder: selectedFolder, copyToLocal: copyToLocalFolder);
+      selectedFolder: selectedFolder,
+      copyToLocal: copyToLocalFolder,
+    );
     var result = switch (type) {
       0 => await importer.directory(true),
       1 => await importer.directory(false),
@@ -688,105 +649,10 @@ class _ComicSourceWidgetState extends State<_ComicSourceWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outlineVariant,
-            width: 0.6,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8),
-          onTap: () {
-            context.to(() => const ComicSourcePage());
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: 56,
-                child: Row(
-                  children: [
-                    Center(
-                      child: Text('Comic Source'.tl, style: ts.s18),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child:
-                          Text(comicSources.length.toString(), style: ts.s12),
-                    ),
-                    const Spacer(),
-                    const Icon(Icons.arrow_right),
-                  ],
-                ),
-              ).paddingHorizontal(16),
-              if (comicSources.isNotEmpty)
-                SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    runSpacing: 8,
-                    spacing: 8,
-                    children: comicSources.map((e) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(e),
-                      );
-                    }).toList(),
-                  ).paddingHorizontal(16).paddingBottom(16),
-                ),
-              if (_availableUpdates > 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: context.colorScheme.outlineVariant,
-                      width: 0.6,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.update,
-                        color: context.colorScheme.primary,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        "@c updates".tlParams({
-                          'c': _availableUpdates,
-                        }),
-                        style: ts.withColor(context.colorScheme.primary),
-                      ),
-                    ],
-                  ),
-                )
-                    .toAlign(Alignment.centerLeft)
-                    .paddingHorizontal(16)
-                    .paddingBottom(8),
-            ],
-          ),
-        ),
-      ),
+    return HomeSourceSection(
+      names: comicSources,
+      availableUpdates: _availableUpdates,
+      onManage: () => context.to(() => const ComicSourcePage()),
     );
   }
 }
@@ -851,7 +717,10 @@ class __AnimatedDownloadingIconState extends State<_AnimatedDownloadingIcon>
 }
 
 class ImageFavorites extends StatefulWidget {
-  const ImageFavorites({super.key});
+  const ImageFavorites({super.key, this.leadingTool});
+
+  /// Optional adjacent tool; manager lifecycle and statistics remain here.
+  final Widget? leadingTool;
 
   @override
   State<ImageFavorites> createState() => _ImageFavoritesState();
@@ -891,130 +760,101 @@ class _ImageFavoritesState extends State<ImageFavorites> {
   Widget build(BuildContext context) {
     bool hasData =
         imageFavoritesCompute != null && !imageFavoritesCompute!.isEmpty;
+    final tool = HomeLibraryTool(
+      title: 'Image Favorites'.tl,
+      icon: Icons.collections_outlined,
+      count: hasData ? imageFavoritesCompute!.count : null,
+      actionLabel: 'View'.tl,
+      onAction: () => context.to(() => const ImageFavoritesPage()),
+    );
+    final statistics = hasData
+        ? HomeImageFavoritesStatistics(
+            computed: imageFavoritesCompute!,
+            displayType: displayType,
+            onSelect: (type) async {
+              setState(() {
+                displayType = type;
+              });
+              await Future.delayed(const Duration(milliseconds: 20));
+              var scrollController = ScrollState.of(context).controller;
+              scrollController.animateTo(
+                scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              );
+            },
+            onKeyword: (text) {
+              context.to(() => ImageFavoritesPage(initialKeyword: text));
+            },
+          )
+        : null;
     return SliverToBoxAdapter(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outlineVariant,
-            width: 0.6,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8),
-          onTap: () {
-            context.to(
-              () => const ImageFavoritesPage()
-            );
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: 56,
-                child: Row(
-                  children: [
-                    Center(
-                      child: Text('Image Favorites'.tl, style: ts.s18),
-                    ),
-                    if (hasData)
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          imageFavoritesCompute!.count.toString(),
-                          style: ts.s12,
-                        ),
-                      ),
-                    const Spacer(),
-                    const Icon(Icons.arrow_right),
-                  ],
-                ),
-              ).paddingHorizontal(16),
-              if (hasData)
-                Row(
-                  children: [
-                    const Spacer(),
-                    buildTypeButton(0, "Tags".tl),
-                    const Spacer(),
-                    buildTypeButton(1, "Authors".tl),
-                    const Spacer(),
-                    buildTypeButton(2, "Comics".tl),
-                    const Spacer(),
-                  ],
-                ),
-              if (hasData) const SizedBox(height: 8),
-              if (hasData)
-                buildChart(switch (displayType) {
-                  0 => imageFavoritesCompute!.tags,
-                  1 => imageFavoritesCompute!.authors,
-                  2 => imageFavoritesCompute!.comics,
-                  _ => [],
-                })
-                    .paddingHorizontal(16)
-                    .paddingBottom(16),
-            ],
-          ),
-        ),
-      ),
+      child: widget.leadingTool == null
+          ? Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [tool, if (statistics != null) statistics],
+              ),
+            )
+          : HomeLibraryTools(
+              source: widget.leadingTool!,
+              favorites: tool,
+              statistics: statistics,
+            ),
     );
   }
+}
 
-  Widget buildTypeButton(int type, String text) {
-    const radius = 24.0;
-    return InkWell(
-      borderRadius: BorderRadius.circular(radius),
-      onTap: () async {
-        setState(() {
-          displayType = type;
-        });
-        await Future.delayed(const Duration(milliseconds: 20));
-        var scrollController = ScrollState.of(context).controller;
-        scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.ease,
-        );
-      },
-      child: AnimatedContainer(
-        width: 96,
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(
-          color:
-              displayType == type ? context.colorScheme.primaryContainer : null,
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outlineVariant,
-            width: 0.6,
-          ),
-          borderRadius: BorderRadius.circular(radius),
-        ),
-        duration: const Duration(milliseconds: 200),
-        child: Center(
-          child: Text(
-            text,
-            style: ts.s16,
-          ),
-        ),
+/// Storage-free rendering of the existing computed statistics. The owning
+/// State still supplies selection, scroll and filtered-navigation callbacks.
+class HomeImageFavoritesStatistics extends StatelessWidget {
+  const HomeImageFavoritesStatistics({
+    super.key,
+    required this.computed,
+    required this.displayType,
+    required this.onSelect,
+    required this.onKeyword,
+  });
+  final ImageFavoritesComputed computed;
+  final int displayType;
+  final ValueChanged<int> onSelect;
+  final ValueChanged<String> onKeyword;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Wrap(
+        spacing: UiSpace.s2,
+        runSpacing: UiSpace.s2,
+        children: [
+          for (final (type, label) in [
+            (0, 'Tags'.tl),
+            (1, 'Authors'.tl),
+            (2, 'Comics'.tl),
+          ])
+            HomeFavoriteTypeButton(
+              label: label,
+              selected: displayType == type,
+              onTap: () => onSelect(type),
+            ),
+        ],
       ),
-    );
-  }
+      const SizedBox(height: UiSpace.s2),
+      buildChart(switch (displayType) {
+        0 => computed.tags,
+        1 => computed.authors,
+        2 => computed.comics,
+        _ => [],
+      }),
+    ],
+  );
 
   Widget buildChart(List<TextWithCount> data) {
-    if (data.isEmpty) {
-      return const SizedBox();
-    }
+    if (data.isEmpty) return const SizedBox();
     var maxCount = data.map((e) => e.count).reduce((a, b) => a > b ? a : b);
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: 164,
-      ),
+      constraints: const BoxConstraints(maxHeight: 164),
       child: SingleChildScrollView(
         child: Column(
           key: ValueKey(displayType),
@@ -1024,11 +864,7 @@ class _ImageFavoritesState extends State<ImageFavorites> {
               count: e.count,
               maxCount: maxCount,
               enableTranslation: displayType != 2,
-              onTap: (text) {
-                context.to(
-                  () => ImageFavoritesPage(initialKeyword: text),
-                );
-              },
+              onTap: onKeyword,
             );
           }).toList(),
         ),
@@ -1098,11 +934,7 @@ class __ChartLineState extends State<_ChartLine>
           onTap: () {
             widget.onTap?.call(widget.text);
           },
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          )
+          child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis)
               .paddingHorizontal(4)
               .toAlign(Alignment.centerLeft)
               .fixWidth(context.width > 600 ? 120 : 80)
@@ -1110,32 +942,28 @@ class __ChartLineState extends State<_ChartLine>
         ),
         const SizedBox(width: 8),
         Expanded(
-          child: LayoutBuilder(builder: (context, constrains) {
-            var width = constrains.maxWidth * widget.count / widget.maxCount;
-            return AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Container(
-                  width: width * _controller.value,
-                  height: 18,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    gradient: LinearGradient(
-                      colors: context.isDarkMode
-                          ? [
-                              Colors.blue.shade800,
-                              Colors.blue.shade500,
-                            ]
-                          : [
-                              Colors.blue.shade300,
-                              Colors.blue.shade600,
-                            ],
+          child: LayoutBuilder(
+            builder: (context, constrains) {
+              var width = constrains.maxWidth * widget.count / widget.maxCount;
+              return AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return Container(
+                    width: width * _controller.value,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      gradient: LinearGradient(
+                        colors: context.isDarkMode
+                            ? [Colors.blue.shade800, Colors.blue.shade500]
+                            : [Colors.blue.shade300, Colors.blue.shade600],
+                      ),
                     ),
-                  ),
-                ).toAlign(Alignment.centerLeft);
-              },
-            );
-          }),
+                  ).toAlign(Alignment.centerLeft);
+                },
+              );
+            },
+          ),
         ),
         const SizedBox(width: 8),
         Text(
@@ -1143,6 +971,6 @@ class __ChartLineState extends State<_ChartLine>
           style: ts.s12,
         ).fixWidth(context.width > 600 ? 60 : 30),
       ],
-    ).fixHeight(28);
+    ).fixHeight(48);
   }
 }

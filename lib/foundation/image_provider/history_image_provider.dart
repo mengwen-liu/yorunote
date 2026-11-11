@@ -1,4 +1,4 @@
-import 'dart:async' show Future;
+import 'dart:async' show Future, StreamController;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:venera/foundation/local.dart';
@@ -17,7 +17,18 @@ class HistoryImageProvider
   final History history;
 
   @override
-  Future<Uint8List> load(chunkEvents, checkStop) async {
+  Future<Uint8List> load(chunkEvents, checkStop) =>
+      _load(chunkEvents, checkStop, null);
+
+  @override
+  Future<Uint8List> loadCancellable(chunkEvents, checkStop, stopped) =>
+      _load(chunkEvents, checkStop, stopped);
+
+  Future<Uint8List> _load(
+    StreamController<ImageChunkEvent> chunkEvents,
+    void Function() checkStop,
+    Future<void>? stopped,
+  ) async {
     var url = history.cover;
     if (!url.contains('/')) {
       var localComic = LocalManager().find(history.id, history.type);
@@ -32,22 +43,28 @@ class HistoryImageProvider
       history.cover = url;
       HistoryManager().addHistory(history);
     }
-    await for (var progress in ImageDownloader.loadThumbnail(
+    return ImageDownloader.loadCoverThumbnail(
       url,
       history.type.sourceKey,
       history.id,
-    )) {
-      checkStop();
-      chunkEvents.add(ImageChunkEvent(
-        cumulativeBytesLoaded: progress.currentBytes,
-        expectedTotalBytes: progress.totalBytes,
-      ));
-      if (progress.imageBytes != null) {
-        return progress.imageBytes!;
-      }
-    }
-    throw "Error: Empty response body.";
+      checkStop: checkStop,
+      stopped: stopped,
+      onProgress: (currentBytes, totalBytes) {
+        chunkEvents.add(
+          ImageChunkEvent(
+            cumulativeBytesLoaded: currentBytes,
+            expectedTotalBytes: totalBytes,
+          ),
+        );
+      },
+    );
   }
+
+  /// Invalidates only the disk cache entry the broken cover was read from or
+  /// written to; local comic covers are never deleted.
+  @override
+  Future<void> onInvalidImageData(Uint8List data) =>
+      ImageDownloader.invalidateCoverCache(data);
 
   @override
   Future<HistoryImageProvider> obtainKey(ImageConfiguration configuration) {

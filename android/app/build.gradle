@@ -7,6 +7,12 @@ plugins {
 
 ext.abiCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86_64": 3]
 
+def candidateBuild = providers.environmentVariable("YORUNOTE_ANDROID_CANDIDATE").orNull == "true"
+def unsignedBuild = providers.environmentVariable("YORUNOTE_ANDROID_UNSIGNED").orNull == "true"
+if (candidateBuild && unsignedBuild) {
+    throw new GradleException("Candidate and unsigned release modes are mutually exclusive.")
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -27,7 +33,9 @@ if (flutterVersionName == null) {
 
 def keystorePropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+if (!unsignedBuild) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+}
 
 android {
     namespace = "com.github.wgh136.venera"
@@ -57,23 +65,29 @@ android {
         jvmTarget = JavaVersion.VERSION_17
     }
 
-    signingConfigs {
-        debug {
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-        }
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+    if (!unsignedBuild) {
+        signingConfigs {
+            debug {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
 
     defaultConfig {
-        applicationId = "com.github.wgh136.venera"
+        applicationId = "com.mengwenliu.yorunote"
+        if (candidateBuild) {
+            applicationIdSuffix ".candidate"
+        }
+        manifestPlaceholders.yorunoteLabel = candidateBuild ? "Yorunote Candidate" : "Yorunote"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = flutter.minSdkVersion
@@ -89,13 +103,13 @@ android {
             ndk {
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
             }
-            signingConfig signingConfigs.release
+            signingConfig = unsignedBuild ? null : signingConfigs.release
         }
         debug {
             ndk {
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
             }
-            signingConfig signingConfigs.debug
+            if (!unsignedBuild) signingConfig signingConfigs.debug
         }
     }
 

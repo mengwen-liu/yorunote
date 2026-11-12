@@ -3,13 +3,20 @@ part of 'settings_page.dart';
 const _windowsReleaseVersion = String.fromEnvironment(
   'YORUNOTE_WINDOWS_VERSION',
 );
+const _androidReleaseVersion = String.fromEnvironment(
+  'YORUNOTE_ANDROID_VERSION',
+  defaultValue: '0.1.0',
+);
 const _yorunoteReleases = 'https://github.com/mengwen-liu/yorunote/releases';
 
-bool get _isYorunoteWindowsRelease =>
-    App.isWindows && _windowsReleaseVersion.isNotEmpty;
+bool get _usesYorunoteReleases =>
+    App.isAndroid || (App.isWindows && _windowsReleaseVersion.isNotEmpty);
 
-String get _displayVersion =>
-    _isYorunoteWindowsRelease ? _windowsReleaseVersion : App.version;
+String get _displayVersion {
+  if (App.isAndroid) return _androidReleaseVersion;
+  if (_usesYorunoteReleases) return _windowsReleaseVersion;
+  return App.version;
+}
 
 class AboutSettings extends StatefulWidget {
   const AboutSettings({super.key});
@@ -89,7 +96,7 @@ class _AboutSettingsState extends State<AboutSettings> {
           trailing: const Icon(Icons.open_in_new),
           onTap: () {
             launchUrlString(
-              _isYorunoteWindowsRelease
+              _usesYorunoteReleases
                   ? 'https://github.com/mengwen-liu/yorunote'
                   : 'https://github.com/venera-app/venera',
             );
@@ -108,36 +115,16 @@ class _AboutSettingsState extends State<AboutSettings> {
 }
 
 Future<bool> checkUpdate() async {
-  if (_isYorunoteWindowsRelease) {
+  if (_usesYorunoteReleases) {
     final response = await AppDio().get(
       'https://api.github.com/repos/mengwen-liu/yorunote/releases?per_page=30',
     );
-    final releases = response.data;
-    if (response.statusCode != 200 || releases is! List) {
-      return false;
-    }
-    final stableTag = RegExp(r'^v(\d+\.\d+\.\d+)$');
-    for (final release in releases) {
-      if (release is! Map ||
-          release['draft'] != false ||
-          release['prerelease'] != false) {
-        continue;
-      }
-      final tag = release['tag_name'];
-      final assets = release['assets'];
-      if (tag is! String || assets is! List) {
-        continue;
-      }
-      final version = stableTag.firstMatch(tag)?.group(1);
-      if (version == null || !_compareVersion(version, _windowsReleaseVersion)) {
-        continue;
-      }
-      final archive = 'Yorunote-$version-windows-x64.zip';
-      if (assets.any((asset) => asset is Map && asset['name'] == archive)) {
-        return true;
-      }
-    }
-    return false;
+    return response.statusCode == 200 &&
+        hasNewerYorunoteRelease(
+          response.data,
+          installedVersion: _displayVersion,
+          android: App.isAndroid,
+        );
   }
   var res = await AppDio()
       .get("https://cdn.jsdelivr.net/gh/venera-app/venera@master/pubspec.yaml");
@@ -171,7 +158,7 @@ Future<void> checkUpdateUi([bool showMessageIfNoUpdate = true, bool delay = fals
                   onPressed: () {
                     Navigator.pop(context);
                     launchUrlString(
-                      _isYorunoteWindowsRelease
+                      _usesYorunoteReleases
                           ? _yorunoteReleases
                           : 'https://github.com/venera-app/venera/releases',
                     );

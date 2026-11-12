@@ -1,0 +1,93 @@
+name: Archive legacy branch names
+on:
+  push:
+    branches: [maintenance/archive-branches]
+    paths: [.github/workflows/archive-branch-names.yml]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency: archive-legacy-branch-names
+
+jobs:
+  rename:
+    if: github.repository_id == '1421354314' && github.ref == 'refs/heads/maintenance/archive-branches'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: mengwen-liu/yorunote
+    steps:
+      - name: Rename and verify the reviewed branches
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > plan.txt <<'PLAN'
+          claude/ecstatic-hopper-jcj9si archive/ecstatic-hopper-jcj9si 51de19d66a10c23e76e1948e96c2ff3344224a62
+          claude/venera-r31-backup-20261104 archive/venera-r31-backup-20261104 59866aa3d70314d5b6b8ccbce8eec559db0d9619
+          claude/yorunote-arm64-ci-20261104 archive/yorunote-arm64-ci-20261104 7b6348a98cb85dd71c826134811fa02fcd302da8
+          claude/yorunote-brand-v01-20261104 archive/yorunote-brand-v01-20261104 2b1925e42bd47edc46d2556f6bc3fcbbfc817416
+          claude/yorunote-cover-timeout-20261105 archive/yorunote-cover-timeout-20261105 f003a708ca99a5c45f140ee554b4500ab5be8d49
+          claude/yorunote-gif-bilingual-20261105 archive/yorunote-gif-bilingual-20261105 b4a704a0a434ef0e0be0ad9199d070bf6c410c84
+          claude/yorunote-opus-audit-20261105 archive/yorunote-opus-audit-20261105 60c1ecdc417305f6db4d9669f6a10ba785717c6e
+          claude/yorunote-preview-release-371ybm archive/yorunote-preview-release-371ybm 71611f7f3aa52cb8e2b249f96a5ec4543e616bef
+          claude/yorunote-readme-20261105 archive/yorunote-readme-20261105 42bdf2dc0fd980e1ad7eaf3b2b66b0aa32e00616
+          claude/yorunote-thumbnail-perf-20261105 archive/yorunote-thumbnail-perf-20261105 a37f5a9d65bc85590e32556c5d2806760e6b1e1c
+          claude/yorunote-thumbnail-r2-20261105 archive/yorunote-thumbnail-r2-20261105 6e85d6b00c7a694c337d437e2d939fe81ceb49e7
+          codex/yorunote-bilingual-release-20261105 archive/yorunote-bilingual-release-20261105 d8ba811727c56b22fe6c5bf2df61baf374b8c00b
+          codex/yorunote-preview-29b590b archive/yorunote-preview-29b590b 29b590b457378c16b19821f139b9bcad7d38f689
+          codex/yorunote-public-preview-20261105 archive/yorunote-public-preview-20261105 08a4e5e0e31d59155790ee32a591a3caadfd8927
+          codex/yorunote-release-docs-sync-20261105 archive/yorunote-release-docs-sync-20261105 54a72f10b070d4009d642df013c447f235fbf26f
+          codex/yorunote-windows-6df02c0f archive/yorunote-windows-6df02c0f 6df02c0fda1978319355a51fc2c75f7d66ea6d7f
+          codex/yorunote-windows-07406c9f archive/yorunote-windows-07406c9f 07406c9f6a6d105fd854cb3ddc22cfcc6dacfd9b
+          codex/yorunote-windows-71485c7d archive/yorunote-windows-71485c7d 71485c7de8799e30c9e1b5797ad83fba65668d51
+          codex/yorunote-windows-homepage-20261106 archive/yorunote-windows-homepage-20261106 4f93856d7d4bc2262a1f6d8e5da9f9060365e654
+          codex/yorunote-windows-mascot-20261106 archive/yorunote-windows-mascot-20261106 935a646fb5e1a2f7d8248e41125372691e64caaa
+          codex/yorunote-windows-overlay-fix-20261106 archive/yorunote-windows-overlay-fix-20261106 b579a3b2acdc4d82a321f959d5c6ff404c4dcf72
+          codex/yorunote-windows-preview2-docs-20261106 archive/yorunote-windows-preview2-docs-20261106 f551750db68617a0be2d66f116e263d73af52fe7
+          codex/yorunote-windows-preview3-docs-20261107 archive/yorunote-windows-preview3-docs-20261107 6a52d8f273a416acd1888be7c7f2a814245f5572
+          codex/yorunote-windows-preview-20261106 archive/yorunote-windows-preview-20261106 3ab39e6cb3fe6233353ab973937f2f19bb5ebf80
+          PLAN
+          list_branches() {
+            gh api "repos/$GH_REPO/branches?per_page=100"
+          }
+          branch_sha() {
+            jq -r --arg name "$1" '.[] | select(.name == $name) | .commit.sha' "$2"
+          }
+          list_branches > before.json
+          jq -e 'type == "array" and length < 100' before.json >/dev/null
+          gh api "repos/$GH_REPO/pulls?state=open&per_page=100" |
+            jq -e 'type == "array" and length == 0' >/dev/null
+          gh api "repos/$GH_REPO/releases?per_page=100" |
+            jq -e 'type == "array" and length < 100 and all(.[]; .draft == false)' >/dev/null
+          while read -r old new sha; do
+            [[ "$old" =~ ^(codex|claude)/[a-z0-9-]+$ ]]
+            [[ "$new" == "archive/${old#*/}" ]]
+            [[ "$sha" =~ ^[a-f0-9]{40}$ ]]
+            [[ "$(branch_sha "$old" before.json)" == "$sha" ]]
+            [[ -z "$(branch_sha "$new" before.json)" ]]
+            jq -e --arg name "$old" '.[] | select(.name == $name) | .protected == false' before.json >/dev/null
+          done < plan.txt
+          while read -r old new sha; do
+            old_path=$(jq -nr --arg name "$old" '$name | @uri')
+            gh api -X POST "repos/$GH_REPO/branches/$old_path/rename" -f new_name="$new" > renamed.json
+            jq -e --arg name "$new" --arg sha "$sha" '.name == $name and .commit.sha == $sha' renamed.json >/dev/null
+            echo "$old -> $new ($sha)"
+          done < plan.txt
+          for attempt in $(seq 1 20); do
+            list_branches > after.json
+            pending=0
+            while read -r old new sha; do
+              if [[ "$(branch_sha "$new" after.json)" != "$sha" || -n "$(branch_sha "$old" after.json)" ]]; then
+                pending=$((pending + 1))
+              fi
+            done < plan.txt
+            if [[ "$pending" == 0 ]]; then
+              echo 'Verified all 24 archived names and original commits.' >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::error::$pending branch changes could not be verified"
+          exit 1

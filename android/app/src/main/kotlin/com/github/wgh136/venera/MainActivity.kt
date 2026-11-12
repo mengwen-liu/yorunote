@@ -2,15 +2,18 @@ package com.github.wgh136.venera
 
 import android.Manifest
 import android.app.Activity
+import android.app.PictureInPictureParams
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.util.Log
+import android.util.Rational
 import android.view.KeyEvent
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -33,6 +36,13 @@ import java.io.FileOutputStream
 import java.util.concurrent.atomic.AtomicInteger
 
 class MainActivity : FlutterFragmentActivity() {
+    private var videoPipChannel: MethodChannel? = null
+
+    override fun onPictureInPictureModeChanged(inPip: Boolean, config: Configuration) {
+        super.onPictureInPictureModeChanged(inPip, config)
+        videoPipChannel?.invokeMethod("modeChanged", inPip)
+    }
+
     var volumeListen = VolumeListen()
     var listening = false
 
@@ -104,6 +114,28 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
+        videoPipChannel = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger, "yorunote/video_pip"
+        ).also { channel ->
+            channel.setMethodCallHandler { call, result ->
+                if (call.method != "enter") {
+                    result.notImplemented()
+                } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O ||
+                    !packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+                ) {
+                    result.success(false)
+                } else {
+                    val params = PictureInPictureParams.Builder()
+                        .setAspectRatio(Rational(16, 9))
+                        .build()
+                    try {
+                        result.success(enterPictureInPictureMode(params))
+                    } catch (_: IllegalStateException) {
+                        result.success(false)
+                    }
+                }
+            }
+        }
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "venera/method_channel"

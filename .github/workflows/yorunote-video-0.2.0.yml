@@ -1,0 +1,356 @@
+name: Yorunote v0.2.0 builds
+on:
+  push:
+    branches: [feature/video-0.2.0]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yorunote-video-0.2.0
+  cancel-in-progress: false
+
+jobs:
+  android-arm64:
+    if: github.repository_id == '1421354314'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      YORUNOTE_ANDROID_CANDIDATE: 'true'
+      EXPECTED_PACKAGE: com.mengwenliu.yorunote.candidate
+      EXPECTED_VERSION: '0.2.0'
+      NDK_VERSION: '28.0.13004108'
+      BUILD_TOOLS: '36.0.0'
+    steps:
+      - name: Check out the candidate
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter 3.41.4
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
+        with:
+          channel: stable
+          flutter-version: '3.41.4'
+          cache: true
+
+      - name: Check source and install Android toolchain
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          flutter --version
+          dart --version 2>&1 | grep -E 'Dart SDK version: 3\.11\.1\b'
+          rustup target add aarch64-linux-android
+          rustc --version | grep -E '^rustc 1\.85\.1\b'
+          sdkmanager="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          "$sdkmanager" --sdk_root="$ANDROID_HOME" \
+            "platforms;android-36" "build-tools;$BUILD_TOOLS" "ndk;$NDK_VERSION"
+          test -x "$ANDROID_HOME/build-tools/$BUILD_TOOLS/apksigner"
+          df -h .
+
+      - name: Resolve dependencies and run focused regressions
+        run: |
+          flutter pub get --enforce-lockfile
+          git diff --exit-code -- pubspec.yaml pubspec.lock
+          flutter analyze --no-pub \
+            lib/components/yorunote_mascot.dart \
+            lib/components/windows_title_brand.dart \
+            lib/foundation/yorunote_release.dart \
+            lib/pages/yorunote_video_page.dart \
+            lib/pages/settings/settings_page.dart \
+            test/foundation/yorunote_release_test.dart
+          flutter test --no-pub --reporter expanded \
+            test/brand/yorunote_brand_test.dart \
+            test/brand/windows_title_brand_test.dart \
+            test/brand/windows_window_frame_overlay_test.dart \
+            test/foundation/favorites_follow_updates_test.dart \
+            test/foundation/yorunote_release_test.dart \
+            test/reader/reader_image_loading_test.dart \
+            test/ui/home_page_test.dart
+
+      - name: Create a runner-local candidate signing key
+        run: |
+          umask 077
+          dir="$RUNNER_TEMP/yorunote-candidate-signing"
+          mkdir "$dir"
+          password="$(openssl rand -hex 24)"
+          echo "::add-mask::$password"
+          export YORUNOTE_CANDIDATE_PASSWORD="$password"
+          keytool -genkeypair -keystore "$dir/candidate.p12" -storetype PKCS12 \
+            -alias candidate -keyalg RSA -keysize 2048 -validity 365 \
+            -storepass:env YORUNOTE_CANDIDATE_PASSWORD \
+            -dname 'CN=Yorunote Candidate, O=CI Test Only' >/dev/null
+          keytool -exportcert -keystore "$dir/candidate.p12" -alias candidate \
+            -storepass:env YORUNOTE_CANDIDATE_PASSWORD | sha256sum | cut -d' ' -f1 \
+            > "$dir/certificate.sha256"
+          git check-ignore -q android/key.properties
+          printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=candidate\nstoreFile=%s\n' \
+            "$password" "$password" "$dir/candidate.p12" > android/key.properties
+
+      - name: Build the Android ARM64 Release-mode candidate
+        run: |
+          flutter build apk --release --no-pub --target-platform android-arm64 \
+            --split-per-abi "--dart-define=YORUNOTE_ANDROID_VERSION=$EXPECTED_VERSION"
+
+      - name: Verify package, version, native libraries and signing certificate
+        run: |
+          apk=build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+          test -f "$apk"
+          bt="$ANDROID_HOME/build-tools/$BUILD_TOOLS"
+          dist="$RUNNER_TEMP/yorunote-android-candidate"
+          mkdir "$dist"
+          "$bt/apksigner" verify --verbose --print-certs "$apk" | tee "$dist/apksigner.txt"
+          grep -Fxq 'Number of signers: 1' "$dist/apksigner.txt"
+          grep -Eq '^Verified using v[23] scheme .*: true$' "$dist/apksigner.txt"
+          expected="$(cat "$RUNNER_TEMP/yorunote-candidate-signing/certificate.sha256")"
+          actual="$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' "$dist/apksigner.txt")"
+          [[ "$expected" =~ ^[a-f0-9]{64}$ && "$actual" == "$expected" ]]
+          "$bt/aapt2" dump badging "$apk" | tee "$dist/badging.txt"
+          grep -Fq "package: name='$EXPECTED_PACKAGE' " "$dist/badging.txt"
+          grep -Fq " versionName='$EXPECTED_VERSION'" "$dist/badging.txt"
+          grep -Fxq "application-label:'Yorunote Candidate'" "$dist/badging.txt"
+          grep -Fxq "native-code: 'arm64-v8a'" "$dist/badging.txt"
+          code="$(sed -n "s/^package:.* versionCode='\([0-9]*\)'.*/\1/p" "$dist/badging.txt")"
+          [[ "$code" =~ ^[0-9]+$ && "$code" -eq 2182 ]]
+          unzip -tq "$apk"
+          "$bt/zipalign" -c 4 "$apk"
+          unzip -Z1 "$apk" | awk -F/ '$1=="lib" && $3 ~ /\.so$/ {print $2}' | sort -u \
+            > "$dist/abis.txt"
+          grep -Fxq 'arm64-v8a' "$dist/abis.txt"
+          test "$(wc -l < "$dist/abis.txt")" -eq 1
+          for name in libapp.so libflutter.so librhttp.so; do
+            unzip -p "$apk" "lib/arm64-v8a/$name" >/dev/null
+          done
+          unzip -p "$apk" 'assets/flutter_assets/assets/brand/yorunote_mascot.gif' |
+            cmp - assets/brand/yorunote_mascot.gif
+          name="Yorunote-$EXPECTED_VERSION-android-arm64-candidate.apk"
+          cp "$apk" "$dist/$name"
+          (cd "$dist" && sha256sum "$name" | tee "$name.sha256")
+          printf 'source=%s\npackage=%s\nversionName=%s\nversionCode=%s\ncertificateSHA256=%s\n' \
+            "$GITHUB_SHA" "$EXPECTED_PACKAGE" "$EXPECTED_VERSION" "$code" "$actual" \
+            | tee "$dist/build-info.txt"
+          git diff --exit-code HEAD
+
+      - name: Remove temporary signing materials
+        if: always()
+        run: |
+          rm -f -- android/key.properties \
+            "$RUNNER_TEMP/yorunote-candidate-signing/candidate.p12"
+
+      - name: Upload the verified candidate and evidence
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: yorunote-android-arm64-0.2.0-candidate
+          path: ${{ runner.temp }}/yorunote-android-candidate/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Build and verify the unsigned release APK
+        env:
+          YORUNOTE_ANDROID_CANDIDATE: 'false'
+          YORUNOTE_ANDROID_UNSIGNED: 'true'
+          EXPECTED_PACKAGE: com.mengwenliu.yorunote
+        run: |
+          test ! -e android/key.properties
+          dist="$RUNNER_TEMP/yorunote-signing-kit"
+          mkdir "$dist"
+          bt="$ANDROID_HOME/build-tools/$BUILD_TOOLS"
+          build_unsigned() {
+            local number="$1" code="$2" suffix="$3" apk name
+            flutter build apk --release --no-pub --target-platform android-arm64 \
+              --split-per-abi "--build-name=$EXPECTED_VERSION" "--build-number=$number" \
+              "--dart-define=YORUNOTE_ANDROID_VERSION=$EXPECTED_VERSION"
+            apk=build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            test -f "$apk"
+            if "$bt/apksigner" verify "$apk"; then
+              echo "::error::The signing input already has a valid signature"
+              return 1
+            fi
+            "$bt/aapt2" dump badging "$apk" | tee "$dist/badging-$code.txt"
+            grep -Fq "package: name='$EXPECTED_PACKAGE' versionCode='$code' versionName='$EXPECTED_VERSION'" "$dist/badging-$code.txt"
+            grep -Fxq "application-label:'Yorunote'" "$dist/badging-$code.txt"
+            grep -Fxq "native-code: 'arm64-v8a'" "$dist/badging-$code.txt"
+            unzip -tq "$apk"
+            "$bt/zipalign" -c 4 "$apk"
+            for library in libapp.so libflutter.so librhttp.so; do
+              unzip -p "$apk" "lib/arm64-v8a/$library" >/dev/null
+            done
+            unzip -p "$apk" 'assets/flutter_assets/assets/brand/yorunote_mascot.gif' |
+              cmp - assets/brand/yorunote_mascot.gif
+            name="Yorunote-$EXPECTED_VERSION-android-arm64${suffix}-unsigned.apk"
+            cp "$apk" "$dist/$name"
+            (cd "$dist" && sha256sum "$name" | tee -a SHA256SUMS.txt)
+          }
+          build_unsigned 218 2182 ""
+          git diff --exit-code HEAD
+          printf 'source=%s\npackage=%s\nversionName=%s\nreleaseVersionCode=2182\n' \
+            "$GITHUB_SHA" "$EXPECTED_PACKAGE" "$EXPECTED_VERSION" > "$dist/build-info.txt"
+
+      - name: Upload unsigned APK and build evidence
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: yorunote-android-0.2.0-offline-signing-kit
+          path: ${{ runner.temp }}/yorunote-signing-kit/
+          if-no-files-found: error
+          retention-days: 14
+
+  windows-x64:
+    if: github.repository_id == '1421354314'
+    runs-on: windows-2022
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      FLUTTER_SUPPRESS_ANALYTICS: 'true'
+      PUB_ENVIRONMENT: github-actions
+
+    steps:
+      - name: Check out the candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Verify source and prepare evidence
+        run: |
+          $env:EVIDENCE = Join-Path $env:RUNNER_TEMP 'yorunote-windows-evidence'
+          $env:DIST = Join-Path $env:RUNNER_TEMP 'yorunote-windows-dist'
+          "EVIDENCE=$env:EVIDENCE" >> $env:GITHUB_ENV
+          "DIST=$env:DIST" >> $env:GITHUB_ENV
+          New-Item -ItemType Directory -Force -Path $env:EVIDENCE | Out-Null
+          $head = (git rev-parse HEAD).Trim()
+          if ($LASTEXITCODE -ne 0 -or $head -ne $env:GITHUB_SHA) { throw 'Source SHA mismatch' }
+          $version = (Get-Content -Raw -LiteralPath windows/version.txt).Trim()
+          if ($version -ne '0.2.0') { throw 'Unexpected release version' }
+          "WINDOWS_RELEASE_VERSION=$version" >> $env:GITHUB_ENV
+          $tracked = git status --porcelain --untracked-files=no
+          if ($tracked) { throw 'Source checkout is dirty' }
+          $identity = @{
+            source = $head
+            workflow_sha = '${{ github.sha }}'
+            repository_id = '${{ github.repository_id }}'
+            runner_os = $env:RUNNER_OS
+            runner_arch = $env:RUNNER_ARCH
+          }
+          $identity | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'source.json')
+          $identity | ConvertTo-Json
+          "SOURCE_SHA=$head" >> $env:GITHUB_ENV
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+
+      - name: Check Python tools and install fixed image tool
+        run: |
+          python -c "import ast,pathlib; [ast.parse(pathlib.Path(p).read_text(encoding='utf-8')) for p in ['windows/build.py','windows/make_icon.py']]; print('Python syntax OK')"
+          if ($LASTEXITCODE -ne 0) { throw 'Python syntax check failed' }
+          python -m pip install --disable-pip-version-check --no-deps -r windows/requirements-build.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Pillow installation failed' }
+          python windows/make_icon.py --evidence $env:EVIDENCE
+          if ($LASTEXITCODE -ne 0) { throw 'Windows icon checks failed' }
+
+
+      - name: Set up fixed Flutter SDK
+        uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e # v2.21.0
+        with:
+          flutter-version: '3.41.4'
+          channel: stable
+          architecture: x64
+          cache: true
+
+      - name: Check SDK and Windows native toolchain
+        run: |
+          flutter --version | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'flutter-bootstrap.log')
+          if ($LASTEXITCODE -ne 0) { throw 'Flutter bootstrap failed' }
+          flutter --version --machine | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'flutter-version.json')
+          if ($LASTEXITCODE -ne 0) { throw 'Flutter version check failed' }
+          $sdk = Get-Content -Raw (Join-Path $env:EVIDENCE 'flutter-version.json') | ConvertFrom-Json
+          if ($sdk.flutterVersion -ne '3.41.4' -or $sdk.dartSdkVersion -notmatch '^3\.11\.1(?:[ (]|$)') {
+            throw 'Unexpected Flutter or Dart version'
+          }
+          flutter doctor -v | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'flutter-doctor.log')
+          $doctorExit = $LASTEXITCODE
+          "flutter doctor exit: $doctorExit" | Add-Content (Join-Path $env:EVIDENCE 'flutter-doctor.log')
+          rustup show | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'rustup-show.log')
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned Rust toolchain is unavailable' }
+
+      - name: Build Windows x64
+        run: |
+          flutter pub get --enforce-lockfile
+          if ($LASTEXITCODE -ne 0) { throw 'Locked pub get failed' }
+          flutter build windows --release --no-pub "--build-name=$env:WINDOWS_RELEASE_VERSION" "--dart-define=YORUNOTE_WINDOWS_VERSION=$env:WINDOWS_RELEASE_VERSION" | Tee-Object -FilePath (Join-Path $env:EVIDENCE 'build-distribution.log')
+          if ($LASTEXITCODE -ne 0) { throw 'Windows build failed' }
+
+      - name: Package and statically verify ZIP
+        run: |
+          python windows/build.py --bundle build/windows/x64/runner/Release --source-sha $env:SOURCE_SHA --output $env:DIST --evidence $env:EVIDENCE --version $env:WINDOWS_RELEASE_VERSION
+          if ($LASTEXITCODE -ne 0) { throw 'ZIP packaging verification failed' }
+
+          @'
+          import hashlib,json,os,pathlib,zipfile
+          archives=list(pathlib.Path(os.environ["DIST"]).glob("*.zip"))
+          assert len(archives)==1
+          with zipfile.ZipFile(archives[0]) as archive:
+              matches=[n for n in archive.namelist() if n.endswith("/data/flutter_assets/assets/brand/yorunote_mascot.gif")]
+              assert len(matches)==1, matches
+              digest=hashlib.sha256(archive.read(matches[0])).hexdigest()
+              assert digest=="4331c743dc0005ab2b55063221d7adcee027115dca928a4e2c96ac81d88e8fcb"
+              print("Packaged original animated GIF:", matches[0], digest)
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { throw 'Packaged mascot mismatch' }
+
+          $archives = @(Get-ChildItem -LiteralPath $env:DIST -Filter '*.zip' -File)
+          if ($archives.Count -ne 1) { throw 'Expected one distribution ZIP' }
+          $extract = Join-Path $env:RUNNER_TEMP 'yorunote-distribution-extracted'
+          if (Test-Path -LiteralPath $extract) { throw 'Extraction target already exists' }
+          Expand-Archive -LiteralPath $archives[0].FullName -DestinationPath $extract
+          $env:YORUNOTE_DISTRIBUTION_EXE = Join-Path $extract 'Yorunote/yorunote.exe'
+          "YORUNOTE_DISTRIBUTION_EXE=$env:YORUNOTE_DISTRIBUTION_EXE" >> $env:GITHUB_ENV
+          $versionInfo = [Diagnostics.FileVersionInfo]::GetVersionInfo($env:YORUNOTE_DISTRIBUTION_EXE)
+          if ($archives[0].Name -ne "Yorunote-$env:WINDOWS_RELEASE_VERSION-windows-x64.zip" -or
+              $versionInfo.FileVersion -ne $env:WINDOWS_RELEASE_VERSION -or
+              $versionInfo.ProductVersion -ne $env:WINDOWS_RELEASE_VERSION -or
+              $versionInfo.FileMajorPart -ne 0 -or $versionInfo.FileMinorPart -ne 2 -or
+              $versionInfo.FileBuildPart -ne 0 -or $versionInfo.FilePrivatePart -ne 0 -or
+              $versionInfo.ProductName -ne 'Yorunote') {
+            throw 'EXE version or ZIP filename mismatch'
+          }
+          @{
+            source = $env:SOURCE_SHA
+            version = $env:WINDOWS_RELEASE_VERSION
+            file_version = $versionInfo.FileVersion
+            product_version = $versionInfo.ProductVersion
+            product_name = $versionInfo.ProductName
+            exe_sha256 = (Get-FileHash -LiteralPath $env:YORUNOTE_DISTRIBUTION_EXE -Algorithm SHA256).Hash.ToLowerInvariant()
+          } | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'exe-version.json')
+          $auth = Get-AuthenticodeSignature -LiteralPath $env:YORUNOTE_DISTRIBUTION_EXE
+          @{status=$auth.Status.ToString(); source=$env:SOURCE_SHA} | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $env:EVIDENCE 'authenticode.json')
+
+      - name: Launch actual extracted distribution
+        id: distribution-launch
+        continue-on-error: true
+        run: |
+          & ./tool/windows/run_smoke.ps1 -Exe $env:YORUNOTE_DISTRIBUTION_EXE -Evidence $env:EVIDENCE -Phase distribution
+
+      - name: Upload Windows x64 ZIP and checksum
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: yorunote-windows-x64-0.2.0
+          path: ${{ env.DIST }}
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload Windows verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: yorunote-windows-x64-0.2.0-evidence
+          path: ${{ env.EVIDENCE }}
+          if-no-files-found: warn
+          retention-days: 14

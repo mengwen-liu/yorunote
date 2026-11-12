@@ -18,6 +18,7 @@ import 'package:venera/pages/follow_updates_page.dart';
 import 'package:venera/pages/history_page.dart';
 import 'package:venera/pages/image_favorites_page/image_favorites_page.dart';
 import 'package:venera/pages/search_page.dart';
+import 'package:venera/pages/yorunote_video_page.dart';
 import 'package:venera/utils/data_sync.dart';
 import 'package:venera/utils/import_comic.dart';
 import 'package:venera/utils/tags_translation.dart';
@@ -49,6 +50,8 @@ class HomePage extends StatelessWidget {
             ),
           ),
         const _SearchBar(),
+        if (App.isAndroid || App.isWindows)
+          const SliverToBoxAdapter(child: YorunoteVideoEntry()),
         const _History(),
         const FollowUpdatesWidget(),
         const ImageFavorites(leadingTool: _ComicSourceWidget()),

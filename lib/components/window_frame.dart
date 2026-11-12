@@ -526,9 +526,13 @@ class WindowPlacement {
 
   static Timer? timer;
 
+  static bool suspendSaving = false;
+
   static void loop() async {
     timer ??= Timer.periodic(const Duration(milliseconds: 100), (timer) async {
+      if (suspendSaving) return;
       var placement = await WindowPlacement.current;
+      if (suspendSaving) return;
       if (placement.rect != cache.rect ||
           placement.isMaximized != cache.isMaximized) {
         cache = placement;

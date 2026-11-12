@@ -1,0 +1,145 @@
+name: Yorunote Android signing preparation
+on:
+  push:
+    branches: [release/android-0.1.0-signing]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yorunote-android-signing
+  cancel-in-progress: false
+
+jobs:
+  android-arm64:
+    if: github.repository_id == '1421354314'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      YORUNOTE_ANDROID_UNSIGNED: 'true'
+      EXPECTED_PACKAGE: com.mengwenliu.yorunote
+      EXPECTED_VERSION: '0.1.0'
+      NDK_VERSION: '28.0.13004108'
+      BUILD_TOOLS: '36.0.0'
+    steps:
+      - name: Check out the signing source
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter 3.41.4
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
+        with:
+          channel: stable
+          flutter-version: '3.41.4'
+          cache: true
+
+      - name: Check source and install Android toolchain
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          flutter --version
+          dart --version 2>&1 | grep -E 'Dart SDK version: 3\.11\.1\b'
+          rustup target add aarch64-linux-android
+          rustc --version | grep -E '^rustc 1\.85\.1\b'
+          sdkmanager="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          "$sdkmanager" --sdk_root="$ANDROID_HOME" \
+            "platforms;android-36" "build-tools;$BUILD_TOOLS" "ndk;$NDK_VERSION"
+          test -x "$ANDROID_HOME/build-tools/$BUILD_TOOLS/apksigner"
+          df -h .
+
+      - name: Resolve dependencies and run focused regressions
+        run: |
+          flutter pub get --enforce-lockfile
+          git diff --exit-code -- pubspec.yaml pubspec.lock
+          flutter analyze --no-pub \
+            lib/components/yorunote_mascot.dart \
+            lib/components/windows_title_brand.dart \
+            lib/foundation/yorunote_release.dart \
+            lib/pages/settings/settings_page.dart \
+            test/foundation/yorunote_release_test.dart
+          flutter test --no-pub --reporter expanded \
+            test/brand/yorunote_brand_test.dart \
+            test/brand/windows_title_brand_test.dart \
+            test/brand/windows_window_frame_overlay_test.dart \
+            test/foundation/favorites_follow_updates_test.dart \
+            test/foundation/yorunote_release_test.dart \
+            test/reader/reader_image_loading_test.dart \
+            test/ui/home_page_test.dart
+
+      - name: Build and verify the two unsigned APKs
+        run: |
+          test ! -e android/key.properties
+          dist="$RUNNER_TEMP/yorunote-signing-kit"
+          mkdir "$dist"
+          bt="$ANDROID_HOME/build-tools/$BUILD_TOOLS"
+          build_unsigned() {
+            local number="$1" code="$2" suffix="$3" apk name
+            flutter build apk --release --no-pub --target-platform android-arm64 \
+              --split-per-abi "--build-name=$EXPECTED_VERSION" "--build-number=$number" \
+              "--dart-define=YORUNOTE_ANDROID_VERSION=$EXPECTED_VERSION"
+            apk=build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            test -f "$apk"
+            if "$bt/apksigner" verify "$apk"; then
+              echo "::error::The signing input already has a valid signature"
+              return 1
+            fi
+            "$bt/aapt2" dump badging "$apk" | tee "$dist/badging-$code.txt"
+            grep -Fq "package: name='$EXPECTED_PACKAGE' versionCode='$code' versionName='$EXPECTED_VERSION'" "$dist/badging-$code.txt"
+            grep -Fxq "application-label:'Yorunote'" "$dist/badging-$code.txt"
+            grep -Fxq "native-code: 'arm64-v8a'" "$dist/badging-$code.txt"
+            unzip -tq "$apk"
+            "$bt/zipalign" -c 4 "$apk"
+            for library in libapp.so libflutter.so librhttp.so; do
+              unzip -p "$apk" "lib/arm64-v8a/$library" >/dev/null
+            done
+            unzip -p "$apk" 'assets/flutter_assets/assets/brand/yorunote_mascot.gif' |
+              cmp - assets/brand/yorunote_mascot.gif
+            name="Yorunote-$EXPECTED_VERSION-android-arm64${suffix}-unsigned.apk"
+            cp "$apk" "$dist/$name"
+            (cd "$dist" && sha256sum "$name" | tee -a SHA256SUMS.txt)
+          }
+          build_unsigned 217 2172 ""
+          build_unsigned 216 2162 "-upgrade-base"
+          git diff --exit-code HEAD
+          cp tool/android/Sign-Yorunote.ps1 "$dist/"
+          cp tool/android/SIGNING.md "$dist/README.md"
+          printf 'source=%s\npackage=%s\nversionName=%s\nreleaseVersionCode=2172\nupgradeBaseVersionCode=2162\n' \
+            "$GITHUB_SHA" "$EXPECTED_PACKAGE" "$EXPECTED_VERSION" > "$dist/build-info.txt"
+
+      - name: Exercise the offline signing script with a disposable certificate
+        run: |
+          umask 077
+          dry="$RUNNER_TEMP/yorunote-signing-dry-run"
+          mkdir "$dry"
+          trap 'rm -rf -- "$dry"' EXIT
+          cp "$RUNNER_TEMP/yorunote-signing-kit/"* "$dry/"
+          YORUNOTE_DRY_RUN_PASSWORD="$(openssl rand -hex 24)"
+          echo "::add-mask::$YORUNOTE_DRY_RUN_PASSWORD"
+          export YORUNOTE_DRY_RUN_PASSWORD
+          keytool -genkeypair -keystore "$dry/dry-run.p12" -storetype PKCS12 \
+            -alias dry-run -keyalg RSA -keysize 2048 -validity 7 \
+            -storepass:env YORUNOTE_DRY_RUN_PASSWORD \
+            -dname 'CN=Yorunote Offline Signing Dry Run, O=CI Test Only' >/dev/null
+          pwsh -NoProfile -NonInteractive -File "$dry/Sign-Yorunote.ps1" \
+            -Keystore "$dry/dry-run.p12" -KeyAlias dry-run \
+            -BuildTools "$ANDROID_HOME/build-tools/$BUILD_TOOLS" \
+            -KeystorePasswordEnv YORUNOTE_DRY_RUN_PASSWORD
+          expected="$(keytool -exportcert -keystore "$dry/dry-run.p12" -alias dry-run \
+            -storepass:env YORUNOTE_DRY_RUN_PASSWORD | sha256sum | cut -d' ' -f1)"
+          test "$(cat "$dry/signed/certificate.sha256")" = "$expected"
+          (cd "$dry/signed" && sha256sum -c SHA256SUMS.txt)
+          echo "Offline signing script passed with a disposable key; signed dry-run files were not uploaded." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload unsigned APKs and offline signing instructions
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: yorunote-android-0.1.0-offline-signing-kit
+          path: ${{ runner.temp }}/yorunote-signing-kit/
+          if-no-files-found: error
+          retention-days: 14

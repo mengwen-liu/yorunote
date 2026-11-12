@@ -2,7 +2,8 @@
 param(
     [Parameter(Mandatory = $true)][string]$Keystore,
     [Parameter(Mandatory = $true)][string]$KeyAlias,
-    [string]$BuildTools
+    [string]$BuildTools,
+    [string]$KeystorePasswordEnv
 )
 
 $ErrorActionPreference = 'Stop'
@@ -30,6 +31,14 @@ foreach ($tool in @($signer, $aapt, $align)) {
     if (-not (Test-Path -LiteralPath $tool -PathType Leaf)) { throw "Missing SDK tool: $tool" }
 }
 $keystorePath = (Resolve-Path -LiteralPath $Keystore).Path
+$passwordOptions = @()
+if ($KeystorePasswordEnv) {
+    if ($KeystorePasswordEnv -notmatch '^[A-Za-z_][A-Za-z0-9_]*$' -or
+        -not [Environment]::GetEnvironmentVariable($KeystorePasswordEnv)) {
+        throw 'The specified keystore password environment variable is missing or invalid.'
+    }
+    $passwordOptions = @('--ks-pass', "env:$KeystorePasswordEnv")
+}
 
 $packages = @(
     @{
@@ -38,9 +47,9 @@ $packages = @(
         Code = 2172
     },
     @{
-        Input = 'Yorunote-0.1.0-android-arm64-upgrade-test-unsigned.apk'
-        Output = 'Yorunote-0.1.0-android-arm64-upgrade-test.apk'
-        Code = 2182
+        Input = 'Yorunote-0.1.0-android-arm64-upgrade-base-unsigned.apk'
+        Output = 'Yorunote-0.1.0-android-arm64-upgrade-base.apk'
+        Code = 2162
     }
 )
 $checksums = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'SHA256SUMS.txt')
@@ -64,7 +73,7 @@ try {
     foreach ($package in $packages) {
         $inputPath = Join-Path $PSScriptRoot $package.Input
         $outputPath = Join-Path $temporary $package.Output
-        & $signer sign --ks $keystorePath --ks-key-alias $KeyAlias --v4-signing-enabled false --out $outputPath $inputPath
+        & $signer sign --ks $keystorePath --ks-key-alias $KeyAlias @passwordOptions --v4-signing-enabled false --out $outputPath $inputPath
         if ($LASTEXITCODE -ne 0) { throw "Signing failed: $($package.Input)" }
 
         $verification = & $signer verify --verbose --print-certs $outputPath

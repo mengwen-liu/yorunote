@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:venera/components/components.dart';
 import 'package:venera/components/home_widgets.dart';
+import 'package:venera/components/yorunote_mascot.dart';
 import 'package:venera/foundation/appdata.dart';
 import 'package:venera/pages/home_page.dart';
 import 'package:venera/utils/translations.dart';
 
-Widget harness(Widget child, {double scale = 1, Brightness? brightness}) {
+Widget harness(
+  Widget child, {
+  double scale = 1,
+  Brightness? brightness,
+  TargetPlatform? platform,
+}) {
   return MaterialApp(
     theme: ThemeData(
+      platform: platform,
       colorScheme: ColorScheme.fromSeed(
         seedColor: Colors.teal,
         brightness: brightness ?? Brightness.light,
@@ -146,6 +153,7 @@ void main() {
             return const SizedBox();
           },
         ),
+        platform: TargetPlatform.windows,
       ),
     );
     expect(
@@ -171,6 +179,41 @@ void main() {
       '_ComicSourceWidget',
     );
   });
+
+  for (final width in [360.0, 840.0]) {
+    testWidgets('Android home shows the mascot at ${width}dp', (tester) async {
+      tester.view.physicalSize = Size(width, 960);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final semantics = tester.ensureSemantics();
+      await tester.pumpWidget(
+        harness(
+          Builder(
+            builder: (context) {
+              final home = const HomePage().build(context);
+              final scroll = home is SmoothCustomScrollView
+                  ? home
+                  : (home as Padding).child! as SmoothCustomScrollView;
+              final header = scroll.slivers[1] as SliverToBoxAdapter;
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(disableAnimations: true),
+                child: header.child!,
+              );
+            },
+          ),
+          platform: TargetPlatform.android,
+        ),
+      );
+      final mascot = find.byType(YorunoteMascot);
+      expect(mascot, findsOneWidget);
+      expect(tester.getSize(mascot), const Size(28, 28));
+      expect(tester.getTopLeft(mascot).dx, lessThan(32));
+      expect(find.bySemanticsLabel('Yorunote'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      semantics.dispose();
+    });
+  }
 
   for (final language in ['en-US', 'zh-TW']) {
     for (final brightness in Brightness.values) {

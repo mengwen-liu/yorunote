@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:venera/components/components.dart';
 import 'package:venera/components/home_widgets.dart';
+import 'package:venera/components/yorunote_mascot.dart';
 import 'package:venera/foundation/app.dart';
 import 'package:venera/foundation/comic_source/comic_source.dart';
 import 'package:venera/foundation/consts.dart';
@@ -32,6 +33,21 @@ class HomePage extends StatelessWidget {
     var widget = SmoothCustomScrollView(
       slivers: [
         SliverPadding(padding: EdgeInsets.only(top: context.padding.top)),
+        if (Theme.of(context).platform == TargetPlatform.android)
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(
+                UiSpace.s6,
+                UiSpace.s2,
+                UiSpace.s6,
+                0,
+              ),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: YorunoteMascot(),
+              ),
+            ),
+          ),
         const _SearchBar(),
         const _History(),
         const FollowUpdatesWidget(),

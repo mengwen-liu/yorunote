@@ -5,11 +5,17 @@
 本檔分開記錄已發布的預覽版、文件更新與歷史開發里程碑。App 修改是否已發布、是否已合併至 master，以及是否完成實機驗收，分別記錄。
 This file distinguishes public previews, documentation updates, and development milestones. Publication, integration into master, and device acceptance are separate states.
 
-## v0.1.0 — 2026-11-12
+## v0.1.0 — 2026-11-13（Android ARM64）
+
+- **Android ARM64 首個正式版 / First stable Android ARM64 release** · [發行頁 / Release](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0) · [Android CI](https://github.com/mengwen-liu/yorunote/actions/runs/43312975285)。
+- APK 由 [提交 `a685c4a`](https://github.com/mengwen-liu/yorunote/tree/a685c4a9e2360f2b4af507a0870d25b640c53dd4) 建置，套件為 `com.mengwenliu.yorunote`，版本為 `0.1.0`（versionCode `2172`），正式簽章驗證通過。維護者在 Galaxy S25+ 與 Galaxy Tab S11 確認 `2162 → 2172` 覆蓋成功、可啟動且紀錄保留。
+- The release APK uses package ID `com.mengwenliu.yorunote` and versionCode `2172`. Signature verification passed. The maintainer confirmed in-place upgrade, app launch, and data retention on both devices. Migration from the old preview package remains unverified.
+
+## v0.1.0 — 2026-11-12（Windows x64）
 
 - **Windows x64 首個正式版 / First Windows x64 release** · [發行頁 / Release](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0) · [Windows CI](https://github.com/mengwen-liu/yorunote/actions/runs/43090132160)。
-- 整合 .3 的 App 與回歸測試至主線。Tag 固定來源 `7aa1ca093b497d2efb3cc0ae32287197cbddd8e7`，Windows ZIP 與 EXE 版本為 0.1.0。Android ARM64 保留原預覽發行。
-- Integrates the .3 application and regression tests into the main branch. The tag pins `7aa1ca093b497d2efb3cc0ae32287197cbddd8e7` and the Windows ZIP and EXE use version 0.1.0. The Android ARM64 preview remains available.
+- 整合 .3 的 App 與回歸測試至主線。Tag 固定來源 `7aa1ca093b497d2efb3cc0ae32287197cbddd8e7`，Windows ZIP 與 EXE 版本為 0.1.0。當日 Android ARM64 仍提供預覽版。
+- Integrates the .3 application and regression tests into the main branch. The tag pins `7aa1ca093b497d2efb3cc0ae32287197cbddd8e7` and the Windows ZIP and EXE use version 0.1.0. At that date, Android ARM64 was available as a preview.
 
 ## v0.1.0-windows-preview.3 — 2026-11-07
 

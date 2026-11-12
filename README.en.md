@@ -8,7 +8,7 @@
 
 <p align="center"><a href="README.md">繁體中文</a> · <strong>English</strong></p>
 
-<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1">v0.1.0-preview.1 · Android</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0">v0.1.0 · Windows x64</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
+<p align="center"><a href="https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0/Yorunote-0.1.0-android-arm64.apk">Download Android ARM64 APK</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0/Yorunote-0.1.0-windows-x64.zip">Download Windows x64 ZIP</a> · <a href="https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0">v0.1.0 release notes</a> · <a href="#downloads-and-releases">Downloads</a> · <a href="CHANGELOG.md">Version history</a> · <a href="#upstream-features-and-fork-contributions">Fork contributions</a></p>
 
 Yorunote is a personal open-source fork of [Venera](https://github.com/venera-app/venera). Work in this fork covers branding, interface maintenance, image-cache fixes, cover loading, and traceable engineering evidence.
 
@@ -16,19 +16,16 @@ The reader and comic-source system come from upstream. This repository is a main
 
 ## Downloads and releases
 
-**Android public preview: [v0.1.0-preview.1](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1)** (2026-11-05)
+### Android ARM64 release
 
-[Download Android ARM64 APK](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-preview.1/Yorunote_29b590b_cover_timeout_arm64_profile.apk) · [SHA-256 checksum](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0-preview.1/Yorunote_29b590b_cover_timeout_arm64_profile.apk.sha256) · [All releases](https://github.com/mengwen-liu/yorunote/releases)
+**[v0.1.0](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0)** (2026-11-13)
 
-- This is an Android `arm64-v8a` **Profile test build**. The internal app version remains 1.6.3 (versionCode 2163), independently of the GitHub preview tag.
-- [Bilingual release notes and known limitations](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1) describe the changes, existing test results, and installation guidance.
-- APK size: 27,882,063 bytes. SHA-256: `7ad08033c204a1de62546ca588ea0c050a5ace8ec0d4945d8c7978e156f5057f`.
-- [Development history](CHANGELOG.md) preserves candidate changes and development records; [Releases](https://github.com/mengwen-liu/yorunote/releases) is the reference for published versions.
-- Original build evidence remains in [Actions run 41968314599](https://github.com/mengwen-liu/yorunote/actions/runs/41968314599). Use the Release assets above for downloads.
+[Download Android ARM64 APK](https://github.com/mengwen-liu/yorunote/releases/download/v0.1.0/Yorunote-0.1.0-android-arm64.apk) · [Build source](https://github.com/mengwen-liu/yorunote/tree/a685c4a9e2360f2b4af507a0870d25b640c53dd4) · [CI verification](https://github.com/mengwen-liu/yorunote/actions/runs/43312975285)
 
-> **Installation compatibility:** the APK uses a disposable test certificate. It cannot update an installed app with the same package ID and a different signing certificate. Preserve the existing app and its data. A persistent signing and update channel has not been established.
->
-> **Validation scope:** this is a public preview, with runtime acceptance on the S25+ and Tab S11 still pending. The 350 passing tests and static APK checks are existing CI results; this publication did not re-run tests or rebuild the APK.
+- Package ID: `com.mengwenliu.yorunote`. ABI: `arm64-v8a`. Version: `0.1.0` (versionCode `2172`). The APK uses the Yorunote release signing key.
+- The maintainer confirmed in-place upgrade from `2162` to `2172`, app launch, and data retention on a Galaxy S25+ and a Galaxy Tab S11 (Android 17 / One UI 9.0).
+- APK SHA-256: `37ef9c55c99e262a04f0205ad73cc1107b429d98874d3f52384c52d682f8e0d5`.
+- The [old public Android preview](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0-preview.1) uses `com.github.wgh136.venera`. Android treats the release as a separate app. Data migration between these packages remains unverified.
 
 ### Windows x64 release
 
@@ -40,7 +37,11 @@ The reader and comic-source system come from upstream. This repository is a main
 - Windows x64 CI checked the EXE version, ZIP hashes, title bar, synthetic-source reading, downloads and offline reading after restart.
 - The ZIP is unsigned and runs without an installer.
 
-## Current development state
+## Release sources and development history
+
+The Android APK was built from [commit `a685c4a`](https://github.com/mengwen-liu/yorunote/tree/a685c4a9e2360f2b4af507a0870d25b640c53dd4). The Windows ZIP was built from the commit pinned by the `v0.1.0` tag.
+
+### Preview builds and historical verification
 
 The Android preview APK source is pinned by [tag `v0.1.0-preview.1`](https://github.com/mengwen-liu/yorunote/tree/v0.1.0-preview.1) at commit `29b590b`. [Development and validation record](https://github.com/mengwen-liu/yorunote/commit/f003a708ca99a5c45f140ee554b4500ab5be8d49).
 
@@ -54,7 +55,7 @@ The Windows application is integrated into `master`. [Tag `v0.1.0`](https://gith
 | Cover loading | Cache hits bypass the queue; 8 network slots; same-key sharing; cancellation propagation | [Thumbnail R2 report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/README.md) |
 | Cover timeout | A native 30-second total timeout for each cover-image HTTP attempt | [Timeout report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) |
 
-The home screen uses the search entry, section heading, and cover card. The recent-reading card and reading-progress components are not yet integrated into this home screen.
+The preview home screen uses the search entry, section heading, and cover card. The recent-reading card and reading-progress components are not yet integrated into this home screen.
 
 The Android application source is [`29b590b`](https://github.com/mengwen-liu/yorunote/commit/29b590b457378c16b19821f139b9bcad7d38f689). CI records (the existing run 41968314599; not re-run for this documentation update) **350 passing tests with no skips** and the same 8 existing analyzer infos, with no new warnings or errors. This does not establish Android runtime acceptance.
 
@@ -69,9 +70,11 @@ The 30-second timeout excludes queueing, source lookups, and retry delays. Four 
 
 ## Building and testing
 
+See the [Android release CI run](https://github.com/mengwen-liu/yorunote/actions/runs/43312975285) for the stable build and verification.
+
 To reproduce the Android preview, check out the Android tag above and read its verification report. The validated toolchain is Flutter 3.41.4, Dart 3.11.1, JDK 17, Rust 1.85.1, Android SDK 36, and NDK 28.0.13004108.
 
-The Android build configuration also needs a local `android/key.properties` file and signing key; neither belongs in Git. Host HTTP/JavaScript integration tests need the corresponding native rhttp and QuickJS libraries. See the [latest verification report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) for conditions and commands.
+The Android build configuration also needs a local `android/key.properties` file and signing key; neither belongs in Git. Host HTTP/JavaScript integration tests need the corresponding native rhttp and QuickJS libraries. See the [preview verification report](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/cover-timeout-20261105/README.md) for conditions and commands.
 
 Windows builds use the [dedicated fixed-source workflow](https://github.com/mengwen-liu/yorunote/blob/ef9996a249b4b815b4688aa99576abd9d7899f3f/.github/workflows/yorunote-windows-preview.yml) without Build ALL. Running the ZIP does not require installing Flutter or the Android SDK. See the [Windows report](https://github.com/mengwen-liu/yorunote/blob/3490fed98e698c2aa87eb9956d0d3da4a45679db/docs/verification/windows-overlay-fix-20261106/PUBLIC_RELEASE_3.md) for exact build and runtime coverage.
 
@@ -81,7 +84,8 @@ Windows builds use the [dedicated fixed-source workflow](https://github.com/meng
 - [Headless mode](doc/headless_doc.md) — original upstream documentation
 - [Synthetic source and device acceptance](https://github.com/mengwen-liu/yorunote/blob/f003a708ca99a5c45f140ee554b4500ab5be8d49/docs/verification/thumbnail-r2-20261105/ACCEPTANCE_SYNTHETIC.md)
 - [Development history](CHANGELOG.md)
-- [Android release notes](docs/releases/v0.1.0-preview.1.md)
+- [Stable release notes](https://github.com/mengwen-liu/yorunote/releases/tag/v0.1.0)
+- [Historical Android preview notes](docs/releases/v0.1.0-preview.1.md)
 - [Bilingual Windows release notes](docs/releases/v0.1.0-windows-preview.3.md)
 - [Windows English instructions](https://github.com/mengwen-liu/yorunote/blob/v0.1.0-windows-preview.3/windows/README.en.md)
 - [Publication record and maintainer procedure](docs/releases/PREVIEW_RELEASE_PROCESS.md)
@@ -91,7 +95,6 @@ Windows builds use the [dedicated fixed-source workflow](https://github.com/meng
 
 - Upstream: [Venera](https://github.com/venera-app/venera).
 - Code license: **GPL-3.0**; see [LICENSE](LICENSE). Copyright and third-party notices are retained.
-- The Android package ID remains `com.github.wgh136.venera`.
 - Tag-translation data: [EhTagTranslation](https://github.com/EhTagTranslation/Database).
 - AI assisted the maintenance work. Contributions are evidenced by actual commits, tests, and verification records.
 - New presentation and release documentation uses Taiwan Traditional Chinese with English counterparts. Upstream documents, licenses, and historical evidence retain their original wording.

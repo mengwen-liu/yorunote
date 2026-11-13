@@ -46,6 +46,9 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
   bool _loading = false;
   bool _failed = false;
 
+  static const _companionChannel = MethodChannel('yorunote/hanime_companion');
+  bool _openingCompanion = false;
+
   static const _recentKey = 'yorunoteRecentVideos';
 
   List<VideoListing> get _recent {
@@ -93,6 +96,33 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
       setState(() => _failed = true);
     } finally {
       if (mounted && request == _request) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _openCompanion() async {
+    if (_openingCompanion) return;
+    setState(() => _openingCompanion = true);
+    try {
+      final opened = await _companionChannel.invokeMethod<bool>('open');
+      if (opened == true || !mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(_label(
+          context,
+          '請先安裝 Han1meViewer Remastered，再從這裡開啟。',
+          'Install Han1meViewer Remastered to open it here.',
+        )),
+      ));
+    } on PlatformException {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(_label(
+          context,
+          '無法開啟 Han1meViewer Remastered。',
+          'Could not open Han1meViewer Remastered.',
+        )),
+      ));
+    } finally {
+      if (mounted) setState(() => _openingCompanion = false);
     }
   }
 
@@ -145,6 +175,19 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
               ),
             ),
           ),
+          if (App.isAndroid)
+            SliverToBoxAdapter(
+              child: ListTile(
+                leading: const Icon(Icons.open_in_new),
+                title: const Text('Han1meViewer Remastered'),
+                subtitle: Text(_label(
+                  context,
+                  '開啟已安裝的完整版 App',
+                  'Open the separately installed app',
+                )),
+                onTap: _openingCompanion ? null : _openCompanion,
+              ),
+            ),
           if (recent.isNotEmpty)
             SliverToBoxAdapter(
               child: ExpansionTile(

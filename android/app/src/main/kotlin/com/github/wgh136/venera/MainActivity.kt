@@ -3,6 +3,7 @@ package com.github.wgh136.venera
 import android.Manifest
 import android.app.Activity
 import android.app.PictureInPictureParams
+import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -134,6 +135,30 @@ class MainActivity : FlutterFragmentActivity() {
                         result.success(false)
                     }
                 }
+            }
+        }
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "yorunote/hanime_companion"
+        ).setMethodCallHandler { call, result ->
+            if (call.method != "open") {
+                result.notImplemented()
+                return@setMethodCallHandler
+            }
+            val launchIntent = packageManager.getLaunchIntentForPackage(
+                "com.han1meviewer.remastered"
+            )
+            if (launchIntent == null) {
+                result.success(false)
+                return@setMethodCallHandler
+            }
+            try {
+                startActivity(launchIntent)
+                result.success(true)
+            } catch (_: ActivityNotFoundException) {
+                result.success(false)
+            } catch (_: SecurityException) {
+                result.success(false)
             }
         }
         MethodChannel(

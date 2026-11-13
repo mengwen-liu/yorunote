@@ -85,7 +85,7 @@ android {
     defaultConfig {
         applicationId = "com.mengwenliu.yorunote"
         if (candidateBuild) {
-            applicationIdSuffix ".candidate"
+            applicationIdSuffix ".candidate.v021"
         }
         manifestPlaceholders.yorunoteLabel = candidateBuild ? "Yorunote Candidate" : "Yorunote"
         // You can update the following values to match your application needs.

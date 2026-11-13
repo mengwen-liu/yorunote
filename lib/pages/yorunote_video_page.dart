@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart' show CancelToken;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -7,24 +8,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:venera/components/window_frame.dart';
 import 'package:venera/foundation/app.dart';
 import 'package:venera/foundation/appdata.dart';
+import 'package:venera/foundation/hanime_catalog.dart';
 import 'package:window_manager/window_manager.dart';
 
 String _label(BuildContext context, String chinese, String english) =>
     Localizations.localeOf(context).languageCode == 'zh' ? chinese : english;
-
-bool _isSource(Uri uri) =>
-    uri.scheme == 'https' &&
-    uri.host == 'hanime1.me' &&
-    uri.port == 443 &&
-    uri.userInfo.isEmpty;
-
-Uri? _watchUri(String input) {
-  final uri = Uri.tryParse(input.trim());
-  if (uri == null || !_isSource(uri) || uri.path != '/watch') return null;
-  final id = uri.queryParameters['v'];
-  if (id == null || !RegExp(r'^\d+$').hasMatch(id)) return null;
-  return Uri.https('hanime1.me', '/watch', {'v': id});
-}
 
 class YorunoteVideoEntry extends StatelessWidget {
   const YorunoteVideoEntry({super.key});
@@ -34,61 +22,219 @@ class YorunoteVideoEntry extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 24),
       leading: const Icon(Icons.ondemand_video_outlined),
-      title: Text(_label(context, '影片播放器', 'Video player')),
+      title: Text(_label(context, '影音', 'Videos')),
       trailing: const Icon(Icons.chevron_right),
-      onTap: () => _openVideo(context),
+      onTap: () => Navigator.of(context, rootNavigator: true).push<void>(
+        MaterialPageRoute(builder: (_) => const _VideoCatalogPage()),
+      ),
+    );
+  }
+}
+
+class _VideoCatalogPage extends StatefulWidget {
+  const _VideoCatalogPage();
+
+  @override
+  State<_VideoCatalogPage> createState() => _VideoCatalogPageState();
+}
+
+class _VideoCatalogPageState extends State<_VideoCatalogPage> {
+  final _catalog = HanimeCatalog();
+  final _query = TextEditingController();
+  CancelToken? _request;
+  List<VideoListing> _videos = [];
+  bool _loading = false;
+  bool _failed = false;
+
+  static const _recentKey = 'yorunoteRecentVideos';
+
+  List<VideoListing> get _recent {
+    final data = appdata.implicitData[_recentKey];
+    if (data is! List) return [];
+    final entries = <VideoListing>[];
+    for (final row in data) {
+      if (row is! Map) continue;
+      final url = row['url'];
+      final title = row['title'];
+      if (url is! String || title is! String) continue;
+      final uri = hanimeWatchUri(url);
+      if (uri != null) entries.add(VideoListing(uri, title, null));
+    }
+    return entries;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_load(''));
+  }
+
+  @override
+  void dispose() {
+    _request?.cancel();
+    _catalog.close();
+    _query.dispose();
+    super.dispose();
+  }
+
+  Future<void> _load(String query) async {
+    _request?.cancel();
+    final request = _request = CancelToken();
+    setState(() {
+      _loading = true;
+      _failed = false;
+    });
+    try {
+      final videos = await _catalog.load(query.trim(), request);
+      if (!mounted || request != _request) return;
+      setState(() => _videos = videos);
+    } on Exception {
+      if (!mounted || request != _request) return;
+      setState(() => _failed = true);
+    } finally {
+      if (mounted && request == _request) setState(() => _loading = false);
+    }
+  }
+
+  void _submit(String input) {
+    FocusScope.of(context).unfocus();
+    final uri = hanimeWatchUri(input);
+    if (uri != null) {
+      final previous = _recent.where((entry) => entry.uri == uri).firstOrNull;
+      unawaited(_open(previous ?? VideoListing(uri, 'Hanime1 #${uri.queryParameters['v']}', null)));
+    } else {
+      unawaited(_load(input));
+    }
+  }
+
+  Future<void> _open(VideoListing video) async {
+    final items = [video, ..._recent.where((item) => item.uri != video.uri)];
+    setState(() {
+      appdata.implicitData[_recentKey] = [
+        for (final item in items.take(20))
+          {'url': item.uri.toString(), 'title': item.title},
+      ];
+    });
+    appdata.writeImplicitData();
+    FocusScope.of(context).unfocus();
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(builder: (_) => _VideoPage(video.uri, video.title)),
     );
   }
 
-  Future<void> _openVideo(BuildContext context) async {
-    var input = '';
-    final uri = await showDialog<Uri>(
-      context: context,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          final watchUri = _watchUri(input);
-          return AlertDialog(
-            title: Text(_label(context, '開啟影片', 'Open video')),
-            content: TextField(
-              autofocus: true,
-              keyboardType: TextInputType.url,
-              textInputAction: TextInputAction.go,
-              decoration: InputDecoration(
-                labelText: _label(context, 'hanime1.me 影片網址', 'hanime1.me video URL'),
-                hintText: 'https://hanime1.me/watch?v=…',
+  @override
+  Widget build(BuildContext context) {
+    final recent = _recent;
+    return Scaffold(
+      appBar: AppBar(title: Text(_label(context, '影音', 'Videos'))),
+      body: CustomScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: SearchBar(
+                controller: _query,
+                hintText: _label(context, '搜尋或貼上影片連結', 'Search or paste a video link'),
+                leading: IconButton(
+                  tooltip: _label(context, '搜尋', 'Search'),
+                  onPressed: () => _submit(_query.text),
+                  icon: const Icon(Icons.search),
+                ),
+                onSubmitted: _submit,
               ),
-              onChanged: (value) => setDialogState(() => input = value),
-              onSubmitted: (_) {
-                if (watchUri != null) Navigator.pop(dialogContext, watchUri);
-              },
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext),
-                child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+          ),
+          if (recent.isNotEmpty)
+            SliverToBoxAdapter(
+              child: ExpansionTile(
+                title: Text(_label(context, '最近開啟', 'Recently opened')),
+                children: [
+                  for (final item in recent)
+                    ListTile(
+                      dense: true,
+                      leading: const Icon(Icons.history),
+                      title: Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+                      onTap: () => _open(item),
+                    ),
+                ],
               ),
-              FilledButton(
-                onPressed: watchUri == null
-                    ? null
-                    : () => Navigator.pop(dialogContext, watchUri),
-                child: Text(_label(context, '開啟', 'Open')),
+            ),
+          if (_loading)
+            const SliverToBoxAdapter(child: LinearProgressIndicator()),
+          if (!_loading && (_failed || _videos.isEmpty))
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    Text(_failed
+                        ? _label(context, '無法載入 Hanime1 目錄，仍可貼上影片連結。',
+                            'Could not load the Hanime1 catalog. You can still paste a video link.')
+                        : _label(context, '沒有可顯示的影片。', 'No videos to display.')),
+                    TextButton(
+                      onPressed: () => _submit(_query.text),
+                      child: Text(_label(context, '重新載入', 'Reload')),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          );
-        },
+            ),
+          if (!_loading && !_failed && _videos.isNotEmpty)
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+              sliver: SliverGrid.builder(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 280,
+                  childAspectRatio: 1.25,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                ),
+                itemCount: _videos.length,
+                itemBuilder: (context, index) => _buildCard(_videos[index]),
+              ),
+            ),
+        ],
       ),
     );
-    if (uri == null || !context.mounted) return;
-    await Navigator.of(context, rootNavigator: true).push<void>(
-      MaterialPageRoute(builder: (_) => _VideoPage(uri)),
+  }
+
+  Widget _buildCard(VideoListing video) {
+    const placeholder = Center(child: Icon(Icons.play_circle_outline));
+    final thumbnail = video.thumbnail;
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => _open(video),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: thumbnail == null
+                  ? placeholder
+                  : Image.network(
+                      thumbnail.toString(),
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => placeholder,
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(video.title, maxLines: 2, overflow: TextOverflow.ellipsis),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class _VideoPage extends StatefulWidget {
-  const _VideoPage(this.uri);
+  const _VideoPage(this.uri, this.title);
 
   final Uri uri;
+  final String title;
 
   @override
   State<_VideoPage> createState() => _VideoPageState();
@@ -108,6 +254,7 @@ class _VideoPageState extends State<_VideoPage> {
   bool _busy = false;
   bool _failed = false;
   bool _playerReady = false;
+  bool _theaterMode = false;
 
   Future<WebViewEnvironment?> _createEnvironment() async {
     if (!App.isWindows) return null;
@@ -265,17 +412,20 @@ class _VideoPageState extends State<_VideoPage> {
   Widget build(BuildContext context) {
     final androidPip = App.isAndroid && _mini;
     return PopScope(
-      canPop: !_busy && !_mini,
+      canPop: !_busy && !_mini && !_theaterMode,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop && App.isWindows && _mini) unawaited(_toggleMini());
+        if (didPop) return;
+        if (App.isWindows && _mini) unawaited(_toggleMini());
+        if (_theaterMode && !_mini) setState(() => _theaterMode = false);
       },
       child: Scaffold(
+        backgroundColor: Colors.black,
         appBar: androidPip
             ? null
             : AppBar(
-                toolbarHeight: _mini ? 44 : kToolbarHeight,
-                automaticallyImplyLeading: !_mini && !_busy,
-                title: Text(_label(context, '影片播放器', 'Video player')),
+                toolbarHeight: _mini || _theaterMode ? 44 : kToolbarHeight,
+                automaticallyImplyLeading: !_mini && !_busy && !_theaterMode,
+                title: Text(widget.title, maxLines: 1, overflow: TextOverflow.ellipsis),
                 actions: [
                   IconButton(
                     tooltip: _mini
@@ -287,6 +437,16 @@ class _VideoPageState extends State<_VideoPage> {
                     ),
                   ),
                   if (!_mini)
+                    IconButton(
+                      tooltip: _theaterMode
+                          ? _label(context, '退出劇院模式', 'Exit theater mode')
+                          : _label(context, '劇院模式', 'Theater mode'),
+                      onPressed: !_playerReady || _busy
+                          ? null
+                          : () => setState(() => _theaterMode = !_theaterMode),
+                      icon: Icon(_theaterMode ? Icons.fullscreen_exit : Icons.fullscreen),
+                    ),
+                  if (!_mini && !_theaterMode)
                     IconButton(
                       tooltip: _label(context, '在瀏覽器開啟', 'Open in browser'),
                       onPressed: _openBrowser,
@@ -320,7 +480,7 @@ class _VideoPageState extends State<_VideoPage> {
               shouldOverrideUrlLoading: (_, action) async {
                 final uri = action.request.url;
                 if (action.isForMainFrame == false ||
-                    (uri != null && _watchUri(uri.toString()) != null)) {
+                    (uri != null && hanimeWatchUri(uri.toString()) != null)) {
                   return NavigationActionPolicy.ALLOW;
                 }
                 return NavigationActionPolicy.CANCEL;
@@ -329,9 +489,13 @@ class _VideoPageState extends State<_VideoPage> {
                 if (mounted && _playerReady) setState(() => _playerReady = false);
               },
               onLoadStop: (controller, url) async {
-                if (url == null || _watchUri(url.toString()) == null) return;
+                if (url == null || hanimeWatchUri(url.toString()) == null) return;
                 try {
-                  await controller.evaluateJavascript(source: _videoScript);
+                  final installed = await controller.evaluateJavascript(source: _videoScript);
+                  if (installed != true && installed != 'true') {
+                    if (mounted) setState(() => _failed = true);
+                    return;
+                  }
                   if (!mounted) return;
                   _controller = controller;
                   setState(() => _playerReady = true);
@@ -354,14 +518,15 @@ class _VideoPageState extends State<_VideoPage> {
 
 const _videoScript = r'''
 (() => {
-  if (location.origin !== 'https://hanime1.me' || location.pathname !== '/watch') return;
+  if (location.origin !== 'https://hanime1.me' || location.pathname !== '/watch') return false;
   const id = new URLSearchParams(location.search).get('v');
-  if (!/^\d+$/.test(id || '') || window.yorunoteVideo) return;
+  if (!/^\d+$/.test(id || '')) return false;
+  if (window.yorunoteVideo) return true;
   const key = 'yorunote.resume.' + id;
   let active, position = 0, lastWrite = 0, ready = false, restoring = false;
   let tapTime = 0, tapSide, tapX, tapY;
   try { position = Number(localStorage.getItem(key)) || 0; } catch (_) {}
-  const player = () => document.querySelector('.plyr video, video');
+  const player = () => document.querySelector('.plyr video, video#player, video');
   const save = (force = false) => {
     if (!active || !ready || restoring || active.seeking || !Number.isFinite(active.duration)) return;
     const now = Date.now();
@@ -379,6 +544,12 @@ const _videoScript = r'''
   const attach = () => {
     const video = player();
     if (!video || video === active) return;
+    const surface = video.closest('.plyr') || video;
+    for (let node = surface.parentElement; node && node !== document.body; node = node.parentElement) {
+      node.classList.add('yorunote-player-ancestor');
+    }
+    surface.classList.add('yorunote-video-surface');
+    document.body.classList.add('yorunote-small');
     active = video;
     const restore = () => {
       if (video !== active || ready || !Number.isFinite(video.duration)) return;
@@ -439,9 +610,16 @@ const _videoScript = r'''
   document.addEventListener('visibilitychange', () => { if (document.hidden) save(true); });
   window.addEventListener('pagehide', () => save(true));
 
+  if (!player()) return false;
   const style = document.createElement('style');
   style.textContent = [
     'body.yorunote-small { overflow: hidden !important; background: black !important; }',
+    'body.yorunote-small * { visibility: hidden !important; }',
+    'body.yorunote-small .yorunote-player-ancestor { transform: none !important;',
+    'filter: none !important; contain: none !important; overflow: visible !important;',
+    'opacity: 1 !important; clip-path: none !important; }',
+    'body.yorunote-small .yorunote-video-surface,',
+    'body.yorunote-small .yorunote-video-surface * { visibility: visible !important; }',
     'body.yorunote-small .yorunote-video-surface { position: fixed !important;',
     'inset: 0 !important; width: 100vw !important; height: 100vh !important;',
     'max-width: none !important; max-height: none !important; margin: 0 !important;',
@@ -462,13 +640,14 @@ const _videoScript = r'''
     if (!video) return false;
     if (mode && (!video.currentSrc || video.paused || video.ended)) return false;
     const surface = video.closest('.plyr') || video;
-    surface.classList.toggle('yorunote-video-surface', mode > 0);
-    document.body.classList.toggle('yorunote-small', mode > 0);
+    surface.classList.add('yorunote-video-surface');
+    document.body.classList.add('yorunote-small');
     document.body.classList.toggle('yorunote-pip', mode === 2);
     save(true);
     return true;
   };
   attach();
   new MutationObserver(attach).observe(document.body, {childList: true, subtree: true});
+  return true;
 })();
 ''';

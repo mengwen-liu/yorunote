@@ -5,7 +5,7 @@ const _windowsReleaseVersion = String.fromEnvironment(
 );
 const _androidReleaseVersion = String.fromEnvironment(
   'YORUNOTE_ANDROID_VERSION',
-  defaultValue: '0.2.2',
+  defaultValue: '0.2.3',
 );
 const _yorunoteReleases = 'https://github.com/mengwen-liu/yorunote/releases';
 

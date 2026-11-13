@@ -27,4 +27,32 @@ void main() {
     expect(items.first.thumbnail.toString(), 'https://hanime1.me/one.jpg');
     expect(items.last.thumbnail.toString(), 'https://media.example/two.jpg');
   });
+
+  test('preserves catalog group boundaries and card metadata', () {
+    final sections = parseHanimeHome('''
+      <div id="home-rows-wrapper">
+        <div><h3>Latest releases</h3>
+          <a href="/watch?v=1"><img src="/one.jpg">
+            <span class="video-title">One</span>
+            <span class="duration">10:15</span></a>
+        </div>
+        <div><h3>Latest uploads</h3>
+          <a href="/watch?v=2"><span class="video-title">Two</span></a>
+        </div>
+      </div>
+    ''');
+    expect(sections.map((section) => section.title), ['Latest releases', 'Latest uploads']);
+    expect(sections.first.videos.single.duration, '10:15');
+    expect(sections.last.videos.single.title, 'Two');
+  });
+
+  test('extracts details and omits the currently selected video', () {
+    final details = parseHanimeDetails('''
+      <div class="video-caption-text">Description</div>
+      <div><a href="/watch?v=1" title="Current"><img src="/current.jpg"></a></div>
+      <div><a href="/watch?v=2" title="Related"><img src="/related.jpg"></a></div>
+    ''', Uri.parse('https://hanime1.me/watch?v=1'));
+    expect(details.description, 'Description');
+    expect(details.related.single.title, 'Related');
+  });
 }

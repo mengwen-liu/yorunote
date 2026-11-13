@@ -38,33 +38,17 @@ class _VideoCatalogPage extends StatefulWidget {
   State<_VideoCatalogPage> createState() => _VideoCatalogPageState();
 }
 
+enum _VideoShelf { favorites, later, recent }
+
 class _VideoCatalogPageState extends State<_VideoCatalogPage> {
   final _catalog = HanimeCatalog();
   final _query = TextEditingController();
   CancelToken? _request;
-  List<VideoListing> _videos = [];
+  List<VideoSection> _sections = [];
+  _VideoShelf? _shelf;
   bool _loading = false;
   bool _failed = false;
-
-  static const _companionChannel = MethodChannel('yorunote/hanime_companion');
-  bool _openingCompanion = false;
-
-  static const _recentKey = 'yorunoteRecentVideos';
-
-  List<VideoListing> get _recent {
-    final data = appdata.implicitData[_recentKey];
-    if (data is! List) return [];
-    final entries = <VideoListing>[];
-    for (final row in data) {
-      if (row is! Map) continue;
-      final url = row['url'];
-      final title = row['title'];
-      if (url is! String || title is! String) continue;
-      final uri = hanimeWatchUri(url);
-      if (uri != null) entries.add(VideoListing(uri, title, null));
-    }
-    return entries;
-  }
+  String _activeQuery = '';
 
   @override
   void initState() {
@@ -84,13 +68,15 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
     _request?.cancel();
     final request = _request = CancelToken();
     setState(() {
+      _activeQuery = query;
+      _shelf = null;
       _loading = true;
       _failed = false;
     });
     try {
-      final videos = await _catalog.load(query.trim(), request);
+      final sections = await _catalog.load(query, request);
       if (!mounted || request != _request) return;
-      setState(() => _videos = videos);
+      setState(() => _sections = sections);
     } on Exception {
       if (!mounted || request != _request) return;
       setState(() => _failed = true);
@@ -99,62 +85,33 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
     }
   }
 
-  Future<void> _openCompanion() async {
-    if (_openingCompanion) return;
-    setState(() => _openingCompanion = true);
-    try {
-      final opened = await _companionChannel.invokeMethod<bool>('open');
-      if (opened == true || !mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(_label(
-          context,
-          '請先安裝 Han1meViewer Remastered，再從這裡開啟。',
-          'Install Han1meViewer Remastered to open it here.',
-        )),
-      ));
-    } on PlatformException {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(_label(
-          context,
-          '無法開啟 Han1meViewer Remastered。',
-          'Could not open Han1meViewer Remastered.',
-        )),
-      ));
-    } finally {
-      if (mounted) setState(() => _openingCompanion = false);
-    }
-  }
-
   void _submit(String input) {
     FocusScope.of(context).unfocus();
     final uri = hanimeWatchUri(input);
-    if (uri != null) {
-      final previous = _recent.where((entry) => entry.uri == uri).firstOrNull;
-      unawaited(_open(previous ?? VideoListing(uri, 'Hanime1 #${uri.queryParameters['v']}', null)));
-    } else {
-      unawaited(_load(input));
+    if (uri == null) {
+      unawaited(_load(input.trim()));
+      return;
     }
+    final saved = _readShelf(_VideoShelf.recent)
+        .where((video) => video.uri == uri)
+        .firstOrNull;
+    unawaited(_open(saved ?? VideoListing(uri, 'Hanime1 #${uri.queryParameters['v']}', null)));
   }
 
   Future<void> _open(VideoListing video) async {
-    final items = [video, ..._recent.where((item) => item.uri != video.uri)];
-    setState(() {
-      appdata.implicitData[_recentKey] = [
-        for (final item in items.take(20))
-          {'url': item.uri.toString(), 'title': item.title},
-      ];
-    });
-    appdata.writeImplicitData();
     FocusScope.of(context).unfocus();
-    await Navigator.of(context).push<void>(
-      MaterialPageRoute(builder: (_) => _VideoPage(video.uri, video.title)),
-    );
+    await _openVideoDetails(context, video);
+    if (mounted) setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final recent = _recent;
+    final shelf = _shelf;
+    final browsing = _activeQuery.isEmpty;
+    final firstVideo = _sections.firstOrNull?.videos.firstOrNull;
+    final grid = shelf != null
+        ? _readShelf(shelf)
+        : (browsing ? const <VideoListing>[] : _sections.expand((section) => section.videos).toList());
     return Scaffold(
       appBar: AppBar(title: Text(_label(context, '影音', 'Videos'))),
       body: CustomScrollView(
@@ -175,66 +132,86 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
               ),
             ),
           ),
-          if (App.isAndroid)
-            SliverToBoxAdapter(
-              child: ListTile(
-                leading: const Icon(Icons.open_in_new),
-                title: const Text('Han1meViewer Remastered'),
-                subtitle: Text(_label(
-                  context,
-                  '開啟已安裝的完整版 App',
-                  'Open the separately installed app',
-                )),
-                onTap: _openingCompanion ? null : _openCompanion,
-              ),
-            ),
-          if (recent.isNotEmpty)
-            SliverToBoxAdapter(
-              child: ExpansionTile(
-                title: Text(_label(context, '最近開啟', 'Recently opened')),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 4,
                 children: [
-                  for (final item in recent)
-                    ListTile(
-                      dense: true,
-                      leading: const Icon(Icons.history),
-                      title: Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-                      onTap: () => _open(item),
+                  ChoiceChip(
+                    label: Text(_label(context, '瀏覽', 'Browse')),
+                    selected: shelf == null,
+                    onSelected: (_) => setState(() => _shelf = null),
+                  ),
+                  for (final item in _VideoShelf.values)
+                    ChoiceChip(
+                      label: Text(_shelfLabel(context, item)),
+                      selected: item == shelf,
+                      onSelected: (_) => setState(() => _shelf = item),
                     ),
                 ],
               ),
             ),
-          if (_loading)
+          ),
+          if (shelf == null && _loading)
             const SliverToBoxAdapter(child: LinearProgressIndicator()),
-          if (!_loading && (_failed || _videos.isEmpty))
+          if (shelf == null && !_loading && (_failed || _sections.isEmpty))
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
                     Text(_failed
-                        ? _label(context, '無法載入 Hanime1 目錄，仍可貼上影片連結。',
-                            'Could not load the Hanime1 catalog. You can still paste a video link.')
+                        ? _label(context, '無法載入目錄。你仍可貼上影片連結。',
+                            'The catalog could not load. You can still paste a video link.')
                         : _label(context, '沒有可顯示的影片。', 'No videos to display.')),
-                    TextButton(
-                      onPressed: () => _submit(_query.text),
-                      child: Text(_label(context, '重新載入', 'Reload')),
-                    ),
+                    if (_failed)
+                      TextButton(
+                        onPressed: () => _load(_activeQuery),
+                        child: Text(_label(context, '重試', 'Retry')),
+                      ),
                   ],
                 ),
               ),
             ),
-          if (!_loading && !_failed && _videos.isNotEmpty)
+          if (shelf == null && !_loading && !_failed && browsing && firstVideo != null) ...[
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                child: SizedBox(
+                  height: 232,
+                  child: _VideoCard(video: firstVideo, onTap: () => _open(firstVideo)),
+                ),
+              ),
+            ),
+            for (final section in _sections)
+              SliverToBoxAdapter(child: _section(context, section)),
+          ],
+          if (shelf != null && grid.isEmpty)
+            SliverToBoxAdapter(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(_label(context, '清單目前是空的。', 'This list is empty.')),
+                ),
+              ),
+            ),
+          if (grid.isNotEmpty && (shelf != null || (!_loading && !_failed)))
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
               sliver: SliverGrid.builder(
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 280,
-                  childAspectRatio: 1.25,
+                  maxCrossAxisExtent: 260,
+                  mainAxisExtent: 185,
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
                 ),
-                itemCount: _videos.length,
-                itemBuilder: (context, index) => _buildCard(_videos[index]),
+                itemCount: grid.length,
+                itemBuilder: (_, index) => _VideoCard(
+                  video: grid[index],
+                  onTap: () => _open(grid[index]),
+                ),
               ),
             ),
         ],
@@ -242,14 +219,110 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
     );
   }
 
-  Widget _buildCard(VideoListing video) {
+  Widget _section(BuildContext context, VideoSection section) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            section.title.isEmpty ? _label(context, '影片', 'Videos') : section.title,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 180,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: section.videos.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 10),
+              itemBuilder: (_, index) {
+                final video = section.videos[index];
+                return SizedBox(
+                  width: 190,
+                  child: _VideoCard(video: video, onTap: () => _open(video)),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String _shelfKey(_VideoShelf shelf) => switch (shelf) {
+  _VideoShelf.favorites => 'yorunoteFavoriteVideos',
+  _VideoShelf.later => 'yorunoteWatchLaterVideos',
+  _VideoShelf.recent => 'yorunoteRecentVideos',
+};
+
+String _shelfLabel(BuildContext context, _VideoShelf shelf) => switch (shelf) {
+  _VideoShelf.favorites => _label(context, '收藏', 'Favorites'),
+  _VideoShelf.later => _label(context, '稍後觀看', 'Watch later'),
+  _VideoShelf.recent => _label(context, '最近播放', 'Recently played'),
+};
+
+List<VideoListing> _readShelf(_VideoShelf shelf) {
+  final data = appdata.implicitData[_shelfKey(shelf)];
+  if (data is! List) return [];
+  final entries = <VideoListing>[];
+  for (final row in data) {
+    if (row is! Map) continue;
+    final url = row['url'];
+    final title = row['title'];
+    if (url is! String || title is! String) continue;
+    final uri = hanimeWatchUri(url);
+    final image = row['thumbnail'];
+    final thumbnail = image is String ? Uri.tryParse(image) : null;
+    final duration = row['duration'];
+    if (uri != null) {
+      entries.add(VideoListing(
+        uri,
+        title,
+        thumbnail?.scheme == 'https' ? thumbnail : null,
+        duration: duration is String ? duration : null,
+      ));
+    }
+  }
+  return entries;
+}
+
+void _saveShelf(_VideoShelf shelf, List<VideoListing> items) {
+  appdata.implicitData[_shelfKey(shelf)] = [
+    for (final item in items)
+      {
+        'url': item.uri.toString(),
+        'title': item.title,
+        'thumbnail': item.thumbnail?.toString(),
+        'duration': item.duration,
+      },
+  ];
+  appdata.writeImplicitData();
+}
+
+Future<void> _openVideoDetails(BuildContext context, VideoListing video) {
+  return Navigator.of(context).push<void>(
+    MaterialPageRoute(builder: (_) => _VideoDetailsPage(video)),
+  );
+}
+
+class _VideoCard extends StatelessWidget {
+  const _VideoCard({required this.video, required this.onTap});
+
+  final VideoListing video;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
     const placeholder = Center(child: Icon(Icons.play_circle_outline));
     final thumbnail = video.thumbnail;
+    final duration = video.duration;
     return Card(
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => _open(video),
+        onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -266,8 +339,153 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
               padding: const EdgeInsets.all(8),
               child: Text(video.title, maxLines: 2, overflow: TextOverflow.ellipsis),
             ),
+            if (duration != null && duration.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                child: Text(duration, style: Theme.of(context).textTheme.bodySmall),
+              ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _VideoDetailsPage extends StatefulWidget {
+  const _VideoDetailsPage(this.video);
+
+  final VideoListing video;
+
+  @override
+  State<_VideoDetailsPage> createState() => _VideoDetailsPageState();
+}
+
+class _VideoDetailsPageState extends State<_VideoDetailsPage> {
+  final _catalog = HanimeCatalog();
+  final _token = CancelToken();
+  late Future<VideoDetails> _details;
+
+  @override
+  void initState() {
+    super.initState();
+    _details = _catalog.details(widget.video.uri, _token);
+  }
+
+  @override
+  void dispose() {
+    _token.cancel();
+    _catalog.close();
+    super.dispose();
+  }
+
+  bool _contains(_VideoShelf shelf) =>
+      _readShelf(shelf).any((video) => video.uri == widget.video.uri);
+
+  void _toggle(_VideoShelf shelf) {
+    final items = _readShelf(shelf);
+    final index = items.indexWhere((video) => video.uri == widget.video.uri);
+    if (index >= 0) {
+      items.removeAt(index);
+    } else {
+      items.insert(0, widget.video);
+    }
+    setState(() => _saveShelf(shelf, items));
+  }
+
+  Future<void> _play() async {
+    final video = widget.video;
+    final recent = _readShelf(_VideoShelf.recent)
+      ..removeWhere((item) => item.uri == video.uri);
+    _saveShelf(_VideoShelf.recent, [video, ...recent.take(39)]);
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(builder: (_) => _VideoPage(video.uri, video.title)),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final video = widget.video;
+    return Scaffold(
+      appBar: AppBar(title: Text(_label(context, '影片詳情', 'Video details'))),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child: SizedBox(
+                height: 230,
+                width: double.infinity,
+                child: _VideoCard(video: video, onTap: _play),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              FilledButton.icon(
+                onPressed: _play,
+                icon: const Icon(Icons.play_arrow),
+                label: Text(_label(context, '播放／續播', 'Play or resume')),
+              ),
+              FilterChip(
+                label: Text(_shelfLabel(context, _VideoShelf.favorites)),
+                selected: _contains(_VideoShelf.favorites),
+                onSelected: (_) => _toggle(_VideoShelf.favorites),
+              ),
+              FilterChip(
+                label: Text(_shelfLabel(context, _VideoShelf.later)),
+                selected: _contains(_VideoShelf.later),
+                onSelected: (_) => _toggle(_VideoShelf.later),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          FutureBuilder<VideoDetails>(
+            future: _details,
+            builder: (context, snapshot) {
+              final details = snapshot.data;
+              if (details == null) {
+                if (snapshot.hasError) {
+                  return TextButton(
+                    onPressed: () => setState(() {
+                      _details = _catalog.details(video.uri, _token);
+                    }),
+                    child: Text(_label(context, '重試載入詳情', 'Retry loading details')),
+                  );
+                }
+                return const LinearProgressIndicator();
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (details.description.isNotEmpty) ...[
+                    Text(_label(context, '簡介', 'Description'),
+                        style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 6),
+                    Text(details.description),
+                    const SizedBox(height: 16),
+                  ],
+                  if (details.related.isNotEmpty)
+                    Text(_label(context, '相關影片', 'Related videos'),
+                        style: Theme.of(context).textTheme.titleMedium),
+                  for (final item in details.related)
+                    ListTile(
+                      leading: const Icon(Icons.play_circle_outline),
+                      title: Text(item.title),
+                      onTap: () async {
+                        await _openVideoDetails(context, item);
+                        if (mounted) setState(() {});
+                      },
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -437,6 +655,23 @@ class _VideoPageState extends State<_VideoPage> {
     }
   }
 
+  Future<void> _setPlaybackSpeed(double speed) async {
+    final controller = _controller;
+    if (controller == null || !_playerReady) return;
+    try {
+      await controller.evaluateJavascript(
+        source: "(() => { const video = document.querySelector('.plyr video, video'); "
+            'if (video) video.playbackRate = $speed; })()',
+      );
+    } on Exception {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(_label(context, '無法調整播放速度。', 'Could not change playback speed.')),
+        ));
+      }
+    }
+  }
+
   Future<void> _openBrowser() async {
     try {
       if (await launchUrl(widget.uri, mode: LaunchMode.externalApplication)) {
@@ -488,6 +723,17 @@ class _VideoPageState extends State<_VideoPage> {
                           ? null
                           : () => setState(() => _theaterMode = !_theaterMode),
                       icon: Icon(_theaterMode ? Icons.fullscreen_exit : Icons.fullscreen),
+                    ),
+                  if (!_mini)
+                    PopupMenuButton<double>(
+                      enabled: _playerReady && !_busy,
+                      tooltip: _label(context, '播放速度', 'Playback speed'),
+                      onSelected: _setPlaybackSpeed,
+                      itemBuilder: (_) => [
+                        for (final speed in [0.5, 0.75, 1.0, 1.25, 1.5, 2.0])
+                          PopupMenuItem(value: speed, child: Text('$speed×')),
+                      ],
+                      icon: const Icon(Icons.speed),
                     ),
                   if (!_mini && !_theaterMode)
                     IconButton(

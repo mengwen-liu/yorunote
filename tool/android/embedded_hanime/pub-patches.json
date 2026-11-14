@@ -1,0 +1,37 @@
+[
+  {
+    "path": "git/flutter_inappwebview-3ef899b3db57c911b080979f1392253b835f98ab/flutter_inappwebview_android/android/build.gradle",
+    "before": "82b483da0a2885adb5b5a5601bdad16289a0a68631b596ffb1001b6016fc0690",
+    "after": "25661c285c7e2204b595849e5b6cc92380765820e7f91567e26bc2a771e9627e"
+  },
+  {
+    "path": "hosted/pub.dev/rhttp-0.15.1/cargokit/gradle/plugin.gradle",
+    "before": "b554c15a92e4ffa19713a30c0e99700682233fd2986e463f08b52228ded4f1b0",
+    "after": "80126c0103e5e706d8bcd9364fa01197059690423a50eece3b887ace80b67af9"
+  },
+  {
+    "path": "hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/android_environment.dart",
+    "before": "0e3f13005425bc9b671824ecacdd799133fb7b4de262138c2b5c5e81daf3904c",
+    "after": "3f25b061e23da9ebf03d3fea1759893109dc8f0e0226d2d200a233f6c6d07095"
+  },
+  {
+    "path": "hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/builder.dart",
+    "before": "de0359688675dd59b5d795cd9a950da8348cb3051b54080887f51263ee6eef24",
+    "after": "ac30c2fe08431d12a4aadd3c16adf0556a8c9af395c7e425f155b58f272a8d54"
+  },
+  {
+    "path": "hosted/pub.dev/rhttp-0.15.1/cargokit/run_build_tool.cmd",
+    "before": "52c0a2f95055e2b275d996af807c96f4b0cf73f99e153b0c5ccd3e1779f667db",
+    "after": "0f0928425463ca65fe53cafe6eda43e18f89be0e28d5647e52d7d11feeb4a410"
+  },
+  {
+    "path": "hosted/pub.dev/rhttp-0.15.1/android/build.gradle",
+    "before": "a7b7537433845b6e167e739cbd20e961b62714c12454533f67e77d9b6130f940",
+    "after": "348cd15ad5eb58e8896694ca12e4cb3951d340100fcf48b3d13d3deb3bd726f9"
+  },
+  {
+    "path": "hosted/pub.dev/zip_flutter-0.0.13/android/build.gradle",
+    "before": "8afee58c65eb91aace430c9cd422498f3e6e64f98a2d3d96d67b79b1ccce2327",
+    "after": "ace3a3e08f7836c46b237b37aad2355bd6a0648d1b9ed741911aa325a86c7666"
+  }
+]

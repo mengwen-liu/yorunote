@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart' show CancelToken;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -14,8 +15,42 @@ import 'package:window_manager/window_manager.dart';
 String _label(BuildContext context, String chinese, String english) =>
     Localizations.localeOf(context).languageCode == 'zh' ? chinese : english;
 
-class YorunoteVideoEntry extends StatelessWidget {
+class YorunoteVideoEntry extends StatefulWidget {
   const YorunoteVideoEntry({super.key});
+
+  @override
+  State<YorunoteVideoEntry> createState() => _YorunoteVideoEntryState();
+}
+
+class _YorunoteVideoEntryState extends State<YorunoteVideoEntry> {
+  static const _channel = MethodChannel('yorunote/embedded_video');
+  bool _opening = false;
+
+  Future<void> _openNative() async {
+    if (_opening) return;
+    setState(() => _opening = true);
+    try {
+      final response = await _channel.invokeMethod<String>('open');
+      if (response != 'launch_accepted') _showLaunchError();
+    } on PlatformException catch (error) {
+      if (error.code != 'already_open') _showLaunchError();
+    } on MissingPluginException {
+      _showLaunchError();
+    } finally {
+      if (mounted) setState(() => _opening = false);
+    }
+  }
+
+  void _showLaunchError() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          _label(context, '無法開啟原版影音。', 'Could not open native videos.'),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +59,11 @@ class YorunoteVideoEntry extends StatelessWidget {
       leading: const Icon(Icons.ondemand_video_outlined),
       title: Text(_label(context, '影音', 'Videos')),
       trailing: const Icon(Icons.chevron_right),
-      onTap: () => Navigator.of(context, rootNavigator: true).push<void>(
-        MaterialPageRoute(builder: (_) => const _VideoCatalogPage()),
-      ),
+      onTap: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+          ? (_opening ? null : _openNative)
+          : () => Navigator.of(context, rootNavigator: true).push<void>(
+              MaterialPageRoute(builder: (_) => const _VideoCatalogPage()),
+            ),
     );
   }
 }
@@ -92,10 +129,15 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
       unawaited(_load(input.trim()));
       return;
     }
-    final saved = _readShelf(_VideoShelf.recent)
-        .where((video) => video.uri == uri)
-        .firstOrNull;
-    unawaited(_open(saved ?? VideoListing(uri, 'Hanime1 #${uri.queryParameters['v']}', null)));
+    final saved = _readShelf(
+      _VideoShelf.recent,
+    ).where((video) => video.uri == uri).firstOrNull;
+    unawaited(
+      _open(
+        saved ??
+            VideoListing(uri, 'Hanime1 #${uri.queryParameters['v']}', null),
+      ),
+    );
   }
 
   Future<void> _open(VideoListing video) async {
@@ -111,7 +153,9 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
     final firstVideo = _sections.firstOrNull?.videos.firstOrNull;
     final grid = shelf != null
         ? _readShelf(shelf)
-        : (browsing ? const <VideoListing>[] : _sections.expand((section) => section.videos).toList());
+        : (browsing
+              ? const <VideoListing>[]
+              : _sections.expand((section) => section.videos).toList());
     return Scaffold(
       appBar: AppBar(title: Text(_label(context, '影音', 'Videos'))),
       body: CustomScrollView(
@@ -122,7 +166,11 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
               child: SearchBar(
                 controller: _query,
-                hintText: _label(context, '搜尋或貼上影片連結', 'Search or paste a video link'),
+                hintText: _label(
+                  context,
+                  '搜尋或貼上影片連結',
+                  'Search or paste a video link',
+                ),
                 leading: IconButton(
                   tooltip: _label(context, '搜尋', 'Search'),
                   onPressed: () => _submit(_query.text),
@@ -162,10 +210,19 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
-                    Text(_failed
-                        ? _label(context, '無法載入目錄。你仍可貼上影片連結。',
-                            'The catalog could not load. You can still paste a video link.')
-                        : _label(context, '沒有可顯示的影片。', 'No videos to display.')),
+                    Text(
+                      _failed
+                          ? _label(
+                              context,
+                              '無法載入目錄。你仍可貼上影片連結。',
+                              'The catalog could not load. You can still paste a video link.',
+                            )
+                          : _label(
+                              context,
+                              '沒有可顯示的影片。',
+                              'No videos to display.',
+                            ),
+                    ),
                     if (_failed)
                       TextButton(
                         onPressed: () => _load(_activeQuery),
@@ -175,13 +232,20 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
                 ),
               ),
             ),
-          if (shelf == null && !_loading && !_failed && browsing && firstVideo != null) ...[
+          if (shelf == null &&
+              !_loading &&
+              !_failed &&
+              browsing &&
+              firstVideo != null) ...[
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                 child: SizedBox(
                   height: 232,
-                  child: _VideoCard(video: firstVideo, onTap: () => _open(firstVideo)),
+                  child: _VideoCard(
+                    video: firstVideo,
+                    onTap: () => _open(firstVideo),
+                  ),
                 ),
               ),
             ),
@@ -193,7 +257,9 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
-                  child: Text(_label(context, '清單目前是空的。', 'This list is empty.')),
+                  child: Text(
+                    _label(context, '清單目前是空的。', 'This list is empty.'),
+                  ),
                 ),
               ),
             ),
@@ -226,7 +292,9 @@ class _VideoCatalogPageState extends State<_VideoCatalogPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            section.title.isEmpty ? _label(context, '影片', 'Videos') : section.title,
+            section.title.isEmpty
+                ? _label(context, '影片', 'Videos')
+                : section.title,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
@@ -277,12 +345,14 @@ List<VideoListing> _readShelf(_VideoShelf shelf) {
     final thumbnail = image is String ? Uri.tryParse(image) : null;
     final duration = row['duration'];
     if (uri != null) {
-      entries.add(VideoListing(
-        uri,
-        title,
-        thumbnail?.scheme == 'https' ? thumbnail : null,
-        duration: duration is String ? duration : null,
-      ));
+      entries.add(
+        VideoListing(
+          uri,
+          title,
+          thumbnail?.scheme == 'https' ? thumbnail : null,
+          duration: duration is String ? duration : null,
+        ),
+      );
     }
   }
   return entries;
@@ -302,9 +372,9 @@ void _saveShelf(_VideoShelf shelf, List<VideoListing> items) {
 }
 
 Future<void> _openVideoDetails(BuildContext context, VideoListing video) {
-  return Navigator.of(context).push<void>(
-    MaterialPageRoute(builder: (_) => _VideoDetailsPage(video)),
-  );
+  return Navigator.of(
+    context,
+  ).push<void>(MaterialPageRoute(builder: (_) => _VideoDetailsPage(video)));
 }
 
 class _VideoCard extends StatelessWidget {
@@ -337,12 +407,19 @@ class _VideoCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8),
-              child: Text(video.title, maxLines: 2, overflow: TextOverflow.ellipsis),
+              child: Text(
+                video.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             if (duration != null && duration.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                child: Text(duration, style: Theme.of(context).textTheme.bodySmall),
+                child: Text(
+                  duration,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ),
           ],
         ),
@@ -454,7 +531,9 @@ class _VideoDetailsPageState extends State<_VideoDetailsPage> {
                     onPressed: () => setState(() {
                       _details = _catalog.details(video.uri, _token);
                     }),
-                    child: Text(_label(context, '重試載入詳情', 'Retry loading details')),
+                    child: Text(
+                      _label(context, '重試載入詳情', 'Retry loading details'),
+                    ),
                   );
                 }
                 return const LinearProgressIndicator();
@@ -463,15 +542,19 @@ class _VideoDetailsPageState extends State<_VideoDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (details.description.isNotEmpty) ...[
-                    Text(_label(context, '簡介', 'Description'),
-                        style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      _label(context, '簡介', 'Description'),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 6),
                     Text(details.description),
                     const SizedBox(height: 16),
                   ],
                   if (details.related.isNotEmpty)
-                    Text(_label(context, '相關影片', 'Related videos'),
-                        style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      _label(context, '相關影片', 'Related videos'),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   for (final item in details.related)
                     ListTile(
                       leading: const Icon(Icons.play_circle_outline),
@@ -572,7 +655,10 @@ class _VideoPageState extends State<_VideoPage> {
     _desktopPlacement = WindowPlacement(previousBounds, maximized);
     if (maximized) {
       await windowManager.unmaximize();
-      _desktopPlacement = WindowPlacement(await windowManager.getBounds(), true);
+      _desktopPlacement = WindowPlacement(
+        await windowManager.getBounds(),
+        true,
+      );
     }
     final bounds = _desktopPlacement!.rect;
     await windowManager.setMinimumSize(const Size(320, 240));
@@ -595,13 +681,17 @@ class _VideoPageState extends State<_VideoPage> {
   }
 
   void _showMiniError() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(_label(
-        context,
-        '請先開始播放，並確認裝置允許小窗播放。',
-        'Start playback and check whether your device allows mini player.',
-      )),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          _label(
+            context,
+            '請先開始播放，並確認裝置允許小窗播放。',
+            'Start playback and check whether your device allows mini player.',
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _toggleMini() async {
@@ -616,13 +706,17 @@ class _VideoPageState extends State<_VideoPage> {
       }
       if (App.isAndroid && appdata.settings['authorizationRequired'] == true) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(_label(
-              context,
-              '啟用應用程式鎖定時，子母畫面無法使用。',
-              'Picture-in-picture is unavailable while app lock is enabled.',
-            )),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                _label(
+                  context,
+                  '啟用應用程式鎖定時，子母畫面無法使用。',
+                  'Picture-in-picture is unavailable while app lock is enabled.',
+                ),
+              ),
+            ),
+          );
         }
         return;
       }
@@ -660,14 +754,19 @@ class _VideoPageState extends State<_VideoPage> {
     if (controller == null || !_playerReady) return;
     try {
       await controller.evaluateJavascript(
-        source: "(() => { const video = document.querySelector('.plyr video, video'); "
+        source:
+            "(() => { const video = document.querySelector('.plyr video, video'); "
             'if (video) video.playbackRate = $speed; })()',
       );
     } on Exception {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(_label(context, '無法調整播放速度。', 'Could not change playback speed.')),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _label(context, '無法調整播放速度。', 'Could not change playback speed.'),
+            ),
+          ),
+        );
       }
     }
   }
@@ -681,9 +780,13 @@ class _VideoPageState extends State<_VideoPage> {
       // The same message is used if the OS has no handler.
     }
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(_label(context, '無法開啟瀏覽器。', 'Could not open the browser.')),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          _label(context, '無法開啟瀏覽器。', 'Could not open the browser.'),
+        ),
+      ),
+    );
   }
 
   @override
@@ -703,7 +806,11 @@ class _VideoPageState extends State<_VideoPage> {
             : AppBar(
                 toolbarHeight: _mini || _theaterMode ? 44 : kToolbarHeight,
                 automaticallyImplyLeading: !_mini && !_busy && !_theaterMode,
-                title: Text(widget.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+                title: Text(
+                  widget.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 actions: [
                   IconButton(
                     tooltip: _mini
@@ -722,7 +829,9 @@ class _VideoPageState extends State<_VideoPage> {
                       onPressed: !_playerReady || _busy
                           ? null
                           : () => setState(() => _theaterMode = !_theaterMode),
-                      icon: Icon(_theaterMode ? Icons.fullscreen_exit : Icons.fullscreen),
+                      icon: Icon(
+                        _theaterMode ? Icons.fullscreen_exit : Icons.fullscreen,
+                      ),
                     ),
                   if (!_mini)
                     PopupMenuButton<double>(
@@ -775,12 +884,18 @@ class _VideoPageState extends State<_VideoPage> {
                 return NavigationActionPolicy.CANCEL;
               },
               onLoadStart: (_, _) {
-                if (mounted && _playerReady) setState(() => _playerReady = false);
+                if (mounted && _playerReady) {
+                  setState(() => _playerReady = false);
+                }
               },
               onLoadStop: (controller, url) async {
-                if (url == null || hanimeWatchUri(url.toString()) == null) return;
+                if (url == null || hanimeWatchUri(url.toString()) == null) {
+                  return;
+                }
                 try {
-                  final installed = await controller.evaluateJavascript(source: _videoScript);
+                  final installed = await controller.evaluateJavascript(
+                    source: _videoScript,
+                  );
                   if (installed != true && installed != 'true') {
                     if (mounted) setState(() => _failed = true);
                     return;

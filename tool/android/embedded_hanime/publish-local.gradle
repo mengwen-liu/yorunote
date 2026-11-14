@@ -1,0 +1,25 @@
+allprojects {
+    if (name in ["app", "yenaly_libs"]) {
+        pluginManager.withPlugin("com.android.library") {
+            apply plugin: "maven-publish"
+            android.publishing.singleVariant("debug")
+            group = "local.yorunote.r3"
+            version = "1.0"
+            afterEvaluate {
+                publishing {
+                    publications {
+                        debug(MavenPublication) {
+                            from components.debug
+                        }
+                    }
+                    repositories {
+                        maven {
+                            name = "R3Local"
+                            url = rootProject.layout.projectDirectory.dir("../r3-maven")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

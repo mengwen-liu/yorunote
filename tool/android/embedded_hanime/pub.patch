@@ -1,0 +1,145 @@
+diff --git a/git/flutter_inappwebview-3ef899b3db57c911b080979f1392253b835f98ab/flutter_inappwebview_android/android/build.gradle b/git/flutter_inappwebview-3ef899b3db57c911b080979f1392253b835f98ab/flutter_inappwebview_android/android/build.gradle
+index 25b08c9..387913b 100644
+--- a/git/flutter_inappwebview-3ef899b3db57c911b080979f1392253b835f98ab/flutter_inappwebview_android/android/build.gradle
++++ b/git/flutter_inappwebview-3ef899b3db57c911b080979f1392253b835f98ab/flutter_inappwebview_android/android/build.gradle
+@@ -41,11 +41,11 @@ android {
+     buildTypes {
+         debug {
+             minifyEnabled false
+-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
++            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+         }
+         release {
+             minifyEnabled true
+-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
++            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+         }
+     }
+     dependencies {
+diff --git a/hosted/pub.dev/rhttp-0.15.1/cargokit/gradle/plugin.gradle b/hosted/pub.dev/rhttp-0.15.1/cargokit/gradle/plugin.gradle
+index d139d04..a86d0f1 100644
+--- a/hosted/pub.dev/rhttp-0.15.1/cargokit/gradle/plugin.gradle
++++ b/hosted/pub.dev/rhttp-0.15.1/cargokit/gradle/plugin.gradle
+@@ -2,6 +2,8 @@
+ /// Details: https://fzyzcjy.github.io/flutter_rust_bridge/manual/integrate/builtin
+ 
+ import java.nio.file.Paths
++import javax.inject.Inject
++import org.gradle.process.ExecOperations
+ import org.apache.tools.ant.taskdefs.condition.Os
+ 
+ CargoKitPlugin.file = buildscript.sourceFile
+@@ -14,6 +16,9 @@ class CargoKitExtension {
+ }
+ 
+ abstract class CargoKitBuildTask extends DefaultTask {
++    @Inject
++    abstract ExecOperations getExecOperations()
++
+ 
+     @Input
+     String buildMode
+@@ -60,12 +65,12 @@ abstract class CargoKitBuildTask extends DefaultTask {
+         def rootProjectDir = project.rootProject.projectDir
+         
+         if (!Os.isFamily(Os.FAMILY_WINDOWS)) {
+-            project.exec {
++            execOperations.exec {
+                 commandLine 'chmod', '+x', path
+             }
+         }
+         
+-        project.exec {
++        execOperations.exec {
+             executable path
+             args "build-gradle"
+             environment "CARGOKIT_ROOT_PROJECT_DIR", rootProjectDir
+@@ -135,7 +140,7 @@ class CargoKitPlugin implements Plugin<Project> {
+             def platforms = com.flutter.gradle.FlutterPluginUtils.getTargetPlatforms(project).collect()
+ 
+             // Same thing addFlutterDependencies does in flutter.gradle
+-            if (buildType == "debug") {
++            if (buildType == "debug" && !project.hasProperty("target-platform")) {
+                 platforms.add("android-x86")
+                 platforms.add("android-x64")
+             }
+@@ -160,7 +165,7 @@ class CargoKitPlugin implements Plugin<Project> {
+                     ndkVersion = plugin.project.android.ndkVersion
+                     sdkDirectory = plugin.project.android.sdkDirectory
+                     minSdkVersion = plugin.project.android.defaultConfig.minSdkVersion.apiLevel as int
+-                    compileSdkVersion = plugin.project.android.compileSdkVersion.substring(8) as int
++                    compileSdkVersion = plugin.project.android.compileSdkVersion.substring(8).tokenize(".").first() as int
+                     targetPlatforms = platforms
+                     pluginFile = CargoKitPlugin.file
+                 }
+diff --git a/hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/android_environment.dart b/hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/android_environment.dart
+index 10f63c8..4114bdb 100644
+--- a/hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/android_environment.dart
++++ b/hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/android_environment.dart
+@@ -57,7 +57,15 @@ class AndroidEnvironment {
+   bool ndkIsInstalled() {
+     final ndkPath = path.join(sdkPath, 'ndk', ndkVersion);
+     final ndkPackageXml = File(path.join(ndkPath, 'package.xml'));
+-    return ndkPackageXml.existsSync();
++    final sourceProperties = File(path.join(ndkPath, 'source.properties'));
++    return ndkPackageXml.existsSync() ||
++        (sourceProperties.existsSync() &&
++            sourceProperties.readAsLinesSync().any((line) {
++              final fields = line.split('=');
++              return fields.length == 2 &&
++                  fields[0].trim() == 'Pkg.Revision' &&
++                  fields[1].trim() == ndkVersion;
++            }));
+   }
+ 
+   void installNdk({
+diff --git a/hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/builder.dart b/hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/builder.dart
+index d07257f..542c884 100644
+--- a/hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/builder.dart
++++ b/hosted/pub.dev/rhttp-0.15.1/cargokit/build_tool/lib/src/builder.dart
+@@ -220,6 +220,10 @@ final _toolchainVersionPattern = RegExp(r'^channel\s*=\s*"([^"]+)"$');
+ 
+ /// Returns the toolchain version preferring the one from the project's rust-toolchain.toml file.
+ String _getToolchainVersion(String fallback) {
++  final configured = Platform.environment['RUSTUP_TOOLCHAIN'];
++  if (configured != null && configured.isNotEmpty) {
++    return configured;
++  }
+   final workingDirectory = path.current.replaceAll('\\', '/');
+ 
+   // Transform C:\Users\user\rhttp\rhttp\example\build\windows\x64\plugins\rhttp\cargokit_build\tool
+diff --git a/hosted/pub.dev/rhttp-0.15.1/cargokit/run_build_tool.cmd b/hosted/pub.dev/rhttp-0.15.1/cargokit/run_build_tool.cmd
+index c45d0aa..2fe933c 100644
+--- a/hosted/pub.dev/rhttp-0.15.1/cargokit/run_build_tool.cmd
++++ b/hosted/pub.dev/rhttp-0.15.1/cargokit/run_build_tool.cmd
+@@ -89,3 +89,4 @@ If %ERRORLEVEL% equ 253 (
+     "%DART%" compile kernel bin/build_tool_runner.dart
+     "%DART%" "%PRECOMPILED%" %*
+ )
++exit /b %ERRORLEVEL%
+diff --git a/hosted/pub.dev/rhttp-0.15.1/android/build.gradle b/hosted/pub.dev/rhttp-0.15.1/android/build.gradle
+index 6089efb..8ffe679 100644
+--- a/hosted/pub.dev/rhttp-0.15.1/android/build.gradle
++++ b/hosted/pub.dev/rhttp-0.15.1/android/build.gradle
+@@ -31,7 +31,7 @@ android {
+ 
+     // Bumping the plugin compileSdkVersion requires all clients of this plugin
+     // to bump the version in their app.
+-    compileSdkVersion 33
++    compileSdkVersion 37
+ 
+     // Use the NDK version
+     // declared in /android/app/build.gradle file of the Flutter project.
+diff --git a/hosted/pub.dev/zip_flutter-0.0.13/android/build.gradle b/hosted/pub.dev/zip_flutter-0.0.13/android/build.gradle
+index 3a7b467..847df53 100644
+--- a/hosted/pub.dev/zip_flutter-0.0.13/android/build.gradle
++++ b/hosted/pub.dev/zip_flutter-0.0.13/android/build.gradle
+@@ -31,7 +31,7 @@ android {
+ 
+     // Bumping the plugin compileSdkVersion requires all clients of this plugin
+     // to bump the version in their app.
+-    compileSdkVersion 33
++    compileSdkVersion 37
+ 
+     // Use the NDK version
+     // declared in /android/app/build.gradle file of the Flutter project.

@@ -1,0 +1,2 @@
+# Preserve patch context across Windows and Unix checkouts.
+/tool/android/embedded_hanime/*.patch text eol=lf

@@ -39,8 +39,12 @@ if (!unsignedBuild) {
 
 android {
     namespace = "com.github.wgh136.venera"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37
     ndkVersion "28.0.13004108"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     packaging {
         jniLibs {
@@ -52,17 +56,18 @@ android {
         abi {
             reset()
             include 'armeabi-v7a', 'arm64-v8a', 'x86_64'
-            enable true
+            enable false
             universalApk true
         }
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions{
-        jvmTarget = JavaVersion.VERSION_17
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     if (!unsignedBuild) {
@@ -83,14 +88,14 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.mengwenliu.yorunote"
+        applicationId = "com.mengwenliu.yorunote.candidate.v020"
         if (candidateBuild) {
             applicationIdSuffix ".candidate.v023"
         }
         manifestPlaceholders.yorunoteLabel = candidateBuild ? "Yorunote Candidate" : "Yorunote"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = flutter.minSdkVersion
+        minSdk = 27
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
@@ -101,15 +106,19 @@ android {
             minifyEnabled true
             shrinkResources true
             ndk {
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
+                abiFilters "arm64-v8a"
             }
             signingConfig = unsignedBuild ? null : signingConfigs.release
         }
         debug {
             ndk {
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
+                abiFilters "arm64-v8a"
             }
-            if (!unsignedBuild) signingConfig signingConfigs.debug
+            def debugStore = providers.environmentVariable("R2_DEBUG_STORE").orNull
+            if (debugStore != null) {
+                signingConfigs.debug.storeFile = file(debugStore)
+            }
+            signingConfig = signingConfigs.debug
         }
     }
 
@@ -146,6 +155,10 @@ flutter {
 }
 
 dependencies {
+    testImplementation "junit:junit:4.13.2"
+    implementation "local.yorunote.r3:app:1.0"
+    implementation "local.yorunote.r3:yenaly_libs:1.0"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.5"
     implementation "androidx.activity:activity-ktx:1.10.1"
     implementation 'androidx.documentfile:documentfile:1.0.1'
 }

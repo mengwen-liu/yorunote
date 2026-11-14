@@ -1,7 +1,15 @@
 allprojects {
     repositories {
+        maven {
+            url = rootProject.file("../.local-data/build-env/r3-maven")
+            content { includeGroup("local.yorunote.r3") }
+        }
         google()
         mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+            content { includeGroupByRegex("com[.]github[.].+") }
+        }
     }
 }
 

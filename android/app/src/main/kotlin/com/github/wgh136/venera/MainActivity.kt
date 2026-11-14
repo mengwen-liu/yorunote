@@ -36,6 +36,16 @@ import java.io.FileOutputStream
 import java.util.concurrent.atomic.AtomicInteger
 
 class MainActivity : FlutterFragmentActivity() {
+    private companion object {
+        const val EMBEDDED_VIDEO_PENDING = "yorunote.embedded_video.pending"
+    }
+
+    private val embeddedVideoGate = EmbeddedVideoLaunchGate()
+    private var embeddedVideoChannel: MethodChannel? = null
+    private val embeddedVideoLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { embeddedVideoGate.release() }
+
     private var videoPipChannel: MethodChannel? = null
 
     override fun onPictureInPictureModeChanged(inPip: Boolean, config: Configuration) {
@@ -57,6 +67,9 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (savedInstanceState?.getBoolean(EMBEDDED_VIDEO_PENDING) == true) {
+            embeddedVideoGate.acquire()
+        }
 
         if (intent?.action == Intent.ACTION_SEND) {
             if (intent.type == "text/plain") {
@@ -64,6 +77,46 @@ class MainActivity : FlutterFragmentActivity() {
                 if (text != null)
                     handleSharedText(text)
             }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(EMBEDDED_VIDEO_PENDING, embeddedVideoGate.pending)
+    }
+
+    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+        embeddedVideoChannel?.setMethodCallHandler(null)
+        embeddedVideoChannel = null
+        super.cleanUpFlutterEngine(flutterEngine)
+    }
+
+    private fun openEmbeddedVideo(result: MethodChannel.Result) {
+        if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) || isFinishing) {
+            result.error("not_resumed", "Yorunote is not in the foreground", null)
+            return
+        }
+        if (!embeddedVideoGate.acquire()) {
+            result.error("already_open", "The Android video Activity is already open", null)
+            return
+        }
+        fun fail(code: String, message: String, error: Throwable) {
+            embeddedVideoGate.release()
+            Log.e("EmbeddedVideo", message, error)
+            result.error(code, message, null)
+        }
+        try {
+            com.yenaly.han1meviewer.EmbeddedHanime.initialize(this)
+            embeddedVideoLauncher.launch(
+                Intent(this, com.yenaly.han1meviewer.ui.activity.MainActivity::class.java),
+            )
+            result.success("launch_accepted")
+        } catch (error: android.content.ActivityNotFoundException) {
+            fail("activity_missing", "The Android video Activity is unavailable", error)
+        } catch (error: LinkageError) {
+            fail("initialization_failed", "The Android video libraries could not initialize", error)
+        } catch (error: Exception) {
+            fail("initialization_failed", "The Android video Activity could not initialize", error)
         }
     }
 
@@ -113,6 +166,18 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        embeddedVideoChannel = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger, "yorunote/embedded_video",
+        ).also { channel ->
+            channel.setMethodCallHandler { call, result ->
+                when {
+                    call.method != "open" -> result.notImplemented()
+                    call.arguments != null -> result.error("invalid_arguments", "Expected no arguments", null)
+                    else -> openEmbeddedVideo(result)
+                }
+            }
+        }
+
         GeneratedPluginRegistrant.registerWith(flutterEngine)
         videoPipChannel = MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger, "yorunote/video_pip"
